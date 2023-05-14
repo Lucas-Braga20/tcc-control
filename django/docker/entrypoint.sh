@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Waiting for database creation..."
-until PGPASSWORD=$POSTGRES_PASSWORD psql -h "$POSTGRES_HOST" -U "$POSTGRES_USER" -c '\q'; do
+until -u $MYSQL_USER -p $MYSQL_PASSWORD -h $MYSQL_HOST $MYSQL_DATABASE; do
   sleep 1
 done
 echo "Database successfully created!"

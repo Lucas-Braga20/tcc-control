@@ -1,26 +1,23 @@
 services:
-  postgres:
-    image: postgres
+  mysql:
+    image: mysql:8.0
+    ports:
+      - '3306:3306'
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - mysql_data:/var/lib/mysql
+    env_file:
+      - envs/mysql.env
+
   django:
     build: ./django
     volumes:
       - ./django/:/code
     ports:
       - "8000:8000"
-    environment:
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
+    env_file:
+      - envs/mysql.env
     depends_on:
-      - postgres
+      - mysql
 
 volumes:
-  postgres_data:
+  mysql_data:
