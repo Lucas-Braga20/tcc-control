@@ -4,6 +4,18 @@
   <div class="d-flex flex-column flex-root">
     <div class="page d-flex flex-row flex-column-fluid">
       {% include 'layout/_aside.html' %}
+
+      <!-- Wrapper -->
+      <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+        {% block header %}
+        {% endblock %}
+
+        {% block content %}
+        {% endblock %}
+
+        {% block footer %}
+        {% endblock %}
+      </div>
     </div>
   </div>
 {% endblock %}
