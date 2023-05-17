@@ -9,6 +9,7 @@ from pathlib import Path
 
 # General definition
 
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-o7o0lsm285o$=p1cchl3&qd()#p$ptcya3d67sts52&$i9q!59'
@@ -20,6 +21,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+# Default
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -27,6 +30,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
+
+# Apps
+
+INSTALLED_APPS += [
+    'core',
+    'tcc_control'
 ]
 
 MIDDLEWARE = [
@@ -44,7 +54,8 @@ ROOT_URLCONF = 'tcc_control.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # 'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

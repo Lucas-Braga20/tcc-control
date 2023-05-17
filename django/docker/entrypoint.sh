@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Waiting for database creation..."
-until -u $MYSQL_USER -p $MYSQL_PASSWORD -h $MYSQL_HOST $MYSQL_DATABASE; do
+until mysql --user=$MYSQL_USER --password=$MYSQL_PASSWORD --host=$MYSQL_HOST $MYSQL_DATABASE; do
   sleep 1
 done
 echo "Database successfully created!"

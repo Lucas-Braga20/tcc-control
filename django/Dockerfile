@@ -2,6 +2,7 @@
 FROM python:3.9-slim as builder
 
 WORKDIR /code
+ADD . /code
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
