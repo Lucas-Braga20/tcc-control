@@ -1,0 +1,37 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block html-title %}TCC Control{% endblock html-title %}{% block html-subtitle %}{% endblock html-subtitle %}</title>
+
+    {% block css %}
+      <!-- Fonts -->
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+
+      <!-- Plugins Bundle Css -->
+      <link rel="stylesheet" href="{% static 'plugins/css/plugins.bundle.css' %}">
+
+      <!-- Template Seven Css -->
+      <link rel="stylesheet" href="{% static 'css/seven.style.bundle.css' %}">
+
+      <!-- General Css -->
+      <link rel="stylesheet" href="{% static 'css/general.css' %}">
+    {% endblock %}
+
+  </head>
+  <body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-enabled">
+    {% block layout %}{% endblock %}
+
+    {% block js %}
+      <!-- Plugins Bundle JS -->
+      <script src="{% static 'plugins/js/plugins.bundle.js' %}"></script>
+
+      <!-- Template Seven JS  -->
+      <script src="{% static 'js/seven.scripts.bundle.js' %}"></script>
+    {% endblock %}
+  </body>
+</html>

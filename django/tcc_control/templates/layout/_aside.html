@@ -1,0 +1,73 @@
+{% load static %}
+
+<div id="kt_aside" class="aside aside-extended bg-white" data-kt-drawer="true" data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="auto" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_toggle">
+  <!-- Primary -->
+  <div class="aside-primary d-flex flex-column align-items-lg-center flex-row-auto">
+    <!-- Logo -->
+    <div class="aside-logo d-none d-lg-flex flex-column align-items-center flex-column-auto py-10" id="kt_aside_logo">
+      <a href="">
+        <img alt="Logo" src="{% static 'media/logos/logo-default.svg' %}" class="h-50px" />
+      </a>
+    </div>
+
+    <!-- NavBar -->
+    <div class="aside-nav d-flex flex-column align-items-center flex-column-fluid w-100 pt-5 pt-lg-0" id="kt_aside_nav">
+      <div class="hover-scroll-y mb-10" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto" data-kt-scroll-wrappers="#kt_aside_nav" data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer" data-kt-scroll-offset="0px">
+        <ul class="nav flex-column">
+          <!-- Item -->
+          <li class="nav-item mb-2" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="right" data-bs-dismiss="click" title="Principal">
+            <a class="nav-link btn btn-custom btn-icon active navbar-primary-icon" data-bs-toggle="tab" href="#kt_aside_nav_tab_main">
+              <i class="fas fa-home"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="aside-footer d-flex flex-column align-items-center flex-column-auto" id="kt_aside_footer"></div>
+  </div>
+
+  <!-- Secondary -->
+  <div class="aside-secondary d-flex flex-row-fluid">
+    <div class="aside-workspace my-5 p-5" id="kt_aside_wordspace">
+      <div class="d-flex h-100 flex-column">
+        <!-- Wrapper -->
+        <div class="flex-column-fluid hover-scroll-y" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-height="auto" data-kt-scroll-wrappers="#kt_aside_wordspace" data-kt-scroll-dependencies="#kt_aside_secondary_footer" data-kt-scroll-offset="0px">
+          <div class="tab-content">
+            <!-- Main Tab -->
+            <div class="tab-pane fade active show" id="kt_aside_nav_tab_menu" role="tabpanel">
+              <div class="menu menu-column menu-fit menu-rounded menu-title-gray-600 menu-icon-gray-400 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-bold fs-6 px-6 my-5 my-lg-0" id="kt_aside_menu" data-kt-menu="true">
+                <div id="kt_aside_menu_wrapper" class="menu-fit">
+                  <div class="menu-item">
+                    <div class="menu-content pb-2">
+                      <span class="menu-section text-muted text-uppercase fs-8 ls-1">Principal</span>
+                    </div>
+                  </div>
+                  <div class="menu-item">
+                    <a class="menu-link" href="#">
+                      <span class="menu-icon navbar-secondary-icon">
+                        <i class="fas fa-home"></i>
+                      </span>
+                      <span class="menu-title">Home
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="flex-column-auto pt-10 px-5" id="kt_aside_secondary_footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toggle -->
+  <button class="btn btn-sm btn-icon bg-body btn-color-gray-600 btn-active-primary position-absolute translate-middle start-100 end-0 bottom-0 shadow-sm d-none d-lg-flex" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="aside-minimize" style="margin-bottom: 1.35rem">
+    <span class="svg-icon svg-icon-2 rotate-180">
+      <i class="fas fa-arrow-left"></i>
+    </span>
+  </button>
+</div>
