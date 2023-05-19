@@ -37,7 +37,8 @@ INSTALLED_APPS = [
 
 INSTALLED_APPS += [
     'core',
-    'tcc_control'
+    'tcc_control',
+    'activities',
 ]
 
 MIDDLEWARE = [
