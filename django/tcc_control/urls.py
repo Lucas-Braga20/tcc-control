@@ -13,4 +13,5 @@ urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('formulary-test/', include('activities.urls', namespace='formulary-test')),
 ]
