@@ -23,29 +23,44 @@
 {% block content %}
   <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <div class="container-xxl" id="kt_content_container">
-      <div class="card">
-        <div class="card-body p-lg-12">
-          <form>
+      <form method="post" id="kt_form_activity">
+        <div class="card">
+          <div class="card-body pt-lg-12 px-lg-12 pb-lg-0">
             <!-- Title -->
-            <div class="mb-8">
+            <div class="fv-row mb-8">
               <label for="title" class="required form-label">Título</label>
               <input type="text" class="form-control form-control-solid" placeholder="Título" name="title"/>
             </div>
 
             <!-- Sub=title -->
-            <div class="mb-8">
+            <div class="fv-row mb-8">
               <label for="subtitle" class="required form-label">Sub título</label>
               <input type="text" class="form-control form-control-solid" placeholder="Sub título" name="subtitle"/>
             </div>
 
             <!-- Content -->
-            <div>
+            <div class="fv-row">
               <label for="content-editor" class="required form-label">Conteúdo</label>
-              <textarea name="content-editor" id="kt_ckeditor_content" cols="30" rows="10"></textarea>
+              <div id="kt_content_ck_editor_loading" class="d-flex w-100 justify-content-center align-items-center">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+              <textarea
+                class="d-none"
+                name="content-editor"
+                id="kt_content_ck_editor"
+                cols="30"
+                rows="10">
+              </textarea>
             </div>
-          </form>
+          </div>
+          <div class="card-footer px-lg-12 py-lg-8 d-flex justify-content-end">
+            <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary ms-5">Salvar</button>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 {% endblock %}
@@ -58,6 +73,7 @@
 
 {% block js-vendors %}
   <script src="{% static 'vendor/ckeditor/ckeditor-classic.bundle.js' %}"></script>
+  <script src="{% static 'vendor/validatejs/validate.min.js' %}"></script>
 {% endblock %}
 
 {% block js-scripts %}

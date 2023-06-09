@@ -13,3 +13,13 @@ class FormularyTest(TemplateView):
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
+
+    def post(self, request, *args, **kwargs):
+        """
+        Post method.
+        """
+
+        body = request.POST
+        print(body)
+
+        return self.render_to_response()

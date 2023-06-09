@@ -87,7 +87,9 @@
                     </a>
                   </div>
                   <div class="menu-item">
-                    <a class="menu-link {% get_link_is_active request 'formulary-test' %}" href="#">
+                    <a
+                      class="menu-link {% get_link_is_active request 'formulary-test' %}"
+                      href="{% url 'activities:formulary-test' %}">
                       <span class="menu-icon navbar-secondary-icon">
                         <i class="fas fa-vials"></i>
                       </span>
