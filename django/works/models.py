@@ -28,6 +28,8 @@ class WorkStep(models.Model):
                                       default=defaults.WORK_STEP_ASSIGNED)
     step = models.ForeignKey('timetables.Step', verbose_name=_('step'),
                              on_delete=models.DO_NOTHING, related_name='step')
+    tcc_work = models.ForeignKey('works.TCCWork', verbose_name=_('tcc work'),
+                                 on_delete=models.DO_NOTHING, related_name='tcc_work')
 
 
 class WorkStepVersion(models.Model):
@@ -35,3 +37,15 @@ class WorkStepVersion(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name=_('created at'))
     content = models.JSONField(verbose_name=_('content'))
+    work_step = models.ForeignKey('works.WorkStep', verbose_name=_('work step'),
+                                  on_delete=models.DO_NOTHING, related_name='work_step')
+
+
+class ChangeRequest(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    approved = models.BooleanField(verbose_name=_('approved'), default=False)
+    description = models.TextField(verbose_name=_('description'))
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      verbose_name=_('created at'))
+    requester = models.ForeignKey('users.User', verbose_name=_('requester'),
+                                  on_delete=models.DO_NOTHING, related_name='requested')

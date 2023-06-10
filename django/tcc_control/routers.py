@@ -6,7 +6,7 @@ from rest_framework.routers import DefaultRouter
 
 from activities.viewsets import ActivityConfigurationViewSet
 from timetables.viewsets import TimetableViewSet, StepViewSet
-from works.viewsets import TCCWorkViewSet, WorkStepViewSet, WorkStepVersionViewSet
+from works.viewsets import TCCWorkViewSet, WorkStepViewSet, WorkStepVersionViewSet, ChangeRequestViewSet
 
 
 router = DefaultRouter()
@@ -16,3 +16,4 @@ router.register('steps', StepViewSet)
 router.register('tcc-works', TCCWorkViewSet)
 router.register('work-steps', WorkStepViewSet)
 router.register('work-step-versions', WorkStepVersionViewSet)
+router.register('change-requests', ChangeRequestViewSet)
