@@ -2,4 +2,5 @@ Django==4.2
 mysqlclient==1.4.3
 django-mysql==4.9.0
 djangorestframework==3.14.0
+django-filter==23.2
 docxtpl==0.16.7

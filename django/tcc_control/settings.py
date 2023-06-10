@@ -39,6 +39,8 @@ INSTALLED_APPS += [
     'core',
     'tcc_control',
     'activities',
+    'timetables',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -75,14 +77,15 @@ WSGI_APPLICATION = 'tcc_control.wsgi.application'
 
 # Django Rest
 
-REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-    ],
-    'DEFAULT_PARSER_CLASSES': [
-        'rest_framework.parsers.JSONParser',
-    ]
-}
+if not DEBUG:
+    REST_FRAMEWORK = {
+        'DEFAULT_RENDERER_CLASSES': [
+            'rest_framework.renderers.JSONRenderer',
+        ],
+        'DEFAULT_PARSER_CLASSES': [
+            'rest_framework.parsers.JSONParser',
+        ]
+    }
 
 
 # Database
@@ -116,6 +119,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = "users.User"
+
 
 # Internationalization
 
@@ -131,6 +136,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = 'static/'
+
+
+# Upload files
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = Path(BASE_DIR / 'tcc_control' / 'media')
 
 
 # Default primary key field type
