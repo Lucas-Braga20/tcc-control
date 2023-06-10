@@ -4,7 +4,7 @@ Works serializers.
 
 from rest_framework import serializers
 
-from works.models import TCCWork
+from works.models import TCCWork, WorkStep
 
 
 class TCCWorkSerializer(serializers.ModelSerializer):
@@ -14,4 +14,14 @@ class TCCWorkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TCCWork
+        fields = '__all__'
+
+
+class WorkStepSerializer(serializers.ModelSerializer):
+    """
+    WorkStep Serializer.
+    """
+
+    class Meta:
+        model = WorkStep
         fields = '__all__'
