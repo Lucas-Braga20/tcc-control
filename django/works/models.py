@@ -38,7 +38,7 @@ class WorkStepVersion(models.Model):
                                       verbose_name=_('created at'))
     content = models.JSONField(verbose_name=_('content'))
     work_step = models.ForeignKey('works.WorkStep', verbose_name=_('work step'),
-                                  on_delete=models.DO_NOTHING, related_name='work_step')
+                                  on_delete=models.DO_NOTHING, related_name='step_version')
 
 
 class ChangeRequest(models.Model):
@@ -48,4 +48,15 @@ class ChangeRequest(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name=_('created at'))
     requester = models.ForeignKey('users.User', verbose_name=_('requester'),
-                                  on_delete=models.DO_NOTHING, related_name='requested')
+                                  on_delete=models.DO_NOTHING, related_name='requester')
+
+
+class Comment(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    description = models.TextField(verbose_name=_('description'))
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      verbose_name=_('created at'))
+    work_step = models.ForeignKey('works.WorkStep', verbose_name=_('work step'),
+                                  on_delete=models.DO_NOTHING, related_name='step_comment')
+    author = models.ForeignKey('users.User', verbose_name=_('author'),
+                               on_delete=models.DO_NOTHING, related_name='step_author')

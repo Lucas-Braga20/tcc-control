@@ -4,7 +4,7 @@ Works serializers.
 
 from rest_framework import serializers
 
-from works.models import TCCWork, WorkStep, WorkStepVersion, ChangeRequest
+from works.models import TCCWork, WorkStep, WorkStepVersion, ChangeRequest, Comment
 
 
 class TCCWorkSerializer(serializers.ModelSerializer):
@@ -44,4 +44,14 @@ class ChangeRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ChangeRequest
+        fields = '__all__'
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    """
+    Comment Serializer.
+    """
+
+    class Meta:
+        model = Comment
         fields = '__all__'
