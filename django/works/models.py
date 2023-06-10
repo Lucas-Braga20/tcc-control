@@ -28,3 +28,10 @@ class WorkStep(models.Model):
                                       default=defaults.WORK_STEP_ASSIGNED)
     step = models.ForeignKey('timetables.Step', verbose_name=_('step'),
                              on_delete=models.DO_NOTHING, related_name='step')
+
+
+class WorkStepVersion(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True,
+                                      verbose_name=_('created at'))
+    content = models.JSONField(verbose_name=_('content'))

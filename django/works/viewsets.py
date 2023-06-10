@@ -4,8 +4,8 @@ TCCWork viewsets.
 
 from rest_framework import viewsets
 
-from works.models import TCCWork, WorkStep
-from works.serializers import TCCWorkSerializer, WorkStepSerializer
+from works.models import TCCWork, WorkStep, WorkStepVersion
+from works.serializers import TCCWorkSerializer, WorkStepSerializer, WorkStepVersionSerializer
 
 
 class TCCWorkViewSet(viewsets.ModelViewSet):
@@ -24,3 +24,12 @@ class WorkStepViewSet(viewsets.ModelViewSet):
     queryset = WorkStep.objects.all()
     serializer_class = WorkStepSerializer
     model = WorkStep
+
+
+class WorkStepVersionViewSet(viewsets.ModelViewSet):
+    """
+    WorkStepVersion viewset provides all http request methods.
+    """
+    queryset = WorkStepVersion.objects.all()
+    serializer_class = WorkStepVersionSerializer
+    model = WorkStepVersion
