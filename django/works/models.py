@@ -1,5 +1,5 @@
 """
-Works models include TCC and development step.
+Works app models.
 """
 
 import uuid
@@ -11,6 +11,9 @@ from core import defaults
 
 
 class TCCWork(models.Model):
+    """
+    TCC work model.
+    """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
     approved = models.BooleanField(verbose_name=_('approved'), default=False)
@@ -19,8 +22,15 @@ class TCCWork(models.Model):
     advised = models.ManyToManyField('users.User', related_name='advised',
                                      verbose_name=_('advised'))
 
+    class Meta:
+        verbose_name = _('TCC work')
+        verbose_name_plural = _('TCC works')
+
 
 class WorkStep(models.Model):
+    """
+    Work step model.
+    """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     presented = models.BooleanField(verbose_name=_('presented'), default=False)
     status = models.SmallIntegerField(verbose_name=_('status'),
@@ -31,8 +41,15 @@ class WorkStep(models.Model):
     tcc_work = models.ForeignKey('works.TCCWork', verbose_name=_('tcc work'),
                                  on_delete=models.DO_NOTHING, related_name='tcc_work')
 
+    class Meta:
+        verbose_name = _('Work step')
+        verbose_name_plural = _('Work steps')
+
 
 class WorkStepVersion(models.Model):
+    """
+    Work step version model.
+    """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name=_('created at'))
@@ -40,8 +57,15 @@ class WorkStepVersion(models.Model):
     work_step = models.ForeignKey('works.WorkStep', verbose_name=_('work step'),
                                   on_delete=models.DO_NOTHING, related_name='step_version')
 
+    class Meta:
+        verbose_name = _('Work step version')
+        verbose_name_plural = _('Work step versions')
+
 
 class ChangeRequest(models.Model):
+    """
+    Change request model.
+    """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     approved = models.BooleanField(verbose_name=_('approved'), default=False)
     description = models.TextField(verbose_name=_('description'))
@@ -50,8 +74,15 @@ class ChangeRequest(models.Model):
     requester = models.ForeignKey('users.User', verbose_name=_('requester'),
                                   on_delete=models.DO_NOTHING, related_name='requester')
 
+    class Meta:
+        verbose_name = _('Change request')
+        verbose_name_plural = _('Change requests')
+
 
 class Comment(models.Model):
+    """
+    Comment model.
+    """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
     created_at = models.DateTimeField(auto_now_add=True,
@@ -60,3 +91,7 @@ class Comment(models.Model):
                                   on_delete=models.DO_NOTHING, related_name='step_comment')
     author = models.ForeignKey('users.User', verbose_name=_('author'),
                                on_delete=models.DO_NOTHING, related_name='step_author')
+
+    class Meta:
+        verbose_name = _('Comment')
+        verbose_name_plural = _('Comments')

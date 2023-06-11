@@ -8,6 +8,10 @@ from activities.models import ActivityConfiguration
 
 
 class ActivityConfigurationSerializer(serializers.ModelSerializer):
+    """
+    Activity Configuration Serializer.
+    """
+
     class Meta:
         model = ActivityConfiguration
         fields = '__all__'

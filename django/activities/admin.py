@@ -1,5 +1,15 @@
 """
-Admin configuration to TCC Control Project.
+Admin configuration to activities app.
 """
 
 from django.contrib import admin
+
+from activities.models import ActivityConfiguration
+
+
+@admin.register(ActivityConfiguration)
+class ActivityConfigurationAdmin(admin.ModelAdmin):
+    """
+    Activity configuration model admin.
+    """
+    list_display = ('fields', 'template_abnt')

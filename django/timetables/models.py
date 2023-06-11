@@ -1,5 +1,5 @@
 """
-Timetable Models.
+Timetable app models.
 """
 
 import uuid
@@ -19,10 +19,14 @@ class Timetable(models.Model):
     participants = models.ManyToManyField('users.User', related_name='participants',
                                           verbose_name=_('pariticipants'))
 
+    class Meta:
+        verbose_name = _('Timetable')
+        verbose_name_plural = _('Timetables')
+
 
 class Step(models.Model):
     """
-    Timetable Setps model.
+    Timetable steps model.
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
@@ -36,6 +40,10 @@ class Step(models.Model):
                                                verbose_name=_('activity configuration'),
                                                on_delete=models.DO_NOTHING)
 
+    class Meta:
+        verbose_name = _('Step')
+        verbose_name_plural = _('Steps')
+
 
 class StepExample(models.Model):
     """
@@ -43,3 +51,7 @@ class StepExample(models.Model):
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     file = models.FileField(upload_to='documents/step-example/', blank=True, null=True)
+
+    class Meta:
+        verbose_name = _('Step Example')
+        verbose_name_plural = _('Step Examples')

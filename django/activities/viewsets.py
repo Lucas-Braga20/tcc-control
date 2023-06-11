@@ -9,6 +9,9 @@ from activities.serializers import ActivityConfigurationSerializer
 
 
 class ActivityConfigurationViewSet(viewsets.ModelViewSet):
+    """
+    Activity Configuration ViewSet.
+    """
     queryset = ActivityConfiguration.objects.all()
     serializer_class = ActivityConfigurationSerializer
     model = ActivityConfiguration
