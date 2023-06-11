@@ -1,0 +1,86 @@
+[
+  {
+    "model": "users.user",
+    "pk": "4c091994-078f-4c94-9df4-29ea135ddd08",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$yKao103voFKafOjmECdPNY$nfhI3nwmg37Unof0sqI7lwD+yPZd3qzV581Y6cEXd5E=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "willian.matiussi",
+      "first_name": "Willian",
+      "last_name": "Matiussi",
+      "email": "willian.matiussi@unigran.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-06-11T19:21:21.918Z",
+      "phone": null,
+      "groups": [
+        2
+      ],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": "74112f96-51ae-4f48-b0f6-319ee836c267",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$n5HS7A27HJaDaYvC7I7zqW$IV/UUvez9CN7ZKz8qGwG9HNBvUo5EIDw1xkI3CAVrhs=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "felipe.perez",
+      "first_name": "Felipe",
+      "last_name": "Perez",
+      "email": "felipe.perez@unigran.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-06-11T19:20:10.807Z",
+      "phone": null,
+      "groups": [
+        1
+      ],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": "7f7e4d1c-e707-4059-9d1a-27044afb6725",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$sgi1lLLPPb7cm0HiVnqfnN$FReXrTsmMkLJvE2NiVlJQdXkHSISOJx0qaO++MEtBpc=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "joao.amancio",
+      "first_name": "João",
+      "last_name": "Amâncio",
+      "email": "joao.amancio@unigran.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-06-11T19:26:36.139Z",
+      "phone": null,
+      "groups": [
+        3
+      ],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": "912642d8-cc18-43a2-819d-350756044caa",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$3nTcAb7Hh3TNM3bBuAfJfn$MdkXE3/70qEkNpxQvmwxqv+klAB1S3/7SsRZNmsbQTM=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "lucas.braga",
+      "first_name": "Lucas",
+      "last_name": "Braga",
+      "email": "lucas.braga@unigran.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-06-11T19:20:47.349Z",
+      "phone": null,
+      "groups": [
+        2
+      ],
+      "user_permissions": []
+    }
+  }
+]
