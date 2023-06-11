@@ -41,9 +41,10 @@ INSTALLED_APPS += [
     'activities',
     'timetables',
     'users',
-    'works',
     'meetings',
+    'comments',
     'notifications',
+    'works',
 ]
 
 MIDDLEWARE = [

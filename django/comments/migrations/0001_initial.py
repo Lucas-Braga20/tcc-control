@@ -13,26 +13,15 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='ApprovedMeeting',
-            fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('approved', models.BooleanField(default=False, verbose_name='approved')),
-            ],
-            options={
-                'verbose_name': 'Approved meeting',
-                'verbose_name_plural': 'Approved meetings',
-            },
-        ),
-        migrations.CreateModel(
-            name='Meeting',
+            name='Comment',
             fields=[
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('description', models.TextField(verbose_name='description')),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
             ],
             options={
-                'verbose_name': 'Metting',
-                'verbose_name_plural': 'Meetings',
+                'verbose_name': 'Comment',
+                'verbose_name_plural': 'Comments',
             },
         ),
     ]

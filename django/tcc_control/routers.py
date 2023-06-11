@@ -6,8 +6,8 @@ from rest_framework.routers import DefaultRouter
 
 from activities.viewsets import ActivityConfigurationViewSet
 from timetables.viewsets import TimetableViewSet, StepViewSet
-from works.viewsets import (TCCWorkViewSet, WorkStepViewSet, WorkStepVersionViewSet, ChangeRequestViewSet,
-                            CommentViewSet)
+from works.viewsets import TCCWorkViewSet, WorkStepViewSet, WorkStepVersionViewSet, ChangeRequestViewSet
+from comments.viewsets import CommentViewSet
 
 
 router = DefaultRouter()

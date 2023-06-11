@@ -5,7 +5,7 @@ Admin configuration to works app.
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from works.models import TCCWork, WorkStep, WorkStepVersion, ChangeRequest, Comment
+from works.models import TCCWork, WorkStep, WorkStepVersion, ChangeRequest
 
 
 @admin.register(TCCWork)
@@ -46,11 +46,3 @@ class ChangeRequestAdmin(admin.ModelAdmin):
     Change Request configuration model admin.
     """
     list_display = ('id', 'approved', 'description', 'created_at', 'requester')
-
-
-@admin.register(Comment)
-class CommentAdmin(admin.ModelAdmin):
-    """
-    Comment configuration model admin.
-    """
-    list_display = ('id', 'description', 'created_at', 'work_step', 'author')
