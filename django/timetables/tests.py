@@ -2,11 +2,15 @@
 Tests for timetables app.
 """
 
+import datetime
+
 from django.test import TestCase
 from django.contrib.auth.models import Group
 from django.forms.fields import Field
 
-from timetables.forms import TimetableForm
+from activities.models import ActivityConfiguration
+
+from timetables.forms import TimetableForm, StepForm
 
 from users.models import User
 
@@ -36,3 +40,70 @@ class TimetableTest(TestCase):
         form = TimetableForm(data=data)
 
         self.assertEqual(form.errors['description'], [Field.default_error_messages['required']])
+
+
+class StepTest(TestCase):
+    """
+    Step test.
+    """
+    fixtures = [
+        'tcc_control/fixtures/users.json',
+        'tcc_control/fixtures/groups.json',
+        'tcc_control/fixtures/tests/activity_configurations.json'
+    ]
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.activity_configuration = ActivityConfiguration.objects.get(id='276d009c-8c9e-4f05-894c-893ab496335b')
+        return super().setUpTestData()
+
+    def test_description(self):
+        data = {
+            'description': '',
+            'start_date': datetime.date.today(),
+            'send_date_advisor': datetime.date.today() + datetime.timedelta(days=1),
+            'send_date': datetime.date.today() + datetime.timedelta(days=2),
+            'activity_configuration': self.activity_configuration
+        }
+        form = StepForm(data=data)
+
+        self.assertEqual(form.errors['description'], [Field.default_error_messages['required']])
+
+    def test_dates(self):
+        data = {
+            'description': 'Teste',
+            'start_date': '2023-02-30',
+            'send_date_advisor': '2023-03-01',
+            'send_date': '2023-03-02',
+            'activity_configuration': self.activity_configuration
+        }
+        form = StepForm(data=data)
+
+        self.assertEqual(form.errors['start_date'], ['Enter a valid date.'])
+
+    def test_date_order(self):
+        data = {
+            'description': 'Teste',
+            'start_date': '2023-03-03',
+            'send_date_advisor': '2023-03-01',
+            'send_date': '2023-03-02',
+            'activity_configuration': self.activity_configuration
+        }
+        form = StepForm(data=data)
+
+        self.assertEqual(form.errors['start_date'], ['The date sent to the advisor must be after the start date'])
+
+    def test_date_advisor_order(self):
+        data = {
+            'description': 'Teste',
+            'start_date': '2023-02-28',
+            'send_date_advisor': '2023-03-03',
+            'send_date': '2023-03-02',
+            'presentation_date': '2023-03-01',
+            'activity_configuration': self.activity_configuration
+        }
+        form = StepForm(data=data)
+
+        self.assertEqual(form.errors['send_date_advisor'], [
+            'The advisor submission date should be after the platform submission date.'
+        ])

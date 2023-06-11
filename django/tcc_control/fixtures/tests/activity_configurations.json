@@ -1,0 +1,12 @@
+[
+    {
+        "model": "activities.activityconfiguration",
+        "pk": "276d009c-8c9e-4f05-894c-893ab496335b",
+        "fields": {
+            "fields": {
+                "title": "required"
+            },
+            "template_abnt": ""
+        }
+    }
+]
