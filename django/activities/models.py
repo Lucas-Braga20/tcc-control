@@ -13,7 +13,8 @@ class ActivityConfiguration(models.Model):
     Activitiy confifugration model.
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    fields = models.JSONField(verbose_name=_("Fields"))
+    name = models.TextField(verbose_name=_('name'), max_length=255)
+    fields = models.JSONField(verbose_name=_('fields'))
     template_abnt = models.FileField(upload_to='documents/', blank=True, null=True)
 
     class Meta:
