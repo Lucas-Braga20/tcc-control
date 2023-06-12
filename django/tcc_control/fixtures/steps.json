@@ -1,0 +1,14 @@
+[
+  {
+    "model": "timetables.step",
+    "pk": "0676cd07-fb62-4bd9-9542-dfd178ed095d",
+    "fields": {
+      "description": "Esta é a etapa termo de abertura de projeto.",
+      "start_date": "2023-06-11",
+      "send_date_advisor": "2023-06-12",
+      "send_date": "2023-06-13",
+      "presentation_date": null,
+      "activity_configuration": "df9a7654-75a4-4209-8566-f7968c037fb6"
+    }
+  }
+]

@@ -1,5 +1,5 @@
 """
-Activities Tests.
+Tests for activities app.
 """
 
 from django.test import TestCase
@@ -7,7 +7,7 @@ from django.test import TestCase
 from activities.forms import ActivityConfigurationForm
 
 
-class ActivityConfiguration(TestCase):
+class ActivityConfigurationTest(TestCase):
     """
     Activity Configuration test.
     """

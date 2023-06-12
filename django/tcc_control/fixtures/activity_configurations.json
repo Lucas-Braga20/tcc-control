@@ -1,0 +1,19 @@
+[
+  {
+    "model": "activities.activityconfiguration",
+    "pk": "df9a7654-75a4-4209-8566-f7968c037fb6",
+    "fields": {
+      "name": "Termo de abertura de projeto",
+      "fields": {
+        "fields": [
+          {
+            "key": "title",
+            "name": "title",
+            "type": "text"
+          }
+        ]
+      },
+      "template_abnt": ""
+    }
+  }
+]

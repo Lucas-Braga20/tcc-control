@@ -1,8 +1,6 @@
 """
-Utils to activities module.
+Utils to activities app.
 """
-
-import json
 
 from core.defaults import ACTIVITY_TYPES
 

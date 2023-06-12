@@ -53,7 +53,7 @@ class WorkStepVersion(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name=_('created at'))
-    content = models.JSONField(verbose_name=_('content'))
+    content = models.JSONField(verbose_name=_('content'), blank=True, null=True)
     work_step = models.ForeignKey('works.WorkStep', verbose_name=_('work step'),
                                   on_delete=models.DO_NOTHING, related_name='step_version')
 
