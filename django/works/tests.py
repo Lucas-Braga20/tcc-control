@@ -85,3 +85,15 @@ class WorkStepVersionTest(TestCase):
 
         self.assertEqual(form.errors['content'], ['Um campo não foi inserido corretamente.'])
 
+    def test_contents_keys(self):
+        """
+        Integration test to verify the fields of the activity.
+        """
+        data = {
+            'content': '{"fields": [{"key": "teste", "value": "teste"}]}',
+            'work_step': self.work_step
+        }
+        form = WorkStepVersionForm(data=data)
+
+        self.assertEqual(form.errors['content'], ['The content of the activity has invalid fields.'])
+

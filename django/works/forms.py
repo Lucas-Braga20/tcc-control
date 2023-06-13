@@ -73,3 +73,17 @@ class WorkStepVersionForm(forms.ModelForm):
             raise forms.ValidationError(str(e))
 
         return content
+
+    def clean(self):
+        content = self.cleaned_data.get('content')
+        work_step = self.cleaned_data.get('work_step')
+
+        if content is not None:
+            activity_configuration = work_step.step.activity_configuration
+
+            activity_fields = activity_configuration.fields.get('fields')
+            keys = [activity_field.get('key') for activity_field in activity_fields]
+
+            for content_field in content.get('fields'):
+                if content_field not in keys:
+                    raise forms.ValidationError({'content': 'The content of the activity has invalid fields.'})
