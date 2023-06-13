@@ -1,0 +1,11 @@
+[
+  {
+    "model": "meetings.meeting",
+    "pk": "e25166fb-6f27-48d9-86ef-2b6ae4f3d0c4",
+    "fields": {
+      "description": "Reunião para conversar sobre o TAP",
+      "created_at": "2023-06-13T01:55:51.668Z",
+      "work_step": "53b389cf-de59-4564-98a7-94e3db4ab041"
+    }
+  }
+]

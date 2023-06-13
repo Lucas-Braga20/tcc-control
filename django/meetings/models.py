@@ -40,3 +40,11 @@ class Meeting(models.Model):
     class Meta:
         verbose_name = _('Metting')
         verbose_name_plural = _('Meetings')
+
+    def get_is_approved(self):
+        """
+        Method to return whether a meeting has been approved.
+        """
+        approved_meeting = self.meeting_approved.all()
+        is_not_approved = approved_meeting.filter(approved=False).exists()
+        return not is_not_approved
