@@ -58,7 +58,8 @@ class TimetableTest(TestCase):
 
     def test_participants(self):
         """
-        Integration test to verify if the participants have the profile of mentors or mentees.
+        Integration test to verify if the participants
+        have the profile of mentors or mentees.
         """
         data = {
             'description': '',
