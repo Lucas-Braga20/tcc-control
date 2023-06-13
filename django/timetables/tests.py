@@ -29,6 +29,7 @@ class TimetableTest(TestCase):
         teacher_group = Group.objects.get(id='3')
         cls.teacher = User.objects.get(id='7f7e4d1c-e707-4059-9d1a-27044afb6725')
         cls.participants = User.objects.exclude(groups=teacher_group)
+        cls.users = User.objects.all()
         return super().setUpTestData()
 
     def test_description(self):
@@ -40,6 +41,33 @@ class TimetableTest(TestCase):
         form = TimetableForm(data=data)
 
         self.assertEqual(form.errors['description'], [Field.default_error_messages['required']])
+
+    def test_teacher(self):
+        """
+        Integration test to verify that the teacher is a
+        user with the teacher profile.
+        """
+        data = {
+            'description': '',
+            'teacher': self.participants.first(),
+            'participants': self.participants
+        }
+        form = TimetableForm(data=data)
+
+        self.assertEqual(form.errors['teacher'], ['This field must be contains user with teacher role.'])
+
+    def test_participants(self):
+        """
+        Integration test to verify if the participants have the profile of mentors or mentees.
+        """
+        data = {
+            'description': '',
+            'teacher': self.teacher,
+            'participants': self.users
+        }
+        form = TimetableForm(data=data)
+
+        self.assertEqual(form.errors['participants'], ['Participants must have the profile of mentors or mentees.'])
 
 
 class StepTest(TestCase):

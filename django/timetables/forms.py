@@ -16,6 +16,32 @@ class TimetableForm(forms.ModelForm):
         model = Timetable
         fields = '__all__'
 
+    def clean_participants(self):
+        """
+        Validate participants field.
+        """
+        participants = self.cleaned_data.get('participants')
+
+        for participant in participants:
+            if participant.groups.all().first().name not in ('Orientando', 'Orientadores'):
+                raise forms.ValidationError('Participants must have the profile of mentors or mentees.')
+
+        return participants
+
+
+    def clean_teacher(self):
+        """
+        Validate teacher field.
+        """
+        teacher = self.cleaned_data.get('teacher')
+
+        group = teacher.groups.all().first()
+
+        if group.name != 'Professor da disciplina':
+            raise forms.ValidationError('This field must be contains user with teacher role.')
+
+        return teacher
+
 
 class StepForm(forms.ModelForm):
     """
