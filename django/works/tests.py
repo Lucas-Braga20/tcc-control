@@ -5,7 +5,7 @@ Tests for works app.
 from django.test import TestCase
 
 from works.forms import WorkStepVersionForm, WorkStepForm
-from works.models import WorkStep
+from works.models import WorkStep, ChangeRequest, WorkStepVersion
 
 from core.defaults import WORK_STEP_COMPLETED, WORK_STEP_PRESENTED
 
@@ -97,3 +97,29 @@ class WorkStepVersionTest(TestCase):
 
         self.assertEqual(form.errors['content'], ['The content of the activity has invalid fields.'])
 
+
+class ChangeRequestTest(TestCase):
+    """
+    Change request test.
+    """
+    fixtures = [
+        'tcc_control/fixtures/users.json',
+        'tcc_control/fixtures/activity_configurations.json',
+        'tcc_control/fixtures/timetables.json',
+        'tcc_control/fixtures/steps.json',
+        'tcc_control/fixtures/tccworks.json',
+        'tcc_control/fixtures/work_steps.json',
+        'tcc_control/fixtures/change_requests.json',
+    ]
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.change_request = ChangeRequest.objects.get(id='579376e1-2de0-4e70-86fc-f9f6fd3a6a86')
+        return super().setUpTestData()
+
+    def test_approve_request(self):
+        """
+        Integration test to validate the approval of a change request.
+        """
+        self.change_request.approve_request()
+        self.assertEqual(WorkStepVersion.objects.all().count(), 1)

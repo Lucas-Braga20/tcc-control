@@ -73,7 +73,18 @@ class ChangeRequest(models.Model):
                                       verbose_name=_('created at'))
     requester = models.ForeignKey('users.User', verbose_name=_('requester'),
                                   on_delete=models.DO_NOTHING, related_name='requester')
+    work_step = models.ForeignKey('works.WorkStep', verbose_name=_('work step'),
+                                  on_delete=models.DO_NOTHING, related_name='change_requests')
 
     class Meta:
         verbose_name = _('Change request')
         verbose_name_plural = _('Change requests')
+
+    def approve_request(self):
+        """
+        Method to approve a change request.
+        """
+        self.approved = True
+        new_version = WorkStepVersion(content=None, work_step=self.work_step)
+        self.save()
+        new_version.save()
