@@ -1,45 +1,45 @@
 """
-TCCWork viewsets.
+Viewsets to works app.
 """
 
 from rest_framework import viewsets
 
-from works.models import TCCWork, WorkStep, WorkStepVersion, ChangeRequest
+from works.models import FinalWork, FinalWorkStage, FinalWorkVersion, ChangeRequest
 from works.serializers import (
-    TCCWorkSerializer, WorkStepSerializer, WorkStepVersionSerializer, ChangeRequestSerializer
+    FinalWorkSerializer, FinalWorkStageSerializer, FinalWorkVersionSerializer, ChangeRequestSerializer
 )
 
 
-class TCCWorkViewSet(viewsets.ModelViewSet):
+class FinalWorkViewSet(viewsets.ModelViewSet):
     """
-    TCCWork viewset provides all http request methods.
+    Final work viewset.
     """
-    queryset = TCCWork.objects.all()
-    serializer_class = TCCWorkSerializer
-    model = TCCWork
+    queryset = FinalWork.objects.all()
+    serializer_class = FinalWorkSerializer
+    model = FinalWork
 
 
-class WorkStepViewSet(viewsets.ModelViewSet):
+class FinalWorkStageViewSet(viewsets.ModelViewSet):
     """
-    WorkStep viewset provides all http request methods.
+    Final work stage viewset.
     """
-    queryset = WorkStep.objects.all()
-    serializer_class = WorkStepSerializer
-    model = WorkStep
+    queryset = FinalWorkStage.objects.all()
+    serializer_class = FinalWorkStageSerializer
+    model = FinalWorkStage
 
 
-class WorkStepVersionViewSet(viewsets.ModelViewSet):
+class FinalWorkVersionViewSet(viewsets.ModelViewSet):
     """
-    WorkStepVersion viewset provides all http request methods.
+    Final work version viewset.
     """
-    queryset = WorkStepVersion.objects.all()
-    serializer_class = WorkStepVersionSerializer
-    model = WorkStepVersion
+    queryset = FinalWorkVersion.objects.all()
+    serializer_class = FinalWorkVersionSerializer
+    model = FinalWorkVersion
 
 
 class ChangeRequestViewSet(viewsets.ModelViewSet):
     """
-    ChangeRequest viewset provides all http request methods.
+    Change request viewset.
     """
     queryset = ChangeRequest.objects.all()
     serializer_class = ChangeRequestSerializer

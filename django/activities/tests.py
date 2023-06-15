@@ -18,4 +18,4 @@ class ActivityConfigurationTest(TestCase):
         }
         form = ActivityConfigurationForm(data=data)
 
-        self.assertEqual(form.errors['fields'], ['Pelo menos um campo deve ser inserido.'])
+        self.assertEqual(form.errors['fields'], ['At least one field must be entered.'])

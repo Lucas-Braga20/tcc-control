@@ -4,42 +4,42 @@ Works serializers.
 
 from rest_framework import serializers
 
-from works.models import TCCWork, WorkStep, WorkStepVersion, ChangeRequest
+from works.models import FinalWork, FinalWorkStage, FinalWorkVersion, ChangeRequest
 
 
-class TCCWorkSerializer(serializers.ModelSerializer):
+class FinalWorkSerializer(serializers.ModelSerializer):
     """
-    TCCWork Serializer.
+    Final work serializer.
     """
 
     class Meta:
-        model = TCCWork
+        model = FinalWork
         fields = '__all__'
 
 
-class WorkStepSerializer(serializers.ModelSerializer):
+class FinalWorkStageSerializer(serializers.ModelSerializer):
     """
-    WorkStep Serializer.
+    Final work stage serializer.
     """
 
     class Meta:
-        model = WorkStep
+        model = FinalWorkStage
         fields = '__all__'
 
 
-class WorkStepVersionSerializer(serializers.ModelSerializer):
+class FinalWorkVersionSerializer(serializers.ModelSerializer):
     """
-    WorkStepVersion Serializer.
+    Final work version Serializer.
     """
 
     class Meta:
-        model = WorkStepVersion
+        model = FinalWorkVersion
         fields = '__all__'
 
 
 class ChangeRequestSerializer(serializers.ModelSerializer):
     """
-    ChangeRequest Serializer.
+    Change request serializer.
     """
 
     class Meta:

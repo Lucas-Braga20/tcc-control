@@ -32,8 +32,8 @@ class Meeting(models.Model):
     description = models.TextField(verbose_name=_('description'))
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name=_('created at'))
-    work_step = models.ForeignKey('works.WorkStep', verbose_name=_('work step'),
-                                  on_delete=models.DO_NOTHING, related_name='step_meeting')
+    work_stage = models.ForeignKey('works.FinalWorkStage', verbose_name=_('work stage'),
+                                   on_delete=models.DO_NOTHING, related_name='stage_meeting')
     participants = models.ManyToManyField('users.User', related_name='meeting_participants',
                                           through='ApprovedMeeting')
 

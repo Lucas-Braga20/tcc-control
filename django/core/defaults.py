@@ -5,22 +5,22 @@ Default values to Tcc Control Project.
 from django.utils.translation import gettext_lazy as _
 
 
-WORK_STEP_ASSIGNED = 0
-WORK_STEP_PENDING = 1
-WORK_STEP_WAITING_CORRECTION = 2
-WORK_STEP_ADJUSTED = 3
-WORK_STEP_COMPLETED_LATE = 4
-WORK_STEP_COMPLETED = 5
-WORK_STEP_PRESENTED = 6
+WORK_STAGE_ASSIGNED = 0
+WORK_STAGE_PENDING = 1
+WORK_STAGE_WAITING_CORRECTION = 2
+WORK_STAGE_ADJUSTED = 3
+WORK_STAGE_COMPLETED_LATE = 4
+WORK_STAGE_COMPLETED = 5
+WORK_STAGE_PRESENTED = 6
 
-WORK_STEP_STATUS = (
-    (WORK_STEP_ASSIGNED, _('assigned')),
-    (WORK_STEP_PENDING, _('pending')),
-    (WORK_STEP_WAITING_CORRECTION, _('correction')),
-    (WORK_STEP_ADJUSTED, _('adjusted')),
-    (WORK_STEP_COMPLETED_LATE, _('completed late')),
-    (WORK_STEP_COMPLETED, _('completed')),
-    (WORK_STEP_PRESENTED, _('presented')),
+WORK_STAGE_STATUS = (
+    (WORK_STAGE_ASSIGNED, _('assigned')),
+    (WORK_STAGE_PENDING, _('pending')),
+    (WORK_STAGE_WAITING_CORRECTION, _('correction')),
+    (WORK_STAGE_ADJUSTED, _('adjusted')),
+    (WORK_STAGE_COMPLETED_LATE, _('completed late')),
+    (WORK_STAGE_COMPLETED, _('completed')),
+    (WORK_STAGE_PRESENTED, _('presented')),
 )
 
 ACTIVITY_TYPE_TEXT = 'text'

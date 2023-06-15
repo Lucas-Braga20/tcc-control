@@ -4,23 +4,23 @@ Timetable viewsets.
 
 from rest_framework import viewsets
 
-from timetables.models import Timetable, Step
-from timetables.serializers import TimetableSerializer, StepSerializer
+from timetables.models import Timetable, Stage
+from timetables.serializers import TimetableSerializer, StageSerializer
 
 
 class TimetableViewSet(viewsets.ModelViewSet):
     """
-    Timtable viewset provides all http request methods.
+    Timtable viewset.
     """
     queryset = Timetable.objects.all()
     serializer_class = TimetableSerializer
     model = Timetable
 
 
-class StepViewSet(viewsets.ModelViewSet):
+class StageViewSet(viewsets.ModelViewSet):
     """
-    Timetable step viewset provides all http request methods.
+    Timetable stage.
     """
-    queryset = Step.objects.all()
-    serializer_class = StepSerializer
-    model = Step
+    queryset = Stage.objects.all()
+    serializer_class = StageSerializer
+    model = Stage

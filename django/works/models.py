@@ -10,56 +10,56 @@ from django.utils.translation import gettext_lazy as _
 from core import defaults
 
 
-class TCCWork(models.Model):
+class FinalWork(models.Model):
     """
-    TCC work model.
+    Final work model.
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
     approved = models.BooleanField(verbose_name=_('approved'), default=False)
-    advisor = models.ForeignKey('users.User', related_name='advisor', verbose_name=_('advisor'),
-                                on_delete=models.DO_NOTHING)
-    advised = models.ManyToManyField('users.User', related_name='advised',
-                                     verbose_name=_('advised'))
+    supervisor = models.ForeignKey('users.User', related_name='work_supervisor', verbose_name=_('supervisor'),
+                                   on_delete=models.DO_NOTHING)
+    mentees = models.ManyToManyField('users.User', related_name='work_mentee',
+                                    verbose_name=_('mentee'))
 
     class Meta:
-        verbose_name = _('TCC work')
-        verbose_name_plural = _('TCC works')
+        verbose_name = _('Final work')
+        verbose_name_plural = _('Final works')
 
 
-class WorkStep(models.Model):
+class FinalWorkStage(models.Model):
     """
-    Work step model.
+    Final work stage model.
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     presented = models.BooleanField(verbose_name=_('presented'), default=False)
-    status = models.SmallIntegerField(verbose_name=_('status'),
-                                      choices=defaults.WORK_STEP_STATUS,
-                                      default=defaults.WORK_STEP_ASSIGNED)
-    step = models.ForeignKey('timetables.Step', verbose_name=_('step'),
-                             on_delete=models.DO_NOTHING, related_name='step')
-    tcc_work = models.ForeignKey('works.TCCWork', verbose_name=_('tcc work'),
-                                 on_delete=models.DO_NOTHING, related_name='tcc_work')
+    status = models.IntegerField(verbose_name=_('status'),
+                                 choices=defaults.WORK_STAGE_STATUS,
+                                 default=defaults.WORK_STAGE_ASSIGNED)
+    stage = models.ForeignKey('timetables.Stage', verbose_name=_('time table stage'),
+                              on_delete=models.DO_NOTHING, related_name='work_timetable_stage')
+    final_work = models.ForeignKey('works.FinalWork', verbose_name=_('final work'),
+                                   on_delete=models.DO_NOTHING, related_name='work_stage')
 
     class Meta:
-        verbose_name = _('Work step')
-        verbose_name_plural = _('Work steps')
+        verbose_name = _('Final work stage')
+        verbose_name_plural = _('Final work stages')
 
 
-class WorkStepVersion(models.Model):
+class FinalWorkVersion(models.Model):
     """
-    Work step version model.
+    Final work version model.
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name=_('created at'))
     content = models.JSONField(verbose_name=_('content'), blank=True, null=True)
-    work_step = models.ForeignKey('works.WorkStep', verbose_name=_('work step'),
-                                  on_delete=models.DO_NOTHING, related_name='step_version')
+    work_stage = models.ForeignKey('works.FinalWorkStage', verbose_name=_('work stage'),
+                                   on_delete=models.DO_NOTHING, related_name='work_stage_version')
 
     class Meta:
-        verbose_name = _('Work step version')
-        verbose_name_plural = _('Work step versions')
+        verbose_name = _('Work stage version')
+        verbose_name_plural = _('Work stage versions')
 
 
 class ChangeRequest(models.Model):
@@ -73,8 +73,8 @@ class ChangeRequest(models.Model):
                                       verbose_name=_('created at'))
     requester = models.ForeignKey('users.User', verbose_name=_('requester'),
                                   on_delete=models.DO_NOTHING, related_name='requester')
-    work_step = models.ForeignKey('works.WorkStep', verbose_name=_('work step'),
-                                  on_delete=models.DO_NOTHING, related_name='change_requests')
+    work_stage = models.ForeignKey('works.FinalWorkStage', verbose_name=_('work stage'),
+                                   on_delete=models.DO_NOTHING, related_name='work_stage_change_request')
 
     class Meta:
         verbose_name = _('Change request')
@@ -85,6 +85,6 @@ class ChangeRequest(models.Model):
         Method to approve a change request.
         """
         self.approved = True
-        new_version = WorkStepVersion(content=None, work_step=self.work_step)
+        new_version = FinalWorkVersion(content=None, work_stage=self.work_stage)
         self.save()
         new_version.save()

@@ -12,4 +12,4 @@ class CommentAdmin(admin.ModelAdmin):
     """
     Comment configuration model admin.
     """
-    list_display = ('id', 'description', 'created_at', 'work_step', 'author')
+    list_display = ('id', 'description', 'created_at', 'work_stage', 'author')

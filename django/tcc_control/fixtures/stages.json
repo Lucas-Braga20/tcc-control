@@ -1,14 +1,15 @@
 [
   {
-    "model": "timetables.step",
+    "model": "timetables.stage",
     "pk": "0676cd07-fb62-4bd9-9542-dfd178ed095d",
     "fields": {
       "description": "Esta é a etapa termo de abertura de projeto.",
       "start_date": "2023-06-11",
-      "send_date_advisor": "2023-06-12",
+      "send_date_supervisor": "2023-06-12",
       "send_date": "2023-06-13",
       "presentation_date": "2023-06-14",
-      "activity_configuration": "df9a7654-75a4-4209-8566-f7968c037fb6"
+      "activity_configuration": "df9a7654-75a4-4209-8566-f7968c037fb6",
+      "timetable": "a90dd479-de02-440f-94e3-d6af553af551"
     }
   }
 ]

@@ -18,14 +18,14 @@ class CommentForm(forms.ModelForm):
 
     def clean(self):
         author = self.cleaned_data.get('author')
-        work_step = self.cleaned_data.get('work_step')
+        work_stage = self.cleaned_data.get('work_stage')
 
-        if author and work_step:
-            advisor = work_step.tcc_work.advisor
-            advised = work_step.tcc_work.advised.all()
+        if author and work_stage:
+            supervisor = work_stage.final_work.supervisor
+            mentees = work_stage.final_work.mentees.all()
 
-            is_advised = advised.filter(id=author.id).exists()
-            is_advisor = author.id == advisor.id
+            is_mentee = mentees.filter(id=author.id).exists()
+            is_supervisor = author.id == supervisor.id
 
-            if not is_advised or not is_advisor:
+            if not is_supervisor or not is_mentee:
                 raise forms.ValidationError({'author': 'The comment can only be made by a TCC member.'})

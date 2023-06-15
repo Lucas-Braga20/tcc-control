@@ -4,7 +4,7 @@ Forms to timetables app.
 
 from django import forms
 
-from timetables.models import Timetable, Step
+from timetables.models import Timetable, Stage
 
 
 class TimetableForm(forms.ModelForm):
@@ -43,27 +43,27 @@ class TimetableForm(forms.ModelForm):
         return teacher
 
 
-class StepForm(forms.ModelForm):
+class StageForm(forms.ModelForm):
     """
-    Step form.
+    Stage form.
     """
 
     class Meta:
-        model = Step
+        model = Stage
         fields = '__all__'
 
     def clean(self):
         cleaned_data = super().clean()
 
         start_date = cleaned_data.get('start_date')
-        send_date_advisor = cleaned_data.get('send_date_advisor')
+        send_date_supervisor = cleaned_data.get('send_date_supervisor')
         send_date = cleaned_data.get('send_date')
         presentation_date = cleaned_data.get('presentation_date')
 
         if start_date:
-            if start_date > send_date_advisor:
+            if start_date > send_date_supervisor:
                 raise forms.ValidationError(
-                    {'start_date': 'The date sent to the advisor must be after the start date'}
+                    {'start_date': 'The date sent to the supervisor must be after the start date'}
                 )
 
             if start_date > send_date:
@@ -74,8 +74,8 @@ class StepForm(forms.ModelForm):
             if presentation_date is not None and start_date > presentation_date:
                 raise forms.ValidationError({'start_date': 'The submission date must be after the start date'})
 
-        if send_date_advisor and send_date:
-            if send_date_advisor > send_date:
+        if send_date_supervisor and send_date:
+            if send_date_supervisor > send_date:
                 raise forms.ValidationError(
-                    {'send_date_advisor': 'The advisor submission date should be after the platform submission date.'}
+                    {'send_date_supervisor': 'The supervisor submission date should be after the platform submission date.'}
                 )

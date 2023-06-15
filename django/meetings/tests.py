@@ -15,9 +15,9 @@ class MeetingTest(TestCase):
         'tcc_control/fixtures/users.json',
         'tcc_control/fixtures/activity_configurations.json',
         'tcc_control/fixtures/timetables.json',
-        'tcc_control/fixtures/steps.json',
-        'tcc_control/fixtures/tccworks.json',
-        'tcc_control/fixtures/work_steps.json',
+        'tcc_control/fixtures/stages.json',
+        'tcc_control/fixtures/final_works.json',
+        'tcc_control/fixtures/final_work_stages.json',
         'tcc_control/fixtures/meetings.json',
         'tcc_control/fixtures/approved_meetings.json'
     ]

@@ -10,7 +10,7 @@ from django.forms.fields import Field
 
 from activities.models import ActivityConfiguration
 
-from timetables.forms import TimetableForm, StepForm
+from timetables.forms import TimetableForm, StageForm
 
 from users.models import User
 
@@ -71,9 +71,9 @@ class TimetableTest(TestCase):
         self.assertEqual(form.errors['participants'], ['Participants must have the profile of mentors or mentees.'])
 
 
-class StepTest(TestCase):
+class StageTest(TestCase):
     """
-    Step test.
+    Stage test.
     """
     fixtures = [
         'tcc_control/fixtures/users.json',
@@ -90,11 +90,11 @@ class StepTest(TestCase):
         data = {
             'description': '',
             'start_date': datetime.date.today(),
-            'send_date_advisor': datetime.date.today() + datetime.timedelta(days=1),
+            'send_date_supervisor': datetime.date.today() + datetime.timedelta(days=1),
             'send_date': datetime.date.today() + datetime.timedelta(days=2),
             'activity_configuration': self.activity_configuration
         }
-        form = StepForm(data=data)
+        form = StageForm(data=data)
 
         self.assertEqual(form.errors['description'], [Field.default_error_messages['required']])
 
@@ -102,11 +102,11 @@ class StepTest(TestCase):
         data = {
             'description': 'Teste',
             'start_date': '2023-02-30',
-            'send_date_advisor': '2023-03-01',
+            'send_date_supervisor': '2023-03-01',
             'send_date': '2023-03-02',
             'activity_configuration': self.activity_configuration
         }
-        form = StepForm(data=data)
+        form = StageForm(data=data)
 
         self.assertEqual(form.errors['start_date'], ['Enter a valid date.'])
 
@@ -114,25 +114,25 @@ class StepTest(TestCase):
         data = {
             'description': 'Teste',
             'start_date': '2023-03-03',
-            'send_date_advisor': '2023-03-01',
+            'send_date_supervisor': '2023-03-01',
             'send_date': '2023-03-02',
             'activity_configuration': self.activity_configuration
         }
-        form = StepForm(data=data)
+        form = StageForm(data=data)
 
-        self.assertEqual(form.errors['start_date'], ['The date sent to the advisor must be after the start date'])
+        self.assertEqual(form.errors['start_date'], ['The date sent to the supervisor must be after the start date'])
 
     def test_date_advisor_order(self):
         data = {
             'description': 'Teste',
             'start_date': '2023-02-28',
-            'send_date_advisor': '2023-03-03',
+            'send_date_supervisor': '2023-03-03',
             'send_date': '2023-03-02',
             'presentation_date': '2023-03-01',
             'activity_configuration': self.activity_configuration
         }
-        form = StepForm(data=data)
+        form = StageForm(data=data)
 
-        self.assertEqual(form.errors['send_date_advisor'], [
-            'The advisor submission date should be after the platform submission date.'
+        self.assertEqual(form.errors['send_date_supervisor'], [
+            'The supervisor submission date should be after the platform submission date.'
         ])

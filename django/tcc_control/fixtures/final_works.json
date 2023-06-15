@@ -1,12 +1,12 @@
 [
   {
-    "model": "works.tccwork",
+    "model": "works.finalwork",
     "pk": "b0b66199-fc9f-433a-844a-376705af5154",
     "fields": {
       "description": "TCC Control",
       "approved": true,
-      "advisor": "74112f96-51ae-4f48-b0f6-319ee836c267",
-      "advised": [
+      "supervisor": "74112f96-51ae-4f48-b0f6-319ee836c267",
+      "mentees": [
         "4c091994-078f-4c94-9df4-29ea135ddd08",
         "912642d8-cc18-43a2-819d-350756044caa"
       ]

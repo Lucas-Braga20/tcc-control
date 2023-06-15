@@ -24,7 +24,7 @@ class ActivityConfigurationForm(forms.ModelForm):
         fields = self.cleaned_data.get('fields')
 
         if fields is None:
-            raise forms.ValidationError('O campo fields não pode ser nulo.')
+            raise forms.ValidationError('The "fields" field cannot be null.')
 
         try:
             validate_fields_json(fields_value=fields)

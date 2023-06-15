@@ -6,56 +6,58 @@ import datetime
 
 from django import forms
 
-from works.models import WorkStep, WorkStepVersion
-from works.utils import validate_step_content_json
+from works.models import FinalWorkStage, FinalWorkVersion
+from works.utils import validate_stage_content_json
 
-from core.defaults import WORK_STEP_COMPLETED, WORK_STEP_COMPLETED_LATE, WORK_STEP_PRESENTED
+from core.defaults import WORK_STAGE_COMPLETED, WORK_STAGE_COMPLETED_LATE, WORK_STAGE_PRESENTED
 
 
-class WorkStepForm(forms.ModelForm):
+class FinalWorkStageForm(forms.ModelForm):
     """
-    Work step form.
+    Final work stage form.
     """
 
     class Meta:
-        model = WorkStep
+        model = FinalWorkStage
         fields = '__all__'
 
-    def clean_status(self):
+    def clean(self):
         """
         Validate status field.
         """
         status = self.cleaned_data.get('status')
 
-        if self.instance is not None and status in (WORK_STEP_COMPLETED, WORK_STEP_COMPLETED_LATE):
-            versions = self.instance.step_version.all()
+        if self.instance is not None and status in (WORK_STAGE_COMPLETED, WORK_STAGE_COMPLETED_LATE):
+            versions = self.instance.work_stage_version.all()
 
             if not versions.exists():
-                raise forms.ValidationError('It is only possible to complete the activity if there is a development.')
+                raise forms.ValidationError(
+                    {'status': 'It is only possible to complete the activity if there is a development.'}
+                )
 
-        if self.instance is not None and status == WORK_STEP_PRESENTED:
-            step = self.instance.step
+        if self.instance is not None and status == WORK_STAGE_PRESENTED:
+            timetable_stage = self.instance.stage
 
             today = datetime.date.today()
 
-            if step.presentation_date is None:
-                raise forms.ValidationError('It is only possible to mark an activity as "presented" when the ' \
-                                            'stage has a presentation.')
+            if timetable_stage.presentation_date is None:
+                raise forms.ValidationError(
+                    {'status': 'It is only possible to mark an activity as "presented" when the stage has a presentation.'}
+                )
 
-            if today < step.presentation_date:
-                raise forms.ValidationError('It is only possible to mark a stage as "presented" when today\'s date ' \
-                                            'is the presentation date or later')
+            if today < timetable_stage.presentation_date:
+                raise forms.ValidationError(
+                    {'status': 'It is only possible to mark a stage as "presented" when today\'s date is the presentation date or later'}
+                )
 
-        return status
 
-
-class WorkStepVersionForm(forms.ModelForm):
+class FinalWorkVersionForm(forms.ModelForm):
     """
-    Work step version form.
+    Final work version form.
     """
 
     class Meta:
-        model = WorkStepVersion
+        model = FinalWorkVersion
         fields = '__all__'
 
     def clean_content(self):
@@ -65,10 +67,10 @@ class WorkStepVersionForm(forms.ModelForm):
         content = self.cleaned_data.get('content')
 
         if content is None:
-            raise forms.ValidationError('O campo content não pode ser nulo.')
+            raise forms.ValidationError('The content field cannot be null.')
 
         try:
-            validate_step_content_json(content=content)
+            validate_stage_content_json(content=content)
         except Exception as e:
             raise forms.ValidationError(str(e))
 
@@ -76,10 +78,10 @@ class WorkStepVersionForm(forms.ModelForm):
 
     def clean(self):
         content = self.cleaned_data.get('content')
-        work_step = self.cleaned_data.get('work_step')
+        work_stage = self.cleaned_data.get('work_stage')
 
         if content is not None:
-            activity_configuration = work_step.step.activity_configuration
+            activity_configuration = work_stage.stage.activity_configuration
 
             activity_fields = activity_configuration.fields.get('fields')
             keys = [activity_field.get('key') for activity_field in activity_fields]

@@ -24,14 +24,14 @@ class Timetable(models.Model):
         verbose_name_plural = _('Timetables')
 
 
-class Step(models.Model):
+class Stage(models.Model):
     """
-    Timetable steps model.
+    Timetable stage model.
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
     start_date = models.DateField(verbose_name=_('start date'))
-    send_date_advisor = models.DateField(verbose_name=_('send date advisor'))
+    send_date_supervisor = models.DateField(verbose_name=_('send date supervisor'))
     send_date = models.DateField(verbose_name=_('send date'))
     presentation_date = models.DateField(verbose_name=_('presentation date'),
                                          blank=True, null=True)
@@ -39,19 +39,21 @@ class Step(models.Model):
                                                related_name='activity_configuration',
                                                verbose_name=_('activity configuration'),
                                                on_delete=models.DO_NOTHING)
+    timetable = models.ForeignKey('timetables.TimeTable', related_name='stages',
+                                  verbose_name=_('timetable'), on_delete=models.DO_NOTHING)
 
     class Meta:
-        verbose_name = _('Step')
-        verbose_name_plural = _('Steps')
+        verbose_name = _('Stage')
+        verbose_name_plural = _('Stages')
 
 
-class StepExample(models.Model):
+class StageExample(models.Model):
     """
-    Step example model.
+    Stage example model.
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    file = models.FileField(upload_to='documents/step-example/', blank=True, null=True)
+    file = models.FileField(upload_to='documents/stage-example/', blank=True, null=True)
 
     class Meta:
-        verbose_name = _('Step Example')
-        verbose_name_plural = _('Step Examples')
+        verbose_name = _('Stage example')
+        verbose_name_plural = _('Stage examples')

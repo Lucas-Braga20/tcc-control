@@ -4,7 +4,7 @@ Admin configuration to timetables app.
 
 from django.contrib import admin
 
-from timetables.models import Timetable, Step, StepExample
+from timetables.models import Timetable, Stage, StageExample
 
 
 @admin.register(Timetable)
@@ -15,17 +15,17 @@ class TimetableAdmin(admin.ModelAdmin):
     list_display = ('id', 'description', 'teacher')
 
 
-@admin.register(Step)
-class StepAdmin(admin.ModelAdmin):
+@admin.register(Stage)
+class StageAdmin(admin.ModelAdmin):
     """
-    Step configuration model admin.
+    Stage configuration model admin.
     """
-    list_display = ('id', 'description', 'start_date', 'send_date_advisor', 'send_date', 'presentation_date')
+    list_display = ('id', 'description', 'start_date', 'send_date_supervisor', 'send_date', 'presentation_date')
 
 
-@admin.register(StepExample)
-class StepExampleAdmin(admin.ModelAdmin):
+@admin.register(StageExample)
+class StageExampleAdmin(admin.ModelAdmin):
     """
-    Step Example configuration model admin.
+    Stage example configuration model admin.
     """
     list_display = ('id', 'file')

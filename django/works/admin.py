@@ -5,37 +5,37 @@ Admin configuration to works app.
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from works.models import TCCWork, WorkStep, WorkStepVersion, ChangeRequest
+from works.models import FinalWork, FinalWorkStage, FinalWorkVersion, ChangeRequest
 
 
-@admin.register(TCCWork)
-class TCCWorkAdmin(admin.ModelAdmin):
+@admin.register(FinalWork)
+class FinalWorkAdmin(admin.ModelAdmin):
     """
-    TCC Work configuration model admin.
+    Final work configuration model admin.
     """
-    list_display = ('id', 'description', 'approved', 'advisor', 'advised')
-    list_filter = ('approved', 'advisor')
+    list_display = ('id', 'description', 'approved', 'supervisor', 'mentees')
+    list_filter = ('supervisor', 'mentees')
 
-    @admin.display(description=_('advised'))
-    def advised(self, obj):
+    @admin.display(description=_('mentees'))
+    def mentees(self, obj):
         """
-        Method to return advised names.
+        Method to return mentees names.
         """
-        return [advised.get_full_name() for advised in obj.advised.all()].join(', ')
+        return [mentee.get_full_name() for mentee in obj.mentee.all()].join(', ')
 
 
-@admin.register(WorkStep)
-class WorkStepAdmin(admin.ModelAdmin):
+@admin.register(FinalWorkStage)
+class FinalWorkStageAdmin(admin.ModelAdmin):
     """
-    Work Step configuration model admin.
+    Final work stage configuration model admin.
     """
     list_display = ('id', 'presented', 'status')
 
 
-@admin.register(WorkStepVersion)
-class WorkStepVersionAdmin(admin.ModelAdmin):
+@admin.register(FinalWorkVersion)
+class FinalWorkVersionAdmin(admin.ModelAdmin):
     """
-    Work Step Version configuration model admin.
+    Final work version configuration model admin.
     """
     list_display = ('id', 'created_at', 'content')
 

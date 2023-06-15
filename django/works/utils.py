@@ -3,7 +3,7 @@ Utils to works app.
 """
 
 
-def validate_step_content_json(content):
+def validate_stage_content_json(content):
     """
     Method to validate field content.
 
@@ -14,11 +14,11 @@ def validate_step_content_json(content):
     fields = content.get('fields')
 
     if fields is None:
-        raise Exception('O campo fields não pode ser nulo.')
+        raise Exception('The "fields" field cannot be null.')
 
     for field in fields:
         key = field.get('key')
         value = field.get('value')
 
         if key is None or value is None:
-            raise Exception('Um campo não foi inserido corretamente.')
+            raise Exception('A field was not entered correctly.')
