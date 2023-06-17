@@ -1,0 +1,88 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block header %}
+  <div
+    id="kt_header"
+    class="header"
+    data-kt-sticky="true"
+    data-kt-sticky-name="header"
+    data-kt-sticky-offset="{default: '200px', lg: '300px'}">
+    <div class="container-xxl d-flex align-items-center justify-content-between" id="kt_header_container">
+      <!-- Page Title -->
+      <div
+        class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-5 pb-lg-0"
+        data-kt-swapper="true"
+        data-kt-swapper-mode="prepend"
+        data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
+        <h1 class="text-dark fw-bold my-0 fs-2">Listagem</h1>
+        <ul class="breadcrumb breadcrumb-line text-muted fw-semibold fs-base my-1">
+          <li class="breadcrumb-item text-muted">
+            <a href="#" class="text-muted">
+              Início
+            </a>
+          </li>
+          <li class="breadcrumb-item text-muted">
+            Atividades
+          </li>
+          <li class="breadcrumb-item text-muted">
+            Configuração de atividades
+          </li>
+          <li class="breadcrumb-item text-dark">
+            Listagem
+          </li>
+        </ul>
+      </div>
+
+      <!-- Actions -->
+      <div class="d-flex flex-shrink-0">
+        <div class="d-flex ms-3">
+          <a
+            href="#"
+            class="btn btn-info"
+            tooltip="Nova configuração de atividade">
+            Nova atividade
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="container-xxl" id="kt_content_container">
+      <div class="card">
+        <div class="card-body">
+          <table
+            id="tcc_datatable_activity_configurations"
+            class="table table-row-bordered gy-5"
+            data-api="{% url 'api:activities-list' %}?format=datatables">
+            <thead>
+              <tr class="fw-bold fs-6 text-muted">
+                <th class="rounded-start min-w-200px" data-data="name">Nome</th>
+                <th class="min-w-150px" data-data="fields_description">Campos</th>
+                <th class="min-w-150px" data-data="template_abnt">Template</th>
+                <th class="w-auto rounded-end text-end">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block css-vendors %}
+  <link rel="stylesheet" href="{% static 'vendor/datatable/datatables.bundle.css' %}">
+{% endblock %}
+
+{% block js-vendors %}
+  <script src="{% static 'vendor/datatable/datatables.bundle.js' %}"></script>
+{% endblock %}
+
+{% block js-scripts %}
+  <script src="{% static 'js/activity-configurations/list.js' %}"></script>
+{% endblock %}

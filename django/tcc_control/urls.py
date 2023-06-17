@@ -14,7 +14,7 @@ from tcc_control.routers import router
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
+    path('api/', include('tcc_control.routers')),
     path('formulary-test/', include('activities.urls', namespace='formulary-test')),
 ]
 

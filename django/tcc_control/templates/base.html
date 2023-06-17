@@ -8,6 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block html-title %}TCC Control{% endblock html-title %}{% block html-subtitle %}{% endblock html-subtitle %}</title>
 
+    {% block css-vendors %}{% endblock %}
+
     {% block css %}
       <!-- Fonts -->
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
@@ -21,7 +23,6 @@
       <!-- General Css -->
       <link rel="stylesheet" href="{% static 'css/general.css' %}">
     {% endblock %}
-
   </head>
   <body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-enabled">
     {% block layout %}{% endblock %}

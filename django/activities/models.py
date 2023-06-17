@@ -16,6 +16,7 @@ class ActivityConfiguration(models.Model):
     name = models.TextField(verbose_name=_('name'), max_length=255)
     fields = models.JSONField(verbose_name=_('fields'))
     template_abnt = models.FileField(upload_to='documents/', blank=True, null=True)
+    archived = models.BooleanField(default=False, verbose_name=_('archived'))
 
     class Meta:
         verbose_name = _('Activity Configuration')

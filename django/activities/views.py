@@ -5,6 +5,13 @@ Activities Views.
 from django.views.generic import TemplateView
 
 
+class ActivityConfigurationListView(TemplateView):
+    """
+    Activity configuration list screen.
+    """
+    template_name = 'activity-configurations/list.html'
+
+
 class FormularyTest(TemplateView):
     """
     Formulary Test View.

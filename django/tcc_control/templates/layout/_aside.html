@@ -79,7 +79,9 @@
                     </a>
                   </div>
                   <div class="menu-item">
-                    <a class="menu-link {% get_link_is_active request 'null' %}" href="#">
+                    <a
+                      class="menu-link {% get_link_is_active request 'activity-configuration-list' %}"
+                      href="{% url 'activities:activity-configuration-list' %}">
                       <span class="menu-icon navbar-secondary-icon">
                         <i class="fas fa-list-ul"></i>
                       </span>
