@@ -14,6 +14,7 @@ const ActivityConfigurationList = () => {
       },
       columnDefs: [{
         targets: '_all',
+        className: 'align-middle',
         render(data) {
           return data != null ? data : "";
         },
@@ -49,7 +50,11 @@ const ActivityConfigurationList = () => {
           data: null,
           orderable: false,
           render(data) {
-            return ''
+            return `
+              <a href="/activities/update/${data.id}" class="btn btn-sm btn-icon btn-primary">
+                <i class="fas fa-edit"></i>
+              </a>
+            `;
           },
         },
       ]

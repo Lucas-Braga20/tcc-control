@@ -2,7 +2,7 @@
 Activities Views.
 """
 
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -30,6 +30,47 @@ class ActivityConfigurationCreateView(CreateView):
     form_class = ActivityConfigurationForm
     success_url = reverse_lazy('activities:list')
     success_message = 'Configuração de atividade criada com sucesso.'
+    permission_classes = None
+    authentication_classes = None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        types = []
+        for type in ACTIVITY_TYPES:
+            if type == 'text':
+                types.append({
+                    'value': type,
+                    'label': 'Texto'
+                })
+
+            if type == 'number':
+                types.append({
+                    'value': type,
+                    'label': 'Número'
+                })
+
+            if type == 'rich':
+                types.append({
+                    'value': type,
+                    'label': 'Editor'
+                })
+
+        context['types'] = types
+
+        return context
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ActivityConfigurationUpdateView(UpdateView):
+    """
+    Activity configuration update screen.
+    """
+    template_name = 'activity-configurations/editor.html'
+    model = ActivityConfiguration
+    form_class = ActivityConfigurationForm
+    success_url = reverse_lazy('activities:list')
+    success_message = 'Configuração de atividade atualizada com sucesso.'
     permission_classes = None
     authentication_classes = None
 

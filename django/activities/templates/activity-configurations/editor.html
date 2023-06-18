@@ -155,7 +155,7 @@
               type="text"
               class="form-control form-control-solid tcc_name_field"
               placeholder="Nome"
-              name="name"
+              name="fields_name"
             />
           </div>
           <div class="fv-row mb-8">
@@ -164,7 +164,7 @@
               id="tcc_fields_editor_type"
               class="form-control form-control-solid"
               placeholder="Tipo"
-              name="type">
+              name="fields_type">
               {% for type in types %}
                 <option value="{{ type.value }}">{{ type.label }}</option>
               {% endfor %}
@@ -177,7 +177,7 @@
               type="text"
               class="form-control form-control-solid tcc_key_field"
               placeholder="Chave"
-              name="key"
+              name="fields_key"
             />
           </div>
         </div>
