@@ -32,13 +32,6 @@ const ActivityConfigurationList = () => {
     },
   };
 
-  const Toast = Swal.mixin({
-    toast: true,
-    position: 'bottom-end',
-    showConfirmButton: false,
-    timer: 3000,
-  });
-
   function getElements() {
     dataTableElement = document.getElementById('tcc_datatable_activity_configurations');
     archivedButtonFilters = document.getElementById('tcc_archived_button_filters');

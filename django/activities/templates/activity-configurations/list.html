@@ -120,6 +120,14 @@
       </div>
     </div>
   </div>
+
+  <div id="tcc_form_messages" class="d-none">
+    {% if messages %}
+      {% for message in messages %}
+        <div data-mode="{{ message.tags }}">{{ message|safe }}</div>
+      {% endfor %}
+    {% endif %}
+  </div>
 {% endblock %}
 
 {% block css-vendors %}
@@ -139,8 +147,26 @@
 {% block js-vendors %}
   <script src="{% static 'vendor/datatable/datatables.bundle.js' %}"></script>
   <script src="{% static 'vendor/sweetalert/sweetalert.js' %}"></script>
+  <script>
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'bottom-end',
+      showConfirmButton: false,
+      timer: 3000,
+    });
+  </script>
 {% endblock %}
 
 {% block js-scripts %}
   <script src="{% static 'js/activity-configurations/list.js' %}"></script>
+  <script>
+    $('#tcc_form_messages').find('div').each(function() {
+      const text = $(this).text();
+      const mode = $(this).data('mode');
+      Toast.fire({
+        icon: mode,
+        title: text,
+      });
+    });
+  </script>
 {% endblock %}

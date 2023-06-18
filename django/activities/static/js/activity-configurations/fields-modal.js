@@ -397,7 +397,9 @@ class ActivityFieldsEditor {
 
       if ($(this.inputElement).val() != '') {
         const initialData = JSON.parse($(this.inputElement).val());
-        this.loadItensElements(initialData.fields);
+        if (initialData != null && initialData.fields != null) {
+          this.loadItensElements(initialData.fields);
+        }
       }
 
       this.handleAddButton();

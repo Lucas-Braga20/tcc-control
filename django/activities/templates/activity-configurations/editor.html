@@ -65,14 +65,14 @@
                       class="form-control form-control-solid is-invalid"
                       placeholder="Nome"
                       name="name"
-                      value="{{ form.name.value }}"/>
+                      value="{% if form.name.value %}{{ form.name.value }}{% endif %}"/>
                   {% else %}
                     <input
                       type="text"
                       class="form-control form-control-solid"
                       placeholder="Nome"
                       name="name"
-                      value="{{ form.name.value }}"/>
+                      value="{% if form.name.value %}{{ form.name.value }}{% endif %}"/>
                   {% endif %}
                   {% for error in form.name.errors %}
                     <div class="invalid-feedback">
@@ -110,13 +110,13 @@
                       name="fields"
                       type="hidden"
                       class="is-invalid"
-                      value="{{ form.fields.value }}">
+                      value="{% if form.fields.value %}{{ form.fields.value }}{% endif %}">
                   {% else %}
                     <input
                       id="tcc_fields_editor"
                       name="fields"
                       type="hidden"
-                      value="{{ form.fields.value }}">
+                      value="{% if form.fields.value %}{{ form.fields.value }}{% endif %}">
                   {% endif %}
                   {% for error in form.fields.errors %}
                     <div class="invalid-feedback">
