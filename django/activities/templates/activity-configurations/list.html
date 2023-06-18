@@ -53,6 +53,53 @@
   <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <div class="container-xxl" id="kt_content_container">
       <div class="card">
+        <div class="card-header border-0 pt-6">
+          <!-- Searh -->
+          <!-- <div class="card-title">
+            <div class="d-flex align-items-center position-relative my-1">
+              <span class="position-absolute ms-6">
+                <i class="fas fa-search"></i>
+              </span>
+              <input
+                type="text"
+                data-tcc-activity-table-filter="search"
+                class="form-control form-control-solid w-250px ps-14"
+                placeholder="Buscar atividade">
+            </div>
+          </div> -->
+
+          <!-- Toolbar -->
+          <div class="card-toolbar">
+            <div class="d-flex justify-content-end">
+              <!-- <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                Filtros
+              </button>
+              <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true">
+                <div class="px-7 py-5">
+                  <div class="fs-5 text-dark fw-bold">Filter Options</div>
+                </div>
+                <div class="separator border-gray-200"></div>
+                <div class="px-7 py-5" data-kt-user-table-filter="form"></div>
+              </div> -->
+              <div id="tcc_archived_button_filters" class="d-flex flex-stack gap-5 mb-3" data-kt-buttons="true">
+                <button
+                  type="button"
+                  class="btn btn-light-primary active"
+                  data-kt-docs-advanced-forms="interactive"
+                  data-archived="false">
+                  Não arquivados
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-light-primary"
+                  data-kt-docs-advanced-forms="interactive"
+                  data-archived="true">
+                  Arquivados
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="card-body">
           <table
             id="tcc_datatable_activity_configurations"
@@ -77,10 +124,21 @@
 
 {% block css-vendors %}
   <link rel="stylesheet" href="{% static 'vendor/datatable/datatables.bundle.css' %}">
+  <style>
+    .my-actions { margin: 0 2em; }
+    .order-1 { order: 1; }
+    .order-2 { order: 2; }
+    .order-3 { order: 3; }
+
+    .right-gap {
+      margin-right: auto;
+    }
+  </style>
 {% endblock %}
 
 {% block js-vendors %}
   <script src="{% static 'vendor/datatable/datatables.bundle.js' %}"></script>
+  <script src="{% static 'vendor/sweetalert/sweetalert.js' %}"></script>
 {% endblock %}
 
 {% block js-scripts %}
