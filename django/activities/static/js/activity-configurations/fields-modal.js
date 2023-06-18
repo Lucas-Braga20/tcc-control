@@ -128,7 +128,7 @@ class ActivityFieldsEditor {
   }
 
 
-  // Add element to list.
+  // Manipulate elements in list.
   addItemElementToList(name, type, key, id) {
     const nameField = $(this.formFieldsElements.name).parent().clone();
     nameField.find('input').attr('id', `tcc_fields_editor_update_name_${id}`);
@@ -226,6 +226,30 @@ class ActivityFieldsEditor {
     `);
   }
 
+  loadItensElements(initial) {
+    initial.forEach(value => {
+      const id = Date.now();
+
+      this.addItemElementToList(value.name, value.type, value.key, id);
+
+      this.items.push({
+        id,
+        name: {
+          value: value.name,
+          element: document.getElementById(`tcc_fields_editor_update_name_${id}`),
+        },
+        type: {
+          value: value.type,
+          element: document.getElementById(`tcc_fields_editor_update_type_${id}`),
+        },
+        key: {
+          value: value.key,
+          element: document.getElementById(`tcc_fields_editor_update_key_${id}`),
+        },
+      });
+    });
+  }
+
 
   // Get json response from added itens.
   getJsonFields() {
@@ -286,8 +310,8 @@ class ActivityFieldsEditor {
         this.resetForm();
         this.modal.object.hide();
       } else {
-        this.validateNameField();
-        this.validateKeyField();
+        this.validateNameField(name, this.formFieldsElements.name);
+        this.validateKeyField(key, this.formFieldsElements.key);
       }
     });
   }
@@ -318,7 +342,7 @@ class ActivityFieldsEditor {
       const type = $(`#tcc_fields_editor_update_type_${id}`);
       const key = $(`#tcc_fields_editor_update_key_${id}`);
 
-      if (ctx.getIsValidForm(name, type, key)) {
+      if (ctx.getIsValidForm(name.val(), type.val(), key.val())) {
         const find = ctx.items.findIndex(item => item.id == id);
   
         if (find != null) {
@@ -371,13 +395,18 @@ class ActivityFieldsEditor {
     try {
       this.getElements();
 
+      if ($(this.inputElement).val() != '') {
+        const initialData = JSON.parse($(this.inputElement).val());
+        this.loadItensElements(initialData.fields);
+      }
+
+      this.handleAddButton();
+      this.handleConfirmButton();
+
+      this.handleNameFields();
+      this.handleKeyFields();
+
       if (this.items.length === 0) {
-        this.handleAddButton();
-        this.handleConfirmButton();
-
-        this.handleNameFields();
-        this.handleKeyFields();
-
         $(this.container).html(this.emptyElement);
       }
     } catch (err) {

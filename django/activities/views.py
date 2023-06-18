@@ -2,7 +2,10 @@
 Activities Views.
 """
 
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 from core.defaults import ACTIVITY_TYPES
 
@@ -17,13 +20,18 @@ class ActivityConfigurationListView(TemplateView):
     template_name = 'activity-configurations/list.html'
 
 
-class ActivityConfigurationCreateView(TemplateView):
+@method_decorator(csrf_exempt, name='dispatch')
+class ActivityConfigurationCreateView(CreateView):
     """
     Activity configuration create screen.
     """
     template_name = 'activity-configurations/editor.html'
     model = ActivityConfiguration
-    form = ActivityConfigurationForm
+    form_class = ActivityConfigurationForm
+    success_url = reverse_lazy('activities:list')
+    success_message = 'Configuração de atividade criada com sucesso.'
+    permission_classes = None
+    authentication_classes = None
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

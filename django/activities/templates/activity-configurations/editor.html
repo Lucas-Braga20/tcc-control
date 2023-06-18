@@ -59,7 +59,26 @@
                 <!-- Name -->
                 <div class="fv-row mb-8">
                   <label for="title" class="required form-label">Name</label>
-                  <input type="text" class="form-control form-control-solid" placeholder="Nome" name="Nome"/>
+                  {% if form.name.errors %}
+                    <input
+                      type="text"
+                      class="form-control form-control-solid is-invalid"
+                      placeholder="Nome"
+                      name="name"
+                      value="{{ form.name.value }}"/>
+                  {% else %}
+                    <input
+                      type="text"
+                      class="form-control form-control-solid"
+                      placeholder="Nome"
+                      name="name"
+                      value="{{ form.name.value }}"/>
+                  {% endif %}
+                  {% for error in form.name.errors %}
+                    <div class="invalid-feedback">
+                      {{ error }}
+                    </div>
+                  {% endfor %}
                 </div>
 
                 <!-- Fields -->
@@ -85,7 +104,25 @@
                       <span class="ms-3">Carregando campos...</span>
                     </div>
                   </div>
-                  <input id="tcc_fields_editor" name="fields" type="hidden">
+                  {% if form.fields.errors %}
+                    <input
+                      id="tcc_fields_editor"
+                      name="fields"
+                      type="hidden"
+                      class="is-invalid"
+                      value="{{ form.fields.value }}">
+                  {% else %}
+                    <input
+                      id="tcc_fields_editor"
+                      name="fields"
+                      type="hidden"
+                      value="{{ form.fields.value }}">
+                  {% endif %}
+                  {% for error in form.fields.errors %}
+                    <div class="invalid-feedback">
+                      {{ error }}
+                    </div>
+                  {% endfor %}
                 </div>
               </div>
               <div class="card-footer px-lg-12 py-lg-8 d-flex justify-content-end">
