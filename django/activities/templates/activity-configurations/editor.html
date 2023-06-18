@@ -1,0 +1,164 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block header %}
+  <div
+    id="kt_header"
+    class="header"
+    data-kt-sticky="true"
+    data-kt-sticky-name="header"
+    data-kt-sticky-offset="{default: '200px', lg: '300px'}">
+    <div class="container-xxl d-flex align-items-center justify-content-between" id="kt_header_container">
+      <!-- Page Title -->
+      <div
+        class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-5 pb-lg-0"
+        data-kt-swapper="true"
+        data-kt-swapper-mode="prepend"
+        data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
+        <h1 class="text-dark fw-bold my-0 fs-2">Adicionar</h1>
+        <ul class="breadcrumb breadcrumb-line text-muted fw-semibold fs-base my-1">
+          <li class="breadcrumb-item text-muted">
+            <a href="#" class="text-muted">
+              Início
+            </a>
+          </li>
+          <li class="breadcrumb-item text-muted">
+            Atividades
+          </li>
+          <li class="breadcrumb-item text-muted">
+            Configuração de atividades
+          </li>
+          <li class="breadcrumb-item text-dark">
+            Adicionar
+          </li>
+        </ul>
+      </div>
+
+      <!-- Actions -->
+      <div class="d-flex flex-shrink-0">
+        <div class="d-flex ms-3">
+          <a
+            href="{% url 'activities:list' %}"
+            class="btn btn-info">
+            Listagem
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="container-xxl" id="kt_content_container">
+      <div class="card">
+        <div class="card-body">
+          <form method="post" id="tcc_editor_activity_configurations">
+            <div class="card">
+              <div class="card-body pt-lg-12 px-lg-12 pb-lg-0">
+                <!-- Name -->
+                <div class="fv-row mb-8">
+                  <label for="title" class="required form-label">Name</label>
+                  <input type="text" class="form-control form-control-solid" placeholder="Nome" name="Nome"/>
+                </div>
+
+                <!-- Fields -->
+                <div class="fv-row mb-8">
+                  <div class="d-flex align-items-center justify-content-between mb-6">
+                    <h2 class="mb-0">Campos</h2>
+                    <div class="d-flex flex-shrink-0">
+                      <div class="d-flex ms-3">
+                        <button
+                          type="button"
+                          id="tcc_fields_editor_add_btn"
+                          class="btn btn-sm btn-secondary">
+                          Adicionar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="tcc_fields_editor_container" class="accordion">
+                    <div class="d-flex justify-content-center align-items-center py-3">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                      <span class="ms-3">Carregando campos...</span>
+                    </div>
+                  </div>
+                  <input id="tcc_fields_editor" name="fields" type="hidden">
+                </div>
+              </div>
+              <div class="card-footer px-lg-12 py-lg-8 d-flex justify-content-end">
+                <a href="{% url 'activities:list' %}" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary ms-5">Salvar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" id="tcc_modal_field">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Adicionar campo</h5>
+
+          <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fas fa-times"></i>
+          </div>
+        </div>
+
+        <div class="modal-body p-8">
+          <div class="fv-row mb-8">
+            <label for="name" class="required form-label">Name</label>
+            <input
+              id="tcc_fields_editor_name"
+              type="text"
+              class="form-control form-control-solid tcc_name_field"
+              placeholder="Nome"
+              name="name"
+            />
+          </div>
+          <div class="fv-row mb-8">
+            <label for="type" class="required form-label">Tipo</label>
+            <select
+              id="tcc_fields_editor_type"
+              class="form-control form-control-solid"
+              placeholder="Tipo"
+              name="type">
+              {% for type in types %}
+                <option value="{{ type.value }}">{{ type.label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="fv-row">
+            <label for="key" class="required form-label">Chave</label>
+            <input
+              id="tcc_fields_editor_key"
+              type="text"
+              class="form-control form-control-solid tcc_key_field"
+              placeholder="Chave"
+              name="key"
+            />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+          <button id="tcc_fields_editor_modal_confirm_button" type="button" class="btn btn-primary">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block css-styles %}
+  <link rel="stylesheet" href="{% static 'css/custom-accordion.css' %}">
+{% endblock %}
+
+{% block js-scripts %}
+  <script src="{% static 'js/activity-configurations/fields-modal.js' %}"></script>
+  <script src="{% static 'js/activity-configurations/editor.js' %}"></script>
+{% endblock %}

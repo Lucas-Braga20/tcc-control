@@ -60,7 +60,7 @@ def get_link_is_active(request, link):
     try:
         resolver_match = request.resolver_match
         if resolver_match:
-            url_name = resolver_match.url_name
+            url_name = f'{resolver_match.app_name}:{resolver_match.url_name}'
     except AttributeError:
         return ''
 
