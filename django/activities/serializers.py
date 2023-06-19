@@ -5,6 +5,7 @@ Activities serializers.
 from rest_framework import serializers
 
 from activities.models import ActivityConfiguration
+from activities.utils import validate_fields_json
 
 
 class ActivityConfigurationSerializer(serializers.ModelSerializer):
@@ -29,3 +30,14 @@ class ActivityConfigurationSerializer(serializers.ModelSerializer):
             return ', '.join([field['name'] for field in fields])
 
         return None
+
+    def validate_fields(self, value):
+        if value is None:
+            raise serializers.ValidationError('The "fields" field cannot be null.')
+
+        try:
+            validate_fields_json(fields_value=value)
+        except Exception as e:
+            raise serializers.ValidationError(str(e))
+
+        return value
