@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import Http404
 
 from core.defaults import ACTIVITY_TYPES
 
@@ -74,6 +75,14 @@ class ActivityConfigurationUpdateView(SuccessMessageMixin, UpdateView):
     success_message = 'Configuração de atividade atualizada com sucesso.'
     permission_classes = None
     authentication_classes = None
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+
+        if obj.archived:
+            raise Http404('This activity is archived.')
+
+        return obj
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

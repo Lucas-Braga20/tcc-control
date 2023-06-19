@@ -87,12 +87,7 @@ const ActivityConfigurationList = () => {
           data: null,
           orderable: false,
           render(data) {
-            const updateButtonElement = `
-              <a href="/activities/update/${data.id}" class="btn btn-sm btn-icon btn-primary">
-                <i class="fas fa-edit"></i>
-              </a>
-            `;
-
+            let updateButtonElement = '';
             let archivedButtonElement = '';
 
             if (!archived) {
@@ -105,6 +100,11 @@ const ActivityConfigurationList = () => {
                   data-id="${data.id}">
                   <i class="fas fa-archive"></i>
                 </button>
+              `;
+              updateButtonElement = `
+                <a href="/activities/update/${data.id}" class="btn btn-sm btn-icon btn-primary">
+                  <i class="fas fa-edit"></i>
+                </a>
               `;
             } else {
               // Unarchive
