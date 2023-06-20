@@ -2,12 +2,11 @@
 Activities Views.
 """
 
-from django.views.generic import TemplateView, CreateView, UpdateView
+from django.views.generic import TemplateView, CreateView, UpdateView, View
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import Http404
 
 from core.defaults import ACTIVITY_TYPES
 
@@ -23,7 +22,7 @@ class ActivityConfigurationListView(TemplateView):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class ActivityConfigurationCreateView(SuccessMessageMixin, CreateView):
+class ActivityConfigurationCreateView(SuccessMessageMixin, CreateView, View):
     """
     Activity configuration create screen.
     """

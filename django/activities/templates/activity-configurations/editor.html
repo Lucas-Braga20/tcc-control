@@ -53,7 +53,7 @@
     <div class="container-xxl" id="kt_content_container">
       <div class="card">
         <div class="card-body">
-          <form method="post" id="tcc_editor_activity_configurations">
+          <form method="post" id="tcc_editor_activity_configurations" enctype="multipart/form-data">
             <div class="card">
               <div class="card-body pt-lg-12 px-lg-12 pb-lg-0">
                 <!-- Name -->
@@ -75,6 +75,19 @@
                       value="{% if form.name.value %}{{ form.name.value }}{% endif %}"/>
                   {% endif %}
                   {% for error in form.name.errors %}
+                    <div class="invalid-feedback">
+                      {{ error }}
+                    </div>
+                  {% endfor %}
+                </div>
+
+                <!-- Template ABNT -->
+                <div class="fv-row mb-8">
+                  <label for="template" class="required form-label">Template</label>
+                  <div>
+                    {{ form.template_abnt }}
+                  </div>
+                  {% for error in form.template_abnt.errors %}
                     <div class="invalid-feedback">
                       {{ error }}
                     </div>

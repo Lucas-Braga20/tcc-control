@@ -70,7 +70,7 @@ const ActivityConfigurationList = () => {
           },
         },
         {
-          data: 'template_abnt',
+          data: 'template_abnt_detail',
           render(data) {
             let element = ''
             if (data === null || data === '') {
@@ -78,7 +78,11 @@ const ActivityConfigurationList = () => {
                 <span class="text-muted">
                   Sem template
                 </span>
-              `
+              `;
+            } else {
+              element = `
+                <a href="${data.file}">${data.name}</a>
+              `;
             }
             return element
           },
