@@ -1,3 +1,12 @@
-from django.shortcuts import render
+"""
+Works views.
+"""
 
-# Create your views here.
+from django.views.generic import TemplateView
+
+
+class WorkStageView(TemplateView):
+    """
+    Work Stage screen.
+    """
+    template_name = 'final-work-stages/stages.html'

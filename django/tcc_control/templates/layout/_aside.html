@@ -26,6 +26,12 @@
               <i class="fas fa-clipboard-list"></i>
             </a>
           </li>
+          <!-- Item -->
+          <li class="nav-item mb-2" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="right" data-bs-dismiss="click" title="TCC">
+            <a class="nav-link btn btn-custom btn-icon navbar-primary-icon {% get_primary_menu_is_active request 'works' %}" data-bs-toggle="tab" href="#kt_aside_nav_tab_works">
+              <i class="fas fa-briefcase"></i>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
@@ -98,6 +104,28 @@
                         <i class="fas fa-vials"></i>
                       </span>
                       <span class="menu-title">Teste
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Works Tab -->
+            <div class="tab-pane fade {% get_primary_tab_is_active request 'works' %}" id="kt_aside_nav_tab_works" role="tabpanel">
+              <div class="menu menu-column menu-fit menu-rounded menu-title-gray-600 menu-icon-gray-400 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-bold fs-6 px-6 my-5 my-lg-0" id="kt_aside_menu" data-kt-menu="true">
+                <div id="kt_aside_menu_wrapper" class="menu-fit">
+                  <div class="menu-item">
+                    <div class="menu-content pb-2">
+                      <span class="menu-section text-muted text-uppercase fs-8 ls-1">TCC</span>
+                    </div>
+                  </div>
+                  <div class="menu-item">
+                    <a
+                      class="menu-link {% get_link_is_active request 'works:stages' %}"
+                      href="{% url 'works:stages' %}">
+                      <span class="menu-icon navbar-secondary-icon">
+                        <i class="fas fa-tasks"></i>
+                      </span>
+                      <span class="menu-title">Etapas
                     </a>
                   </div>
                 </div>

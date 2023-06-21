@@ -16,6 +16,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('tcc_control.routers')),
     path('activities/', include('activities.urls', namespace='activities')),
+    path('works/', include('works.urls', namespace='works')),
 ]
 
 
