@@ -8,7 +8,9 @@ from rest_framework.routers import DefaultRouter
 
 from activities.viewsets import ActivityConfigurationViewSet
 from timetables.viewsets import TimetableViewSet, StageViewSet
-from works.viewsets import FinalWorkViewSet, FinalWorkStageViewSet, FinalWorkVersionViewSet, ChangeRequestViewSet
+from works.viewsets import (
+    FinalWorkViewSet, FinalWorkStageViewSet, FinalWorkVersionViewSet, ChangeRequestViewSet, VersionContentImageViewSet
+)
 from comments.viewsets import CommentViewSet
 
 
@@ -19,6 +21,7 @@ router.register('stages', StageViewSet)
 router.register('final-works', FinalWorkViewSet)
 router.register('final-work-stages', FinalWorkStageViewSet)
 router.register('final-work-versions', FinalWorkVersionViewSet)
+router.register('version-content-images', VersionContentImageViewSet)
 router.register('change-requests', ChangeRequestViewSet)
 router.register('comments', CommentViewSet)
 

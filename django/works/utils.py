@@ -22,3 +22,10 @@ def validate_stage_content_json(content):
 
         if key is None or value is None:
             raise Exception('A field was not entered correctly.')
+
+
+def get_version_content_image_folder(instance, filename):
+    """
+    Get upload folder.
+    """
+    return f'works/{instance.version.work_stage.final_work.id}/versions/{instance.version.id}/${filename}'

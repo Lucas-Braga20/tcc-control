@@ -2,11 +2,12 @@
 Viewsets to works app.
 """
 
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 
-from works.models import FinalWork, FinalWorkStage, FinalWorkVersion, ChangeRequest
+from works.models import FinalWork, FinalWorkStage, FinalWorkVersion, ChangeRequest, VersionContentImage
 from works.serializers import (
-    FinalWorkSerializer, FinalWorkStageSerializer, FinalWorkVersionSerializer, ChangeRequestSerializer
+    FinalWorkSerializer, FinalWorkStageSerializer, FinalWorkVersionSerializer, ChangeRequestSerializer,
+    VersionContentImageSerializer
 )
 
 
@@ -35,6 +36,21 @@ class FinalWorkVersionViewSet(viewsets.ModelViewSet):
     queryset = FinalWorkVersion.objects.all()
     serializer_class = FinalWorkVersionSerializer
     model = FinalWorkVersion
+
+
+class VersionContentImageViewSet(mixins.CreateModelMixin,
+                                 mixins.RetrieveModelMixin,
+                                 mixins.DestroyModelMixin,
+                                 mixins.ListModelMixin,
+                                 viewsets.GenericViewSet):
+    """
+    Version content image viewset.
+    """
+    queryset = VersionContentImage.objects.all()
+    serializer_class = VersionContentImageSerializer
+    model = VersionContentImage
+    authentication_classes = []
+    permission_classes = []
 
 
 class ChangeRequestViewSet(viewsets.ModelViewSet):

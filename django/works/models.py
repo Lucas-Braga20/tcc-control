@@ -9,6 +9,8 @@ from django.utils.translation import gettext_lazy as _
 
 from core import defaults
 
+from works.utils import get_version_content_image_folder
+
 
 class FinalWork(models.Model):
     """
@@ -60,6 +62,16 @@ class FinalWorkVersion(models.Model):
     class Meta:
         verbose_name = _('Work stage version')
         verbose_name_plural = _('Work stage versions')
+
+
+class VersionContentImage(models.Model):
+    """
+    Version content image model.
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    image = models.ImageField(upload_to=get_version_content_image_folder, verbose_name=_('image'), max_length=255)
+    version = models.ForeignKey('works.FinalWorkVersion', verbose_name=_('work version'),
+                                on_delete=models.CASCADE, related_name='version_images')
 
 
 class ChangeRequest(models.Model):

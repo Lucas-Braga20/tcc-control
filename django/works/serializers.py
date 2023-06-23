@@ -4,7 +4,7 @@ Works serializers.
 
 from rest_framework import serializers
 
-from works.models import FinalWork, FinalWorkStage, FinalWorkVersion, ChangeRequest
+from works.models import FinalWork, FinalWorkStage, FinalWorkVersion, ChangeRequest, VersionContentImage
 
 
 class FinalWorkSerializer(serializers.ModelSerializer):
@@ -35,6 +35,16 @@ class FinalWorkVersionSerializer(serializers.ModelSerializer):
     class Meta:
         model = FinalWorkVersion
         fields = '__all__'
+
+
+class VersionContentImageSerializer(serializers.ModelSerializer):
+    """
+    Version content image serializer.
+    """
+
+    class Meta:
+        model = VersionContentImage
+        fields = ['image', 'version']
 
 
 class ChangeRequestSerializer(serializers.ModelSerializer):

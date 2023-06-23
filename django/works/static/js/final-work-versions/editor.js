@@ -2,6 +2,60 @@ const FinalWorkVersionEditor = () => {
   let richTextEditors = tinymce.init({
     selector: '.tcc_rich_text',
     height: 400,
+    images_upload_url: '/version-content-images/',
+    images_upload_base_path: '/api',
+    plugins: [
+      'advlist autolink lists link image charmap print preview anchor',
+      'searchreplace visualblocks code fullscreen',
+      'insertdatetime media table paste imagetools wordcount'
+    ],  
+    toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+    automatic_uploads: true,
+    images_upload_handler(blobInfo, success, failure, progress) {
+      let xhr, formData;
+
+      xhr = new XMLHttpRequest();
+      xhr.withCredentials = false;
+      xhr.open('POST', '/api/version-content-images/');
+
+      xhr.upload.onprogress = function (e) {
+        progress(e.loaded / e.total * 100);
+      };
+
+      xhr.onload = function() {
+        var json;
+    
+        if (xhr.status === 403) {
+          failure('HTTP Error: ' + xhr.status, { remove: true });
+          return;
+        }
+    
+        if (xhr.status < 200 || xhr.status >= 300) {
+          failure('HTTP Error: ' + xhr.status);
+          return;
+        }
+    
+        json = JSON.parse(xhr.responseText);
+        json['location'] = json['image']
+    
+        if (!json || typeof json.location != 'string') {
+          failure('Invalid JSON: ' + xhr.responseText);
+          return;
+        }
+    
+        success(json.location);
+      };
+
+      xhr.onerror = function () {
+        failure('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
+      };
+    
+      formData = new FormData();
+      formData.append('image', blobInfo.blob(), blobInfo.filename());
+      formData.append('version', $('#tcc_version_form').data('version'));
+
+      xhr.send(formData);
+    },
   });
 
   let contentInputElement = $('#id_content');
