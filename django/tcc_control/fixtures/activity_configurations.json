@@ -8,8 +8,18 @@
         "fields": [
           {
             "key": "title",
-            "name": "title",
+            "name": "Título",
             "type": "text"
+          },
+          {
+            "key": "subtitle",
+            "name": "Sub-Título",
+            "type": "text"
+          },
+          {
+            "key": "content",
+            "name": "Conteúdo",
+            "type": "rich"
           }
         ]
       },

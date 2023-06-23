@@ -1,0 +1,132 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block header %}
+  <div
+  id="kt_header"
+  class="header"
+  data-kt-sticky="true"
+  data-kt-sticky-name="header"
+  data-kt-sticky-offset="{default: '200px', lg: '300px'}">
+    <div class="container-xxl d-flex align-items-center justify-content-between" id="kt_header_container">
+      <!-- Page Title -->
+      <div
+        class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-5 pb-lg-0"
+        data-kt-swapper="true"
+        data-kt-swapper-mode="prepend"
+        data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
+        <h1 class="text-dark fw-bold my-0 fs-2">Desenvolvimento</h1>
+        <ul class="breadcrumb breadcrumb-line text-muted fw-semibold fs-base my-1">
+          <li class="breadcrumb-item text-muted">
+            <a href="#" class="text-muted">
+              TCC
+            </a>
+          </li>
+          <li class="breadcrumb-item text-muted">
+            <a href="{% url 'works:stages' %}">
+              Etapas
+            </a>
+          </li>
+          <li class="breadcrumb-item text-dark">
+            Desenvolvimento
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="container-xxl" id="kt_content_container">
+      <form id="tcc_version_form" method="post">
+        <div class="card">
+          <div class="card-header border-0 p-8 pb-4">
+            <h1 class="card-title fs-1 m-0">Termo de abertura do projeto</h1>
+            <div class="card-toolbar">
+              <div class="d-flex align-items-center">
+                <ul class="nav nav-tabs flex-nowrap text-nowrap">
+                  <li class="nav-item">
+                    <a
+                      class="nav-link btn btn-active-light btn-color-gray-600 btn-active-color-primary rounded-bottom-0"
+                      href="#">
+                      Versão 1
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              </ul>
+            </div>
+          </div>
+          <div class="card-body pt-4 pb-0">
+            {% if form.content.errors %}
+              <div class="alert alert-danger d-flex align-items-center p-5">
+                <span class="svg-icon me-3">
+                  <i class="fas fa-exclamation-triangle fa-fw fa-2x text-danger"></i>
+                </span>
+  
+                <div class="d-flex flex-column">
+                  <h4 class="mb-1 alert-danger">Houve um erro!</h4>
+                  <span>
+                    {% for error in form.content.errors %}
+                      <p class="mb-0">{{ error }}</p>
+                    {% endfor %}
+                  </span>
+                </div>
+              </div>
+            {% endif %}
+
+            <input
+              id="id_content"
+              type="hidden"
+              name="content"
+              value="{% if form.content.value %}{{ form.content.value }}{% endif %}"/>
+
+            {% for field in fields.fields %}
+              <div class="fv-row mb-8">
+                <label for="content__{{ field.key }}" class="required form-label">{{ field.name }}</label>
+                {% if field.type == 'text' %}
+                  <input
+                    type="text"
+                    class="form-control form-control-solid tcc_content_field"
+                    placeholder="{{ field.name }}"
+                    name="content__{{ field.key }}"
+                    data-type="text"
+                    data-key="{{ field.key }}">
+                {% elif field.type == 'number' %}
+                  <input
+                    type="number"
+                    class="form-control form-control-solid tcc_content_field"
+                    placeholder="{{ field.name }}"
+                    name="content__{{ field.key }}"
+                    data-type="number"
+                    data-key="{{ field.key }}">
+                {% elif field.type == 'rich' %}
+                  <textarea
+                    id="content__{{ field.key }}"
+                    class="form-control form-control-solid tcc_rich_text tcc_content_field"
+                    placeholder="{{ field.name }}"
+                    name="content__{{ field.key }}"
+                    data-type="rich"
+                    data-key="{{ field.key }}"></textarea>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+          <div class="card-footer border-0 p-8 pt-0 d-flex justify-content-end">
+            <a href="{% url 'works:stages' %}" class="btn btn-secondary">Cancelar</a>
+            <button id="tcc_submit_button" type="button" class="btn btn-primary ms-5">Salvar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js-vendors %}
+  <script src="{% static 'vendor/tinymce/tinymce.bundle.js' %}"></script>
+{% endblock %}
+
+{% block js-scripts %}
+  <script src="{% static 'js/final-work-versions/editor.js' %}"></script>
+{% endblock %}

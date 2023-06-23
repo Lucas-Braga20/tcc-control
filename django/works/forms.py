@@ -58,7 +58,7 @@ class FinalWorkVersionForm(forms.ModelForm):
 
     class Meta:
         model = FinalWorkVersion
-        fields = '__all__'
+        fields = ['content']
 
     def clean_content(self):
         """
@@ -78,7 +78,8 @@ class FinalWorkVersionForm(forms.ModelForm):
 
     def clean(self):
         content = self.cleaned_data.get('content')
-        work_stage = self.cleaned_data.get('work_stage')
+
+        work_stage = self.instance.work_stage
 
         if content is not None:
             activity_configuration = work_stage.stage.activity_configuration
@@ -87,5 +88,5 @@ class FinalWorkVersionForm(forms.ModelForm):
             keys = [activity_field.get('key') for activity_field in activity_fields]
 
             for content_field in content.get('fields'):
-                if content_field not in keys:
+                if content_field['key'] not in keys:
                     raise forms.ValidationError({'content': 'The content of the activity has invalid fields.'})
