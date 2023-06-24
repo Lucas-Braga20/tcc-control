@@ -190,6 +190,7 @@
               class="form-control form-control-solid tcc_key_field"
               placeholder="Chave"
               name="fields_key"
+              readonly
             />
           </div>
         </div>
@@ -208,6 +209,7 @@
 {% endblock %}
 
 {% block js-scripts %}
+  <script src="{% static 'js/utils.js' %}"></script>
   <script src="{% static 'js/activity-configurations/fields-modal.js' %}"></script>
   <script src="{% static 'js/activity-configurations/editor.js' %}"></script>
 {% endblock %}

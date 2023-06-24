@@ -39,6 +39,25 @@ class ActivityFieldsEditor {
     </div>
   `;
 
+  badge = {
+    'text': `
+      <span class="badge badge-primary">
+        Texto
+      </span>
+    `,
+    'number': `
+      <span class="badge badge-secondary">
+        Número
+      </span>
+    `,
+    'rich': `
+      <span class="badge badge-warning">
+        Editor
+      </span>
+    `,
+  }
+
+
   removeItem(index) {
     if (index > -1) {
       this.items.splice(index, 1);
@@ -84,35 +103,8 @@ class ActivityFieldsEditor {
 
     $('.tcc_name_field').keyup(function (e) {
       ctx.validateNameField($(this).val(), $(this));
-    });
-  }
 
-  validateKeyField(value, element) {
-    const hasErrors = $(element).hasClass('is-invalid');
-
-    if (value.length === 0) {
-      if (!hasErrors) {
-        $(element).addClass('is-invalid');
-        $(element).parent().append(`
-          <div class="invalid-feedback">
-            O campo chave é obrigatório.
-          </div>
-        `);
-      }
-    } else {
-      $(element).removeClass('is-invalid');
-      let feedbacks = $(element).parent().find('.invalid-feedback');
-
-      if (feedbacks != null) {
-        feedbacks.remove();
-      }
-    }
-  }
-  handleKeyFields() {
-    const ctx = this;
-
-    $('.tcc_key_field').keyup(function (e) {
-      ctx.validateKeyField($(this).val(), $(this));
+      $(this).parent().parent().find('.tcc_key_field').val(stringToSlug($(this).val()));
     });
   }
 
@@ -131,12 +123,15 @@ class ActivityFieldsEditor {
   // Manipulate elements in list.
   addItemElementToList(name, type, key, id) {
     const nameField = $(this.formFieldsElements.name).parent().clone();
+    nameField.addClass('col');
     nameField.find('input').attr('id', `tcc_fields_editor_update_name_${id}`);
 
     const typeField = $(this.formFieldsElements.type).parent().clone();
+    typeField.addClass('col');
     typeField.find('select').attr('id', `tcc_fields_editor_update_type_${id}`);
 
     const keyField = $(this.formFieldsElements.key).parent().clone();
+    keyField.addClass('col');
     keyField.find('input').attr('id', `tcc_fields_editor_update_key_${id}`);
 
     const element = `
@@ -151,13 +146,23 @@ class ActivityFieldsEditor {
             aria-controls="tcc_accordion_body_${id}">
             <div class="d-flex justify-content-between w-100">
               <div>
-                ${name}
+                <h3 class="mb-0 fs-6 text-dark">
+                  Nome:
+                  <span class="fw-light">
+                    ${name}
+                  </span>
+                </h3>
               </div>
               <div>
-                ${key}
+                <p class="mb-0 fs-6 text-dark">
+                  Chave:
+                  <span class="badge badge-light">
+                    ${key}
+                  </span>
+                </p>
               </div>
               <div class="me-3">
-                ${type}
+                ${this.badge[type]}
               </div>
             </div>
           </button>
@@ -165,14 +170,16 @@ class ActivityFieldsEditor {
         <div
           id="tcc_accordion_body_${id}"
           class="accordion-collapse collapse"
-          aria-labelledby="tcc_accordion_body_${id}"
-          data-bs-parent="#tcc_accordion_body_${id}">
+          aria-labelledby="tcc_accordion_header_${id}"
+          data-bs-parent="#tcc_fields_editor_container">
           <div class="accordion-body">
-            ${nameField.get(0).outerHTML}
-            ${typeField.get(0).outerHTML}
-            ${keyField.get(0).outerHTML}
+            <div class="row">
+              ${nameField.get(0).outerHTML}
+              ${typeField.get(0).outerHTML}
+              ${keyField.get(0).outerHTML}
+            </div>
 
-            <div class="d-flex justify-content-end mt-8">
+            <div class="d-flex justify-content-end">
               <div>
                 <button type="button" class="btn btn-sm btn-danger tcc_remove_button" data-id="${id}">Remover</button>
               </div>
@@ -196,7 +203,6 @@ class ActivityFieldsEditor {
     $(`#tcc_fields_editor_update_key_${id}`).val(key)
 
     this.handleNameFields();
-    this.handleKeyFields();
 
     this.handleRemoveButtons();
     this.handleSaveButtons();
@@ -214,13 +220,23 @@ class ActivityFieldsEditor {
     $(`#tcc_accordion-item_${value.id}`).find('.accordion-button').html(`
       <div class="d-flex justify-content-between w-100">
         <div>
-          ${value.name}
+          <h3 class="mb-0 fs-6 text-dark">
+            Nome:
+            <span class="fw-light">
+              ${value.name}
+            </span>
+          </h3>
         </div>
         <div>
-          ${value.key}
+          <p class="mb-0 fs-6 text-dark">
+            Chave:
+            <span class="badge badge-light">
+              ${value.key}
+            </span>
+          </p>
         </div>
         <div class="me-3">
-          ${value.type}
+          ${this.badge[value.type]}
         </div>
       </div>
     `);
@@ -228,7 +244,7 @@ class ActivityFieldsEditor {
 
   loadItensElements(initial) {
     initial.forEach(value => {
-      const id = Date.now();
+      const id = guid();
 
       this.addItemElementToList(value.name, value.type, value.key, id);
 
@@ -284,7 +300,7 @@ class ActivityFieldsEditor {
       let key = $(this.formFieldsElements.key).val();
 
       if (this.getIsValidForm(name, type, key)) {
-        const id = Date.now();
+        const id = guid();
 
         this.addItemElementToList(name, type, key, id);
 
@@ -311,7 +327,6 @@ class ActivityFieldsEditor {
         this.modal.object.hide();
       } else {
         this.validateNameField(name, this.formFieldsElements.name);
-        this.validateKeyField(key, this.formFieldsElements.key);
       }
     });
   }
@@ -406,7 +421,6 @@ class ActivityFieldsEditor {
       this.handleConfirmButton();
 
       this.handleNameFields();
-      this.handleKeyFields();
 
       if (this.items.length === 0) {
         $(this.container).html(this.emptyElement);
