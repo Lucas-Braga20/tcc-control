@@ -6,7 +6,9 @@
     <!-- Logo -->
     <div class="aside-logo d-none d-lg-flex flex-column align-items-center flex-column-auto py-10" id="kt_aside_logo">
       <a href="">
-        <img alt="Logo" src="{% static 'media/logos/logo-default.svg' %}" class="h-50px" />
+        <div class="symbol symbol-50px symbol-circle">
+          <div class="symbol-label fs-2 fw-semibold bg-primary text-white" style="font-weight: bolder">TC</div>
+        </div>
       </a>
     </div>
 
@@ -14,12 +16,6 @@
     <div class="aside-nav d-flex flex-column align-items-center flex-column-fluid w-100 pt-5 pt-lg-0" id="kt_aside_nav">
       <div class="hover-scroll-y mb-10" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto" data-kt-scroll-wrappers="#kt_aside_nav" data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer" data-kt-scroll-offset="0px">
         <ul class="nav flex-column">
-          <!-- Item -->
-          <li class="nav-item mb-2" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="right" data-bs-dismiss="click" title="Principal">
-            <a class="nav-link btn btn-custom btn-icon navbar-primary-icon {% get_primary_menu_is_active request 'main' %}" data-bs-toggle="tab" href="#kt_aside_nav_tab_main">
-              <i class="fas fa-home"></i>
-            </a>
-          </li>
           <!-- Item -->
           <li class="nav-item mb-2" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="right" data-bs-dismiss="click" title="Atividade">
             <a class="nav-link btn btn-custom btn-icon navbar-primary-icon {% get_primary_menu_is_active request 'activities' %}" data-bs-toggle="tab" href="#kt_aside_nav_tab_activity">
@@ -47,26 +43,6 @@
         <!-- Wrapper -->
         <div class="flex-column-fluid hover-scroll-y" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-height="auto" data-kt-scroll-wrappers="#kt_aside_wordspace" data-kt-scroll-dependencies="#kt_aside_secondary_footer" data-kt-scroll-offset="0px">
           <div class="tab-content">
-            <!-- Main Tab -->
-            <div class="tab-pane fade {% get_primary_tab_is_active request 'main' %}" id="kt_aside_nav_tab_main" role="tabpanel">
-              <div class="menu menu-column menu-fit menu-rounded menu-title-gray-600 menu-icon-gray-400 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-bold fs-6 px-6 my-5 my-lg-0" id="kt_aside_menu" data-kt-menu="true">
-                <div id="kt_aside_menu_wrapper" class="menu-fit">
-                  <div class="menu-item">
-                    <div class="menu-content pb-2">
-                      <span class="menu-section text-muted text-uppercase fs-8 ls-1">Principal</span>
-                    </div>
-                  </div>
-                  <div class="menu-item">
-                    <a class="menu-link" href="#">
-                      <span class="menu-icon navbar-secondary-icon">
-                        <i class="fas fa-home"></i>
-                      </span>
-                      <span class="menu-title">Home
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
             <!-- Activity Tab -->
             <div class="tab-pane fade {% get_primary_tab_is_active request 'activities' %}" id="kt_aside_nav_tab_activity" role="tabpanel">
               <div class="menu menu-column menu-fit menu-rounded menu-title-gray-600 menu-icon-gray-400 menu-state-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-bold fs-6 px-6 my-5 my-lg-0" id="kt_aside_menu" data-kt-menu="true">
@@ -94,16 +70,6 @@
                         <i class="fas fa-list-ul"></i>
                       </span>
                       <span class="menu-title">Listagem
-                    </a>
-                  </div>
-                  <div class="menu-item">
-                    <a
-                      class="menu-link {% get_link_is_active request 'activities:formulary-test' %}"
-                      href="{% url 'activities:formulary-test' %}">
-                      <span class="menu-icon navbar-secondary-icon">
-                        <i class="fas fa-vials"></i>
-                      </span>
-                      <span class="menu-title">Teste
                     </a>
                   </div>
                 </div>

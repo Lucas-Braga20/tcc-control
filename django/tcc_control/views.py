@@ -2,8 +2,10 @@
 General views to TCC Control project.
 """
 
-from django.views.generic import TemplateView
+from django.views.generic import RedirectView
 
 
-class HomeView(TemplateView):
-    template_name = 'home.html'
+class HomeView(RedirectView):
+    permanent = False
+    query_string = False
+    pattern_name = 'activities:list'
