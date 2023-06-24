@@ -18,15 +18,7 @@
         <h1 class="text-dark fw-bold my-0 fs-2">Listagem</h1>
         <ul class="breadcrumb breadcrumb-line text-muted fw-semibold fs-base my-1">
           <li class="breadcrumb-item text-muted">
-            <a href="#" class="text-muted">
-              Início
-            </a>
-          </li>
-          <li class="breadcrumb-item text-muted">
             Atividades
-          </li>
-          <li class="breadcrumb-item text-muted">
-            Configuração de atividades
           </li>
           <li class="breadcrumb-item text-dark">
             Listagem
@@ -53,54 +45,44 @@
   <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <div class="container-xxl" id="kt_content_container">
       <div class="card">
-        <div class="card-header border-0 pt-6">
+        <div class="card-header border-0 p-8 pb-4">
           <!-- Searh -->
-          <!-- <div class="card-title">
-            <div class="d-flex align-items-center position-relative my-1">
+          <div class="card-title">
+            <div class="d-flex align-items-center position-relative my-1 me-2">
               <span class="position-absolute ms-6">
                 <i class="fas fa-search"></i>
               </span>
               <input
+                id="tcc_datatable_search_input"
                 type="text"
                 data-tcc-activity-table-filter="search"
                 class="form-control form-control-solid w-250px ps-14"
                 placeholder="Buscar atividade">
             </div>
-          </div> -->
+          </div>
 
           <!-- Toolbar -->
           <div class="card-toolbar p-0 m-0">
-            <div class="d-flex justify-content-end">
-              <!-- <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                Filtros
+            <!-- Archived options -->
+            <div id="tcc_archived_button_filters" class="d-flex flex-stack gap-2" data-kt-buttons="true">
+              <button
+                type="button"
+                class="btn btn-light-primary active"
+                data-kt-docs-advanced-forms="interactive"
+                data-archived="false">
+                Não arquivados
               </button>
-              <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true">
-                <div class="px-7 py-5">
-                  <div class="fs-5 text-dark fw-bold">Filter Options</div>
-                </div>
-                <div class="separator border-gray-200"></div>
-                <div class="px-7 py-5" data-kt-user-table-filter="form"></div>
-              </div> -->
-              <div id="tcc_archived_button_filters" class="d-flex flex-stack gap-5" data-kt-buttons="true">
-                <button
-                  type="button"
-                  class="btn btn-light-primary active"
-                  data-kt-docs-advanced-forms="interactive"
-                  data-archived="false">
-                  Não arquivados
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-light-primary"
-                  data-kt-docs-advanced-forms="interactive"
-                  data-archived="true">
-                  Arquivados
-                </button>
-              </div>
+              <button
+                type="button"
+                class="btn btn-light-primary"
+                data-kt-docs-advanced-forms="interactive"
+                data-archived="true">
+                Arquivados
+              </button>
             </div>
           </div>
         </div>
-        <div class="card-body">
+        <div class="card-body pt-4">
           <table
             id="tcc_datatable_activity_configurations"
             class="table table-row-bordered gy-5"
@@ -110,7 +92,7 @@
                 <th class="rounded-start min-w-200px" data-data="name">Nome</th>
                 <th class="min-w-150px" data-data="fields_description">Campos</th>
                 <th class="min-w-150px" data-data="template_abnt_detail">Template</th>
-                <th class="w-auto rounded-end">Ações</th>
+                <th class="w-auto rounded-end text-end">Ações</th>
               </tr>
             </thead>
             <tbody>

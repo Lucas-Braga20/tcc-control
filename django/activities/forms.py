@@ -28,7 +28,7 @@ class ActivityConfigurationForm(forms.ModelForm):
         else:
             self.fields['template_abnt'].widget.attrs['class'] = f' {input_field_classes}'
 
-        if self.errors.get('template_abnt'):
+        if self.errors.get('template_abnt') is not None:
             self.fields['template_abnt'].widget.attrs['class'] += ' is-invalid'
 
     def clean_fields(self):

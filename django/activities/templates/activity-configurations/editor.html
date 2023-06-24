@@ -18,15 +18,9 @@
         <h1 class="text-dark fw-bold my-0 fs-2">Adicionar</h1>
         <ul class="breadcrumb breadcrumb-line text-muted fw-semibold fs-base my-1">
           <li class="breadcrumb-item text-muted">
-            <a href="#" class="text-muted">
-              Início
+            <a href="{% url 'activities:list' %}" class="text-muted">
+              Atividades
             </a>
-          </li>
-          <li class="breadcrumb-item text-muted">
-            Atividades
-          </li>
-          <li class="breadcrumb-item text-muted">
-            Configuração de atividades
           </li>
           <li class="breadcrumb-item text-dark">
             Adicionar
@@ -51,101 +45,106 @@
 {% block content %}
   <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <div class="container-xxl" id="kt_content_container">
-      <div class="card">
-        <div class="card-body">
-          <form method="post" id="tcc_editor_activity_configurations" enctype="multipart/form-data">
-            <div class="card">
-              <div class="card-body pt-lg-12 px-lg-12 pb-lg-0">
-                <!-- Name -->
-                <div class="fv-row mb-8">
-                  <label for="title" class="required form-label">Name</label>
-                  {% if form.name.errors %}
-                    <input
-                      type="text"
-                      class="form-control form-control-solid is-invalid"
-                      placeholder="Nome"
-                      name="name"
-                      value="{% if form.name.value %}{{ form.name.value }}{% endif %}"/>
-                  {% else %}
-                    <input
-                      type="text"
-                      class="form-control form-control-solid"
-                      placeholder="Nome"
-                      name="name"
-                      value="{% if form.name.value %}{{ form.name.value }}{% endif %}"/>
-                  {% endif %}
-                  {% for error in form.name.errors %}
-                    <div class="invalid-feedback">
-                      {{ error }}
-                    </div>
-                  {% endfor %}
+      <form method="post" id="tcc_editor_activity_configurations" enctype="multipart/form-data" novalidate>
+        <div class="card">
+          <div class="card-header border-0 p-8 pb-4">
+            <h1 class="mb-0">Adicione uma configuração de atividade</h1>
+          </div>
+          <div class="card-body py-4">
+            <!-- Name -->
+            <div class="fv-row mb-8">
+              <label for="title" class="required form-label">Name</label>
+              {% if form.name.errors %}
+                <input
+                  type="text"
+                  class="form-control form-control-solid is-invalid"
+                  placeholder="Nome"
+                  name="name"
+                  value="{% if form.name.value %}{{ form.name.value }}{% endif %}"/>
+              {% else %}
+                <input
+                  type="text"
+                  class="form-control form-control-solid"
+                  placeholder="Nome"
+                  name="name"
+                  value="{% if form.name.value %}{{ form.name.value }}{% endif %}"/>
+              {% endif %}
+              {% for error in form.name.errors %}
+                <div class="invalid-feedback">
+                  {{ error }}
                 </div>
-
-                <!-- Template ABNT -->
-                <div class="fv-row mb-8">
-                  <label for="template" class="required form-label">Template</label>
-                  <div>
-                    {{ form.template_abnt }}
-                  </div>
-                  {% for error in form.template_abnt.errors %}
-                    <div class="invalid-feedback">
-                      {{ error }}
-                    </div>
-                  {% endfor %}
-                </div>
-
-                <!-- Fields -->
-                <div class="fv-row mb-8">
-                  <div class="d-flex align-items-center justify-content-between mb-6">
-                    <h2 class="mb-0">Campos</h2>
-                    <div class="d-flex flex-shrink-0">
-                      <div class="d-flex ms-3">
-                        <button
-                          type="button"
-                          id="tcc_fields_editor_add_btn"
-                          class="btn btn-sm btn-secondary">
-                          Adicionar
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="tcc_fields_editor_container" class="accordion">
-                    <div class="d-flex justify-content-center align-items-center py-3">
-                      <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                      </div>
-                      <span class="ms-3">Carregando campos...</span>
-                    </div>
-                  </div>
-                  {% if form.fields.errors %}
-                    <input
-                      id="tcc_fields_editor"
-                      name="fields"
-                      type="hidden"
-                      class="is-invalid"
-                      value="{% if form.fields.value %}{{ form.fields.value }}{% endif %}">
-                  {% else %}
-                    <input
-                      id="tcc_fields_editor"
-                      name="fields"
-                      type="hidden"
-                      value="{% if form.fields.value %}{{ form.fields.value }}{% endif %}">
-                  {% endif %}
-                  {% for error in form.fields.errors %}
-                    <div class="invalid-feedback">
-                      {{ error }}
-                    </div>
-                  {% endfor %}
-                </div>
-              </div>
-              <div class="card-footer px-lg-12 py-lg-8 d-flex justify-content-end">
-                <a href="{% url 'activities:list' %}" class="btn btn-secondary">Cancelar</a>
-                <button type="submit" class="btn btn-primary ms-5">Salvar</button>
-              </div>
+              {% endfor %}
             </div>
-          </form>
+
+            <!-- Template ABNT -->
+            <div class="fv-row mb-8">
+              <label for="template" class="required form-label">Template</label>
+              {% if form.template_abnt.errors %}
+                <div class="is-invalid">
+                  {{ form.template_abnt }}
+                </div>
+              {% else %}
+                <div>
+                  {{ form.template_abnt }}
+                </div>
+              {% endif %}
+              {% for error in form.template_abnt.errors %}
+                <div class="invalid-feedback">
+                  {{ error }}
+                </div>
+              {% endfor %}
+            </div>
+
+            <!-- Fields -->
+            <div class="fv-row">
+              <div class="d-flex align-items-center justify-content-between mb-6">
+                <h2 class="mb-0">Campos</h2>
+                <div class="d-flex flex-shrink-0">
+                  <div class="d-flex ms-3">
+                    <button
+                      type="button"
+                      id="tcc_fields_editor_add_btn"
+                      class="btn btn-sm btn-secondary">
+                      Adicionar
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div id="tcc_fields_editor_container" class="accordion">
+                <div class="d-flex justify-content-center align-items-center py-3">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                  <span class="ms-3">Carregando campos...</span>
+                </div>
+              </div>
+              {% if form.fields.errors %}
+                <input
+                  id="tcc_fields_editor"
+                  name="fields"
+                  type="hidden"
+                  class="is-invalid"
+                  value="{% if form.fields.value %}{{ form.fields.value }}{% endif %}">
+              {% else %}
+                <input
+                  id="tcc_fields_editor"
+                  name="fields"
+                  type="hidden"
+                  value="{% if form.fields.value %}{{ form.fields.value }}{% endif %}">
+              {% endif %}
+              {% for error in form.fields.errors %}
+                <div class="invalid-feedback">
+                  {{ error }}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="card-footer d-flex justify-content-end pt-4 border-0">
+            <a href="{% url 'activities:list' %}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary ms-5">Salvar</button>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 

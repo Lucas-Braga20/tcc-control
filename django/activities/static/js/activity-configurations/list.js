@@ -3,6 +3,8 @@ const ActivityConfigurationList = () => {
   let dataTableObject = null;
   let archivedButtonFilters = null;
 
+  let searchInputElement = null;
+
   let archived = false;
 
   const API = {
@@ -35,6 +37,7 @@ const ActivityConfigurationList = () => {
   function getElements() {
     dataTableElement = document.getElementById('tcc_datatable_activity_configurations');
     archivedButtonFilters = document.getElementById('tcc_archived_button_filters');
+    searchInputElement = document.getElementById('tcc_datatable_search_input');
   }
 
   function initActivityConfigurationsDataTable() {
@@ -42,6 +45,11 @@ const ActivityConfigurationList = () => {
       responsive: true,
       drawCallback(settings) {
         handleArchiveButtonActions();
+
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
       },
       ajax: {
         url: $(dataTableElement).data('api'),
@@ -90,6 +98,7 @@ const ActivityConfigurationList = () => {
         {
           data: null,
           orderable: false,
+          className: 'text-end',
           render(data) {
             let updateButtonElement = '';
             let archivedButtonElement = '';
@@ -100,13 +109,21 @@ const ActivityConfigurationList = () => {
                 <button
                   type="button"
                   class="btn btn-sm btn-icon btn-primary ms-1 tcc_archive_button"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Arquivar"
                   data-archive="${true}"
                   data-id="${data.id}">
                   <i class="fas fa-archive"></i>
                 </button>
               `;
               updateButtonElement = `
-                <a href="/activities/update/${data.id}" class="btn btn-sm btn-icon btn-primary">
+                <a
+                  href="/activities/update/${data.id}"
+                  class="btn btn-sm btn-icon btn-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Atualizar">
                   <i class="fas fa-edit"></i>
                 </a>
               `;
@@ -117,7 +134,10 @@ const ActivityConfigurationList = () => {
                   type="button"
                   class="btn btn-sm btn-icon btn-primary ms-1 tcc_archive_button"
                   data-archive="${false}"
-                  data-id="${data.id}">
+                  data-id="${data.id}"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Desarquivar">
                   <i class="fas fa-box-open"></i>
                 </button>
               `;
@@ -223,9 +243,16 @@ const ActivityConfigurationList = () => {
     });
   }
 
+  function handleSearchInput() {
+    $(searchInputElement).keyup(function() {
+      dataTableObject.search($(this).val()).draw();
+    });
+  }
+
   getElements();
   initActivityConfigurationsDataTable();
   handleArchivedButtonFilters();
+  handleSearchInput();
 }
 
 KTUtil.onDOMContentLoaded(function() {
