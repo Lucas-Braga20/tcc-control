@@ -17,7 +17,7 @@ class WorkStageView(TemplateView):
     """
     Work Stage screen.
     """
-    template_name = 'final-work-stages/stages.html'
+    template_name = 'final-work-stages/list.html'
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -40,3 +40,11 @@ class WorkStageDevelopmentView(SuccessMessageMixin, UpdateView):
         context['fields'] = detail_object.work_stage.stage.activity_configuration.fields
 
         return context
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class WorkStageDetailView(TemplateView):
+    """
+    Work stage detail screen.
+    """
+    template_name = 'final-work-stages/detail.html'
