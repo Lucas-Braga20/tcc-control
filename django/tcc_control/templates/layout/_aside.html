@@ -17,14 +17,32 @@
       <div class="hover-scroll-y mb-10" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto" data-kt-scroll-wrappers="#kt_aside_nav" data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer" data-kt-scroll-offset="0px">
         <ul class="nav flex-column">
           <!-- Item -->
-          <li class="nav-item mb-2" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="right" data-bs-dismiss="click" title="Atividade">
-            <a class="nav-link btn btn-custom btn-icon navbar-primary-icon {% get_primary_menu_is_active request 'activities' %}" data-bs-toggle="tab" href="#kt_aside_nav_tab_activity">
+          <li
+            class="nav-item mb-2"
+            data-bs-toggle="tooltip"
+            data-bs-trigger="hover"
+            data-bs-placement="right"
+            data-bs-dismiss="click"
+            title="Atividade">
+            <a
+              class="nav-link btn btn-custom btn-icon navbar-primary-icon {% get_primary_menu_is_active request 'activities' %}"
+              data-bs-toggle="tab"
+              href="#kt_aside_nav_tab_activity">
               <i class="fas fa-clipboard-list"></i>
             </a>
           </li>
           <!-- Item -->
-          <li class="nav-item mb-2" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="right" data-bs-dismiss="click" title="TCC">
-            <a class="nav-link btn btn-custom btn-icon navbar-primary-icon {% get_primary_menu_is_active request 'works' %}" data-bs-toggle="tab" href="#kt_aside_nav_tab_works">
+          <li
+            class="nav-item mb-2"
+            data-bs-toggle="tooltip"
+            data-bs-trigger="hover"
+            data-bs-placement="right"
+            data-bs-dismiss="click"
+            title="TCC">
+            <a
+              class="nav-link btn btn-custom btn-icon navbar-primary-icon {% get_primary_menu_is_active request 'works' %}"
+              data-bs-toggle="tab"
+              href="#kt_aside_nav_tab_works">
               <i class="fas fa-briefcase"></i>
             </a>
           </li>
@@ -86,7 +104,7 @@
                   </div>
                   <div class="menu-item">
                     <a
-                      class="menu-link {% get_link_is_active request 'works:stages' %}"
+                      class="menu-link {% get_link_is_active request 'works:stages' %} {% get_link_is_active request 'works:detail' %} {% get_link_is_active request 'works:development' %}"
                       href="{% url 'works:stages' %}">
                       <span class="menu-icon navbar-secondary-icon">
                         <i class="fas fa-tasks"></i>
