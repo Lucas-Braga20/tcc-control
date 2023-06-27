@@ -7,14 +7,23 @@ from rest_framework import viewsets, mixins
 from timetables.models import Timetable, Stage
 from timetables.serializers import TimetableSerializer, StageSerializer
 
+from django_filters.rest_framework import DjangoFilterBackend
 
-class TimetableViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+
+class TimetableViewSet(mixins.RetrieveModelMixin,
+                       mixins.ListModelMixin,
+                       mixins.UpdateModelMixin,
+                       viewsets.GenericViewSet):
     """
     Timtable viewset.
     """
     queryset = Timetable.objects.all()
     serializer_class = TimetableSerializer
     model = Timetable
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['archived']
+    permission_classes = []
+    authentication_classes = []
 
 
 class StageViewSet(viewsets.ModelViewSet):

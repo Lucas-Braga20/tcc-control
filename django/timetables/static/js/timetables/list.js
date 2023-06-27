@@ -36,6 +36,7 @@ const TimetablesList = () => {
 
   function getElements() {
     dataTableElement = document.getElementById('tcc_datatable_timetables');
+    archivedButtonFilters = document.getElementById('tcc_archived_button_filters');
     searchInputElement = document.getElementById('tcc_datatable_search_input');
   }
 
@@ -106,7 +107,7 @@ const TimetablesList = () => {
               `;
               updateButtonElement = `
                 <a
-                  href="/activities/update/${data.id}"
+                  href="/timetables/update/${data.id}"
                   class="btn btn-sm btn-icon btn-primary"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
@@ -159,7 +160,7 @@ const TimetablesList = () => {
           const { isConfirmed } = result;
 
           if (isConfirmed) {
-            API.activities.archive(id).then(response => {
+            API.timetables.archive(id).then(response => {
               if (response.ok === false) {
                 throw new Error(response.statusText);
               }
@@ -197,7 +198,7 @@ const TimetablesList = () => {
           const { isConfirmed } = result;
 
           if (isConfirmed) {
-            API.activities.unarchive(id).then(response => {
+            API.timetables.unarchive(id).then(response => {
               if (response.ok === false) {
                 throw new Error(response.statusText);
               }

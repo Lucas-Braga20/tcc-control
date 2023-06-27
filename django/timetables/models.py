@@ -18,6 +18,7 @@ class Timetable(models.Model):
                                 on_delete=models.DO_NOTHING)
     participants = models.ManyToManyField('users.User', related_name='participants',
                                           verbose_name=_('pariticipants'))
+    archived = models.BooleanField(default=False, verbose_name=_('archived'))
 
     class Meta:
         verbose_name = _('Timetable')
