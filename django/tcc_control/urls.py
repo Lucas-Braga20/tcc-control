@@ -17,6 +17,7 @@ urlpatterns = [
     path('api/', include('tcc_control.routers')),
     path('activities/', include('activities.urls', namespace='activities')),
     path('works/', include('works.urls', namespace='works')),
+    path('timetables/', include('timetables.urls', namespace='timetables')),
 ]
 
 

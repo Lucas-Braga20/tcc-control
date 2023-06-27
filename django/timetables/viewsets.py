@@ -2,13 +2,13 @@
 Timetable viewsets.
 """
 
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 
 from timetables.models import Timetable, Stage
 from timetables.serializers import TimetableSerializer, StageSerializer
 
 
-class TimetableViewSet(viewsets.ModelViewSet):
+class TimetableViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     Timtable viewset.
     """
