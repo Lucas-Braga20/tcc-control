@@ -19,10 +19,20 @@ class TimetableSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_start(self, obj):
-        return obj.stages.all().order_by('start_date').first().start_date
+        queryset = obj.stages.all().order_by('start_date')
+
+        if queryset.exists():
+            return queryset.first().start_date
+
+        return None
 
     def get_end(self, obj):
-        return obj.stages.all().order_by('-send_date').first().send_date
+        queryset = obj.stages.all().order_by('-send_date')
+
+        if queryset.exists():
+            return queryset.first().send_date
+
+        return None
 
 
 class StageSerializer(serializers.ModelSerializer):

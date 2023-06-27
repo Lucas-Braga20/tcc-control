@@ -6,15 +6,50 @@ from django import forms
 
 from timetables.models import Timetable, Stage
 
+from users.models import User
+
+
+class CustomSelectMultiple(forms.SelectMultiple):
+    def render_option(self, selected_choices, option_value, option_label):
+        user = User.objects.get(pk=option_value)
+        option_label = user.get_full_name()
+        return super().render_option(selected_choices, option_value, option_label)
+
 
 class TimetableForm(forms.ModelForm):
     """
     Timetable form.
     """
+    mentee_field = forms.ModelMultipleChoiceField(
+        queryset=User.objects.filter(groups__name='Orientando'),
+        widget=CustomSelectMultiple(),
+        required=True
+    )
+    supervisor_field = forms.ModelMultipleChoiceField(
+        queryset=User.objects.filter(groups__name='Orientador'),
+        widget=CustomSelectMultiple(),
+        required=True
+    )
+    teacher = forms.ModelChoiceField(
+        label='Teacher',
+        queryset=User.objects.filter(username='joao.amancio'),
+        initial=User.objects.get(username='joao.amancio'),
+        widget=forms.Select(attrs={'readonly': 'readonly', 'class': 'd-none'})
+    )
 
     class Meta:
         model = Timetable
-        fields = '__all__'
+        fields = ['mentee_field', 'supervisor_field', 'description', 'teacher']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['mentee_field'].choices = [
+            (user.pk, user.get_full_name()) for user in User.objects.filter(groups__name='Orientando')
+        ]
+        self.fields['supervisor_field'].choices = [
+            (user.pk, user.get_full_name()) for user in User.objects.filter(groups__name='Orientador')
+        ]
 
     def clean_participants(self):
         """
@@ -28,7 +63,6 @@ class TimetableForm(forms.ModelForm):
 
         return participants
 
-
     def clean_teacher(self):
         """
         Validate teacher field.
@@ -41,6 +75,25 @@ class TimetableForm(forms.ModelForm):
             raise forms.ValidationError('This field must be contains user with teacher role.')
 
         return teacher
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.save()
+
+        mentees = self.cleaned_data.get('mentee_field')
+        supervisors = self.cleaned_data.get('supervisor_field')
+
+        if mentees:
+            for mentee in mentees:
+                instance.participants.add(mentee)
+        if supervisors:
+            for supervisor in supervisors:
+                instance.participants.add(supervisor)
+
+        if commit:
+            instance.save()
+
+        return instance
 
 
 class StageForm(forms.ModelForm):

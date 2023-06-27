@@ -9,6 +9,7 @@
     data-kt-sticky-name="header"
     data-kt-sticky-offset="{default: '200px', lg: '300px'}">
     <div class="container-xxl d-flex align-items-center justify-content-between" id="kt_header_container">
+      <!-- Page Title -->
       <div
         class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-5 pb-lg-0"
         data-kt-swapper="true"
@@ -23,6 +24,17 @@
             Listagem
           </li>
         </ul>
+      </div>
+
+      <!-- Actions -->
+      <div class="d-flex flex-shrink-0">
+        <div class="d-flex ms-3">
+          <a
+            href="{% url 'timetables:create' %}"
+            class="btn btn-primary">
+            Novo cronograma
+          </a>
+        </div>
       </div>
     </div>
   </div>
