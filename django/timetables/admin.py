@@ -12,7 +12,10 @@ class TimetableAdmin(admin.ModelAdmin):
     """
     Timetable configuration model admin.
     """
-    list_display = ('id', 'description', 'teacher')
+    list_display = ('id', 'description', 'teacher', 'get_participants')
+
+    def get_participants(self, obj):
+        return ', '.join([participant.get_full_name() for participant in obj.participants.all()])
 
 
 @admin.register(Stage)

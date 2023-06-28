@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% load static %}
+{% load static utils %}
 
 {% block header %}
   <div
@@ -51,8 +51,6 @@
             <h1 class="mb-0">Adicione um cronograma</h1>
           </div>
           <div class="card-body py-4">
-            {{ form.errors }}
-
             {{ form.teacher  }}
 
             <!-- Description -->
@@ -85,7 +83,13 @@
                 >
                   <option></option>
                   {% for pk, choice in form.mentee_field.field.choices %}
-                    <option value="{{ pk }}">{{ choice }}</option>
+                    <option
+                      {% if pk in mentees %}
+                        selected
+                      {% endif %}
+                      value="{{ pk }}">
+                      {{ choice }}
+                    </option>
                   {% endfor %}
                 </select>
               {% else %}
@@ -100,7 +104,13 @@
                 >
                   <option></option>
                   {% for pk, choice in form.mentee_field.field.choices %}
-                    <option value="{{ pk }}">{{ choice }}</option>
+                    <option
+                      {% if pk in mentees %}
+                        selected
+                      {% endif %}
+                      value="{{ pk }}">
+                      {{ choice }}
+                    </option>
                   {% endfor %}
                 </select>
               {% endif %}
@@ -126,7 +136,13 @@
                 >
                   <option></option>
                   {% for pk, choice in form.supervisor_field.field.choices %}
-                    <option value="{{ pk }}">{{ choice }}</option>
+                    <option
+                      {% if pk in supervisors %}
+                        selected
+                      {% endif %}
+                      value="{{ pk }}">
+                      {{ choice }}
+                    </option>
                   {% endfor %}
                 </select>
               {% else %}
@@ -141,7 +157,13 @@
                 >
                   <option></option>
                   {% for pk, choice in form.supervisor_field.field.choices %}
-                    <option value="{{ pk }}">{{ choice }}</option>
+                    <option
+                      {% if pk in supervisors %}
+                        selected
+                      {% endif %}
+                      value="{{ pk }}">
+                      {{ choice }}
+                    </option>
                   {% endfor %}
                 </select>
               {% endif %}

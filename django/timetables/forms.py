@@ -83,12 +83,28 @@ class TimetableForm(forms.ModelForm):
         mentees = self.cleaned_data.get('mentee_field')
         supervisors = self.cleaned_data.get('supervisor_field')
 
+        participants = instance.participants.values_list('id', flat=True)
+
         if mentees:
+            # add mentees
             for mentee in mentees:
-                instance.participants.add(mentee)
+                if mentee.id not in participants.values_list('id', flat=True):
+                    instance.participants.add(mentee)
+
+            # remove mentees
+            for participant in participants.filter(groups__name='Orientando'):
+                if participant not in mentees.values_list('id', flat=True):
+                    instance.participants.remove(participant)
         if supervisors:
+            # add supervisor
             for supervisor in supervisors:
-                instance.participants.add(supervisor)
+                if supervisor.id not in participants.values_list('id', flat=True):
+                    instance.participants.add(supervisor)
+
+            # remove supervisor
+            for participant in participants.filter(groups__name='Orientador'):
+                if participant not in supervisors.values_list('id', flat=True):
+                    instance.participants.remove(participant)
 
         if commit:
             instance.save()
