@@ -32,6 +32,14 @@ class StageEditor {
           body: JSON.stringify(body),
         });
       },
+      delete(id) {
+        return fetch(`/api/stages/${id}/`, {
+          method: 'delete',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+      },
     },
   };
 
@@ -440,6 +448,52 @@ class StageEditor {
   }
 
 
+  // Collapse Events
+  handleCollapseRemoveButton() {
+    const ctx = this;
+
+    $('.tcc_remove_button').click(function (e) {
+      Swal.fire({
+        title: 'Remover etapa',
+        text: 'Tem certeza que deseja remover esta etapa?',
+        icon: 'warning',
+        customClass: {
+          actions: 'my-actions',
+          cancelButton: 'btn btn-secondary order-1',
+          confirmButton: 'btn btn-primary order-2',
+        },
+        buttonsStyling: false,
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar'
+      }).then(result => {
+        const { isConfirmed } = result;
+
+        if (isConfirmed) {
+          ctx.API.stages.delete($(this).data('id'))
+            .then(response => {
+              if (response.status >= 300) {
+                throw new Error();
+              }
+            })
+            .then(() => {
+              Toast.fire({
+                icon: 'success',
+                title: 'Etapa removida com sucesso.'
+              });
+
+              ctx.getStageList();
+            }).catch(err => {
+              Toast.fire({
+                icon: 'error',
+                title: 'Houve um erro no servidor.'
+              });
+            });
+        }
+      });
+    });
+  }
+
+
   // Get HTML elements.
   getElements() {
     try {
@@ -466,6 +520,8 @@ class StageEditor {
         response.forEach(stage => {
           this.addItemElementToList(stage);
         });
+
+        this.handleCollapseRemoveButton();
       })
       .catch(error => {
         console.log(error);
