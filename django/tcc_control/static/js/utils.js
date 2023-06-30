@@ -24,3 +24,11 @@ function guid () {
 
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 }
+
+function getDatetimeFormat(date) {
+  if (date) {
+    return  moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD');
+  }
+
+  return null;
+}

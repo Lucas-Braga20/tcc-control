@@ -173,6 +173,34 @@
                 </div>
               {% endfor %}
             </div>
+
+            <!-- Stages -->
+            {% if object %}
+              <div class="fv-row">
+                <div class="d-flex align-items-center justify-content-between mb-6">
+                  <h2 class="mb-0">Etapas</h2>
+                  <div class="d-flex flex-shrink-0">
+                    <div class="d-flex ms-3">
+                      <button
+                        type="button"
+                        id="tcc_stage_editor_add_btn"
+                        class="btn btn-sm btn-secondary">
+                        Adicionar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="tcc_stage_editor_container" class="accordion" data-timetable="{{ object.id }}">
+                  <div class="d-flex justify-content-center align-items-center py-3">
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <span class="ms-3">Carregando campos...</span>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
           </div>
           <div class="card-footer d-flex justify-content-end pt-4 border-0">
             <a href="{% url 'timetables:list' %}" class="btn btn-secondary">Cancelar</a>
@@ -182,8 +210,100 @@
       </form>
     </div>
   </div>
+
+  <div class="modal fade" tabindex="-1" id="tcc_modal_stage">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Adicionar etapa</h5>
+
+          <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fas fa-times"></i>
+          </div>
+        </div>
+
+        <div class="modal-body p-8">
+          <!-- Description -->
+          <div class="fv-row mb-8">
+            <label for="tcc_stage_editor_description" class="required form-label">Descrição</label>
+            <input
+              id="tcc_stage_editor_description"
+              type="text"
+              class="form-control form-control-solid tcc_description_field"
+              placeholder="Descrição">
+          </div>
+
+          <!-- Activity configuration -->
+          <div class="fv-row mb-8">
+            <label for="tcc_stage_editor_activity" class="required form-label">Configuração de atividade</label>
+            <select id="tcc_stage_editor_activity" class="form-select form-select-solid tcc_activity_field">
+            </select>
+          </div>
+
+          <!-- Start date -->
+          <div class="fv-row mb-8">
+            <label for="tcc_stage_editor_start_date" class="required form-label">Data de início</label>
+            <input
+              class="form-control form-control-solid"
+              placeholder="dd/mm/aaaa"
+              id="tcc_stage_editor_start_date"/>
+          </div>
+
+          <!-- Supervisor date -->
+          <div class="fv-row mb-8">
+            <label for="tcc_stage_editor_supervisor_date" class="required form-label">Data de envio ao orientador</label>
+            <input
+              class="form-control form-control-solid"
+              placeholder="dd/mm/aaaa"
+              id="tcc_stage_editor_supervisor_date"/>
+          </div>
+
+          <!-- Send date -->
+          <div class="fv-row mb-8">
+            <label for="tcc_stage_editor_send_date" class="required form-label">Data de envio</label>
+            <input
+              class="form-control form-control-solid"
+              placeholder="dd/mm/aaaa"
+              id="tcc_stage_editor_send_date"/>
+          </div>
+
+          <!-- Presentation date -->
+          <div class="fv-row mb-8">
+            <label for="tcc_stage_editor_presentation_date" class="form-label">Data de apresentação</label>
+            <input
+              class="form-control form-control-solid"
+              placeholder="dd/mm/aaaa"
+              id="tcc_stage_editor_presentation_date"/>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="tcc_stage_editor_modal_cancel_button" type="button" class="btn btn-light" data-bs-dismiss="modal">
+            Fechar
+          </button>
+          <button id="tcc_stage_editor_modal_confirm_button" type="button" class="btn btn-primary">
+            Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js-vendors %}
+  <script src="{% static 'vendor/sweetalert/sweetalert.js' %}"></script>
+  <script>
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'bottom-end',
+      showConfirmButton: false,
+      timer: 3000,
+    });
+  </script>
 {% endblock %}
 
 {% block js-scripts %}
+  <script src="{% static 'js/utils.js' %}"></script>
+  <script src="{% static 'js/timetables/stages-editor.js' %}"></script>
   <script src="{% static 'js/timetables/editor.js' %}"></script>
 {% endblock %}

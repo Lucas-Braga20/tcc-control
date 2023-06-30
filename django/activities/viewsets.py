@@ -4,6 +4,7 @@ Activities Viewsets.
 
 from rest_framework import mixins, viewsets, status
 from rest_framework.response import Response
+from rest_framework.filters import SearchFilter
 
 from activities.models import ActivityConfiguration
 from activities.serializers import ActivityConfigurationSerializer
@@ -21,10 +22,20 @@ class ActivityConfigurationViewSet(mixins.RetrieveModelMixin,
     queryset = ActivityConfiguration.objects.all()
     serializer_class = ActivityConfigurationSerializer
     model = ActivityConfiguration
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['archived']
+    search_fields = ['name']
     permission_classes = []
     authentication_classes = []
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        no_page = self.request.query_params.get('no_page')
+        if no_page:
+            self.pagination_class = None
+
+        return queryset
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()

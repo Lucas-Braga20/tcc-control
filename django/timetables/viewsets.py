@@ -33,3 +33,14 @@ class StageViewSet(viewsets.ModelViewSet):
     queryset = Stage.objects.all()
     serializer_class = StageSerializer
     model = Stage
+    permission_classes = []
+    authentication_classes = []
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        no_page = self.request.query_params.get('no_page')
+        if no_page:
+            self.pagination_class = None
+
+        return queryset
