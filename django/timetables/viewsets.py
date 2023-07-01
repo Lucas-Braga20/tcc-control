@@ -33,6 +33,8 @@ class StageViewSet(viewsets.ModelViewSet):
     queryset = Stage.objects.all()
     serializer_class = StageSerializer
     model = Stage
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['timetable']
     permission_classes = []
     authentication_classes = []
 

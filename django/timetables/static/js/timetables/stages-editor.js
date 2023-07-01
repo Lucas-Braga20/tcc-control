@@ -16,7 +16,9 @@ class StageEditor {
   API = {
     stages: {
       list() {
-        return fetch(`/api/stages/?no_page=true`, {
+        const timetable = $('#tcc_stage_editor_container').data('timetable');
+
+        return fetch(`/api/stages/?no_page=true&timetable=${timetable}`, {
           method: 'get',
           headers: {
             'Content-Type': 'application/json',
@@ -38,10 +40,31 @@ class StageEditor {
           headers: {
             'Content-Type': 'application/json',
           },
-        })
+        });
+      },
+      update(body, id) {
+        return fetch(`/api/stages/${id}/`, {
+          method: 'patch',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        });
       },
     },
   };
+
+  emptyElement = `
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button
+          class="accordion-button empty-item fs-4 fw-bold d-flex justify-content-center collapsed"
+          type="button">
+          Sem etapas.
+        </button>
+      </h2>
+    </div>
+  `;
 
 
   // Handle fields inside collapse.
@@ -79,7 +102,7 @@ class StageEditor {
       <div class="fv-row mb-8">
         <label for="${elementId}" class="required form-label">Data de início</label>
         <input
-          class="form-control form-control-solid"
+          class="form-control form-control-solid tcc_start_date_field"
           placeholder="dd/mm/aaaa"
           id="${elementId}"/>
       </div>
@@ -93,7 +116,7 @@ class StageEditor {
       <div class="fv-row mb-8">
         <label for="${elementId}" class="required form-label">Data de envio ao supervisor</label>
         <input
-          class="form-control form-control-solid"
+          class="form-control form-control-solid tcc_supervisor_date_field"
           placeholder="dd/mm/aaaa"
           id="${elementId}"/>
       </div>
@@ -107,7 +130,7 @@ class StageEditor {
       <div class="fv-row mb-8">
         <label for="${elementId}" class="required form-label">Data de envio</label>
         <input
-          class="form-control form-control-solid"
+          class="form-control form-control-solid tcc_send_date_field"
           placeholder="dd/mm/aaaa"
           id="${elementId}"/>
       </div>
@@ -121,7 +144,7 @@ class StageEditor {
       <div class="fv-row mb-8">
         <label for="${elementId}" class="form-label">Data de apresentação</label>
         <input
-          class="form-control form-control-solid"
+          class="form-control form-control-solid tcc_presentation_date_field"
           placeholder="dd/mm/aaaa"
           id="${elementId}"/>
       </div>
@@ -165,22 +188,22 @@ class StageEditor {
 
     $(`#tcc_stage_editor_start_date_${stage.id}`).flatpickr({
       dateFormat: 'd/m/Y',
-      defaultDate: moment(stage.start_date).format('DD/MM/YYYY'),
+      defaultDate: getFlatpickrFormat(stage.start_date),
     });
 
     $(`#tcc_stage_editor_supervisor_date_${stage.id}`).flatpickr({
       dateFormat: 'd/m/Y',
-      defaultDate: moment(stage.send_date_supervisor).format('DD/MM/YYYY'),
+      defaultDate: getFlatpickrFormat(stage.send_date_supervisor),
     });
 
     $(`#tcc_stage_editor_send_date_${stage.id}`).flatpickr({
       dateFormat: 'd/m/Y',
-      defaultDate: moment(stage.send_date).format('DD/MM/YYYY'),
+      defaultDate: getFlatpickrFormat(stage.send_date),
     });
 
     $(`#tcc_stage_editor_presentation_date_${stage.id}`).flatpickr({
       dateFormat: 'd/m/Y',
-      defaultDate: moment(stage.presentation_date).format('DD/MM/YYYY'),
+      defaultDate: getFlatpickrFormat(stage.presentation_date),
     });
 
     $(`#tcc_stage_editor_description_${stage.id}`).val(stage.description);
@@ -359,6 +382,10 @@ class StageEditor {
           } else {
             ctx.getStageList();
             ctx.modal.object.hide();
+            Toast.fire({
+              icon: 'success',
+              title: 'Etapa criada com sucesso.'
+            });
           }
         })
         .catch((err) => {
@@ -405,6 +432,32 @@ class StageEditor {
     }
   }
 
+  handleCollapseFormError(data, id) {
+    if (data.description) {
+      this.addErrorInField(data.description, `#tcc_stage_editor_description_${id}`);
+    }
+
+    if (data.activity_configuration) {
+      this.addErrorInField(data.activity_configuration, `#tcc_stage_editor_activity_${id}`);
+    }
+
+    if (data.start_date) {
+      this.addErrorInField(data.start_date, `#tcc_stage_editor_start_date${id}`);
+    }
+
+    if (data.send_date_supervisor) {
+      this.addErrorInField(data.send_date_supervisor, `#tcc_stage_editor_supervisor_date${id}`);
+    }
+
+    if (data.send_date) {
+      this.addErrorInField(data.send_date, `#tcc_stage_editor_send_date${id}`);
+    }
+
+    if (data.presentation_date) {
+      this.addErrorInField(data.presentation_date, `#tcc_stage_editor_presentation_date${id}`);
+    }
+  }
+
   addErrorInField(error, id) {
     $(id).addClass('is-invalid');
     if (Array.isArray(error)) {
@@ -424,6 +477,16 @@ class StageEditor {
     }
   }
 
+  addLoadingStateInField(el) {
+    $(el).addClass('disabled');
+    $(el).attr('disabled', true);
+  }
+
+  removeLoadingStateInField(el) {
+    $(el).removeClass('disabled');
+    $(el).removeAttr('disabled', true);
+  }
+
   resetModalFormError() {
     this.removeErrorInField('#tcc_stage_editor_description');
     this.removeErrorInField('#tcc_stage_editor_activity');
@@ -431,6 +494,15 @@ class StageEditor {
     this.removeErrorInField('#tcc_stage_editor_supervisor_date');
     this.removeErrorInField('#tcc_stage_editor_send_date');
     this.removeErrorInField('#tcc_stage_editor_presentation_date');
+  }
+
+  resetCollapseFormError(id) {
+    this.removeErrorInField(`#tcc_stage_editor_description${id}`);
+    this.removeErrorInField(`#tcc_stage_editor_activity${id}`);
+    this.removeErrorInField(`#tcc_stage_editor_start_date${id}`);
+    this.removeErrorInField(`#tcc_stage_editor_supervisor_date${id}`);
+    this.removeErrorInField(`#tcc_stage_editor_send_date_${id}`);
+    this.removeErrorInField(`#tcc_stage_editor_presentation_date${id}`);
   }
 
   resetModalFormValues() {
@@ -493,6 +565,61 @@ class StageEditor {
     });
   }
 
+  handleCollapseSaveButton() {
+    const ctx = this;
+
+    $('.tcc_save_button').click(function (e) {
+      const accordion = $(this).parent().parent().parent();
+
+      ctx.addLoadingStateInField($(accordion).find('.tcc_description_field'));
+      ctx.addLoadingStateInField($(accordion).find('.tcc_activity_field'));
+      ctx.addLoadingStateInField($(accordion).find('.tcc_start_date_field'));
+      ctx.addLoadingStateInField($(accordion).find('.tcc_supervisor_date_field'));
+      ctx.addLoadingStateInField($(accordion).find('.tcc_send_date_field'));
+      ctx.addLoadingStateInField($(accordion).find('.tcc_presentation_date_field'));
+
+      let fetchResponse;
+
+      ctx.API.stages.update({
+        description: $(accordion).find('.tcc_description_field').val(),
+        activity_configuration: $(accordion).find('.tcc_activity_field').val(),
+        start_date: getDatetimeFormat($(accordion).find('.tcc_start_date_field').val()),
+        send_date_supervisor: getDatetimeFormat($(accordion).find('.tcc_supervisor_date_field').val()),
+        send_date: getDatetimeFormat($(accordion).find('.tcc_send_date_field').val()),
+        presentation_date: getDatetimeFormat($(accordion).find('.tcc_presentation_date_field').val()),
+      }, $(this).data('id'))
+        .then(response => fetchResponse = response)
+        .then(response => response.json())
+        .then(data => {
+          if (fetchResponse.status >= 300) {
+            ctx.resetCollapseFormError($(this).data('id'));
+            ctx.handleCollapseFormError(data, $(this).data('id'));
+          } else {
+            ctx.getStageList();
+            Toast.fire({
+              icon: 'success',
+              title: 'Etapa atualizada com sucesso.'
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          Toast.fire({
+            icon: 'error',
+            title: 'Houve um erro no servidor. Tente novamente!'
+          });
+        })
+        .finally(() => {
+          ctx.removeLoadingStateInField($(accordion).find('.tcc_description_field'));
+          ctx.removeLoadingStateInField($(accordion).find('.tcc_activity_field'));
+          ctx.removeLoadingStateInField($(accordion).find('.tcc_start_date_field'));
+          ctx.removeLoadingStateInField($(accordion).find('.tcc_supervisor_date_field'));
+          ctx.removeLoadingStateInField($(accordion).find('.tcc_send_date_field'));
+          ctx.removeLoadingStateInField($(accordion).find('.tcc_presentation_date_field'));
+        });
+    });
+  }
+
 
   // Get HTML elements.
   getElements() {
@@ -517,11 +644,16 @@ class StageEditor {
       .then(response => {
         $(this.container).html('');
 
-        response.forEach(stage => {
-          this.addItemElementToList(stage);
-        });
+        if (response && response.length > 0) {
+          response.forEach(stage => {
+            this.addItemElementToList(stage);
+          });
+        } else {
+          $(this.container).html(this.emptyElement);
+        }
 
         this.handleCollapseRemoveButton();
+        this.handleCollapseSaveButton();
       })
       .catch(error => {
         console.log(error);

@@ -27,8 +27,17 @@ function guid () {
 
 function getDatetimeFormat(date) {
   if (date) {
-    return  moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD');
+    return moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD');
   }
 
   return null;
 }
+
+function getFlatpickrFormat(date) {
+  if (date) {
+    return moment(date).format('DD/MM/YYYY');
+  }
+
+  return null;
+}
+
