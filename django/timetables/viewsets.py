@@ -2,7 +2,9 @@
 Timetable viewsets.
 """
 
-from rest_framework import viewsets, mixins
+import os
+
+from rest_framework import viewsets, mixins, status
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 
@@ -55,9 +57,15 @@ class StageViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=body)
         serializer.is_valid(raise_exception=True)
 
+        files = request.FILES.getlist('examples')
+        for file in files:
+            extension = os.path.splitext(file.name)[1]
+            if extension.lower() not in ['.pdf', '.docx']:
+                return Response(data={'examples': 'Only PDF or DOCX files are allowed.'},
+                                status=status.HTTP_400_BAD_REQUEST)
+
         stage = serializer.save()
 
-        files = request.FILES.getlist('examples')
         for file in files:
             stage_example = StageExample.objects.create(
                 stage=stage,
@@ -74,13 +82,18 @@ class StageViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
 
+        files = request.FILES.getlist('examples')
+        for file in files:
+            extension = os.path.splitext(file.name)[1]
+            if extension.lower() not in ['.pdf', '.docx']:
+                return Response(data={'examples': 'Only PDF or DOCX files are allowed.'},
+                                status=status.HTTP_400_BAD_REQUEST)
+
         stage = serializer.save()
 
         already_uploaded = request.data.getlist('already_uploaded', [])
-        print(stage.stage_examples.all().exclude(id__in=already_uploaded))
         stage.stage_examples.all().exclude(id__in=already_uploaded).delete()
 
-        files = request.FILES.getlist('examples')
         for file in files:
             stage_example = StageExample.objects.create(
                 stage=stage,

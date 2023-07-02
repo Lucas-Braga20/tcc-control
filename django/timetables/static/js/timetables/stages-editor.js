@@ -489,6 +489,10 @@ class StageEditor {
     if (data.presentation_date) {
       this.addErrorInField(data.presentation_date, '#tcc_stage_editor_presentation_date');
     }
+
+    if (data.examples) {
+      this.addErrorInField(data.examples, `.tcc_stage_examples_repeater`);
+    }
   }
 
   handleModalFormRepeater() {
@@ -548,6 +552,10 @@ class StageEditor {
     if (data.presentation_date) {
       this.addErrorInField(data.presentation_date, `#tcc_stage_editor_presentation_date${id}`);
     }
+
+    if (data.examples) {
+      this.addErrorInField(data.examples, `#tcc_stage_examples_repeater_${id}`);
+    }
   }
 
   addErrorInField(error, id) {
@@ -586,6 +594,7 @@ class StageEditor {
     this.removeErrorInField('#tcc_stage_editor_supervisor_date');
     this.removeErrorInField('#tcc_stage_editor_send_date');
     this.removeErrorInField('#tcc_stage_editor_presentation_date');
+    this.removeErrorInField('.tcc_stage_examples_repeater');
   }
 
   resetCollapseFormError(id) {
@@ -595,6 +604,7 @@ class StageEditor {
     this.removeErrorInField(`#tcc_stage_editor_supervisor_date${id}`);
     this.removeErrorInField(`#tcc_stage_editor_send_date_${id}`);
     this.removeErrorInField(`#tcc_stage_editor_presentation_date${id}`);
+    this.removeErrorInField(`#tcc_stage_examples_repeater_${id}`);
   }
 
   resetModalFormValues() {
