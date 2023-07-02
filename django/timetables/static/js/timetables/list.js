@@ -160,25 +160,34 @@ const TimetablesList = () => {
           const { isConfirmed } = result;
 
           if (isConfirmed) {
-            API.timetables.archive(id).then(response => {
-              if (response.ok === false) {
-                throw new Error(response.statusText);
-              }
+            let fetchResponse;
 
-              return response.json();
-            }).then(() => {
-              dataTableObject.ajax.reload();
-              dataTableObject.draw();
-              Toast.fire({
-                icon: 'success',
-                title: 'Cronograma arquivado com sucesso.'
+            API.timetables.archive(id)
+              .then(response => fetchResponse = response)
+              .then(response => {
+                return response.json().catch(() => {
+                  throw new Error('Houve um erro no servidor.');
+                })
+              })
+              .then(response => {
+                console.log('teste');
+                if (fetchResponse.status >= 300) {
+                  throw new Error(response.detail || 'Houve um erro no servidor.');
+                } else {
+                  dataTableObject.ajax.reload();
+                  dataTableObject.draw();
+                  Toast.fire({
+                    icon: 'success',
+                    title: 'Cronograma arquivado com sucesso.'
+                  });
+                }
+              })
+              .catch(err => {
+                Toast.fire({
+                  icon: 'error',
+                  title: err.message,
+                });
               });
-            }).catch(err => {
-              Toast.fire({
-                icon: 'error',
-                title: 'Houve um erro no servidor.'
-              });
-            });
           }
         });
       } else {

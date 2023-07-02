@@ -4,6 +4,8 @@ Timetable app models.
 
 import uuid
 
+from datetime import date
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -46,6 +48,23 @@ class Stage(models.Model):
     class Meta:
         verbose_name = _('Stage')
         verbose_name_plural = _('Stages')
+
+    def already_started(self):
+        today = date.today()
+
+        if today > self.start_date:
+            return True
+
+        if today > self.send_date_supervisor:
+            return True
+
+        if today > self.send_date:
+            return True
+
+        if self.presentation_date and today > self.presentation_date:
+            return True
+
+        return False
 
 
 class StageExample(models.Model):

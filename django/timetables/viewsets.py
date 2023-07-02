@@ -13,6 +13,8 @@ from timetables.serializers import TimetableSerializer, StageSerializer
 
 from django_filters.rest_framework import DjangoFilterBackend
 
+from datetime import date
+
 
 class TimetableViewSet(mixins.RetrieveModelMixin,
                        mixins.ListModelMixin,
@@ -28,6 +30,22 @@ class TimetableViewSet(mixins.RetrieveModelMixin,
     filterset_fields = ['archived']
     permission_classes = []
     authentication_classes = []
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        stages = instance.stages.all()
+
+        data = request.data
+        archived = data.get('archived')
+
+        if archived == True:
+            for stage in stages:
+                if stage.already_started():
+                    return Response(data={
+                        'detail': 'It is not possible to archive a schedule that has already started.'
+                    }, status=status.HTTP_400_BAD_REQUEST)
+
+        return super().update(request, *args, **kwargs)
 
 
 class StageViewSet(viewsets.ModelViewSet):
