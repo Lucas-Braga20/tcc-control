@@ -28,7 +28,7 @@ class StageEditor {
       create(body) {
         return fetch(`/api/stages/`, {
           method: 'post',
-          body: body,
+          body,
         });
       },
       delete(id) {
@@ -42,10 +42,7 @@ class StageEditor {
       update(body, id) {
         return fetch(`/api/stages/${id}/`, {
           method: 'patch',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
+          body,
         });
       },
     },
@@ -144,6 +141,58 @@ class StageEditor {
           class="form-control form-control-solid tcc_presentation_date_field"
           placeholder="dd/mm/aaaa"
           id="${elementId}"/>
+      </div>
+    `;
+  }
+
+  generateStageExamplesElement(id, stage) {
+    const repeaterElementId = `tcc_stage_examples_repeater_${id}`;
+
+    let rows = '';
+
+    stage.examples.forEach(() => {
+      rows += `
+        <div data-repeater-item class="mb-2">
+          <div class="row g-3 align-items-center">
+            <div class="tcc_create_stage_examples_link">
+            </div>
+            <div class="col mt-0">
+              <input type="file" class="form-control form-control-solid tcc_create_stage_examples_${id}" />
+            </div>
+            <div class="col-auto">
+              <input data-repeater-delete type="button" class="btn btn-danger" value="Remover"/>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    if (stage.examples.length === 0) {
+      rows = `
+        <div data-repeater-item class="mb-2">
+          <div class="row g-3 align-items-center">
+            <div class="tcc_create_stage_examples_link">
+            </div>
+            <div class="col mt-0">
+              <input type="file" class="form-control form-control-solid tcc_create_stage_examples_${id}" />
+            </div>
+            <div class="col-auto">
+              <input data-repeater-delete type="button" class="btn btn-danger" value="Remover"/>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="fv-row mb-8">
+        <label class="form-label">Modelos de exemplo</label>
+        <div class="fv-row" id="${repeaterElementId}">
+          <div data-repeater-list="stage-examples">
+            ${rows}
+          </div>
+          <input data-repeater-create type="button" class="btn btn-primary btn-sm" value="Adicionar"/>
+        </div>
       </div>
     `;
   }
@@ -294,6 +343,7 @@ class StageEditor {
             ${this.generateSupervisorDateFieldElement(stage.id)}
             ${this.generateSendDateFieldElement(stage.id)}
             ${this.generatePresentationDateFieldElement(stage.id)}
+            ${this.generateStageExamplesElement(stage.id, stage)}
 
             <div class="d-flex justify-content-end">
               <div>
@@ -439,6 +489,39 @@ class StageEditor {
     if (data.presentation_date) {
       this.addErrorInField(data.presentation_date, '#tcc_stage_editor_presentation_date');
     }
+  }
+
+  handleModalFormRepeater() {
+    $('.tcc_stage_examples_repeater').repeater({
+      show: function () {
+        $(this).slideDown();
+      },
+    });
+  }
+
+  handleCollapseFormRepeater(stage) {
+    $(`#tcc_stage_examples_repeater_${stage.id}`).repeater({
+      show: function () {
+        $(this).slideDown();
+      },
+    });
+
+    $(`#tcc_stage_examples_repeater_${stage.id}`).find('[data-repeater-item]').each(function(index) {
+      if (stage.examples[index]) {
+        $(this).find('.tcc_create_stage_examples_link').html(`
+          <span class="fw-bold">
+            Arquivo atual:
+            <span class="fw-light">
+              <a href="${stage.examples[index].file}">
+                ${extractFileNameFromURL(stage.examples[index].file)}
+              </a>
+            </span>
+          </span>
+        `);
+
+        $(this).find(`.tcc_create_stage_examples_${stage.id}`).data('stage-example', stage.examples[index].id);
+      }
+    });
   }
 
   handleCollapseFormError(data, id) {
@@ -590,16 +673,37 @@ class StageEditor {
       ctx.addLoadingStateInField($(accordion).find('.tcc_send_date_field'));
       ctx.addLoadingStateInField($(accordion).find('.tcc_presentation_date_field'));
 
+      const id = $(this).data('id');
+
       let fetchResponse;
 
-      ctx.API.stages.update({
-        description: $(accordion).find('.tcc_description_field').val(),
-        activity_configuration: $(accordion).find('.tcc_activity_field').val(),
-        start_date: getDatetimeFormat($(accordion).find('.tcc_start_date_field').val()),
-        send_date_supervisor: getDatetimeFormat($(accordion).find('.tcc_supervisor_date_field').val()),
-        send_date: getDatetimeFormat($(accordion).find('.tcc_send_date_field').val()),
-        presentation_date: getDatetimeFormat($(accordion).find('.tcc_presentation_date_field').val()),
-      }, $(this).data('id'))
+      let formData = new FormData();
+      formData.append('description', $(accordion).find('.tcc_description_field').val());
+      formData.append('activity_configuration', $(accordion).find('.tcc_activity_field').val());
+      formData.append('start_date', getDatetimeFormat($(accordion).find('.tcc_start_date_field').val()));
+      formData.append('send_date_supervisor', getDatetimeFormat($(accordion).find('.tcc_supervisor_date_field').val()));
+      formData.append('send_date', getDatetimeFormat($(accordion).find('.tcc_send_date_field').val()));
+      formData.append('timetable', $(ctx.container).data('timetable'));
+
+      if ($(accordion).find('.tcc_presentation_date_field').val()) {
+        formData.append('presentation_date', getDatetimeFormat($(accordion).find('.tcc_presentation_date_field').val()));
+      }
+
+      $(`.tcc_create_stage_examples_${id}`).each(function(index, element) {
+        const data = $(element).data('stage-example');
+
+        if (data) {
+          formData.append('already_uploaded', data);
+        } else {
+          const files = $(element)[0].files;
+
+          for (let i = 0; i < files.length; i++) {
+            formData.append('examples', files[i]);
+          }
+        }
+      });
+
+      ctx.API.stages.update(formData, $(this).data('id'))
         .then(response => fetchResponse = response)
         .then(response => response.json())
         .then(data => {
@@ -659,6 +763,7 @@ class StageEditor {
         if (response && response.length > 0) {
           response.forEach(stage => {
             this.addItemElementToList(stage);
+            this.handleCollapseFormRepeater(stage);
           });
         } else {
           $(this.container).html(this.emptyElement);
@@ -684,6 +789,7 @@ class StageEditor {
       this.handleAddButton();
       this.handleModalConfirmButton();
       this.handleModalCloseEvent();
+      this.handleModalFormRepeater();
     } catch (err) {
       throw new Error(err.message)
     }

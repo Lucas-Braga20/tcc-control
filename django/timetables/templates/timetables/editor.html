@@ -324,15 +324,6 @@
 {% endblock %}
 
 {% block js-scripts %}
-<script>
-  $(document).ready(function () {
-    $('.tcc_stage_examples_repeater').repeater({
-      show: function () {
-        $(this).slideDown();
-      },
-    });
-  });
-</script>
   <script src="{% static 'js/utils.js' %}"></script>
   <script src="{% static 'js/timetables/stages-editor.js' %}"></script>
   <script src="{% static 'js/timetables/editor.js' %}"></script>

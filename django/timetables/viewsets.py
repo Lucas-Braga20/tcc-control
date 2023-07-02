@@ -67,3 +67,25 @@ class StageViewSet(viewsets.ModelViewSet):
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=201, headers=headers)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+
+        stage = serializer.save()
+
+        already_uploaded = request.data.getlist('already_uploaded', [])
+        print(stage.stage_examples.all().exclude(id__in=already_uploaded))
+        stage.stage_examples.all().exclude(id__in=already_uploaded).delete()
+
+        files = request.FILES.getlist('examples')
+        for file in files:
+            stage_example = StageExample.objects.create(
+                stage=stage,
+                file=file,
+            )
+            stage_example.save()
+
+        return Response(serializer.data)

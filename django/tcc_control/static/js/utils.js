@@ -41,3 +41,9 @@ function getFlatpickrFormat(date) {
   return null;
 }
 
+function extractFileNameFromURL(url) {
+  var startIndex = url.lastIndexOf("/") + 1;
+  var filename = url.substr(startIndex);
+  return filename;
+}
+
