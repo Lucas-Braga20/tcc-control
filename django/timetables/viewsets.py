@@ -42,7 +42,7 @@ class TimetableViewSet(mixins.RetrieveModelMixin,
             for stage in stages:
                 if stage.already_started():
                     return Response(data={
-                        'detail': 'It is not possible to archive a schedule that has already started.'
+                        'detail': 'Cannot archive a schedule that has already started.'
                     }, status=status.HTTP_400_BAD_REQUEST)
 
         return super().update(request, *args, **kwargs)
@@ -120,3 +120,13 @@ class StageViewSet(viewsets.ModelViewSet):
             stage_example.save()
 
         return Response(serializer.data)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        if instance.already_started():
+            return Response(data={'detail': 'Cannot remove a step that has already started'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)

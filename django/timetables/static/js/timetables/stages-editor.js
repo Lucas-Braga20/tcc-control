@@ -646,23 +646,31 @@ class StageEditor {
         const { isConfirmed } = result;
 
         if (isConfirmed) {
+          let fetchResponse;
+
           ctx.API.stages.delete($(this).data('id'))
+            .then(response => fetchResponse = response)
             .then(response => {
-              if (response.status >= 300) {
-                throw new Error();
+              return response.json().catch(() => {
+                throw new Error('Houve um erro no servidor.');
+              })
+            })
+            .then(response => {
+              if (fetchResponse.status >= 300) {
+                throw new Error(response.detail || 'Houve um erro no servidor.');
+              } else {
+                Toast.fire({
+                  icon: 'success',
+                  title: 'Etapa removida com sucesso.'
+                });
+  
+                ctx.getStageList();
               }
             })
-            .then(() => {
-              Toast.fire({
-                icon: 'success',
-                title: 'Etapa removida com sucesso.'
-              });
-
-              ctx.getStageList();
-            }).catch(err => {
+            .catch(err => {
               Toast.fire({
                 icon: 'error',
-                title: 'Houve um erro no servidor.'
+                title: err.message,
               });
             });
         }

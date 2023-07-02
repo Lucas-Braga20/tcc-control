@@ -170,7 +170,6 @@ const TimetablesList = () => {
                 })
               })
               .then(response => {
-                console.log('teste');
                 if (fetchResponse.status >= 300) {
                   throw new Error(response.detail || 'Houve um erro no servidor.');
                 } else {
