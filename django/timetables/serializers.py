@@ -4,7 +4,7 @@ Timetable serializers.
 
 from rest_framework import serializers
 
-from timetables.models import Timetable, Stage
+from timetables.models import Timetable, Stage, StageExample
 
 
 class TimetableSerializer(serializers.ModelSerializer):
@@ -35,11 +35,23 @@ class TimetableSerializer(serializers.ModelSerializer):
         return None
 
 
+class StageExampleSerializer(serializers.ModelSerializer):
+    """
+    Stage example serializer.
+    """
+
+    class Meta:
+        model = StageExample
+        fields = '__all__'
+
+
 class StageSerializer(serializers.ModelSerializer):
     """
     Timetable stage Serializer.
     """
+    examples = StageExampleSerializer(many=True, read_only=True, source='stage_examples')
 
     class Meta:
         model = Stage
-        fields = '__all__'
+        fields = ['id', 'description', 'start_date', 'send_date_supervisor', 'send_date',
+                  'presentation_date', 'activity_configuration', 'timetable', 'examples']

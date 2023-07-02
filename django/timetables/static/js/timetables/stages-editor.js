@@ -28,10 +28,7 @@ class StageEditor {
       create(body) {
         return fetch(`/api/stages/`, {
           method: 'post',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
+          body: body,
         });
       },
       delete(id) {
@@ -364,15 +361,27 @@ class StageEditor {
       let fetchResponse;
       let ctx = this;
 
-      this.API.stages.create({
-        description: $('#tcc_stage_editor_description').val(),
-        activity_configuration: $('#tcc_stage_editor_activity').val(),
-        start_date: getDatetimeFormat($('#tcc_stage_editor_start_date').val()),
-        send_date_supervisor: getDatetimeFormat($('#tcc_stage_editor_supervisor_date').val()),
-        send_date: getDatetimeFormat($('#tcc_stage_editor_send_date').val()),
-        presentation_date: getDatetimeFormat($('#tcc_stage_editor_presentation_date').val()),
-        timetable: $(ctx.container).data('timetable'),
-      })
+      let formData = new FormData();
+      formData.append('description', $('#tcc_stage_editor_description').val());
+      formData.append('activity_configuration', $('#tcc_stage_editor_activity').val());
+      formData.append('start_date', getDatetimeFormat($('#tcc_stage_editor_start_date').val()));
+      formData.append('send_date_supervisor', getDatetimeFormat($('#tcc_stage_editor_supervisor_date').val()));
+      formData.append('send_date', getDatetimeFormat($('#tcc_stage_editor_send_date').val()));
+      formData.append('timetable', $(ctx.container).data('timetable'));
+
+      if ($('#tcc_stage_editor_presentation_date').val()) {
+        formData.append('presentation_date', getDatetimeFormat($('#tcc_stage_editor_presentation_date').val()));
+      }
+
+      $('.tcc_create_stage_examples').each(function(index, element) {
+        const files = $(element)[0].files;
+
+        for (let i = 0; i < files.length; i++) {
+          formData.append('examples', files[i]);
+        }
+      });
+
+      this.API.stages.create(formData)
         .then(response => fetchResponse = response)
         .then(response => response.json())
         .then(data => {
@@ -512,6 +521,9 @@ class StageEditor {
     $('#tcc_stage_editor_supervisor_date').get(0)._flatpickr.clear();
     $('#tcc_stage_editor_send_date').get(0)._flatpickr.clear();
     $('#tcc_stage_editor_presentation_date').get(0)._flatpickr.clear();
+
+    $('.tcc_stage_examples_repeater [data-repeater-item]').slice(1).empty();
+    $('.tcc_stage_examples_repeater [data-repeater-item] .tcc_create_stage_examples').val('');
   }
 
   removeErrorInField(id) {

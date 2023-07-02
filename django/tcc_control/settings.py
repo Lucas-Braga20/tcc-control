@@ -95,11 +95,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 }
 
-if DEBUG is False:
-    REST_FRAMEWORK['DEFAULT_PARSER_CLASSES'] = {
-        'rest_framework.parsers.JSONParser',
-    }
-
 
 # Database
 

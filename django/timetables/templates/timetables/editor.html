@@ -275,6 +275,26 @@
               placeholder="dd/mm/aaaa"
               id="tcc_stage_editor_presentation_date"/>
           </div>
+
+          <!-- File example date -->
+          <div class="fv-row mb-8">
+            <label class="form-label">Modelos de exemplo</label>
+            <div class="fv-row tcc_stage_examples_repeater">
+              <div data-repeater-list="stage-examples">
+                <div data-repeater-item class="mb-2">
+                  <div class="row g-3 align-items-center">
+                    <div class="col">
+                      <input type="file" name="tcc_stage_examples_item" class="form-control form-control-solid tcc_create_stage_examples" />
+                    </div>
+                    <div class="col-auto">
+                      <input data-repeater-delete type="button" class="btn btn-danger" value="Remover"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <input data-repeater-create type="button" class="btn btn-primary btn-sm" value="Adicionar"/>
+            </div>
+          </div>
         </div>
 
         <div class="modal-footer">
@@ -292,6 +312,7 @@
 
 {% block js-vendors %}
   <script src="{% static 'vendor/sweetalert/sweetalert.js' %}"></script>
+  <script src="{% static 'vendor/jquery.repeater/jquery.repeater.min.js' %}"></script>
   <script>
     const Toast = Swal.mixin({
       toast: true,
@@ -303,6 +324,15 @@
 {% endblock %}
 
 {% block js-scripts %}
+<script>
+  $(document).ready(function () {
+    $('.tcc_stage_examples_repeater').repeater({
+      show: function () {
+        $(this).slideDown();
+      },
+    });
+  });
+</script>
   <script src="{% static 'js/utils.js' %}"></script>
   <script src="{% static 'js/timetables/stages-editor.js' %}"></script>
   <script src="{% static 'js/timetables/editor.js' %}"></script>

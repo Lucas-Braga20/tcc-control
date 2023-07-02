@@ -3,8 +3,10 @@ Timetable viewsets.
 """
 
 from rest_framework import viewsets, mixins
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.response import Response
 
-from timetables.models import Timetable, Stage
+from timetables.models import Timetable, Stage, StageExample
 from timetables.serializers import TimetableSerializer, StageSerializer
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -32,9 +34,9 @@ class StageViewSet(viewsets.ModelViewSet):
     """
     queryset = Stage.objects.all()
     serializer_class = StageSerializer
-    model = Stage
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['timetable']
+    parser_classes = [FormParser, MultiPartParser]
     permission_classes = []
     authentication_classes = []
 
@@ -46,3 +48,22 @@ class StageViewSet(viewsets.ModelViewSet):
             self.pagination_class = None
 
         return queryset
+
+    def create(self, request, *args, **kwargs):
+        body = self.request.data.copy()
+
+        serializer = self.get_serializer(data=body)
+        serializer.is_valid(raise_exception=True)
+
+        stage = serializer.save()
+
+        files = request.FILES.getlist('examples')
+        for file in files:
+            stage_example = StageExample.objects.create(
+                stage=stage,
+                file=file,
+            )
+            stage_example.save()
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=201, headers=headers)

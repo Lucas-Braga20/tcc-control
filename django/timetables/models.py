@@ -54,6 +54,9 @@ class StageExample(models.Model):
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     file = models.FileField(upload_to='documents/stage-example/', blank=True, null=True)
+    stage = models.ForeignKey('timetables.Stage', related_name='stage_examples',
+                              verbose_name=_('stage'), on_delete=models.CASCADE,
+                              blank=True, null=True)
 
     class Meta:
         verbose_name = _('Stage example')
