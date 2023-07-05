@@ -15,6 +15,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from datetime import date
 
+from core.mixins import DisablePaginationMixin
+
 
 class TimetableViewSet(mixins.RetrieveModelMixin,
                        mixins.ListModelMixin,
@@ -48,7 +50,7 @@ class TimetableViewSet(mixins.RetrieveModelMixin,
         return super().update(request, *args, **kwargs)
 
 
-class StageViewSet(viewsets.ModelViewSet):
+class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
     """
     Timetable stage.
     """

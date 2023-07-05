@@ -149,6 +149,16 @@
                       <span class="menu-title">Listagem
                     </a>
                   </div>
+                  <div class="menu-item">
+                    <a
+                      class="menu-link {% get_link_is_active request 'timetables:calendar' %}"
+                      href="{% url 'timetables:calendar' %}">
+                      <span class="menu-icon navbar-secondary-icon">
+                        <i class="fas fa-calendar"></i>
+                      </span>
+                      <span class="menu-title">Calendário
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

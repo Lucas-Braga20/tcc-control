@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.messages.views import SuccessMessageMixin
 
-from timetables.models import Timetable
+from timetables.models import Timetable, Stage
 from timetables.forms import TimetableForm
 
 
@@ -55,3 +55,11 @@ class TimetableUpdateView(SuccessMessageMixin, UpdateView):
         context['supervisors'] = object.participants.filter(groups__name='Orientador').values_list('id', flat=True)
 
         return context
+
+
+class TimetableStageCalendarView(TemplateView):
+    """
+    Timetable calendar view.
+    """
+    template_name = 'timetables/calendar.html'
+    model = Stage
