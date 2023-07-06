@@ -6,3 +6,4 @@ djangorestframework-datatables==0.6.0
 django-filter==23.2
 docxtpl==0.16.7
 Pillow==9.5.0
+django-widget-tweaks==1.4.12

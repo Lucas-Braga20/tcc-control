@@ -13,8 +13,9 @@ from tcc_control import views
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('admin/', admin.site.urls),
-    path('accounts/', include('django.contrib.auth.urls')),
     path('api/', include('tcc_control.routers')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('users/', include('users.urls')),
     path('activities/', include('activities.urls', namespace='activities')),
     path('works/', include('works.urls', namespace='works')),
     path('timetables/', include('timetables.urls', namespace='timetables')),
