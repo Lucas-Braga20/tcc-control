@@ -4,24 +4,22 @@ Works views.
 
 from typing import Any, Dict
 from django.views.generic import TemplateView, UpdateView
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
 from works.models import FinalWorkVersion
 from works.forms import FinalWorkVersionForm
 
 
-class WorkStageView(TemplateView):
+class WorkStageView(LoginRequiredMixin, TemplateView):
     """
     Work Stage screen.
     """
     template_name = 'final-work-stages/list.html'
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class WorkStageDevelopmentView(SuccessMessageMixin, UpdateView):
+class WorkStageDevelopmentView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
     Work stage development view.
     """
@@ -42,8 +40,7 @@ class WorkStageDevelopmentView(SuccessMessageMixin, UpdateView):
         return context
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class WorkStageDetailView(TemplateView):
+class WorkStageDetailView(LoginRequiredMixin, TemplateView):
     """
     Work stage detail screen.
     """

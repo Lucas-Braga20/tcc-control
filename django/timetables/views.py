@@ -4,23 +4,21 @@ Views to timetables apps.
 
 from django.views.generic import CreateView, TemplateView, UpdateView
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from timetables.models import Timetable, Stage
 from timetables.forms import TimetableForm
 
 
-class TimetableListView(TemplateView):
+class TimetableListView(LoginRequiredMixin, TemplateView):
     """
     Timetable list screen.
     """
     template_name = 'timetables/list.html'
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class TimetableCreateView(SuccessMessageMixin, CreateView):
+class TimetableCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     """
     Timetable view to create object.
     """
@@ -33,8 +31,7 @@ class TimetableCreateView(SuccessMessageMixin, CreateView):
     authentication_classes = None
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class TimetableUpdateView(SuccessMessageMixin, UpdateView):
+class TimetableUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
     Timetable view to update object.
     """
@@ -57,7 +54,7 @@ class TimetableUpdateView(SuccessMessageMixin, UpdateView):
         return context
 
 
-class TimetableStageCalendarView(TemplateView):
+class TimetableStageCalendarView(LoginRequiredMixin, TemplateView):
     """
     Timetable calendar view.
     """

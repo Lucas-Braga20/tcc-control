@@ -4,9 +4,8 @@ Activities Views.
 
 from django.views.generic import TemplateView, CreateView, UpdateView, View
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 
 from core.defaults import ACTIVITY_TYPES
@@ -15,15 +14,14 @@ from activities.models import ActivityConfiguration
 from activities.forms import ActivityConfigurationForm
 
 
-class ActivityConfigurationListView(TemplateView):
+class ActivityConfigurationListView(LoginRequiredMixin, TemplateView):
     """
     Activity configuration list screen.
     """
     template_name = 'activity-configurations/list.html'
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class ActivityConfigurationCreateView(SuccessMessageMixin, CreateView, View):
+class ActivityConfigurationCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView, View):
     """
     Activity configuration create screen.
     """
@@ -63,8 +61,7 @@ class ActivityConfigurationCreateView(SuccessMessageMixin, CreateView, View):
         return context
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class ActivityConfigurationUpdateView(SuccessMessageMixin, UpdateView):
+class ActivityConfigurationUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
     Activity configuration update screen.
     """

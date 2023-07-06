@@ -8,12 +8,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from tcc_control import views
-from tcc_control.routers import router
 
 
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('api/', include('tcc_control.routers')),
     path('activities/', include('activities.urls', namespace='activities')),
     path('works/', include('works.urls', namespace='works')),
