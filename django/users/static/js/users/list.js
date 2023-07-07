@@ -1,0 +1,269 @@
+const TimetablesList = () => {
+  let dataTableElement = null;
+  let dataTableObject = null;
+  let isActiveButtonFilters = null;
+
+  let searchInputElement = null;
+
+  let isActive = true;
+
+  let groupsBadges = {
+    'Professor da disciplina': `
+      <span class="badge badge-light-primary">Professor da disciplina</span>
+    `,
+    'Orientador': `
+      <span class="badge badge-light-success">Orientador</span>
+    `,
+    'Orientando': `
+      <span class="badge badge-light-info">Orientando</span>
+    `,
+    'Admin': `
+      <span class="badge badge-light-dark">Admin</span>
+    `,
+  };
+
+  const API = {
+    users: {
+      active(id) {
+        return fetch(`/api/users/${id}/`, {
+          method: 'patch',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
+          },
+          body: JSON.stringify({
+            is_active: true
+          }),
+        });
+      },
+      unactive(id) {
+        return fetch(`/api/users/${id}/`, {
+          method: 'patch',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
+          },
+          body: JSON.stringify({
+            is_active: false
+          }),
+        });
+      }
+    },
+  };
+
+
+  function getElements() {
+    dataTableElement = document.getElementById('tcc_datatable_users');
+    isActiveButtonFilters = document.getElementById('tcc_active_button_filters');
+    searchInputElement = document.getElementById('tcc_datatable_search_input');
+  }
+
+  function initUsersDataTable() {
+    dataTableObject = $(dataTableElement).DataTable({
+      responsive: true,
+      drawCallback(settings) {
+        handleArchiveButtonActions();
+
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+      },
+      ajax: {
+        url: $(dataTableElement).data('api'),
+        data(data) {
+          data.is_active = isActive;
+        },
+      },
+      columnDefs: [{
+        targets: '_all',
+        className: 'align-middle',
+        render(data) {
+          return data != null ? data : "";
+        },
+      }],
+      columns: [
+        {
+          data: 'full_name',
+          render(data) {
+            return data
+          },
+        },
+        {
+          data: 'username',
+          render(data) {
+            return `
+              <span class="text-muted fs-7">${data}</span>
+            `;
+          },
+        },
+        {
+          data: null,
+          render(data) {
+            if (data.groups && data.groups.length == 0) {
+              if (data.is_superuser) {
+                return groupsBadges['Admin'];
+              }
+
+              return `
+                <span class="text-muted fs-6">Sem perfil</span>
+              `;
+            }
+
+            return groupsBadges[data.groups[0].name]
+          },
+        },
+        {
+          data: null,
+          orderable: false,
+          className: 'text-end',
+          render(data) {
+            let activeButtonElement = '';
+
+            if (!isActive) {
+              // Active
+              activeButtonElement = `
+                <button
+                  type="button"
+                  class="btn btn-sm btn-icon btn-primary ms-1 tcc_active_button"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Ativar"
+                  data-active="${true}"
+                  data-id="${data.id}">
+                  <i class="fas fa-box-open"></i>
+                </button>
+              `;
+            } else {
+              // Unactive
+              activeButtonElement = `
+                <button
+                  type="button"
+                  class="btn btn-sm btn-icon btn-primary ms-1 tcc_active_button"
+                  data-active="${false}"
+                  data-id="${data.id}"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Desativar">
+                  <i class="fas fa-archive"></i>
+                </button>
+              `;
+            }
+
+            return `${activeButtonElement}`;
+          },
+        },
+      ]
+    });
+  }
+
+  function handleArchiveButtonActions() {
+    $('.tcc_active_button').click(function () {
+      const id = $(this).data('id');
+      const active = $(this).data('active');
+
+      if (active) {
+        Swal.fire({
+          title: 'Ativar usuário',
+          text: 'Tem certeza que deseja ativar este usuário?',
+          icon: 'warning',
+          customClass: {
+            actions: 'my-actions',
+            cancelButton: 'btn btn-secondary order-1',
+            confirmButton: 'btn btn-primary order-2',
+          },
+          buttonsStyling: false,
+          showCancelButton: true,
+          confirmButtonText: 'Confirmar'
+        }).then(result => {
+          const { isConfirmed } = result;
+
+          if (isConfirmed) {
+            let fetchResponse;
+
+            API.users.active(id)
+              .then(response => fetchResponse = response)
+              .then(response => {
+                return response.json().catch(() => {
+                  throw new Error('Houve um erro no servidor.');
+                })
+              })
+              .then(response => {
+                if (fetchResponse.status >= 300) {
+                  throw new Error(response.detail || 'Houve um erro no servidor.');
+                } else {
+                  dataTableObject.ajax.reload();
+                  dataTableObject.draw();
+                  Toast.fire({
+                    icon: 'success',
+                    title: 'Usuário ativado com sucesso.'
+                  });
+                }
+              })
+              .catch(err => {
+                Toast.fire({
+                  icon: 'error',
+                  title: err.message,
+                });
+              });
+          }
+        });
+      } else {
+        Swal.fire({
+          title: 'Desativar usuário',
+          text: 'Tem certeza que deseja desativar este usuário?',
+          icon: 'warning',
+          customClass: {
+            actions: 'my-actions',
+            cancelButton: 'btn btn-secondary order-1',
+            confirmButton: 'btn btn-primary order-2',
+          },
+          buttonsStyling: false,
+          showCancelButton: true,
+          confirmButtonText: 'Confirmar'
+        }).then(result => {
+          const { isConfirmed } = result;
+
+          if (isConfirmed) {
+            API.users.unactive(id).then(response => {
+              if (response.ok === false) {
+                throw new Error(response.statusText);
+              }
+
+              return response.json();
+            }).then(() => {
+              dataTableObject.ajax.reload();
+              dataTableObject.draw();
+              Toast.fire({
+                icon: 'success',
+                title: 'Usuário desativado com sucesso.'
+              });
+            }).catch(err => {
+              Toast.fire({
+                icon: 'error',
+                title: 'Houve um erro no servidor.'
+              });
+            });
+          }
+        });
+      }
+    });
+  }
+
+  function handleActiveButtonFilters() {
+    $(isActiveButtonFilters).find('button').click(function () {
+      isActive = $(this).data('active');
+      dataTableObject.ajax.reload();
+      dataTableObject.draw();
+    });
+  }
+
+
+  getElements();
+  initUsersDataTable();
+  handleActiveButtonFilters();
+}
+
+KTUtil.onDOMContentLoaded(function() {
+  TimetablesList();
+});
