@@ -47,7 +47,19 @@ const TimetablesList = () => {
             is_active: false
           }),
         });
-      }
+      },
+      changeRole(id, group) {
+        return fetch(`/api/users/${id}/`, {
+          method: 'patch',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
+          },
+          body: JSON.stringify({
+            groups: [group]
+          }),
+        });
+      },
     },
   };
 
@@ -63,6 +75,7 @@ const TimetablesList = () => {
       responsive: true,
       drawCallback(settings) {
         handleArchiveButtonActions();
+        handleRoleButtonActions();
 
         const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -100,7 +113,7 @@ const TimetablesList = () => {
         {
           data: null,
           render(data) {
-            if (data.groups && data.groups.length == 0) {
+            if (data.groups_detail && data.groups_detail.length == 0) {
               if (data.is_superuser) {
                 return groupsBadges['Admin'];
               }
@@ -110,7 +123,7 @@ const TimetablesList = () => {
               `;
             }
 
-            return groupsBadges[data.groups[0].name]
+            return groupsBadges[data.groups_detail[0].name]
           },
         },
         {
@@ -119,6 +132,7 @@ const TimetablesList = () => {
           className: 'text-end',
           render(data) {
             let activeButtonElement = '';
+            let changeRoleElement = '';
 
             if (!isActive) {
               // Active
@@ -150,10 +164,143 @@ const TimetablesList = () => {
               `;
             }
 
-            return `${activeButtonElement}`;
+            if (isActive && data.groups_detail[0] && data.groups_detail[0].name == 'Orientando') {
+              changeRoleElement = `
+                <button
+                  type="button"
+                  class="btn btn-sm btn-icon btn-primary ms-1 tcc_change_role_button"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Trocar para orientador"
+                  data-group="1"
+                  data-id="${data.id}">
+                  <i class="fas fa-user-tie"></i>
+                </button>
+              `;
+            }
+
+            if (isActive && data.groups_detail[0] && data.groups_detail[0].name == 'Orientador') {
+              changeRoleElement = `
+                <button
+                  type="button"
+                  class="btn btn-sm btn-icon btn-primary ms-1 tcc_change_role_button"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Trocar para orientando"
+                  data-group="2"
+                  data-id="${data.id}">
+                  <i class="fas fa-user-graduate"></i>
+                </button>
+              `;
+            }
+
+            return `${activeButtonElement} ${changeRoleElement}`;
           },
         },
       ]
+    });
+  }
+
+  function handleRoleButtonActions() {
+    $('.tcc_change_role_button').click(function () {
+      const id = $(this).data('id');
+      const group = Number.parseInt($(this).data('group'));
+
+      if (group == 1) {
+        Swal.fire({
+          title: 'Trocar perfil do usuário',
+          text: 'Tem certeza que deseja que deseja alterar o perfil deste usuário para orientador?',
+          icon: 'warning',
+          customClass: {
+            actions: 'my-actions',
+            cancelButton: 'btn btn-secondary order-1',
+            confirmButton: 'btn btn-primary order-2',
+          },
+          buttonsStyling: false,
+          showCancelButton: true,
+          confirmButtonText: 'Confirmar'
+        }).then(result => {
+          const { isConfirmed } = result;
+
+          if (isConfirmed) {
+            let fetchResponse;
+
+            API.users.changeRole(id, '1')
+              .then(response => fetchResponse = response)
+              .then(response => {
+                return response.json().catch(() => {
+                  throw new Error('Houve um erro no servidor.');
+                })
+              })
+              .then(response => {
+                if (fetchResponse.status >= 300) {
+                  throw new Error(response.detail || 'Houve um erro no servidor.');
+                } else {
+                  dataTableObject.ajax.reload();
+                  dataTableObject.draw();
+                  Toast.fire({
+                    icon: 'success',
+                    title: 'Usuário alterado com sucesso.'
+                  });
+                }
+              })
+              .catch(err => {
+                Toast.fire({
+                  icon: 'error',
+                  title: err.message,
+                });
+              });
+          }
+        });
+      }
+
+      if (group == 2) {
+        Swal.fire({
+          title: 'Trocar perfil do usuário',
+          text: 'Tem certeza que deseja que deseja alterar o perfil deste usuário para orientando?',
+          icon: 'warning',
+          customClass: {
+            actions: 'my-actions',
+            cancelButton: 'btn btn-secondary order-1',
+            confirmButton: 'btn btn-primary order-2',
+          },
+          buttonsStyling: false,
+          showCancelButton: true,
+          confirmButtonText: 'Confirmar'
+        }).then(result => {
+          const { isConfirmed } = result;
+
+          if (isConfirmed) {
+            let fetchResponse;
+
+            API.users.changeRole(id, '2')
+              .then(response => fetchResponse = response)
+              .then(response => {
+                return response.json().catch(() => {
+                  throw new Error('Houve um erro no servidor.');
+                })
+              })
+              .then(response => {
+                if (fetchResponse.status >= 300) {
+                  throw new Error(response.detail || 'Houve um erro no servidor.');
+                } else {
+                  dataTableObject.ajax.reload();
+                  dataTableObject.draw();
+                  Toast.fire({
+                    icon: 'success',
+                    title: 'Usuário alterado com sucesso.'
+                  });
+                }
+              })
+              .catch(err => {
+                Toast.fire({
+                  icon: 'error',
+                  title: err.message,
+                });
+              });
+          }
+        });
+      }
     });
   }
 

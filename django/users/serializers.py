@@ -23,13 +23,13 @@ class UserSerializer(serializers.ModelSerializer):
     """
     User Serializer.
     """
-    groups = GroupSerializer(many=True)
+    groups_detail = GroupSerializer(many=True, source='groups', read_only=True)
     full_name = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = ['id', 'is_superuser', 'username', 'first_name', 'last_name', 'email', 'is_active', 'phone',
-                  'groups', 'full_name']
+                  'groups', 'groups_detail', 'full_name']
 
     def get_full_name(self, obj):
         return obj.get_full_name()
