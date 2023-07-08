@@ -6,10 +6,47 @@ import datetime
 
 from django import forms
 
-from works.models import FinalWorkStage, FinalWorkVersion
+from works.models import FinalWorkStage, FinalWorkVersion, FinalWork
 from works.utils import validate_stage_content_json
 
+from users.models import User
+
 from core.defaults import WORK_STAGE_COMPLETED, WORK_STAGE_COMPLETED_LATE, WORK_STAGE_PRESENTED
+
+
+
+class FinalWorkForm(forms.ModelForm):
+    """
+    Final work form.
+    """
+    mentees = forms.ModelMultipleChoiceField(queryset=User.objects.filter(is_active=True, groups__name='Orientando'))
+    supervisor = forms.ModelChoiceField(queryset=User.objects.filter(is_active=True, groups__name='Orientador'))
+
+    class Meta:
+        model = FinalWork
+        fields = ['description', 'supervisor', 'mentees']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+
+        super().__init__(*args, **kwargs)
+
+        if user:
+            print(user)
+            self.fields['mentees'].initial = user
+
+        self.fields['mentees'].widget.attrs.update({
+            'data-control': 'select2',
+            'data-close-on-select': 'false',
+            'data-placeholder': 'Selecione os orientandos',
+            'data-allow-clear': 'true',
+            'multiple': 'true',
+        })
+
+        self.fields['supervisor'].widget.attrs.update({
+            'data-control': 'select2',
+            'data-placeholder': 'Selecione o orientador',
+        })
 
 
 class FinalWorkStageForm(forms.ModelForm):

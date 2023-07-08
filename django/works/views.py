@@ -3,13 +3,13 @@ Works views.
 """
 
 from typing import Any, Dict
-from django.views.generic import TemplateView, UpdateView
+from django.views.generic import TemplateView, UpdateView, CreateView, View
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
-from works.models import FinalWorkVersion
-from works.forms import FinalWorkVersionForm
+from works.models import FinalWorkVersion, FinalWork
+from works.forms import FinalWorkVersionForm, FinalWorkForm
 
 
 class WorkStageView(LoginRequiredMixin, TemplateView):
@@ -45,3 +45,17 @@ class WorkStageDetailView(LoginRequiredMixin, TemplateView):
     Work stage detail screen.
     """
     template_name = 'final-work-stages/detail.html'
+
+
+class WorkProposalCreateView(LoginRequiredMixin, CreateView, View):
+    """
+    Work proposal create screen.
+    """
+    template_name = 'final-work-proposal/editor.html'
+    model = FinalWork
+    form_class = FinalWorkForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
