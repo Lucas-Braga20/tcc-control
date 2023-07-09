@@ -18,7 +18,7 @@ class FinalWork(models.Model):
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
-    approved = models.BooleanField(verbose_name=_('approved'), default=False)
+    approved = models.BooleanField(verbose_name=_('approved'), null=True, blank=True)
     supervisor = models.ForeignKey('users.User', related_name='work_supervisor', verbose_name=_('supervisor'),
                                    on_delete=models.DO_NOTHING)
     mentees = models.ManyToManyField('users.User', related_name='work_mentee',
@@ -27,6 +27,9 @@ class FinalWork(models.Model):
     class Meta:
         verbose_name = _('Final work')
         verbose_name_plural = _('Final works')
+
+    def get_mentees(self):
+        return ', '.join([mentee.get_full_name() for mentee in self.mentees.all()])
 
 
 class FinalWorkStage(models.Model):

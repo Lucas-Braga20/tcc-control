@@ -3,6 +3,7 @@ Forms to works app.
 """
 
 import datetime
+from typing import Any, Dict
 
 from django import forms
 
@@ -32,7 +33,6 @@ class FinalWorkForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         if user:
-            print(user)
             self.fields['mentees'].initial = user
 
         self.fields['mentees'].widget.attrs.update({
@@ -47,6 +47,18 @@ class FinalWorkForm(forms.ModelForm):
             'data-control': 'select2',
             'data-placeholder': 'Selecione o orientador',
         })
+
+    def clean(self):
+        cleaned_data = super().clean()
+        mentees = cleaned_data.get('mentees')
+
+        works = FinalWork.objects.filter(approved=True, mentees__in=mentees.values_list('id'))
+        if works.exists():
+            raise forms.ValidationError(
+                'There is already a TCC proposal pending. Cancel the active proposal and create a new one.'
+            )
+
+        return cleaned_data
 
 
 class FinalWorkStageForm(forms.ModelForm):

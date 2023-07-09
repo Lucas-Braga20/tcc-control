@@ -13,15 +13,15 @@ class FinalWorkAdmin(admin.ModelAdmin):
     """
     Final work configuration model admin.
     """
-    list_display = ('id', 'description', 'approved', 'supervisor', 'mentees')
+    list_display = ('id', 'description', 'approved', 'supervisor', 'get_mentees')
     list_filter = ('supervisor', 'mentees')
 
     @admin.display(description=_('mentees'))
-    def mentees(self, obj):
+    def get_mentees(self, obj):
         """
         Method to return mentees names.
         """
-        return [mentee.get_full_name() for mentee in obj.mentee.all()].join(', ')
+        return ', '.join([mentee.get_full_name() for mentee in obj.mentees.all()])
 
 
 @admin.register(FinalWorkStage)

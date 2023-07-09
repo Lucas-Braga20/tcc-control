@@ -1,0 +1,168 @@
+{% extends 'layout.html' %}
+{% load static widget_tweaks %}
+
+{% block header %}
+  <div
+    id="kt_header"
+    class="header"
+    data-kt-sticky="true"
+    data-kt-sticky-name="header"
+    data-kt-sticky-offset="{default: '200px', lg: '300px'}">
+    <div class="container-xxl d-flex align-items-center justify-content-between" id="kt_header_container">
+      <!-- Page Title -->
+      <div
+        class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-5 pb-lg-0"
+        data-kt-swapper="true"
+        data-kt-swapper-mode="prepend"
+        data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
+        <h1 class="text-dark fw-bold my-0 fs-2">Todas as propostas</h1>
+        <ul class="breadcrumb breadcrumb-line text-muted fw-semibold fs-base my-1">
+          <li class="breadcrumb-item text-muted">
+            TCC
+          </li>
+          <li class="breadcrumb-item text-dark">
+            Propostas
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  {% csrf_token %}
+  <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="container-xxl" id="kt_content_container">
+      <div class="card">
+        <div class="card-header border-0 p-8 pb-4">
+          <h1 class="mb-0">Propostas de TCC</h1>
+        </div>
+        <div class="card-body py-4 pb-8">
+          <div class="accordion" id="tcc_accordion">
+            {% for item in object_list %}
+              <div id="tcc_accordion_item_{{ item.id }}" class="accordion-item">
+                <h2 class="accordion-header" id="tcc_accordion_header_{{ item.id }}">
+                  <button
+                    class="accordion-button collapsed fs-4 fw-semibold"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#tcc_accordion_body_{{ item.id }}"
+                    aria-expanded="false"
+                    aria-controls="tcc_accordion_body_{{ item.id }}"
+                  >
+                    <div class="row w-100">
+                      <div class="col">
+                        <h1 class="fs-5 mb-0">
+                          {{ item.description }}
+                        </h1>
+                      </div>
+
+                      {% if request.user.groups.all|first != mentee_group %}
+                        <div class="col d-flex justify-content-center">
+                          <span class="text-muted fs-6">
+                            {{ item.get_mentees }}
+                          </span>
+                        </div>
+
+                        <div class="col d-flex justify-content-center">
+                          <span class="text-muted fs-6 tcc-work-proposal-supervisor">
+                            {{ item.supervisor }}
+                          </span>
+                        </div>
+                      {% endif %}
+
+                      <div class="col d-flex justify-content-end">
+                        <span class="me-4 tcc-work-proposal-badges">
+                          {% if item.approved == True %}
+                            <span class="badge badge-light-success">Aprovado</span>
+                          {% elif item.approved == False %}
+                            <span class="badge badge-light-danger">Reprovado</span>
+                          {% else %}
+                            <span class="badge badge-light-warning">Pendente</span>
+                          {% endif %}
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                </h2>
+                {% if item.approved == None and request.user.groups.all|first != mentee_group %}
+                  <div
+                    id="tcc_accordion_body_{{ item.id }}"
+                    class="accordion-collapse collapse"
+                    aria-labelledby="tcc_accordion_header_{{ item.id }}"
+                    data-bs-parent="#tcc_accordion"
+                  >
+                    <div class="accordion-body">
+                      <div class="fv-row mb-8">
+                        <label for="tcc_supervisor" class="required form-label">Orientador</label>
+                        <select class="form-select form-select-solid" data-control="select2">
+                          {% for user in supervisor %}
+                            {% if  user == item.supervisor %}
+                              <option value="{{ user.id }}" selected>{{ user.get_full_name }}</option>
+                            {% else %}
+                              <option value="{{ user.id }}">{{ user.get_full_name }}</option>
+                            {% endif %}
+                          {% endfor %}
+                        </select>
+                      </div>
+
+                      <div class="d-flex justify-content-end">
+                        <div>
+                          <button
+                            type="button"
+                            class="btn btn-sm btn-danger tcc_remove_button"
+                            data-id="{{ item.id }}"
+                          >
+                            Reprovar
+                          </button>
+                        </div>
+                        <div class="ms-2">
+                          <button
+                            type="button"
+                            class="btn btn-sm btn-primary tcc_save_button"
+                            data-id="{{ item.id }}"
+                          >
+                            Aprovar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block css-vendors %}
+  <style>
+    .my-actions { margin: 0 2em; }
+    .order-1 { order: 1; }
+    .order-2 { order: 2; }
+    .order-3 { order: 3; }
+
+    .right-gap {
+      margin-right: auto;
+    }
+  </style>
+{% endblock %}
+
+{% block js-vendors %}
+  <script src="{% static 'vendor/sweetalert/sweetalert.js' %}"></script>
+  <script>
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'bottom-end',
+      showConfirmButton: false,
+      timer: 3000,
+    });
+  </script>
+{% endblock %}
+
+{% block js-scripts %}
+  <script src="{% static 'js/final-work-proposal/list.js' %}"></script>
+{% endblock %}

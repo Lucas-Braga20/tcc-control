@@ -2,14 +2,18 @@
 Works views.
 """
 
-from typing import Any, Dict
-from django.views.generic import TemplateView, UpdateView, CreateView, View
+from django.views.generic import TemplateView, UpdateView, CreateView, View, ListView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import Group
 from django.urls import reverse_lazy
 
 from works.models import FinalWorkVersion, FinalWork
 from works.forms import FinalWorkVersionForm, FinalWorkForm
+
+from users.models import User
+
+from core.permissions import UserGroup, GenericPermissionMixin
 
 
 class WorkStageView(LoginRequiredMixin, TemplateView):
@@ -31,7 +35,7 @@ class WorkStageDevelopmentView(LoginRequiredMixin, SuccessMessageMixin, UpdateVi
     permission_classes = None
     authentication_classes = None
 
-    def get_context_data(self, **kwargs: Any):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         detail_object = context['object']
@@ -47,15 +51,47 @@ class WorkStageDetailView(LoginRequiredMixin, TemplateView):
     template_name = 'final-work-stages/detail.html'
 
 
-class WorkProposalCreateView(LoginRequiredMixin, CreateView, View):
+class WorkProposalCreateView(GenericPermissionMixin, LoginRequiredMixin, CreateView, View):
     """
     Work proposal create screen.
     """
     template_name = 'final-work-proposal/editor.html'
     model = FinalWork
     form_class = FinalWorkForm
+    success_url = reverse_lazy('works:proposal-list')
+    success_message = 'Proposta de TCC criada com sucesso.'
+    required_groups = ['Orientando']
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
+
+
+class WorkProposalListView(LoginRequiredMixin, ListView, View):
+    """
+    Work proposal list screen.
+    """
+    template_name = 'final-work-proposal/list.html'
+    model = FinalWork
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        user_group = UserGroup(self.request.user)
+
+        if user_group.is_mentee():
+            queryset = queryset.filter(mentees__in=[self.request.user])
+
+        if user_group.is_supervisor():
+            queryset = queryset.filter(supervisor=self.request.user)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['supervisor'] = User.objects.filter(groups__name='Orientador')
+        context['mentee_group'] = Group.objects.get(name='Orientando')
+
+        return context

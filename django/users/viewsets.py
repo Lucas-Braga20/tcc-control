@@ -24,4 +24,4 @@ class UserViewSet(mixins.RetrieveModelMixin,
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['is_active']
     permission_classes = [permissions.IsAuthenticated, RoleAccessPermission]
-    role_required = ['Professor da disciplina']
+    roles_required = ['Professor da disciplina']
