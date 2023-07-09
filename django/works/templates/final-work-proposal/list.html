@@ -25,6 +25,37 @@
           </li>
         </ul>
       </div>
+
+      <!-- Actions -->
+      <div class="d-flex flex-shrink-0">
+        <div class="d-flex ms-3">
+          {% if not allow_create %}
+            <div
+              data-bs-toggle="tooltip"
+              data-bs-placement="bottom"
+              title="Já existe uma proposta ativa."
+              id="tcc_work_proposal_create_link_error">
+              <button class="btn btn-primary" disabled>
+                Nova proposta
+              </button>
+            </div>
+
+            <a
+              href="{% url 'works:proposal-create' %}"
+              class="btn btn-primary d-none"
+              id="tcc_work_proposal_create_link">
+              Nova proposta
+            </a>
+          {% else %}
+            <a
+              href="{% url 'works:proposal-create' %}"
+              class="btn btn-primary"
+              id="tcc_work_proposal_create_link">
+              Nova proposta
+            </a>
+          {% endif %}
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}
@@ -128,9 +159,38 @@
                       </div>
                     </div>
                   </div>
+                {% else %}
+                  <div
+                    id="tcc_accordion_body_{{ item.id }}"
+                    class="accordion-collapse collapse"
+                    aria-labelledby="tcc_accordion_header_{{ item.id }}"
+                    data-bs-parent="#tcc_accordion"
+                  >
+                    <div class="accordion-body">
+                      <div class="d-flex justify-content-end">
+                        <div class="ms-2">
+                          <button
+                            type="button"
+                            class="btn btn-sm btn-danger tcc_cancel_button"
+                            data-id="{{ item.id }}"
+                          >
+                            Cancelar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 {% endif %}
               </div>
             {% endfor %}
+
+            {% if object_list|length == 0 %}
+              <div class="accordion-item">
+                <h2 class="accordion-header p-7 fs-7 text-muted fw-light">
+                  Sem propostas
+                </h2>
+              </div>
+            {% endif %}
           </div>
         </div>
       </div>

@@ -86,6 +86,8 @@ class WorkProposalListView(LoginRequiredMixin, ListView, View):
         if user_group.is_supervisor():
             queryset = queryset.filter(supervisor=self.request.user)
 
+        queryset = queryset.exclude(archived=True)
+
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -93,5 +95,8 @@ class WorkProposalListView(LoginRequiredMixin, ListView, View):
 
         context['supervisor'] = User.objects.filter(groups__name='Orientador')
         context['mentee_group'] = Group.objects.get(name='Orientando')
+        context['allow_create'] = not FinalWork.objects.filter(
+            mentees__in=[self.request.user]
+        ).exclude(archived=True).exists()
 
         return context

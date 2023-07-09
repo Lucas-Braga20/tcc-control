@@ -52,7 +52,7 @@ class FinalWorkForm(forms.ModelForm):
         cleaned_data = super().clean()
         mentees = cleaned_data.get('mentees')
 
-        works = FinalWork.objects.filter(approved=True, mentees__in=mentees.values_list('id'))
+        works = FinalWork.objects.filter(mentees__in=mentees.values_list('id')).exclude(archived=True)
         if works.exists():
             raise forms.ValidationError(
                 'There is already a TCC proposal pending. Cancel the active proposal and create a new one.'

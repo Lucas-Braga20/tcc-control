@@ -23,6 +23,7 @@ class FinalWork(models.Model):
                                    on_delete=models.DO_NOTHING)
     mentees = models.ManyToManyField('users.User', related_name='work_mentee',
                                     verbose_name=_('mentee'))
+    archived = models.BooleanField(default=False, verbose_name=_('archived'))
 
     class Meta:
         verbose_name = _('Final work')

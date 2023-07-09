@@ -43,6 +43,8 @@ class FinalWorkViewSet(mixins.CreateModelMixin,
         if user_group.is_supervisor():
             queryset = queryset.filter(supervisor=self.request.user)
 
+        queryset = queryset.filter(archived=False)
+
         return queryset
 
 
