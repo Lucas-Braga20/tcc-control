@@ -10,15 +10,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from timetables.models import Timetable, Stage
 from timetables.forms import TimetableForm
 
+from core.permissions import GenericPermissionMixin
 
-class TimetableListView(LoginRequiredMixin, TemplateView):
+
+class TimetableListView(GenericPermissionMixin, LoginRequiredMixin, TemplateView):
     """
     Timetable list screen.
     """
     template_name = 'timetables/list.html'
+    required_groups = ['Professor da disciplina']
 
 
-class TimetableCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class TimetableCreateView(GenericPermissionMixin, LoginRequiredMixin, SuccessMessageMixin, CreateView):
     """
     Timetable view to create object.
     """
@@ -29,6 +32,7 @@ class TimetableCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = 'Cronograma criado com sucesso.'
     permission_classes = None
     authentication_classes = None
+    required_groups = ['Professor da disciplina']
 
 
 class TimetableUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):

@@ -27,35 +27,37 @@
       </div>
 
       <!-- Actions -->
-      <div class="d-flex flex-shrink-0">
-        <div class="d-flex ms-3">
-          {% if not allow_create %}
-            <div
-              data-bs-toggle="tooltip"
-              data-bs-placement="bottom"
-              title="Já existe uma proposta ativa."
-              id="tcc_work_proposal_create_link_error">
-              <button class="btn btn-primary" disabled>
-                Nova proposta
-              </button>
-            </div>
+      {% if request.user.groups.all|first == mentee_group %}
+        <div class="d-flex flex-shrink-0">
+          <div class="d-flex ms-3">
+            {% if not allow_create %}
+              <div
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Já existe uma proposta ativa."
+                id="tcc_work_proposal_create_link_error">
+                <button class="btn btn-primary" disabled>
+                  Nova proposta
+                </button>
+              </div>
 
-            <a
-              href="{% url 'works:proposal-create' %}"
-              class="btn btn-primary d-none"
-              id="tcc_work_proposal_create_link">
-              Nova proposta
-            </a>
-          {% else %}
-            <a
-              href="{% url 'works:proposal-create' %}"
-              class="btn btn-primary"
-              id="tcc_work_proposal_create_link">
-              Nova proposta
-            </a>
-          {% endif %}
+              <a
+                href="{% url 'works:proposal-create' %}"
+                class="btn btn-primary d-none"
+                id="tcc_work_proposal_create_link">
+                Nova proposta
+              </a>
+            {% else %}
+              <a
+                href="{% url 'works:proposal-create' %}"
+                class="btn btn-primary"
+                id="tcc_work_proposal_create_link">
+                Nova proposta
+              </a>
+            {% endif %}
+          </div>
         </div>
-      </div>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
@@ -116,7 +118,7 @@
                     </div>
                   </button>
                 </h2>
-                {% if item.approved == None and request.user.groups.all|first != mentee_group %}
+                {% if item.approved == None and request.user.groups.all|first == teacher_group %}
                   <div
                     id="tcc_accordion_body_{{ item.id }}"
                     class="accordion-collapse collapse"

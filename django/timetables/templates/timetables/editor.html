@@ -73,12 +73,16 @@
 
             <!-- Description -->
             <div class="fv-row mb-8">
-              <label for="description" class="required form-label">Descrição</label>
+              <label for="description" class="required form-label">
+                Descrição
+              </label>
+
               {% if form.description.errors %}
                 <textarea class="form-control form-control-solid is-invalid" name="description" id="description" cols="30" rows="10">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
               {% else %}
                 <textarea class="form-control form-control-solid" name="description" id="description" cols="30" rows="10">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
               {% endif %}
+
               {% for error in form.description.errors %}
                 <div class="invalid-feedback">
                   {{ error }}
@@ -88,7 +92,10 @@
 
             <!-- Mentees -->
             <div class="fv-row mb-8">
-              <label for="mentees" class="required form-label">Orientandos</label>
+              <label for="mentees" class="required form-label">
+                Orientandos
+              </label>
+
               {% if form.mentee_field.errors %}
                 <select
                   class="form-select form-select-solid is-invalid"
@@ -132,6 +139,7 @@
                   {% endfor %}
                 </select>
               {% endif %}
+
               {% for error in form.mentee_field.errors %}
                 <div class="invalid-feedback">
                   {{ error }}
@@ -141,7 +149,10 @@
 
             <!-- Supervisors -->
             <div class="fv-row mb-8">
-              <label for="mentees" class="required form-label">Orientadores</label>
+              <label for="mentees" class="required form-label">
+                Orientadores
+              </label>
+
               {% if form.supervisor_field.errors %}
                 <select
                   class="form-select form-select-solid is-invalid"
@@ -185,6 +196,7 @@
                   {% endfor %}
                 </select>
               {% endif %}
+
               {% for error in form.supervisor_field.errors %}
                 <div class="invalid-feedback">
                   {{ error }}

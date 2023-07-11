@@ -55,6 +55,21 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
     queryset = FinalWorkStage.objects.all()
     serializer_class = FinalWorkStageSerializer
     model = FinalWorkStage
+    permission_classes = [RoleAccessPermission, permissions.IsAuthenticated]
+    roles_required = ['Orientando', 'Professor da disciplina', 'Orientador']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        user_group = UserGroup(self.request.user)
+
+        if user_group.is_mentee():
+            queryset = queryset.filter(final_work__mentees__in=[self.request.user])
+
+        if user_group.is_supervisor():
+            queryset = queryset.filter(final_work__supervisor=self.request.user)
+
+        return queryset
 
 
 class FinalWorkVersionViewSet(viewsets.ModelViewSet):
@@ -64,6 +79,21 @@ class FinalWorkVersionViewSet(viewsets.ModelViewSet):
     queryset = FinalWorkVersion.objects.all()
     serializer_class = FinalWorkVersionSerializer
     model = FinalWorkVersion
+    permission_classes = [RoleAccessPermission, permissions.IsAuthenticated]
+    roles_required = ['Orientando', 'Professor da disciplina', 'Orientador']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        user_group = UserGroup(self.request.user)
+
+        if user_group.is_mentee():
+            queryset = queryset.filter(work_stage__final_work__mentees__in=[self.request.user])
+
+        if user_group.is_supervisor():
+            queryset = queryset.filter(work_stage__final_work__supervisor=self.request.user)
+
+        return queryset
 
 
 class VersionContentImageViewSet(mixins.CreateModelMixin,
@@ -77,8 +107,21 @@ class VersionContentImageViewSet(mixins.CreateModelMixin,
     queryset = VersionContentImage.objects.all()
     serializer_class = VersionContentImageSerializer
     model = VersionContentImage
-    authentication_classes = []
-    permission_classes = []
+    permission_classes = [RoleAccessPermission, permissions.IsAuthenticated]
+    roles_required = ['Orientando', 'Professor da disciplina', 'Orientador']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        user_group = UserGroup(self.request.user)
+
+        if user_group.is_mentee():
+            queryset = queryset.filter(version__work_stage__final_work__mentees__in=[self.request.user])
+
+        if user_group.is_supervisor():
+            queryset = queryset.filter(version__work_stage__final_work__supervisor=self.request.user)
+
+        return queryset
 
 
 class ChangeRequestViewSet(viewsets.ModelViewSet):
@@ -88,3 +131,5 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
     queryset = ChangeRequest.objects.all()
     serializer_class = ChangeRequestSerializer
     model = ChangeRequest
+    permission_classes = [RoleAccessPermission, permissions.IsAuthenticated]
+    roles_required = ['Orientando', 'Professor da disciplina']

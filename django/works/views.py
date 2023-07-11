@@ -95,6 +95,7 @@ class WorkProposalListView(LoginRequiredMixin, ListView, View):
 
         context['supervisor'] = User.objects.filter(groups__name='Orientador')
         context['mentee_group'] = Group.objects.get(name='Orientando')
+        context['teacher_group'] = Group.objects.get(name='Professor da disciplina')
         context['allow_create'] = not FinalWork.objects.filter(
             mentees__in=[self.request.user]
         ).exclude(archived=True).exists()

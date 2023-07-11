@@ -2,7 +2,7 @@
 Activities Viewsets.
 """
 
-from rest_framework import mixins, viewsets, status
+from rest_framework import mixins, viewsets, status, permissions
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
 
@@ -10,6 +10,8 @@ from activities.models import ActivityConfiguration
 from activities.serializers import ActivityConfigurationSerializer
 
 from django_filters.rest_framework import DjangoFilterBackend
+
+from core.permissions import RoleAccessPermission
 
 
 class ActivityConfigurationViewSet(mixins.RetrieveModelMixin,
@@ -25,8 +27,8 @@ class ActivityConfigurationViewSet(mixins.RetrieveModelMixin,
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['archived']
     search_fields = ['name']
-    permission_classes = []
-    authentication_classes = []
+    permission_classes = [permissions.IsAuthenticated, RoleAccessPermission]
+    roles_required = ['Professor da disciplina']
 
     def get_queryset(self):
         queryset = super().get_queryset()

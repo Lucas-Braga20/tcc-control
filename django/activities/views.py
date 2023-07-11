@@ -13,15 +13,18 @@ from core.defaults import ACTIVITY_TYPES
 from activities.models import ActivityConfiguration
 from activities.forms import ActivityConfigurationForm
 
+from core.permissions import GenericPermissionMixin
 
-class ActivityConfigurationListView(LoginRequiredMixin, TemplateView):
+
+class ActivityConfigurationListView(GenericPermissionMixin, LoginRequiredMixin, TemplateView):
     """
     Activity configuration list screen.
     """
     template_name = 'activity-configurations/list.html'
+    required_groups = ['Professor da disciplina']
 
 
-class ActivityConfigurationCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView, View):
+class ActivityConfigurationCreateView(GenericPermissionMixin, LoginRequiredMixin, SuccessMessageMixin, CreateView, View):
     """
     Activity configuration create screen.
     """
@@ -32,6 +35,7 @@ class ActivityConfigurationCreateView(LoginRequiredMixin, SuccessMessageMixin, C
     success_message = 'Configuração de atividade criada com sucesso.'
     permission_classes = None
     authentication_classes = None
+    required_groups = ['Professor da disciplina']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -61,7 +65,7 @@ class ActivityConfigurationCreateView(LoginRequiredMixin, SuccessMessageMixin, C
         return context
 
 
-class ActivityConfigurationUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class ActivityConfigurationUpdateView(GenericPermissionMixin, LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
     Activity configuration update screen.
     """
@@ -72,6 +76,7 @@ class ActivityConfigurationUpdateView(LoginRequiredMixin, SuccessMessageMixin, U
     success_message = 'Configuração de atividade atualizada com sucesso.'
     permission_classes = None
     authentication_classes = None
+    required_groups = ['Professor da disciplina']
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)

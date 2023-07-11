@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% load static %}
+{% load static widget_tweaks %}
 
 {% block header %}
   <div
@@ -55,22 +55,16 @@
           <div class="card-body py-4">
             <!-- Name -->
             <div class="fv-row mb-8">
-              <label for="title" class="required form-label">Name</label>
+              <label for="title" class="required form-label">
+                Name
+              </label>
+
               {% if form.name.errors %}
-                <input
-                  type="text"
-                  class="form-control form-control-solid is-invalid"
-                  placeholder="Nome"
-                  name="name"
-                  value="{% if form.name.value %}{{ form.name.value }}{% endif %}"/>
+                {{ form.name|add_class:"form-control form-control-solid is-invalid" }}
               {% else %}
-                <input
-                  type="text"
-                  class="form-control form-control-solid"
-                  placeholder="Nome"
-                  name="name"
-                  value="{% if form.name.value %}{{ form.name.value }}{% endif %}"/>
+                {{ form.name|add_class:"form-control form-control-solid" }}
               {% endif %}
+
               {% for error in form.name.errors %}
                 <div class="invalid-feedback">
                   {{ error }}
@@ -80,7 +74,10 @@
 
             <!-- Template ABNT -->
             <div class="fv-row mb-8">
-              <label for="template" class="required form-label">Template</label>
+              <label for="template" class="required form-label">
+                Template
+              </label>
+
               {% if form.template_abnt.errors %}
                 <div class="is-invalid">
                   {{ form.template_abnt }}
@@ -90,6 +87,7 @@
                   {{ form.template_abnt }}
                 </div>
               {% endif %}
+
               {% for error in form.template_abnt.errors %}
                 <div class="invalid-feedback">
                   {{ error }}
@@ -120,6 +118,7 @@
                   <span class="ms-3">Carregando campos...</span>
                 </div>
               </div>
+
               {% if form.fields.errors %}
                 <input
                   id="tcc_fields_editor"
@@ -134,6 +133,7 @@
                   type="hidden"
                   value="{% if form.fields.value %}{{ form.fields.value }}{% endif %}">
               {% endif %}
+
               {% for error in form.fields.errors %}
                 <div class="invalid-feedback">
                   {{ error }}

@@ -4,7 +4,7 @@ Timetable viewsets.
 
 import os
 
-from rest_framework import viewsets, mixins, status
+from rest_framework import viewsets, mixins, status, permissions
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 
@@ -16,6 +16,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from datetime import date
 
 from core.mixins import DisablePaginationMixin
+from core.permissions import RoleAccessPermission
 
 
 class TimetableViewSet(mixins.RetrieveModelMixin,
@@ -30,8 +31,8 @@ class TimetableViewSet(mixins.RetrieveModelMixin,
     model = Timetable
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['archived']
-    permission_classes = []
-    authentication_classes = []
+    permission_classes = [permissions.IsAuthenticated, RoleAccessPermission]
+    roles_required = ['Professor da disciplina']
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -59,8 +60,8 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['timetable']
     parser_classes = [FormParser, MultiPartParser]
-    permission_classes = []
-    authentication_classes = []
+    permission_classes = [permissions.IsAuthenticated, RoleAccessPermission]
+    roles_required = ['Professor da disciplina']
 
     def get_queryset(self):
         queryset = super().get_queryset()
