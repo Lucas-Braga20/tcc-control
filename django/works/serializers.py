@@ -14,12 +14,13 @@ class FinalWorkSerializer(serializers.ModelSerializer):
     Final work serializer.
     """
     mentees_detail = UserSerializer(many=True, source='mentees', read_only=True)
+    supervisor_detail = UserSerializer(many=False, source='supervisor', read_only=True)
     current_stage = serializers.SerializerMethodField()
 
     class Meta:
         model = FinalWork
         fields = ['id', 'description', 'approved', 'supervisor', 'mentees', 'archived', 'mentees_detail',
-                  'current_stage']
+                  'current_stage', 'supervisor_detail']
 
     def get_current_stage(self, obj):
         return obj.get_current_stage()

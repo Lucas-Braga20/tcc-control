@@ -67,6 +67,12 @@ const FinalWorkList = () => {
           },
         },
         {
+          data: 'supervisor_detail',
+          render(data) {
+            return data.full_name;
+          },
+        },
+        {
           data: 'current_stage',
           render(data) {
             return badges[data] || '';
