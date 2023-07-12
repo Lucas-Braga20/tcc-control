@@ -101,3 +101,11 @@ class WorkProposalListView(LoginRequiredMixin, ListView, View):
         ).exclude(archived=True).exists()
 
         return context
+
+
+class WorkListView(GenericPermissionMixin, LoginRequiredMixin, TemplateView):
+    """
+    Final work list screen.
+    """
+    template_name = 'final-work/list.html'
+    required_groups = ['Orientador', 'Professor da disciplina']

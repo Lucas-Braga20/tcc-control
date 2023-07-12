@@ -200,6 +200,18 @@
                       <span class="menu-section text-muted text-uppercase fs-8 ls-1">TCC</span>
                     </div>
                   </div>
+                  {% if group.is_teacher or group.is_supervisor %}
+                  <div class="menu-item">
+                    <a
+                      class="menu-link {% get_link_is_active request 'works:list' %}"
+                      href="{% url 'works:list' %}">
+                      <span class="menu-icon navbar-secondary-icon">
+                        <i class="fas fa-list"></i>
+                      </span>
+                      <span class="menu-title">Listagem
+                    </a>
+                  </div>
+                  {% endif %}
                   <div class="menu-item">
                     <a
                       class="menu-link {% get_link_is_active request 'works:stages' %} {% get_link_is_active request 'works:detail' %} {% get_link_is_active request 'works:development' %}"

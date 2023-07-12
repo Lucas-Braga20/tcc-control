@@ -22,6 +22,7 @@ class StageEditor {
           method: 'get',
           headers: {
             'Content-Type': 'application/json',
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
           },
         });
       },
@@ -29,6 +30,9 @@ class StageEditor {
         return fetch(`/api/stages/`, {
           method: 'post',
           body,
+          headers: {
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
+          },
         });
       },
       delete(id) {
@@ -36,6 +40,7 @@ class StageEditor {
           method: 'delete',
           headers: {
             'Content-Type': 'application/json',
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
           },
         });
       },
@@ -43,6 +48,9 @@ class StageEditor {
         return fetch(`/api/stages/${id}/`, {
           method: 'patch',
           body,
+          headers: {
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
+          },
         });
       },
     },

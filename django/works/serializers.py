@@ -6,15 +6,23 @@ from rest_framework import serializers
 
 from works.models import FinalWork, FinalWorkStage, FinalWorkVersion, ChangeRequest, VersionContentImage
 
+from users.serializers import UserSerializer
+
 
 class FinalWorkSerializer(serializers.ModelSerializer):
     """
     Final work serializer.
     """
+    mentees_detail = UserSerializer(many=True, source='mentees', read_only=True)
+    current_stage = serializers.SerializerMethodField()
 
     class Meta:
         model = FinalWork
-        fields = '__all__'
+        fields = ['id', 'description', 'approved', 'supervisor', 'mentees', 'archived', 'mentees_detail',
+                  'current_stage']
+
+    def get_current_stage(self, obj):
+        return obj.get_current_stage()
 
 
 class FinalWorkStageSerializer(serializers.ModelSerializer):

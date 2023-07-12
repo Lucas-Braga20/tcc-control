@@ -4,6 +4,8 @@ Works app models.
 
 import uuid
 
+from datetime import date
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -31,6 +33,16 @@ class FinalWork(models.Model):
 
     def get_mentees(self):
         return ', '.join([mentee.get_full_name() for mentee in self.mentees.all()])
+
+    def get_current_stage(self):
+        today = date.today()
+
+        stage = self.work_stage.filter(stage__start_date__lte=today, stage__send_date__gte=today)
+
+        if stage.exists():
+            return stage.first().status
+
+        return None
 
 
 class FinalWorkStage(models.Model):

@@ -20,7 +20,7 @@ router.register('activities', ActivityConfigurationViewSet, basename='activities
 router.register('timetables', TimetableViewSet)
 router.register('stages', StageViewSet)
 router.register('users', UserViewSet)
-router.register('final-works', FinalWorkViewSet)
+router.register('final-works', FinalWorkViewSet, basename='works')
 router.register('final-work-stages', FinalWorkStageViewSet)
 router.register('final-work-versions', FinalWorkVersionViewSet)
 router.register('version-content-images', VersionContentImageViewSet)

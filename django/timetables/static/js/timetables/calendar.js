@@ -10,7 +10,11 @@ const Calendar = () => {
   let API = {
     stages: {
       list(params) {
-        return fetch(`/api/stages/${params}`)
+        return fetch(`/api/stages/${params}`, {
+          headers: {
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
+          }
+        })
       },
     },
   };

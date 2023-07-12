@@ -61,7 +61,7 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
     filterset_fields = ['timetable']
     parser_classes = [FormParser, MultiPartParser]
     permission_classes = [permissions.IsAuthenticated, RoleAccessPermission]
-    roles_required = ['Professor da disciplina']
+    roles_required = ['Professor da disciplina', 'Orientador', 'Orientando']
 
     def get_queryset(self):
         queryset = super().get_queryset()
