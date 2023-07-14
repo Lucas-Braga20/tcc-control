@@ -11,7 +11,7 @@ from works.views import (WorkStageView, WorkStageDevelopmentView, WorkStageDetai
 app_name = 'works'
 urlpatterns = [
     path('', WorkListView.as_view(), name='list'),
-    path('stages/', WorkStageView.as_view(), name='stages'),
+    path('<uuid:pk>/stages/', WorkStageView.as_view(), name='stages'),
     path('stages/detail', WorkStageDetailView.as_view(), name='detail'),
     path('development/<uuid:pk>', WorkStageDevelopmentView.as_view(), name='development'),
     path('proposal/create', WorkProposalCreateView.as_view(), name='proposal-create'),

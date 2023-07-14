@@ -2,7 +2,7 @@
 Works views.
 """
 
-from django.views.generic import TemplateView, UpdateView, CreateView, View, ListView
+from django.views.generic import TemplateView, UpdateView, CreateView, View, ListView, DetailView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
@@ -13,14 +13,28 @@ from works.forms import FinalWorkVersionForm, FinalWorkForm
 
 from users.models import User
 
+from meetings.models import Meeting
+
 from core.permissions import UserGroup, GenericPermissionMixin
 
 
-class WorkStageView(LoginRequiredMixin, TemplateView):
+class WorkStageView(LoginRequiredMixin, DetailView, View):
     """
     Work Stage screen.
     """
     template_name = 'final-work-stages/list.html'
+    model = FinalWork
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        object = self.get_object()
+
+        context['meetings'] = Meeting.objects.filter(work_stage__final_work=object).exclude(
+            meeting_approved__approved=False
+        )
+
+        return context
 
 
 class WorkStageDevelopmentView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):

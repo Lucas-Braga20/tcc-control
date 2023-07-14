@@ -37,10 +37,33 @@
           <div class="d-flex flex-column">
             <div class="d-flex align-items-center mb-2">
               <h1 class="mb-0">
-                TCC Control
+                {{ object.description }}
               </h1>
-              <i class="fas fa-check-circle fa-fw fs-2 text-primary ms-3"></i>
-              <span class="badge badge-light-success fw-bolder ms-2 fs-8 py-1 px-3">Completo</span>
+              {% if object.approved %}
+                <i
+                  class="fas fa-check-circle fa-fw fs-2 text-primary ms-3"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Aprovado"></i>
+              {% else %}
+                <i
+                  class="fas fa-times-circle fa-fw fs-2 text-danger ms-3"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Reprovado"></i>
+              {% endif %}
+
+              {% with last_stage=object.work_stage.last %}
+                {% if last_stage and last_stage.status < 3 %}
+                  <span class="badge badge-light fw-bolder ms-2 fs-8 py-1 px-3">
+                    Pendente
+                  </span>
+                {% else %}
+                  <span class="badge badge-light-success fw-bolder ms-2 fs-8 py-1 px-3">
+                    Completo
+                  </span>
+                {% endif %}
+              {% endwith %}
             </div>
             <div class="d-flex">
               <div class="d-flex fw-semibold fs-6 pe-2">
@@ -49,7 +72,7 @@
                   <span class="ms-2 text-gray-400">Orientador:</span>
                 </div>
                 <span class="text-gray-700 fw-bold">
-                  Felipe Perez
+                  {{ object.supervisor.get_full_name }}
                 </span>
               </div>
               <div class="ms-10 d-flex fw-semibold fs-6 pe-2">
@@ -58,7 +81,7 @@
                   <span class="ms-2 text-gray-400">Orientado(s):</span>
                 </div>
                 <span class="text-gray-700 fw-bold">
-                  Lucas Braga, Willian Matiussi
+                  {{ object.get_mentees }}
                 </span>
               </div>
             </div>
@@ -82,26 +105,34 @@
               Documento
             </button>
           </div>
-          <div class="mt-8">
+          <div class="mt-5">
             <div class="d-flex flex-column">
-              <a
-                href="{% url 'works:detail' %}"
-                class="border border-gray-300 rounded p-2">
-                <div class="d-flex align-items-center justify-content-between p-4">
-                  <h3 class="fs-7 fw-light text-gray-700 mb-0">
-                    Termo de abertura de projeto
-                  </h3>
-                  <span class="badge badge-light-dark">Atribuído</span>
-                </div>
-              </a>
-              <a href="{% url 'works:detail' %}" class="border border-gray-300 rounded mt-3 p-2">
-                <div class="d-flex align-items-center justify-content-between p-4">
-                  <h3 class="fs-7 fw-light text-gray-700 mb-0">
-                    DER
-                  </h3>
-                  <span class="badge badge-light-success">Concluído</span>
-                </div>
-              </a>
+              {% for work_stage in object.work_stage.all %}
+                <a
+                  href="{% url 'works:detail' %}"
+                  class="border border-gray-300 rounded p-2 mt-3">
+                  <div class="d-flex align-items-center justify-content-between p-4">
+                    <h3 class="fs-7 fw-light text-gray-700 mb-0">
+                      {{ work_stage.stage.description }}
+                    </h3>
+                    {% if work_stage.status == 0 %}
+                      <span class="badge badge-light-dark">Atribuído</span>
+                    {% elif work_stage.status == 1 %}
+                      <span class="badge badge-light-warning">Pendente</span>
+                    {% elif work_stage.status == 2 %}
+                      <span class="badge badge-light-primary">Aguardando correção</span>
+                    {% elif work_stage.status == 3 %}
+                      <span class="badge badge-light-info">Corrigido</span>
+                    {% elif work_stage.status == 4 %}
+                      <span class="badge badge-light-danger">Entregue com atraso</span>
+                    {% elif work_stage.status == 5 %}
+                      <span class="badge badge-light-success">Entregue</span>
+                    {% elif work_stage.status == 6 %}
+                      <span class="badge badge-light-success">Apresentado</span>
+                    {% endif %}
+                  </div>
+                </a>
+              {% endfor %}
             </div>
           </div>
 
@@ -114,24 +145,30 @@
               Ata de acompanhamento
             </button>
           </div>
-          <div class="mt-8">
+          <div class="mt-5">
             <div class="d-flex flex-column">
-              <a href="#" class="border border-gray-300 rounded p-2">
-                <div class="d-flex align-items-center justify-content-between p-4">
-                  <h3 class="fs-7 fw-light text-gray-700 mb-0">
-                    Reunião para falar sobre o termo de abertura.
-                  </h3>
-                  <span class="fw-light fs-7 text-gray-400">27/10/2023 10:00</span>
+              {% for meeting in meetings %}
+                {% if meeting.get_is_approved %}
+                  <a href="#" class="border border-gray-300 rounded p-2">
+                    <div class="d-flex align-items-center justify-content-between p-4">
+                      <h3 class="fs-7 fw-light text-gray-700 mb-0">
+                        {{ meeting.description }}
+                      </h3>
+                      <span class="fw-light fs-7 text-gray-400">{{ meeting.created_at }}</span>
+                    </div>
+                  </a>
+                {% endif %}
+              {% endfor %}
+
+              {% if meetings|length == 0 %}
+                <div class="border border-gray-300 rounded p-2">
+                  <div class="d-flex align-items-center justify-content-between p-4">
+                    <h3 class="fs-7 fw-light text-gray-700 mb-0 py-1">
+                      Sem reuniões
+                    </h3>
+                  </div>
                 </div>
-              </a>
-              <a href="#" class="border border-gray-300 rounded mt-3 p-2">
-                <div class="d-flex align-items-center justify-content-between p-4">
-                  <h3 class="fs-7 fw-light text-gray-700 mb-0">
-                    Reunião sobre o DER
-                  </h3>
-                  <span class="fw-light fs-7 text-gray-400">20/10/2023 10:00</span>
-                </div>
-              </a>
+              {% endif %}
             </div>
           </div>
         </div>
