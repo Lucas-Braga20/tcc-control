@@ -3,6 +3,7 @@ Timetable app models.
 """
 
 import uuid
+import os
 
 from datetime import date
 
@@ -66,6 +67,18 @@ class Stage(models.Model):
 
         return False
 
+    def get_start_date(self):
+        return self.start_date.strftime('%d/%m/%Y')
+
+    def get_send_date_supervisor(self):
+        return self.send_date_supervisor.strftime('%d/%m/%Y')
+
+    def get_send_date(self):
+        return self.send_date.strftime('%d/%m/%Y')
+
+    def get_presentation_date(self):
+        return self.presentation_date.strftime('%d/%m/%Y') if self.presentation_date is not None else None
+
 
 class StageExample(models.Model):
     """
@@ -80,3 +93,12 @@ class StageExample(models.Model):
     class Meta:
         verbose_name = _('Stage example')
         verbose_name_plural = _('Stage examples')
+
+    def get_file_name(self):
+        return os.path.basename(self.file.name) if self.file is not None else None
+
+    def get_file_size(self):
+        return round(self.file.size / (1024 * 1024), 3) if self.file is not None else None
+
+    def get_file_extension(self):
+        return os.path.splitext(self.file.name)[1] if self.file is not None else None

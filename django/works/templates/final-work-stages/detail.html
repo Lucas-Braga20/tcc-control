@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% load static %}
+{% load static utils %}
 
 {% block header %}
   <div
@@ -26,7 +26,7 @@
             </a>
           </li>
           <li class="breadcrumb-item text-dark">
-            DER
+            {{ object.stage.description }}
           </li>
         </ul>
       </div>
@@ -42,20 +42,34 @@
           <div class="d-flex flex-column">
             <div class="d-flex align-items-center mb-2">
               <h1 class="mb-0">
-                DER - Diagrama Entidade-Relacionamento
+                {{ object.stage.description }}
               </h1>
             </div>
             <div class="d-flex">
               <div class="d-flex fw-semibold fs-6 pe-2">
                 <span class="text-muted fw-light">
-                  Etapa atual
+                  {{ object.get_date_state }}
                 </span>
               </div>
             </div>
           </div>
           <div class="d-flex">
             <div>
-              <span class="badge badge-light-dark fw-bolder fs-7">Atribuído</span>
+              {% if object.status == 0 %}
+                <span class="badge badge-light-dark fw-bolder fs-7">Atribuído</span>
+              {% elif object.status == 1 %}
+                <span class="badge badge-light-warning fw-bolder fs-7">Pendente</span>
+              {% elif object.status == 2 %}
+                <span class="badge badge-light-primary fw-bolder fs-7">Aguardando correção</span>
+              {% elif object.status == 3 %}
+                <span class="badge badge-light-info fw-bolder fs-7">Corrigido</span>
+              {% elif object.status == 4 %}
+                <span class="badge badge-light-danger fw-bolder fs-7">Entregue com atraso</span>
+              {% elif object.status == 5 %}
+                <span class="badge badge-light-success fw-bolder fs-7">Entregue</span>
+              {% elif object.status == 6 %}
+                <span class="badge badge-light-success fw-bolder fs-7">Apresentado</span>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -68,7 +82,7 @@
                   <div class="timeline-line"></div>
                   <div class="timeline-date">
                     <div class="text-muted">
-                      20/10/2023
+                      {{ object.stage.get_start_date }}
                     </div>
                   </div>
                   <div class="timeline-event">
@@ -84,7 +98,7 @@
                   <div class="timeline-line"></div>
                   <div class="timeline-date">
                     <div class="text-muted">
-                      22/10/2023
+                      {{ object.stage.get_send_date_supervisor }}
                     </div>
                   </div>
                   <div class="timeline-event">
@@ -94,13 +108,14 @@
                   </div>
                 </div>
               </div>
+              {% assign_if "has_presentation_date" "object.stage.presentation_date is not None" %}
               <div class="col d-flex justify-content-center">
-                <div class="timeline-container">
-                  <div class="timeline-point center"></div>
+                <div class="timeline-container {% inline_if has_presentation_date '' 'end' %}">
+                  <div class="timeline-point {% inline_if has_presentation_date 'center' 'right' %}"></div>
                   <div class="timeline-line"></div>
                   <div class="timeline-date">
                     <div class="text-muted">
-                      25/10/2023
+                      {{ object.stage.get_send_date }}
                     </div>
                   </div>
                   <div class="timeline-event">
@@ -110,58 +125,71 @@
                   </div>
                 </div>
               </div>
-              <div class="col d-flex justify-content-center">
-                <div class="timeline-container end">
-                  <div class="timeline-point right"></div>
-                  <div class="timeline-line"></div>
-                  <div class="timeline-date">
-                    <div class="text-muted">
-                      27/10/2023
+              {% if object.stage.presentation_date %}
+                <div class="col d-flex justify-content-center">
+                  <div class="timeline-container end">
+                    <div class="timeline-point right"></div>
+                    <div class="timeline-line"></div>
+                    <div class="timeline-date">
+                      <div class="text-muted">
+                        {{ object.stage.get_presentation_date }}
+                      </div>
                     </div>
-                  </div>
-                  <div class="timeline-event">
-                    <div class="bg-light p-2 border border-gray-300 rounded text-dark">
-                      Apresentação
+                    <div class="timeline-event">
+                      <div class="bg-light p-2 border border-gray-300 rounded text-dark">
+                        Apresentação
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              {% endif %}
             </div>
           </div>
 
           <div class="mt-2">
-            <div>
-              <h3>Modelo de exemplo</h3>
-            </div>
-            <div class="d-flex">
-              <div class="cursor-pointer bg-light-primary border rounded border-primary border-dashed w-150px h-150px d-flex justify-content-center align-items-center">
-                <div class="d-flex">
-                  <i class="far fa-file-pdf fa-fw fa-3x text-primary"></i>
-                  <div class="d-flex flex-column justify-content-center">
-                    <div class="text-dark fw-bold fs-7">
-                      pdf
-                    </div>
-                    <div class="text-dark fw-bold fs-8">
-                      10mb
+            {% if object.stage.stage_examples.all|length == 0 %}
+              <div>
+                <h3 class="mb-0">Sem modelos de exemplo</h3>
+              </div>
+            {% else %}
+              <div>
+                <h3>Modelo(s) de exemplo</h3>
+              </div>
+            {% endif %}
+
+            {% for example in object.stage.stage_examples.all %}
+              <div class="d-flex">
+                <a href="{{ example.file.url }}" blank="true">
+                  <div class="cursor-pointer bg-light-primary border rounded border-primary border-dashed w-150px h-150px d-flex justify-content-center align-items-center">
+                    <div class="d-flex">
+                      <i class="far fa-file-pdf fa-fw fa-3x text-primary"></i>
+                      <div class="d-flex flex-column justify-content-center">
+                        <div class="text-dark fw-bold fs-7">
+                          {{ example.get_file_extension }}
+                        </div>
+                        <div class="text-dark fw-bold fs-8">
+                          {{ example.get_file_size }}MB
+                        </div>
+                      </div>
                     </div>
                   </div>
+                </a>
+                <div class="ms-2">
+                  <p class="fw-bold fs-7 text-dark mb-0">
+                    Nome:
+                    <span class="fw-light">
+                      {{ example.get_file_name }}
+                    </span>
+                  </p>
+                  <p class="fw-bold fs-7 text-dark">
+                    Tamanho:
+                    <span class="fw-light">
+                      {{ example.get_file_size }}MB
+                    </span>
+                  </p>
                 </div>
               </div>
-              <div class="ms-2">
-                <p class="fw-bold fs-7 text-dark mb-0">
-                  Nome:
-                  <span class="fw-light">
-                    Modelo de Diagrama Entidade-Relacionamento.pdf
-                  </span>
-                </p>
-                <p class="fw-bold fs-7 text-dark">
-                  Tamanho:
-                  <span class="fw-light">
-                    10mb
-                  </span>
-                </p>
-              </div>
-            </div>
+            {% endfor %}
           </div>
         </div>
         <div class="card-footer pt-2 border-0 d-flex justify-content-start">
@@ -187,36 +215,33 @@
           </h2>
         </div>
         <div class="card-body pt-4">
-          <div class="p-4 border rounded">
-            <div class="d-flex justify-content-between text-gray-500">
-              <h5 class="mb-0">
-                Felipe Perez
-              </h5>
-              <span>
-                21/10/2023 às 10:47
-              </span>
+          {% if object.stage_comment.all|length == 0 %}
+            <div class="p-4 border rounded">
+              <div class="mt-2">
+                <p class="mb-0">
+                  Sem comentários
+                </p>
+              </div>
             </div>
-            <div class="mt-2">
-              <p class="mb-0">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptate nobis ipsam dolorum libero veritatis omnis necessitatibus molestiae, dolor ratione accusamus repellat qui quidem quam explicabo deleniti distinctio optio iure quo?
-              </p>
+          {% endif %}
+
+          {% for comment in object.stage_comment.all %}
+            <div class="p-4 border rounded mt-2">
+              <div class="d-flex justify-content-between text-gray-500">
+                <h5 class="mb-0">
+                  {{ comment.author }}
+                </h5>
+                <span>
+                  {{ comment.created_at }}
+                </span>
+              </div>
+              <div class="mt-2">
+                <p class="mb-0">
+                  {{ comment.description }}
+                </p>
+              </div>
             </div>
-          </div>
-          <div class="p-4 border rounded mt-2">
-            <div class="d-flex justify-content-between text-gray-500">
-              <h5 class="mb-0">
-                Lucas Braga
-              </h5>
-              <span>
-                20/10/2023 às 10:47
-              </span>
-            </div>
-            <div class="mt-2">
-              <p class="mb-0">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptate nobis ipsam dolorum libero veritatis omnis necessitatibus molestiae, dolor ratione accusamus repellat qui quidem quam explicabo deleniti distinctio optio iure quo?
-              </p>
-            </div>
-          </div>
+          {% endfor %}
         </div>
       </div>
 

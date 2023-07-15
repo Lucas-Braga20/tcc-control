@@ -20,3 +20,21 @@ def initials(value):
         return names[0][0]
     else:
         return ''
+
+
+@register.simple_tag
+def inline_if(value, true_statement, false_statement):
+    if value:
+        return true_statement
+    else:
+        return false_statement
+
+
+@register.simple_tag(takes_context=True)
+def assign_if(context, name, expression):
+    try:
+        result = bool(eval(expression, {}, context))
+    except (SyntaxError, NameError):
+        result = False
+    context[name] = result
+    return ''

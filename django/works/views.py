@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
 from django.urls import reverse_lazy
 
-from works.models import FinalWorkVersion, FinalWork
+from works.models import FinalWorkVersion, FinalWork, FinalWorkStage
 from works.forms import FinalWorkVersionForm, FinalWorkForm
 
 from users.models import User
@@ -58,11 +58,12 @@ class WorkStageDevelopmentView(LoginRequiredMixin, SuccessMessageMixin, UpdateVi
         return context
 
 
-class WorkStageDetailView(LoginRequiredMixin, TemplateView):
+class WorkStageDetailView(LoginRequiredMixin, DetailView, View):
     """
     Work stage detail screen.
     """
     template_name = 'final-work-stages/detail.html'
+    model = FinalWorkStage
 
 
 class WorkProposalCreateView(GenericPermissionMixin, LoginRequiredMixin, CreateView, View):

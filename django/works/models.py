@@ -63,6 +63,17 @@ class FinalWorkStage(models.Model):
         verbose_name = _('Final work stage')
         verbose_name_plural = _('Final work stages')
 
+    def get_date_state(self):
+        today = date.today()
+
+        if self.stage.send_date < today:
+            return 'Etapa passada'
+
+        if self.stage.start_date > today:
+            return 'Etapa futura'
+
+        return 'Etapa atual'
+
 
 class FinalWorkVersion(models.Model):
     """
