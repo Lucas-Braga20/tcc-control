@@ -213,18 +213,6 @@
   </style>
 {% endblock %}
 
-{% block js-vendors %}
-  <script src="{% static 'vendor/sweetalert/sweetalert.js' %}"></script>
-  <script>
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'bottom-end',
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  </script>
-{% endblock %}
-
 {% block js-scripts %}
   <script src="{% static 'js/final-work-proposal/list.js' %}"></script>
 {% endblock %}

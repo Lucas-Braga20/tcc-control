@@ -341,16 +341,7 @@
 {% endblock %}
 
 {% block js-vendors %}
-  <script src="{% static 'vendor/sweetalert/sweetalert.js' %}"></script>
   <script src="{% static 'vendor/jquery.repeater/jquery.repeater.min.js' %}"></script>
-  <script>
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'bottom-end',
-      showConfirmButton: false,
-      timer: 3000,
-    });
-  </script>
 {% endblock %}
 
 {% block js-scripts %}

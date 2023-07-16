@@ -32,7 +32,7 @@ class NotificationMixin:
         user = self.request.user
 
         if user:
-            notifications = user.notification_receiver.all()
+            notifications = user.notification_receiver.all().order_by('-created_at')
 
             viewed = []
             not_viewed = []

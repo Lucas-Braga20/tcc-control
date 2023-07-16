@@ -130,9 +130,9 @@
 
           <div class="tab-content">
             <div class="tab-pane fade show active" id="kt_topbar_notifications_not_viewed" role="tabpanel">
-              <div class="scroll-y mh-325px my-5 px-8">
+              <div class="scroll-y mh-325px my-2 mb-5 px-8">
                 {% for notification in notifications.not_viewed %}
-                  <div class="border border-gray-300 rounded">
+                  <div class="border border-gray-300 rounded mt-3">
                     <div class="d-flex flex-column p-3">
                       <h3 class="fs-7 fw-semibold text-gray-800 mb-0">
                         {{ notification.description }}
@@ -145,20 +145,26 @@
                 {% endfor %}
 
                 {% if notifications.not_viewed|length == 0 %}
-                  Sem notificações
+                  <div class="border border-gray-300 rounded mt-3">
+                    <div class="d-flex flex-column p-3">
+                      <h3 class="fs-7 fw-light text-gray-700 mb-0 text-center">
+                        Sem notificações
+                      </h3>
+                    </div>
+                  </div>
                 {% endif %}
               </div>
 
               <div class="py-3 text-center border-top">
-                <button class="btn btn-color-gray-600 btn-active-color-primary">
+                <button id="tcc_notification_viewall" class="btn btn-color-gray-600 btn-active-color-primary">
                   Marcar como lido
                 </button>
               </div>
             </div>
             <div class="tab-pane fade" id="kt_topbar_notifications_viewed" role="tabpanel">
-              <div class="scroll-y mh-325px my-5 px-8">
+              <div class="scroll-y mh-325px my-2 mb-5 px-8">
                 {% for notification in notifications.viewed %}
-                  <div class="border border-gray-300 rounded">
+                  <div class="border border-gray-300 rounded mt-3">
                     <div class="d-flex flex-column p-3">
                       <h3 class="fs-7 fw-semibold text-gray-800 mb-0">
                         {{ notification.description }}
@@ -171,7 +177,13 @@
                 {% endfor %}
 
                 {% if notifications.viewed|length == 0 %}
-                  Sem notificações
+                  <div class="border border-gray-300 rounded mt-3">
+                    <div class="d-flex flex-column p-3">
+                      <h3 class="fs-7 fw-light text-gray-700 mb-0 text-center">
+                        Sem notificações
+                      </h3>
+                    </div>
+                  </div>
                 {% endif %}
               </div>
             </div>

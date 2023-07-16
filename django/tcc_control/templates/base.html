@@ -41,6 +41,20 @@
 
       <!-- Template Seven JS  -->
       <script src="{% static 'js/seven.scripts.bundle.js' %}"></script>
+
+      <!-- SweetAlert -->
+      <script src="{% static 'vendor/sweetalert/sweetalert.js' %}"></script>
+      <script>
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'bottom-end',
+          showConfirmButton: false,
+          timer: 3000,
+        });
+      </script>
+
+      <!-- Notification JS -->
+      <script src="{% static 'js/notification/notification.js' %}"></script>
     {% endblock %}
 
     {% block js-vendors %}{% endblock %}
