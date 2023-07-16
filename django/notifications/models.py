@@ -7,6 +7,8 @@ import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from core.utils import get_datetime_tz
+
 
 class Receiver(models.Model):
     """
@@ -39,7 +41,11 @@ class Notification(models.Model):
     receiver = models.ManyToManyField('users.User',
                                       related_name='notification_receiver',
                                       through='Receiver')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'), blank=False, null=True)
 
     class Meta:
         verbose_name = _('Notification')
         verbose_name_plural = _('Notifications')
+
+    def get_created_at(self):
+        return get_datetime_tz(self.created_at).strftime("%d/%m/%Y %H:%M") if self.created_at is not None else None

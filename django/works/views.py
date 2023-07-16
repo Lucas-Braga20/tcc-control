@@ -2,8 +2,6 @@
 Works views.
 """
 
-from typing import Any, Dict
-from django.db import models
 from django.views.generic import TemplateView, UpdateView, CreateView, View, ListView, DetailView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,9 +16,10 @@ from users.models import User
 from meetings.models import Meeting
 
 from core.permissions import UserGroup, GenericPermissionMixin
+from core.mixins import NotificationMixin
 
 
-class WorkStageView(LoginRequiredMixin, DetailView, View):
+class WorkStageView(NotificationMixin, LoginRequiredMixin, DetailView, View):
     """
     Work Stage screen.
     """
@@ -39,7 +38,7 @@ class WorkStageView(LoginRequiredMixin, DetailView, View):
         return context
 
 
-class WorkStageDevelopmentView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class WorkStageDevelopmentView(NotificationMixin, LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
     Work stage development view.
     """
@@ -60,7 +59,7 @@ class WorkStageDevelopmentView(LoginRequiredMixin, SuccessMessageMixin, UpdateVi
         return context
 
 
-class WorkStageDetailView(LoginRequiredMixin, DetailView, View):
+class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, View):
     """
     Work stage detail screen.
     """
@@ -75,7 +74,7 @@ class WorkStageDetailView(LoginRequiredMixin, DetailView, View):
         return context
 
 
-class WorkProposalCreateView(GenericPermissionMixin, LoginRequiredMixin, CreateView, View):
+class WorkProposalCreateView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, CreateView, View):
     """
     Work proposal create screen.
     """
@@ -92,7 +91,7 @@ class WorkProposalCreateView(GenericPermissionMixin, LoginRequiredMixin, CreateV
         return kwargs
 
 
-class WorkProposalListView(LoginRequiredMixin, ListView, View):
+class WorkProposalListView(NotificationMixin, LoginRequiredMixin, ListView, View):
     """
     Work proposal list screen.
     """
@@ -127,7 +126,7 @@ class WorkProposalListView(LoginRequiredMixin, ListView, View):
         return context
 
 
-class WorkListView(GenericPermissionMixin, LoginRequiredMixin, TemplateView):
+class WorkListView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, TemplateView):
     """
     Final work list screen.
     """

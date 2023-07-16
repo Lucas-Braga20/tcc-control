@@ -14,9 +14,10 @@ from activities.models import ActivityConfiguration
 from activities.forms import ActivityConfigurationForm
 
 from core.permissions import GenericPermissionMixin
+from core.mixins import NotificationMixin
 
 
-class ActivityConfigurationListView(GenericPermissionMixin, LoginRequiredMixin, TemplateView):
+class ActivityConfigurationListView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, TemplateView):
     """
     Activity configuration list screen.
     """
@@ -24,7 +25,12 @@ class ActivityConfigurationListView(GenericPermissionMixin, LoginRequiredMixin, 
     required_groups = ['Professor da disciplina']
 
 
-class ActivityConfigurationCreateView(GenericPermissionMixin, LoginRequiredMixin, SuccessMessageMixin, CreateView, View):
+class ActivityConfigurationCreateView(NotificationMixin,
+                                      GenericPermissionMixin,
+                                      LoginRequiredMixin,
+                                      SuccessMessageMixin,
+                                      CreateView,
+                                      View):
     """
     Activity configuration create screen.
     """
@@ -65,7 +71,11 @@ class ActivityConfigurationCreateView(GenericPermissionMixin, LoginRequiredMixin
         return context
 
 
-class ActivityConfigurationUpdateView(GenericPermissionMixin, LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class ActivityConfigurationUpdateView(NotificationMixin,
+                                      GenericPermissionMixin,
+                                      LoginRequiredMixin,
+                                      SuccessMessageMixin,
+                                      UpdateView):
     """
     Activity configuration update screen.
     """

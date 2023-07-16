@@ -11,9 +11,10 @@ from timetables.models import Timetable, Stage
 from timetables.forms import TimetableForm
 
 from core.permissions import GenericPermissionMixin
+from core.mixins import NotificationMixin
 
 
-class TimetableListView(GenericPermissionMixin, LoginRequiredMixin, TemplateView):
+class TimetableListView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, TemplateView):
     """
     Timetable list screen.
     """
@@ -21,7 +22,7 @@ class TimetableListView(GenericPermissionMixin, LoginRequiredMixin, TemplateView
     required_groups = ['Professor da disciplina']
 
 
-class TimetableCreateView(GenericPermissionMixin, LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class TimetableCreateView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, SuccessMessageMixin, CreateView):
     """
     Timetable view to create object.
     """
@@ -35,7 +36,7 @@ class TimetableCreateView(GenericPermissionMixin, LoginRequiredMixin, SuccessMes
     required_groups = ['Professor da disciplina']
 
 
-class TimetableUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class TimetableUpdateView(NotificationMixin, LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
     Timetable view to update object.
     """
@@ -58,7 +59,7 @@ class TimetableUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return context
 
 
-class TimetableStageCalendarView(LoginRequiredMixin, TemplateView):
+class TimetableStageCalendarView(NotificationMixin, LoginRequiredMixin, TemplateView):
     """
     Timetable calendar view.
     """

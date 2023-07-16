@@ -9,6 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from users.forms import SignUpForm
 
 from core.permissions import GenericPermissionMixin
+from core.mixins import NotificationMixin
 
 
 class SignUpView(CreateView):
@@ -17,7 +18,7 @@ class SignUpView(CreateView):
     template_name = 'registration/signup.html'
 
 
-class UserListView(GenericPermissionMixin, LoginRequiredMixin, TemplateView):
+class UserListView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, TemplateView):
     """
     User List View.
     """

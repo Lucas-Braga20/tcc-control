@@ -2,8 +2,11 @@
 Mixins for the tcc control project.
 """
 
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+
+from notifications.models import Notification, Receiver
+
+from users.models import User
 
 
 class DisablePaginationMixin:
@@ -20,3 +23,37 @@ class DisablePaginationMixin:
             return Response(data)
 
         return super().get_paginated_response(data)
+
+
+class NotificationMixin:
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user = self.request.user
+
+        if user:
+            notifications = user.notification_receiver.all()
+
+            viewed = []
+            not_viewed = []
+
+            for notification in notifications:
+                receiver_viewed = user.notification.filter(visualized=True, notification=notification)
+                receiver_not_viewed = user.notification.filter(visualized=False, notification=notification)
+
+                if receiver_viewed.exists():
+                    viewed.append(receiver_viewed.first().notification.id)
+
+                if receiver_not_viewed.exists():
+                    not_viewed.append(receiver_not_viewed.first().notification.id)
+
+            context['notifications'] = {
+                'all': notifications,
+                'viewed': notifications.filter(id__in=viewed),
+                'not_viewed': notifications.filter(id__in=not_viewed),
+                'count': notifications.count(),
+            }
+        else:
+            context['notifications'] = None
+
+        return context

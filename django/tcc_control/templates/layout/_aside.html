@@ -88,6 +88,97 @@
 
     <!-- Footer -->
     <div class="aside-footer d-flex flex-column align-items-center flex-column-auto" id="kt_aside_footer">
+      <div class="d-flex align-items-center mb-2">
+        <div
+          class="nav-link btn btn-icon btn-custom"
+          data-kt-menu-trigger="click"
+          data-kt-menu-overflow="true"
+          data-kt-menu-placement="top-start"
+          data-bs-toggle="tooltip"
+          data-bs-placement="right"
+          data-bs-dismiss="click"
+          title="Notificações"
+        >
+          <i class="fas fa-bell" style="font-size: 20px;"></i>
+        </div>
+
+        <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px" data-kt-menu="true">
+          <div class="d-flex flex-column bgi-no-repeat rounded-top dropdown-header-bg">
+            <h3 class="text-white fw-bold px-9 mt-10 mb-6">Notifications
+            <span class="fs-8 opacity-75 ps-3">{{ notifications.count }} notificações</span></h3>
+            <ul class="nav nav-line-tabs nav-line-tabs-2x nav-stretch fw-bold px-9">
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white opacity-75 opacity-state-100 pb-4 active"
+                  data-bs-toggle="tab"
+                  href="#kt_topbar_notifications_not_viewed"
+                >
+                  Recentes
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-white opacity-75 opacity-state-100 pb-4"
+                  data-bs-toggle="tab"
+                  href="#kt_topbar_notifications_viewed"
+                >
+                  Visualizadas
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="kt_topbar_notifications_not_viewed" role="tabpanel">
+              <div class="scroll-y mh-325px my-5 px-8">
+                {% for notification in notifications.not_viewed %}
+                  <div class="border border-gray-300 rounded">
+                    <div class="d-flex flex-column p-3">
+                      <h3 class="fs-7 fw-semibold text-gray-800 mb-0">
+                        {{ notification.description }}
+                      </h3>
+                      <p class="fs-7 fw-light text-gray-700 mb-0 text-end">
+                        {{ notification.get_created_at }}
+                      </p>
+                    </div>
+                  </div>
+                {% endfor %}
+
+                {% if notifications.not_viewed|length == 0 %}
+                  Sem notificações
+                {% endif %}
+              </div>
+
+              <div class="py-3 text-center border-top">
+                <button class="btn btn-color-gray-600 btn-active-color-primary">
+                  Marcar como lido
+                </button>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="kt_topbar_notifications_viewed" role="tabpanel">
+              <div class="scroll-y mh-325px my-5 px-8">
+                {% for notification in notifications.viewed %}
+                  <div class="border border-gray-300 rounded">
+                    <div class="d-flex flex-column p-3">
+                      <h3 class="fs-7 fw-semibold text-gray-800 mb-0">
+                        {{ notification.description }}
+                      </h3>
+                      <p class="fs-7 fw-light text-gray-700 mb-0 text-end">
+                        {{ notification.get_created_at }}
+                      </p>
+                    </div>
+                  </div>
+                {% endfor %}
+
+                {% if notifications.viewed|length == 0 %}
+                  Sem notificações
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {% if request.user.is_authenticated %}
         <div class="d-flex align-items-center mb-10" id="kt_header_user_menu_toggle">
           <!-- Activator -->
