@@ -75,7 +75,25 @@ const FinalWorkList = () => {
         {
           data: 'current_stage',
           render(data) {
-            return badges[data] || '';
+            if (data) {
+              return `
+                <a href="/works/stages/${data.id}/detail">
+                  ${data.stage_detail.description}
+                </a>
+              `;
+            } else {
+              return '--';
+            }
+          },
+        },
+        {
+          data: null,
+          render(data) {
+            if (data.current_stage) {
+              return badges[data.current_stage.status] || '--';
+            } else {
+              return '--';
+            }
           },
         },
         {

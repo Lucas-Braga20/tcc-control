@@ -2,13 +2,15 @@
 Comments viewsets.
 """
 
-from rest_framework import viewsets, permissions, status
-from rest_framework.response import Response
+from rest_framework import viewsets, permissions
+from rest_framework.filters import SearchFilter
 
 from comments.models import Comment
 from comments.serializers import CommentSerializer
 
 from core.permissions import UserGroup
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -19,6 +21,8 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     model = Comment
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['work_stage']
 
     def get_queryset(self):
         queryset =super().get_queryset()

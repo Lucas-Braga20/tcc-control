@@ -214,7 +214,7 @@
             Comentários
           </h2>
         </div>
-        <div class="card-body pt-4" id="tcc_comments_container">
+        <div class="card-body pt-4" id="tcc_comments_container" data-work-stage="{{ object.id }}">
           {% if object.stage_comment.all|length == 0 %}
             <div class="p-4 border rounded">
               <div class="mt-2">

@@ -8,6 +8,8 @@ from works.models import FinalWork, FinalWorkStage, FinalWorkVersion, ChangeRequ
 
 from users.serializers import UserSerializer
 
+from timetables.serializers import StageSerializer
+
 
 class FinalWorkSerializer(serializers.ModelSerializer):
     """
@@ -23,17 +25,23 @@ class FinalWorkSerializer(serializers.ModelSerializer):
                   'current_stage', 'supervisor_detail']
 
     def get_current_stage(self, obj):
-        return obj.get_current_stage()
+        current_stage = obj.get_current_stage()
+
+        if current_stage:
+            return FinalWorkStageSerializer(current_stage).data
+
+        return None
 
 
 class FinalWorkStageSerializer(serializers.ModelSerializer):
     """
     Final work stage serializer.
     """
+    stage_detail = StageSerializer(many=False, source='stage', read_only=True)
 
     class Meta:
         model = FinalWorkStage
-        fields = '__all__'
+        fields = ['id', 'presented', 'status', 'stage', 'final_work', 'stage_detail']
 
 
 class FinalWorkVersionSerializer(serializers.ModelSerializer):

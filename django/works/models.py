@@ -39,10 +39,10 @@ class FinalWork(models.Model):
 
         stage = self.work_stage.filter(stage__start_date__lte=today, stage__send_date__gte=today)
 
-        if stage.exists():
-            return stage.first().status
+        if not stage.exists():
+            return self.work_stage.filter().order_by('-stage__send_date').first()
 
-        return None
+        return stage.first()
 
 
 class FinalWorkStage(models.Model):

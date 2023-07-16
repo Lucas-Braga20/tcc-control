@@ -6,7 +6,7 @@ const FinalWorkStageDetail = () => {
   const API = {
     works: {
       comments() {
-        return fetch(`/api/comments/?no_page=true`, {
+        return fetch(`/api/comments/?no_page=true&work_stage=${$(commentsContainer).data('work-stage')}`, {
           method: 'get',
           headers: {
             'Content-Type': 'application/json',
