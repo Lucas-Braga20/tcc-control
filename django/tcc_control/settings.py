@@ -150,7 +150,7 @@ AUTH_USER_MODEL = "users.User"
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Cuiaba'
 
 USE_I18N = True
 

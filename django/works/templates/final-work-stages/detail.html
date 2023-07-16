@@ -214,7 +214,7 @@
             Comentários
           </h2>
         </div>
-        <div class="card-body pt-4">
+        <div class="card-body pt-4" id="tcc_comments_container">
           {% if object.stage_comment.all|length == 0 %}
             <div class="p-4 border rounded">
               <div class="mt-2">
@@ -225,14 +225,14 @@
             </div>
           {% endif %}
 
-          {% for comment in object.stage_comment.all %}
+          {% for comment in comments %}
             <div class="p-4 border rounded mt-2">
               <div class="d-flex justify-content-between text-gray-500">
                 <h5 class="mb-0">
                   {{ comment.author }}
                 </h5>
                 <span>
-                  {{ comment.created_at }}
+                  {{ comment.get_created_at }}
                 </span>
               </div>
               <div class="mt-2">
@@ -253,18 +253,40 @@
         </div>
         <div class="card-body py-4">
           <form>
+            {% csrf_token %}
             <div class="fv-row">
               <label for="comment" class="required form-label">Comentário</label>
-              <textarea name="comment" id="comment" cols="30" rows="10" class="form-control form-control-solid"></textarea>
+              <textarea name="comment" id="tcc_comment_textarea" cols="30" rows="10" class="form-control form-control-solid"></textarea>
             </div>
           </form>
         </div>
         <div class="card-footer pt-4 d-flex justify-content-end">
-          <button class="btn btn-primary">Comentar</button>
+          <button
+            id="tcc_add_comment"
+            class="btn btn-primary"
+            data-work-stage="{{ object.id }}">
+            Comentar
+          </button>
         </div>
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block js-vendors %}
+  <script src="{% static 'vendor/sweetalert/sweetalert.js' %}"></script>
+  <script>
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'bottom-end',
+      showConfirmButton: false,
+      timer: 3000,
+    });
+  </script>
+{% endblock %}
+
+{% block js-scripts %}
+  <script src="{% static 'js/final-work-stages/detail.js' %}"></script>
 {% endblock %}
 
 {% block css-styles %}

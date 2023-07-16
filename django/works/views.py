@@ -2,6 +2,8 @@
 Works views.
 """
 
+from typing import Any, Dict
+from django.db import models
 from django.views.generic import TemplateView, UpdateView, CreateView, View, ListView, DetailView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -64,6 +66,13 @@ class WorkStageDetailView(LoginRequiredMixin, DetailView, View):
     """
     template_name = 'final-work-stages/detail.html'
     model = FinalWorkStage
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['comments'] = self.get_object().stage_comment.all().order_by('-created_at')
+
+        return context
 
 
 class WorkProposalCreateView(GenericPermissionMixin, LoginRequiredMixin, CreateView, View):

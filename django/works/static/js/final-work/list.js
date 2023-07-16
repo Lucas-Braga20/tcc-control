@@ -85,7 +85,7 @@ const FinalWorkList = () => {
           render(data) {
             return `
               <a
-                href="/works/stages/"
+                href="/works/${data.id}/stages/"
                 class="btn btn-sm btn-icon btn-primary ms-1"
                 data-bs-toggle="tooltip"
                 data-bs-placement="top"

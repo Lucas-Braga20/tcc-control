@@ -7,6 +7,8 @@ import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from core.utils import get_datetime_tz
+
 
 class Comment(models.Model):
     """
@@ -24,3 +26,6 @@ class Comment(models.Model):
     class Meta:
         verbose_name = _('Comment')
         verbose_name_plural = _('Comments')
+
+    def get_created_at(self):
+        return get_datetime_tz(self.created_at).strftime("%d/%m/%Y %H:%M")
