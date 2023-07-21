@@ -69,7 +69,10 @@ class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, Vie
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['comments'] = self.get_object().stage_comment.all().order_by('-created_at')
+        object = self.get_object()
+
+        context['comments'] = object.stage_comment.all().order_by('-created_at')
+        context['meetings'] = object.stage_meeting.all().filter().order_by('-created_at')
 
         return context
 

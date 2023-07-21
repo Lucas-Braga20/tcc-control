@@ -36,7 +36,7 @@
 
 {% block content %}
   <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-    <div class="container-xxl" id="kt_content_container">
+    <div class="container-xxl" id="kt_content_container" data-work-stage="{{ object.id }}">
       <div class="card">
         <div class="card-header border-0 p-8 pb-4">
           <div class="d-flex flex-column">
@@ -198,13 +198,93 @@
             class="btn btn-primary">
             Desenvolvimento
           </a>
-          <button class="btn btn-secondary ms-2">Solicitar correção</button>
-          <button class="btn btn-secondary ms-2">Solicitar reunião</button>
+          <button class="btn btn-light ms-2">Solicitar correção</button>
+          <button id="tcc_request_meeting_request_button" class="btn btn-light ms-2">Solicitar reunião</button>
           <a
             href="{% url 'works:stages' 'b0b66199-fc9f-433a-844a-376705af5154' %}"
-            class="btn btn-secondary ms-2">
+            class="btn btn-light ms-2">
             Etapas
           </a>
+        </div>
+      </div>
+
+      <div class="card mt-8">
+        <div class="card-header border-0 p-8 pb-4">
+          <h2 class="mb-0">
+            Reuniões solicitadas
+          </h2>
+        </div>
+        <div class="card-body pt-4" id="tcc_request_meetings_container">
+          {% if meetings|length == 0 %}
+            <div class="p-4 border rounded">
+              <div class="mt-2">
+                <p class="mb-0">
+                  Sem reuniões
+                </p>
+              </div>
+            </div>
+          {% endif %}
+
+          {% for meeting in meetings %}
+            <div class="p-4 border rounded mt-2">
+              <div class="d-flex justify-content-between text-gray-500">
+                <div class="d-flex">
+                  {% for participant in meeting.meeting_approved.all %}
+                    <div class="me-8 d-flex flex-row align-items-center">
+                      <h5 class="mb-0">
+                        {{ participant.user.get_full_name }}
+                      </h5>
+
+                      {% if participant.approved == True %}
+                        <i
+                          class="fas fa-check-circle fa-fw fs-4 text-success ms-2"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          title="Aprovado"></i>
+                      {% elif participant.approved == False %}
+                        <i
+                          class="fas fa-times-circle fa-fw fs-4 text-danger ms-2"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          title="Reprovado"></i>
+                      {% else %}
+                        <i
+                          class="fas fa-minus-circle fa-fw fs-4 text-dark-light ms-2"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          title="Pendente"></i>
+                      {% endif %}
+                    </div>
+                  {% endfor %}
+                </div>
+
+                <div>
+                  <span class="me-2">
+                    {{ meeting.get_meeting_date }}
+                  </span>
+
+                  {% if meeting.get_is_approved == True %}
+                    <span class="badge badge-sm badge-light-success">
+                      Aprovado
+                    </span>
+                  {% elif meeting.get_is_approved == False %}
+                    <span class="badge badge-sm badge-light-danger">
+                      Reprovado
+                    </span>
+                  {% else %}
+                    <span class="badge badge-sm badge-light">
+                      Pendente
+                    </span>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="mt-2">
+                <p class="mb-0">
+                  {{ meeting.description }}
+                </p>
+              </div>
+            </div>
+          {% endfor %}
         </div>
       </div>
 
@@ -214,7 +294,7 @@
             Comentários
           </h2>
         </div>
-        <div class="card-body pt-4" id="tcc_comments_container" data-work-stage="{{ object.id }}">
+        <div class="card-body pt-4" id="tcc_comments_container">
           {% if object.stage_comment.all|length == 0 %}
             <div class="p-4 border rounded">
               <div class="mt-2">
@@ -263,10 +343,55 @@
         <div class="card-footer pt-4 d-flex justify-content-end">
           <button
             id="tcc_add_comment"
-            class="btn btn-primary"
-            data-work-stage="{{ object.id }}">
+            class="btn btn-primary">
             Comentar
           </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" id="tcc_request_meeting_modal">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Solicitar reunião</h5>
+
+          <div
+            id="tcc_request_meeting_modal_close"
+            class="btn btn-icon btn-sm btn-active-light-primary ms-2"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          >
+            <i class="fas fa-times"></i>
+          </div>
+        </div>
+
+        <div class="modal-body p-8">
+          <div class="fv-row mb-8">
+            <label for="name" class="required form-label">Descrição</label>
+            <textarea
+              name="description"
+              id="tcc_meeting_description"
+              cols="30"
+              rows="10"
+              class="form-control form-control-solid"></textarea>
+          </div>
+
+          <div class="fv-row mb-8">
+            <label for="name" class="required form-label">Data</label>
+            <input
+              class="form-control form-control-solid"
+              placeholder="dd/mm/aaaa hh:mm"
+              id="tcc_meeting_datetime"
+              autocomplete="off"
+            />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="tcc_request_meeting_modal_cancel" type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+          <button id="tcc_request_meeting_modal_confirm" type="button" class="btn btn-primary">Solicitar</button>
         </div>
       </div>
     </div>

@@ -14,6 +14,7 @@ from works.viewsets import (
 from comments.viewsets import CommentViewSet
 from users.viewsets import UserViewSet
 from notifications.viewsets import NotificationViewSet
+from meetings.viewsets import MeetingViewSet
 
 
 router = DefaultRouter()
@@ -28,6 +29,7 @@ router.register('version-content-images', VersionContentImageViewSet)
 router.register('change-requests', ChangeRequestViewSet)
 router.register('comments', CommentViewSet)
 router.register('notifications', NotificationViewSet)
+router.register('meetings', MeetingViewSet)
 
 app_name = 'api'
 

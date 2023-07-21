@@ -104,7 +104,7 @@
 
         <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px" data-kt-menu="true">
           <div class="d-flex flex-column bgi-no-repeat rounded-top dropdown-header-bg">
-            <h3 class="text-white fw-bold px-9 mt-10 mb-6">Notifications
+            <h3 class="text-white fw-bold px-9 mt-10 mb-6">Notificações
             <span class="fs-8 opacity-75 ps-3">{{ notifications.count }} notificações</span></h3>
             <ul class="nav nav-line-tabs nav-line-tabs-2x nav-stretch fw-bold px-9">
               <li class="nav-item">
@@ -155,11 +155,13 @@
                 {% endif %}
               </div>
 
-              <div class="py-3 text-center border-top">
-                <button id="tcc_notification_viewall" class="btn btn-color-gray-600 btn-active-color-primary">
-                  Marcar como lido
-                </button>
-              </div>
+              {% if notifications.not_viewed|length != 0 %}
+                <div class="py-3 text-center border-top">
+                  <button id="tcc_notification_viewall" class="btn btn-color-gray-600 btn-active-color-primary">
+                    Marcar como lido
+                  </button>
+                </div>
+              {% endif %}
             </div>
             <div class="tab-pane fade" id="kt_topbar_notifications_viewed" role="tabpanel">
               <div class="scroll-y mh-325px my-2 mb-5 px-8">

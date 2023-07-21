@@ -53,8 +53,10 @@
         });
       </script>
 
-      <!-- Notification JS -->
-      <script src="{% static 'js/notification/notification.js' %}"></script>
+      {% if request.user is None %}
+        <!-- Notification JS -->
+        <script src="{% static 'js/notification/notification.js' %}"></script>
+      {% endif %}
     {% endblock %}
 
     {% block js-vendors %}{% endblock %}

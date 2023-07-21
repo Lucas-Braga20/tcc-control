@@ -20,4 +20,4 @@ class MeetingAdmin(admin.ModelAdmin):
     """
     Meeting configuration model admin.
     """
-    list_display = ('id', 'description', 'created_at')
+    list_display = ('id', 'description', 'created_at', 'meeting_date')
