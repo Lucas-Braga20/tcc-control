@@ -139,3 +139,32 @@ class FinalWorkVersionForm(forms.ModelForm):
             for content_field in content.get('fields'):
                 if content_field['key'] not in keys:
                     raise forms.ValidationError({'content': 'The content of the activity has invalid fields.'})
+
+
+class FinalWorkCreateVersionForm(forms.ModelForm):
+    """
+    Final work create version form.
+    """
+
+    class Meta:
+        model = FinalWorkVersion
+        fields = ['work_stage']
+
+    def save(self, commit):
+        version = super().save(commit)
+
+        activity_fields = version.work_stage.stage.activity_configuration.fields
+        content = []
+
+        for fields in activity_fields['fields']:
+            content.append({
+                'key': fields['key'],
+                'value': '',
+            })
+
+        version.content = {
+            'fields': content
+        }
+        version.save()
+
+        return version

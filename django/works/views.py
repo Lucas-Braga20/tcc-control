@@ -2,15 +2,18 @@
 Works views.
 """
 
+from typing import Any
 from django.views.generic import TemplateView, UpdateView, CreateView, View, ListView, DetailView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
-from django.urls import reverse_lazy
-from django.http import HttpResponseForbidden
+from django.urls import reverse_lazy, reverse
+from django.http import HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseBadRequest, Http404
+from django.shortcuts import redirect
+from django.contrib import messages
 
 from works.models import FinalWorkVersion, FinalWork, FinalWorkStage
-from works.forms import FinalWorkVersionForm, FinalWorkForm
+from works.forms import FinalWorkVersionForm, FinalWorkForm, FinalWorkCreateVersionForm
 
 from users.models import User
 
@@ -46,10 +49,7 @@ class WorkStageDevelopmentView(NotificationMixin, LoginRequiredMixin, SuccessMes
     template_name = 'final-work-versions/editor.html'
     model = FinalWorkVersion
     form_class = FinalWorkVersionForm
-    success_url = reverse_lazy('timetables:calendar')
     success_message = 'Trabalho salvo com sucesso.'
-    permission_classes = None
-    authentication_classes = None
 
     def post(self, request, *args, **kwargs):
         object = self.get_object()
@@ -75,6 +75,31 @@ class WorkStageDevelopmentView(NotificationMixin, LoginRequiredMixin, SuccessMes
 
         return context
 
+    def get_success_url(self):
+        return reverse('works:detail', kwargs={'pk': self.object.work_stage.id})
+
+
+def create_work_stage_development(request):
+    if request.method == 'POST':
+        work_stage_id = request.POST.get('work_stage')
+
+        if work_stage_id is None:
+            return HttpResponseBadRequest()
+
+        try:
+            work_stage = FinalWorkStage.objects.get(id=work_stage_id)
+        except:
+            return Http404()
+
+        form = FinalWorkCreateVersionForm(request.POST)
+        if form.is_valid():
+            version = form.save(commit=True)
+            return redirect(reverse('works:development', kwargs={'pk': version.id}))
+        else:
+            return redirect(reverse('works:detail', kwargs={'pk': work_stage.id}) + '?error=true')
+
+    return HttpResponseBadRequest()
+
 
 class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, View):
     """
@@ -82,6 +107,21 @@ class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, Vie
     """
     template_name = 'final-work-stages/detail.html'
     model = FinalWorkStage
+
+    def get(self, request, *args, **kwargs):
+        error_param = request.GET.get('error')
+
+        if error_param and error_param == 'true':
+            messages.error(request, 'Houve um erro no servidor. Tente novamente!')
+
+            params = request.GET.copy()
+            params.pop('error', None)
+            querystring_without_error = params.urlencode()
+
+            url_without_error = request.path + '?' + querystring_without_error
+            return redirect(url_without_error)
+
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

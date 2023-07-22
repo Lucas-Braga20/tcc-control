@@ -199,6 +199,14 @@
               class="btn btn-primary">
               Desenvolvimento
             </a>
+          {% else %}
+            <form method="POST" action="{% url 'works:development-create' %}">
+              {% csrf_token %}
+              <input type="hidden" name="work_stage" value="{{ object.id }}">
+              <button type="submit" class="btn btn-primary">
+                Desenvolvimento
+              </button>
+            </form>
           {% endif %}
           <button class="btn btn-light ms-2">Solicitar correção</button>
           <button id="tcc_request_meeting_request_button" class="btn btn-light ms-2">Solicitar reunião</button>
@@ -416,10 +424,28 @@
       </div>
     </div>
   </div>
+
+  <div id="tcc_form_messages" class="d-none">
+    {% if messages %}
+      {% for message in messages %}
+        <div data-mode="{{ message.tags }}">{{ message|safe }}</div>
+      {% endfor %}
+    {% endif %}
+  </div>
 {% endblock %}
 
 {% block js-scripts %}
   <script src="{% static 'js/final-work-stages/detail.js' %}"></script>
+  <script>
+    $('#tcc_form_messages').find('div').each(function() {
+      const text = $(this).text();
+      const mode = $(this).data('mode');
+      Toast.fire({
+        icon: mode,
+        title: text,
+      });
+    });
+  </script>
 {% endblock %}
 
 {% block css-styles %}
