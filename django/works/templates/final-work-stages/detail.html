@@ -193,11 +193,13 @@
           </div>
         </div>
         <div class="card-footer pt-2 border-0 d-flex justify-content-start">
-          <a
-            href="{% url 'works:development' '5d5cfcdb-b200-4418-aced-9dd8e5b7f7a1' %}"
-            class="btn btn-primary">
-            Desenvolvimento
-          </a>
+          {% if object.get_last_version is not None %}
+            <a
+              href="{% url 'works:development' object.get_last_version.id %}"
+              class="btn btn-primary">
+              Desenvolvimento
+            </a>
+          {% endif %}
           <button class="btn btn-light ms-2">Solicitar correção</button>
           <button id="tcc_request_meeting_request_button" class="btn btn-light ms-2">Solicitar reunião</button>
           <a

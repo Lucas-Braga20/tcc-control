@@ -7,6 +7,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
 from django.urls import reverse_lazy
+from django.http import HttpResponseForbidden
 
 from works.models import FinalWorkVersion, FinalWork, FinalWorkStage
 from works.forms import FinalWorkVersionForm, FinalWorkForm
@@ -45,13 +46,29 @@ class WorkStageDevelopmentView(NotificationMixin, LoginRequiredMixin, SuccessMes
     template_name = 'final-work-versions/editor.html'
     model = FinalWorkVersion
     form_class = FinalWorkVersionForm
-    success_url = reverse_lazy('works:stages')
+    success_url = reverse_lazy('timetables:calendar')
     success_message = 'Trabalho salvo com sucesso.'
     permission_classes = None
     authentication_classes = None
 
+    def post(self, request, *args, **kwargs):
+        object = self.get_object()
+
+        stage = object.work_stage
+        versions = stage.work_stage_version.all().order_by('created_at')
+        if object != versions.last():
+            return HttpResponseForbidden('This versions is blocked.')
+
+        return super().post(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        object = self.get_object()
+
+        stage = object.work_stage
+        versions = stage.work_stage_version.all().order_by('created_at')
+        context['versions'] = versions
 
         detail_object = context['object']
         context['fields'] = detail_object.work_stage.stage.activity_configuration.fields

@@ -48,13 +48,15 @@
             <div class="card-toolbar">
               <div class="d-flex align-items-center">
                 <ul class="nav nav-tabs flex-nowrap text-nowrap">
-                  <li class="nav-item">
-                    <a
-                      class="nav-link btn btn-active-light btn-color-gray-600 btn-active-color-primary rounded-bottom-0"
-                      href="#">
-                      Versão 1
-                    </a>
-                  </li>
+                  {% for version in versions %}
+                    <li class="nav-item">
+                      <a
+                        class="nav-link btn btn-active-light btn-color-gray-600 btn-active-color-primary rounded-bottom-0 {% if version == object %}active{% endif %}"
+                        href="{% url 'works:development' version.id %}">
+                        Versão {{ forloop.counter }}
+                      </a>
+                    </li>
+                  {% endfor %}
                 </ul>
               </div>
               </ul>
@@ -94,7 +96,10 @@
                     placeholder="{{ field.name }}"
                     name="content__{{ field.key }}"
                     data-type="text"
-                    data-key="{{ field.key }}">
+                    data-key="{{ field.key }}"
+                    {% if object.get_is_blocked %}
+                      disabled="true"
+                    {% endif %}>
                 {% elif field.type == 'number' %}
                   <input
                     type="number"
@@ -102,7 +107,10 @@
                     placeholder="{{ field.name }}"
                     name="content__{{ field.key }}"
                     data-type="number"
-                    data-key="{{ field.key }}">
+                    data-key="{{ field.key }}"
+                    {% if object.get_is_blocked %}
+                      disabled="true"
+                    {% endif %}>
                 {% elif field.type == 'rich' %}
                   <textarea
                     id="content__{{ field.key }}"
@@ -110,14 +118,33 @@
                     placeholder="{{ field.name }}"
                     name="content__{{ field.key }}"
                     data-type="rich"
-                    data-key="{{ field.key }}"></textarea>
+                    data-key="{{ field.key }}"
+                    {% if object.get_is_blocked %}
+                      disabled="true"
+                    {% endif %}></textarea>
                 {% endif %}
               </div>
             {% endfor %}
           </div>
           <div class="card-footer border-0 p-8 pt-0 d-flex justify-content-end">
-            <a href="{% url 'works:detail' %}" class="btn btn-secondary">Voltar</a>
-            <button id="tcc_submit_button" type="button" class="btn btn-primary ms-5">Salvar</button>
+            <a href="{% url 'works:detail' object.work_stage.id %}" class="btn btn-secondary">Voltar</a>
+
+            {% if object.get_is_blocked %}
+              <div
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Solicite uma alteração">
+                <button
+                  id="tcc_submit_button"
+                  type="button"
+                  class="btn btn-primary disabled ms-5"
+                  disabled>
+                  Salvar
+                </button>
+              </div>
+            {% else %}
+              <button id="tcc_submit_button" type="button" class="btn btn-primary ms-5">Salvar</button>
+            {% endif %}
           </div>
         </div>
       </form>

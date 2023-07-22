@@ -74,6 +74,9 @@ class FinalWorkStage(models.Model):
 
         return 'Etapa atual'
 
+    def get_last_version(self):
+        return self.work_stage_version.all().order_by('-created_at').first()
+
 
 class FinalWorkVersion(models.Model):
     """
@@ -89,6 +92,15 @@ class FinalWorkVersion(models.Model):
     class Meta:
         verbose_name = _('Work stage version')
         verbose_name_plural = _('Work stage versions')
+
+    def get_is_blocked(self):
+        stage = self.work_stage
+        versions = stage.work_stage_version.all().order_by('created_at')
+
+        if self != versions.last():
+            return True
+
+        return False
 
 
 class VersionContentImage(models.Model):

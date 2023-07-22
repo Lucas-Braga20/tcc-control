@@ -62,6 +62,13 @@ const FinalWorkVersionEditor = () => {
   let submitButtonElement = $('#tcc_submit_button');
 
 
+  function configEditor() {
+    $('.tcc_rich_text[disabled=true]').each(function() {
+      tinymce.get($(this).get(0).id).setMode('readonly');
+    });
+  }
+
+
   function setContentValues() {
     const json = JSON.parse(contentInputElement.val());
 
@@ -105,6 +112,7 @@ const FinalWorkVersionEditor = () => {
 
   setContentValues();
   handleSubmitButtonEvent();
+  configEditor();
 }
 
 KTUtil.onDOMContentLoaded(function() {
