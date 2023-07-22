@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% load static utils %}
+{% load static utils meetings %}
 
 {% block header %}
   <div
@@ -226,7 +226,7 @@
           {% endif %}
 
           {% for meeting in meetings %}
-            <div class="p-4 border rounded mt-2">
+            <div class="p-4 border rounded mt-2 tcc_requested_meeting_item" data-meeting="{{ meeting.id }}">
               <div class="d-flex justify-content-between text-gray-500">
                 <div class="d-flex">
                   {% for participant in meeting.meeting_approved.all %}
@@ -283,6 +283,24 @@
                   {{ meeting.description }}
                 </p>
               </div>
+
+              {% review_meeting_required meeting request.user as required_review %}
+
+              {% if required_review %}
+                <div class="mt-2 d-flex justify-content-end">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-light me-2 tcc_meeting_requested_disapprove">
+                    Recusar
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-primary tcc_meeting_requested_approve">
+                    Aprovar
+                  </button>
+                </div>
+              {% endif %}
             </div>
           {% endfor %}
         </div>

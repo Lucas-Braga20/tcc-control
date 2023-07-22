@@ -72,7 +72,7 @@ class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, Vie
         object = self.get_object()
 
         context['comments'] = object.stage_comment.all().order_by('-created_at')
-        context['meetings'] = object.stage_meeting.all().filter().order_by('-created_at')
+        context['meetings'] = object.stage_meeting.all().filter().order_by('-meeting_date')
 
         return context
 

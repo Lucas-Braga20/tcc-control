@@ -25,25 +25,29 @@ class MeetingSerializer(serializers.ModelSerializer):
     """
     Meeting Serializer.
     """
-    created_at = serializers.SerializerMethodField(read_only=True)
+    created_at_formated = serializers.SerializerMethodField(read_only=True)
     participants = ApprovedMeetingSerializer(many=True, read_only=True, source='meeting_approved')
     is_approved = serializers.SerializerMethodField(read_only=True)
     meeting_approved = serializers.PrimaryKeyRelatedField(queryset=User.objects.filter(), required=False, many=True)
-    meeting_date = serializers.SerializerMethodField()
+    meeting_date_formated = serializers.SerializerMethodField()
+    required_review = serializers.SerializerMethodField()
 
     class Meta:
         model = Meeting
-        fields = ['id', 'description', 'work_stage', 'meeting_approved', 'participants', 'created_at', 'meeting_date',
-                  'is_approved']
+        fields = ['id', 'description', 'work_stage', 'meeting_approved', 'participants', 'created_at',
+                  'created_at_formated', 'meeting_date', 'meeting_date_formated', 'is_approved', 'required_review']
 
-    def get_created_at(self, obj):
+    def get_created_at_formated(self, obj):
         return obj.get_created_at()
 
     def get_is_approved(self, obj):
         return obj.get_is_approved()
 
-    def get_meeting_date(self, obj):
+    def get_meeting_date_formated(self, obj):
         return obj.get_meeting_date()
+
+    def get_required_review(self, obj):
+        return obj.review_meeting_required(self.context['request'].user)
 
     def create(self, validated_data):
         meeting = super().create(validated_data)
@@ -51,9 +55,17 @@ class MeetingSerializer(serializers.ModelSerializer):
         mentees = meeting.work_stage.final_work.mentees.all()
         supervisor = meeting.work_stage.final_work.supervisor
 
-        for mentee in mentees:
-            ApprovedMeeting.objects.create(meeting=meeting, user=mentee, approved=None)
+        author = self.context['request'].user
 
-        ApprovedMeeting.objects.create(meeting=meeting, user=supervisor, approved=None)
+        for mentee in mentees:
+            if mentee == author:
+                ApprovedMeeting.objects.create(meeting=meeting, user=mentee, approved=True)
+            else:
+                ApprovedMeeting.objects.create(meeting=meeting, user=mentee, approved=None)
+
+        if supervisor == author:
+            ApprovedMeeting.objects.create(meeting=meeting, user=supervisor, approved=True)
+        else:
+            ApprovedMeeting.objects.create(meeting=meeting, user=supervisor, approved=None)
 
         return meeting

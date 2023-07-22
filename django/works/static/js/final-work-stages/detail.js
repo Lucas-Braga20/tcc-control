@@ -65,6 +65,30 @@ const FinalWorkStageDetail = () => {
           }),
         });
       },
+      approve(meeting) {
+        return fetch('/api/meetings/approve/', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
+          },
+          body: JSON.stringify({
+            meeting,
+          }),
+        })
+      },
+      disapprove(meeting) {
+        return fetch('/api/meetings/disapprove/', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
+          },
+          body: JSON.stringify({
+            meeting,
+          }),
+        })
+      },
     },
   };
 
@@ -183,7 +207,8 @@ const FinalWorkStageDetail = () => {
   function initFlatpickrFields() {
     $('#tcc_meeting_datetime').flatpickr({
       enableTime: true,
-      dateFormat: "d/m/Y H:i",
+      altInput: true,
+      altFormat: "d/m/Y H:i",
       time_24hr: true,
       allowInput: true,
     });
@@ -248,7 +273,7 @@ const FinalWorkStageDetail = () => {
 
       let fetchResponse;
 
-      API.meetings.add($('#tcc_meeting_description').val(), )
+      API.meetings.add($('#tcc_meeting_description').val(), $('#tcc_meeting_datetime').val())
         .then(response => fetchResponse = response)
         .then(response => response.json())
         .then(data => {
@@ -327,8 +352,28 @@ const FinalWorkStageDetail = () => {
             `;
           }
 
+          let footer = ``;
+
+          if (meeting.required_review) {
+            footer = `
+              <div class="mt-2 d-flex justify-content-end">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-light me-2 tcc_meeting_requested_disapprove">
+                  Recusar
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-sm btn-primary tcc_meeting_requested_approve">
+                  Aprovar
+                </button>
+              </div>
+            `;
+          }
+
           meetings += `
-            <div class="p-4 border rounded mt-2">
+            <div class="p-4 border rounded mt-2 tcc_requested_meeting_item" data-meeting="${meeting.id}">
               <div class="d-flex justify-content-between text-gray-500">
                 <div class="d-flex">
                   ${
@@ -374,7 +419,7 @@ const FinalWorkStageDetail = () => {
 
                 <div>
                   <span class="me-2">
-                    ${meeting.meeting_date}
+                    ${meeting.meeting_date_formated}
                   </span>
 
                   ${chip}
@@ -385,11 +430,109 @@ const FinalWorkStageDetail = () => {
                   ${meeting.description}
                 </p>
               </div>
+
+              ${footer}
             </div>
           `;
         });
         $(meetingsContainer).html(meetings);
+      })
+      .then(() => {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+      })
+      .then(() => {
+        handleMettingApproveButton();
+        handleMettingDisapproveButton();
       });
+  }
+
+  function handleMettingDisapproveButton() {
+    $('.tcc_meeting_requested_disapprove').click(function(e) {
+      Swal.fire({
+        title: 'Reprovar reunião',
+        text: 'Tem certeza que deseja reprovar esta reunião?',
+        icon: 'warning',
+        customClass: {
+          actions: 'my-actions',
+          cancelButton: 'btn btn-secondary order-1',
+          confirmButton: 'btn btn-primary order-2',
+        },
+        buttonsStyling: false,
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar'
+      }).then(result => {
+        const { isConfirmed } = result;
+  
+        const id = $(this).parent().parent().data('meeting');
+
+        if (isConfirmed) {
+          API.meetings.disapprove(id)
+            .then(response => {
+              if (response.ok === false) {
+                throw new Error(response.statusText);
+              }  
+            }).then(() => {
+              Toast.fire({
+                icon: 'success',
+                title: 'Reunião reprovado com sucesso.'
+              });
+
+              getAllMeetings();
+            }).catch(err => {
+              Toast.fire({
+                icon: 'error',
+                title: 'Houve um erro no servidor.'
+              });
+            });
+        }
+      });
+    });
+  }
+
+  function handleMettingApproveButton() {
+    $('.tcc_meeting_requested_approve').click(function(e) {
+      Swal.fire({
+        title: 'Aprovar reunião',
+        text: 'Tem certeza que deseja aprovar esta reunião?',
+        icon: 'warning',
+        customClass: {
+          actions: 'my-actions',
+          cancelButton: 'btn btn-secondary order-1',
+          confirmButton: 'btn btn-primary order-2',
+        },
+        buttonsStyling: false,
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar'
+      }).then(result => {
+        const { isConfirmed } = result;
+  
+        const id = $(this).parent().parent().data('meeting');
+
+        if (isConfirmed) {
+          API.meetings.approve(id)
+            .then(response => {
+              if (response.ok === false) {
+                throw new Error(response.statusText);
+              }  
+            }).then(() => {
+              Toast.fire({
+                icon: 'success',
+                title: 'Reunião aprovada com sucesso.'
+              });
+
+              getAllMeetings();
+            }).catch(err => {
+              Toast.fire({
+                icon: 'error',
+                title: 'Houve um erro no servidor.'
+              });
+            });
+        }
+      });
+    });
   }
 
 
@@ -400,8 +543,8 @@ const FinalWorkStageDetail = () => {
 
   handleRequestMeetingEvent();
   handleRequestMeetingConfirmEvent();
-
-  getAllMeetings();
+  handleMettingApproveButton();
+  handleMettingDisapproveButton();
 }
 
 KTUtil.onDOMContentLoaded(function() {

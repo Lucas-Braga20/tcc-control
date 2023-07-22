@@ -59,7 +59,7 @@ class Meeting(models.Model):
         if is_pending:
             return None
 
-        is_disapproved = not approved_meeting.exclude(approved=False).exists()
+        is_disapproved = approved_meeting.filter(approved=False).exists()
         if is_disapproved:
             return False
 
@@ -70,3 +70,9 @@ class Meeting(models.Model):
 
     def get_meeting_date(self):
         return get_datetime_tz(self.meeting_date).strftime("%d/%m/%Y %H:%M") if self.meeting_date is not None else None
+
+    def review_meeting_required(self, user):
+        if user is None:
+            raise Exception('User is required.')
+
+        return self.meeting_approved.all().filter(approved=None, user=user).exists()
