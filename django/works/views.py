@@ -2,13 +2,12 @@
 Works views.
 """
 
-from typing import Any
 from django.views.generic import TemplateView, UpdateView, CreateView, View, ListView, DetailView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
 from django.urls import reverse_lazy, reverse
-from django.http import HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseBadRequest, Http404
+from django.http import HttpResponseForbidden, HttpResponseBadRequest, Http404
 from django.shortcuts import redirect
 from django.contrib import messages
 
@@ -110,6 +109,17 @@ class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, Vie
 
     def get(self, request, *args, **kwargs):
         error_param = request.GET.get('error')
+        success_review_request = request.GET.get('success_review_request')
+
+        if success_review_request and success_review_request == 'true':
+            messages.success(request, 'Correção solicitada com sucesso.')
+
+            params = request.GET.copy()
+            params.pop('success_review_request', None)
+            querystring_without_error = params.urlencode()
+
+            url_without_error = request.path + '?' + querystring_without_error
+            return redirect(url_without_error)
 
         if error_param and error_param == 'true':
             messages.error(request, 'Houve um erro no servidor. Tente novamente!')
@@ -130,6 +140,7 @@ class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, Vie
 
         context['comments'] = object.stage_comment.all().order_by('-created_at')
         context['meetings'] = object.stage_meeting.all().filter().order_by('-meeting_date')
+        context['user_group'] = UserGroup(self.request.user)
 
         return context
 

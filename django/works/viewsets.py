@@ -2,7 +2,9 @@
 Viewsets to works app.
 """
 
-from rest_framework import viewsets, mixins, permissions
+from rest_framework import viewsets, mixins, permissions, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from works.models import FinalWork, FinalWorkStage, FinalWorkVersion, ChangeRequest, VersionContentImage
 from works.serializers import (
@@ -11,6 +13,9 @@ from works.serializers import (
 )
 
 from core.permissions import RoleAccessPermission, UserGroup
+from core.defaults import WORK_STAGE_WAITING_CORRECTION
+
+from notifications.serializers import NotificationSerializer
 
 
 class FinalWorkViewSet(mixins.CreateModelMixin,
@@ -70,6 +75,41 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(final_work__supervisor=self.request.user)
 
         return queryset
+
+    @action(detail=True, methods=['get'])
+    def request_review(self, request, pk=None):
+        object = self.get_object()
+
+        user = self.request.user
+
+        if not object.final_work.mentees.filter(id=user.id).exists():
+            return Response(data={
+                'work_stage': 'Você não pertence a este TCC.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        if object.status in [4, 5, 6]:
+            return Response(data={
+                'status': 'Esta etapa já foi completada.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        object.status = WORK_STAGE_WAITING_CORRECTION
+        object.save()
+
+        receivers = []
+        receivers.append(object.final_work.supervisor.id)
+
+        notification_serializer = NotificationSerializer(data={
+            'description': f'Os orientando(s) do TCC: "{object.final_work.description}" solicitaram uma correção na ' \
+                           f'etapa: {object.stage.description}',
+            'author': user.id,
+            'receiver': receivers,
+        })
+
+        notification_serializer.is_valid(raise_exception=True)
+        notification_serializer.save()
+
+        headers = self.get_success_headers(notification_serializer.data)
+        return Response(notification_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class FinalWorkVersionViewSet(viewsets.ModelViewSet):

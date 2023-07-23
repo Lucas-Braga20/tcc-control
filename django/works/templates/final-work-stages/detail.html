@@ -193,6 +193,7 @@
           </div>
         </div>
         <div class="card-footer pt-2 border-0 d-flex justify-content-start">
+          <!-- Development button -->
           {% if object.get_last_version is not None %}
             <a
               href="{% url 'works:development' object.get_last_version.id %}"
@@ -208,8 +209,48 @@
               </button>
             </form>
           {% endif %}
-          <button class="btn btn-light ms-2">Solicitar correção</button>
-          <button id="tcc_request_meeting_request_button" class="btn btn-light ms-2">Solicitar reunião</button>
+
+          {% if user_group.is_mentee %}
+            {% if object.status == 0 or object.status == 1 or object.status == 2 or object.status == 3 %}
+              <button id="tcc_request_meeting_request_button" class="btn btn-light ms-2">
+                Solicitar reunião
+              </button>
+            {% endif %}
+
+            {% if object.status == 0 or object.status == 1 %}
+              <button id="tcc_request_review_button" class="btn btn-light ms-2">
+                Solicitar correção
+              </button>
+            {% endif %}
+
+            {% if object.status == 4 or object.status == 5 or object.status == 6 %}
+              <button id="tcc_change_request_button" class="btn btn-light ms-2">
+                Solicitar alteração
+              </button>
+            {% endif %}
+          {% endif %}
+
+          {% if user_group.is_supervisor %}
+            {% if object.status == 0 or object.status == 1 or object.status == 2 or object.status == 3 %}
+              <button id="tcc_mark_reviewed_button" class="btn btn-light ms-2">
+                Marcar como corrigido
+              </button>
+            {% endif %}
+          {% endif %}
+
+          {% if user_group.is_teacher %}
+            {% if object.status == 0 or object.status == 1 or object.status == 2 or object.status == 3 %}
+              <button id="tcc_mark_completed_button" class="btn btn-light ms-2">
+                Marcar como concluído
+              </button>
+
+              <button id="tcc_mark_presented_button" class="btn btn-light ms-2">
+                Marcar como apresentado
+              </button>
+            {% endif %}
+          {% endif %}
+
+          <!-- Stage button -->
           <a
             href="{% url 'works:stages' 'b0b66199-fc9f-433a-844a-376705af5154' %}"
             class="btn btn-light ms-2">

@@ -53,7 +53,7 @@
         });
       </script>
 
-      {% if request.user is None %}
+      {% if request.user is not None %}
         <!-- Notification JS -->
         <script src="{% static 'js/notification/notification.js' %}"></script>
       {% endif %}
