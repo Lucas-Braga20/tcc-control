@@ -68,7 +68,18 @@ class ChangeRequestSerializer(serializers.ModelSerializer):
     """
     Change request serializer.
     """
+    work_stage_detail = FinalWorkStageSerializer(many=False, read_only=True, source='work_stage')
+    requester_detail = UserSerializer(many=False, read_only=True, source='requester')
+    final_work = serializers.SerializerMethodField()
+    created_at_formated = serializers.SerializerMethodField()
+    requester = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = ChangeRequest
         fields = '__all__'
+
+    def get_final_work(self, obj):
+        return obj.work_stage.final_work.description
+
+    def get_created_at_formated(self, obj):
+        return obj.get_created_at()

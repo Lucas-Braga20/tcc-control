@@ -306,16 +306,29 @@
                     </div>
                   </div>
                   {% if group.is_teacher or group.is_supervisor %}
-                  <div class="menu-item">
-                    <a
-                      class="menu-link {% get_link_is_active request 'works:list' %}"
-                      href="{% url 'works:list' %}">
-                      <span class="menu-icon navbar-secondary-icon">
-                        <i class="fas fa-list"></i>
-                      </span>
-                      <span class="menu-title">Listagem
-                    </a>
-                  </div>
+                    <div class="menu-item">
+                      <a
+                        class="menu-link {% get_link_is_active request 'works:list' %}"
+                        href="{% url 'works:list' %}">
+                        <span class="menu-icon navbar-secondary-icon">
+                          <i class="fas fa-list"></i>
+                        </span>
+                        <span class="menu-title">Listagem
+                      </a>
+                    </div>
+                  {% endif %}
+
+                  {% if group.is_teacher %}
+                    <div class="menu-item">
+                      <a
+                        class="menu-link {% get_link_is_active request 'works:change-request-list' %}"
+                        href="{% url 'works:change-request-list' %}">
+                        <span class="menu-icon navbar-secondary-icon">
+                          <i class="fas fa-list"></i>
+                        </span>
+                        <span class="menu-title">Solicitações de alteração
+                      </a>
+                    </div>
                   {% endif %}
 
                   {% if group.is_mentee %}

@@ -16,6 +16,15 @@ const FinalWorkStageDetail = () => {
     closeButton: null,
   };
 
+  let changeRequestModal = {
+    element: null,
+    object: null,
+    cancelButton: null,
+    confirmButton: null,
+    requestButton: null,
+    closeButton: null,
+  };
+
   const API = {
     comments: {
       list() {
@@ -128,6 +137,21 @@ const FinalWorkStageDetail = () => {
         });
       },
     },
+    changeRequests: {
+      add(description, workStage) {
+        return fetch(`/api/change-requests/`, {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
+          },
+          body: JSON.stringify({
+            description: description,
+            work_stage: workStage,
+          }),
+        });
+      },
+    },
   };
 
 
@@ -142,6 +166,12 @@ const FinalWorkStageDetail = () => {
     modal.cancelButton = $('#tcc_request_meeting_modal_cancel');
     modal.confirmButton = $('#tcc_request_meeting_modal_confirm');
     modal.closeButton = $('#tcc_request_meeting_modal_close');
+    changeRequestModal.element = $('#tcc_change_request_modal');
+    changeRequestModal.object = new bootstrap.Modal(changeRequestModal.element);
+    changeRequestModal.requestButton = $('#tcc_change_request_button');
+    changeRequestModal.cancelButton = $('#tcc_change_request_modal_cancel');
+    changeRequestModal.confirmButton = $('#tcc_change_request_modal_confirm');
+    changeRequestModal.closeButton = $('#tcc_change_request_modal_close');
   }
 
 
@@ -615,7 +645,6 @@ const FinalWorkStageDetail = () => {
               }
 
               window.location.href = newUrl;
-            getAllMeetings();
             }).catch(err => {
               console.log(err);
 
@@ -671,7 +700,6 @@ const FinalWorkStageDetail = () => {
               }
 
               window.location.href = newUrl;
-            getAllMeetings();
             }).catch(err => {
               console.log(err);
 
@@ -727,7 +755,6 @@ const FinalWorkStageDetail = () => {
               }
 
               window.location.href = newUrl;
-            getAllMeetings();
             }).catch(err => {
               console.log(err);
 
@@ -781,7 +808,6 @@ const FinalWorkStageDetail = () => {
               }
 
               window.location.href = newUrl;
-            getAllMeetings();
             }).catch(err => {
               console.log(err);
 
@@ -792,6 +818,76 @@ const FinalWorkStageDetail = () => {
             });
         }
       });
+    });
+  }
+
+
+  // Request change
+  function handleChangeRequestEvent() {
+    $(changeRequestModal.requestButton).click(() => {
+      changeRequestModal.object.show();
+    })
+  }
+
+  function resetChangeRequestModalFormError() {
+    removeErrorInField('#tcc_change_description');
+  }
+
+  function handleChangeRequestModalFormError(data) {
+    if (data.description) {
+      addErrorInField(data.description, '#tcc_change_description');
+    }
+  }
+
+  function handleChangeRequestConfirmEvent() {
+    $(changeRequestModal.confirmButton).click(function(e) {
+      $(changeRequestModal.cancelButton).attr('disabled', true);
+      $(changeRequestModal.confirmButton).attr('disabled', true);
+      $(changeRequestModal.closeButton).attr('disabled', true);
+      $(changeRequestModal.confirmButton).html(`
+        <div class="spinner-border spinner-border-sm text-white me-2" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        Solicitar
+      `);
+
+      let fetchResponse;
+
+      const id = $('#kt_content_container').data('work-stage');
+
+      API.changeRequests.add($('#tcc_change_description').val(), id)
+        .then(response => fetchResponse = response)
+        .then(response => response.json())
+        .then(data => {
+          if (fetchResponse.status >= 300) {
+            resetChangeRequestModalFormError();
+            handleChangeRequestModalFormError(data);
+          } else {
+            changeRequestModal.object.hide();
+
+            $('#tcc_change_description').val('');
+
+            Toast.fire({
+              icon: 'success',
+              title: 'Solicitação de alteração requisitada com sucesso.'
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          Toast.fire({
+            icon: 'error',
+            title: 'Houve um erro no servidor. Tente novamente!'
+          });
+        })
+        .finally(() => {
+          $(changeRequestModal.cancelButton).removeAttr('disabled');
+          $(changeRequestModal.confirmButton).removeAttr('disabled');
+          $(changeRequestModal.closeButton).removeAttr('disabled');
+          $(changeRequestModal.confirmButton).html(`
+            Solicitar
+          `);
+        });
     });
   }
 
@@ -810,6 +906,9 @@ const FinalWorkStageDetail = () => {
   handleMarkReviewedButton();
   handleMarkCompletedButton();
   handleMarkPresentedButton();
+
+  handleChangeRequestEvent();
+  handleChangeRequestConfirmEvent();
 }
 
 KTUtil.onDOMContentLoaded(function() {

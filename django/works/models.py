@@ -10,6 +10,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from core import defaults
+from core.datetime import get_datetime_tz
 
 from works.utils import get_version_content_image_folder
 
@@ -121,7 +122,7 @@ class ChangeRequest(models.Model):
     Change request model.
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    approved = models.BooleanField(verbose_name=_('approved'), default=False)
+    approved = models.BooleanField(verbose_name=_('approved'), blank=True, null=True, default=None)
     description = models.TextField(verbose_name=_('description'))
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name=_('created at'))
@@ -142,3 +143,6 @@ class ChangeRequest(models.Model):
         new_version = FinalWorkVersion(content=None, work_stage=self.work_stage)
         self.save()
         new_version.save()
+
+    def get_created_at(self):
+        return get_datetime_tz(self.created_at).strftime("%d/%m/%Y %H:%M") if self.created_at is not None else None

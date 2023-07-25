@@ -224,9 +224,44 @@
             {% endif %}
 
             {% if object.status == 4 or object.status == 5 or object.status == 6 %}
-              <button id="tcc_change_request_button" class="btn btn-light ms-2">
-                Solicitar alteração
-              </button>
+              {% if change_already_requested %}
+                <div>
+                  <button
+                    id="tcc_change_request_button"
+                    class="btn btn-light ms-2 disabled"
+                    disabled
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Já existe uma solicitação pendente.">
+                    Solicitar alteração
+                  </button>
+                </div>
+              {% else %}
+                <div>
+                  <button
+                    id="tcc_change_request_button"
+                    class="btn btn-light ms-2"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="A sua última solicitação foi reprovada.">
+                    Solicitar novamente uma alteração
+                  </button>
+                </div>
+              {% endif %}
+            {% endif %}
+
+            {% if object.status == 7 %}
+              <div>
+                <button
+                  id="tcc_change_request_button"
+                  class="btn btn-light ms-2 disabled"
+                  disabled
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="A solicitação de alteração foi aprovada. Altere o documento.">
+                  Solicitar alteração
+                </button>
+              </div>
             {% endif %}
           {% endif %}
 
@@ -463,6 +498,42 @@
         <div class="modal-footer">
           <button id="tcc_request_meeting_modal_cancel" type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
           <button id="tcc_request_meeting_modal_confirm" type="button" class="btn btn-primary">Solicitar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" id="tcc_change_request_modal">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Solicitar uma alteração?</h5>
+
+          <div
+            id="tcc_change_request_modal_close"
+            class="btn btn-icon btn-sm btn-active-light-primary ms-2"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          >
+            <i class="fas fa-times"></i>
+          </div>
+        </div>
+
+        <div class="modal-body p-8">
+          <div class="fv-row mb-8">
+            <label for="name" class="required form-label">Descrição</label>
+            <textarea
+              name="description"
+              id="tcc_change_description"
+              cols="30"
+              rows="10"
+              class="form-control form-control-solid"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="tcc_change_request_modal_cancel" type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+          <button id="tcc_change_request_modal_confirm" type="button" class="btn btn-primary">Solicitar</button>
         </div>
       </div>
     </div>

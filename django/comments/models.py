@@ -7,7 +7,7 @@ import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from core.utils import get_datetime_tz
+from core.datetime import get_datetime_tz
 
 
 class Comment(models.Model):

@@ -5,7 +5,7 @@ Works URL.
 from django.urls import path
 
 from works.views import (WorkStageView, WorkStageDevelopmentView, WorkStageDetailView, WorkProposalCreateView,
-                         WorkProposalListView, WorkListView, create_work_stage_development)
+                         WorkProposalListView, WorkListView, create_work_stage_development, ChangeRequestListView)
 
 
 app_name = 'works'
@@ -17,4 +17,5 @@ urlpatterns = [
     path('development/<uuid:pk>/', WorkStageDevelopmentView.as_view(), name='development'),
     path('proposal/create', WorkProposalCreateView.as_view(), name='proposal-create'),
     path('proposal/list', WorkProposalListView.as_view(), name='proposal-list'),
+    path('change-request/list/', ChangeRequestListView.as_view(), name='change-request-list'),
 ]

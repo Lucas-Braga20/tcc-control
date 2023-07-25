@@ -168,6 +168,13 @@ class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, Vie
         context['meetings'] = object.stage_meeting.all().filter().order_by('-meeting_date')
         context['user_group'] = UserGroup(self.request.user)
 
+        change_requests = object.work_stage_change_request.all().order_by('-created_at')
+
+        if change_requests.exists():
+            context['change_already_requested'] = change_requests.first().approved == None
+        else:
+            context['change_already_requested'] = False
+
         return context
 
 
@@ -229,3 +236,11 @@ class WorkListView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin
     """
     template_name = 'final-work/list.html'
     required_groups = ['Orientador', 'Professor da disciplina']
+
+
+class ChangeRequestListView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, TemplateView):
+    """
+    Change request list view.
+    """
+    template_name = 'change-requests/list.html'
+    required_groups = ['Professor da disciplina']
