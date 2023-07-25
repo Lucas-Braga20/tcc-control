@@ -13,7 +13,7 @@ from works.serializers import (
 )
 
 from core.permissions import RoleAccessPermission, UserGroup
-from core.defaults import WORK_STAGE_WAITING_CORRECTION
+from core.defaults import WORK_STAGE_WAITING_CORRECTION, WORK_STAGE_ADJUSTED
 
 from notifications.serializers import NotificationSerializer
 
@@ -101,6 +101,40 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
         notification_serializer = NotificationSerializer(data={
             'description': f'Os orientando(s) do TCC: "{object.final_work.description}" solicitaram uma correção na ' \
                            f'etapa: {object.stage.description}',
+            'author': user.id,
+            'receiver': receivers,
+        })
+
+        notification_serializer.is_valid(raise_exception=True)
+        notification_serializer.save()
+
+        headers = self.get_success_headers(notification_serializer.data)
+        return Response(notification_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    @action(detail=True, methods=['get'])
+    def mark_reviewed(self, request, pk=None):
+        object = self.get_object()
+
+        user = self.request.user
+
+        if object.final_work.supervisor.id != user.id:
+            return Response(data={
+                'work_stage': 'Você não pertence a este TCC.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        if object.status in [4, 5, 6]:
+            return Response(data={
+                'status': 'Esta etapa já foi completada.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        object.status = WORK_STAGE_ADJUSTED
+        object.save()
+
+        receivers = list(object.final_work.mentees.values_list('id', flat=True))
+
+        notification_serializer = NotificationSerializer(data={
+            'description': f'O supervisor do TCC: "{object.final_work.description}" marcou como corrigido a etapa: ' \
+                           f'{object.stage.description}',
             'author': user.id,
             'receiver': receivers,
         })
