@@ -243,7 +243,9 @@
               <button id="tcc_mark_completed_button" class="btn btn-light ms-2">
                 Marcar como concluído
               </button>
+            {% endif %}
 
+            {% if object.status != 6 %}
               <button id="tcc_mark_presented_button" class="btn btn-light ms-2">
                 Marcar como apresentado
               </button>

@@ -118,6 +118,15 @@ const FinalWorkStageDetail = () => {
           },
         });
       },
+      markPresented(workStage) {
+        return fetch(`/api/final-work-stages/${workStage}/mark_presented/`, {
+          method: 'get',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
+          },
+        });
+      },
     },
   };
 
@@ -732,6 +741,60 @@ const FinalWorkStageDetail = () => {
     });
   }
 
+  function handleMarkPresentedButton() {
+    $('#tcc_mark_presented_button').click(function(e) {
+      Swal.fire({
+        title: 'Marcar como apresentado',
+        text: 'Tem certeza que deseja marcar como apresentado esta etapa?',
+        icon: 'warning',
+        customClass: {
+          actions: 'my-actions',
+          cancelButton: 'btn btn-secondary order-1',
+          confirmButton: 'btn btn-primary order-2',
+        },
+        buttonsStyling: false,
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar'
+      }).then(result => {
+        const { isConfirmed } = result;
+  
+        const id = $('#kt_content_container').data('work-stage');
+
+        if (isConfirmed) {
+          API.workStages.markPresented(id)
+            .then(response => {
+              if (response.ok === false) {
+                throw new Error(response.statusText);
+              }  
+            }).then(() => {
+              let currentUrl = window.location.href;
+
+              let hasQueryParams = currentUrl.includes('?');
+
+              let newParam = 'success_mark_presented=true';
+
+              let newUrl;
+              if (hasQueryParams) {
+                newUrl = currentUrl + '&' + newParam;
+              } else {
+                newUrl = currentUrl + '?' + newParam;
+              }
+
+              window.location.href = newUrl;
+            getAllMeetings();
+            }).catch(err => {
+              console.log(err);
+
+              Toast.fire({
+                icon: 'error',
+                title: 'Houve um erro no servidor.'
+              });
+            });
+        }
+      });
+    });
+  }
+
 
   getElements();
   initFlatpickrFields();
@@ -746,6 +809,7 @@ const FinalWorkStageDetail = () => {
   handleRequestReviewButton();
   handleMarkReviewedButton();
   handleMarkCompletedButton();
+  handleMarkPresentedButton();
 }
 
 KTUtil.onDOMContentLoaded(function() {

@@ -115,6 +115,7 @@ class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, Vie
         error_param = request.GET.get('error')
         success_review_request = request.GET.get('success_review_request')
         success_mark_completed = request.GET.get('success_mark_completed')
+        success_mark_presented = request.GET.get('success_mark_presented')
 
         if success_review_request and success_review_request == 'true':
             messages.success(request, 'Correção solicitada com sucesso.')
@@ -131,6 +132,16 @@ class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, Vie
 
             params = request.GET.copy()
             params.pop('success_mark_completed', None)
+            querystring_without_error = params.urlencode()
+
+            url_without_error = request.path + '?' + querystring_without_error
+            return redirect(url_without_error)
+
+        if success_mark_presented and success_mark_presented == 'true':
+            messages.success(request, 'Atividade apresentada com sucesso.')
+
+            params = request.GET.copy()
+            params.pop('success_mark_presented', None)
             querystring_without_error = params.urlencode()
 
             url_without_error = request.path + '?' + querystring_without_error
