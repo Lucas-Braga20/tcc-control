@@ -100,6 +100,9 @@ class FinalWorkVersion(models.Model):
         if self != versions.last():
             return True
 
+        if self.work_stage.status in defaults.completed_status:
+            return True
+
         return False
 
 

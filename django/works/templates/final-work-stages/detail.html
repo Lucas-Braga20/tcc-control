@@ -231,7 +231,7 @@
           {% endif %}
 
           {% if user_group.is_supervisor %}
-            {% if object.status == 0 or object.status == 1 or object.status == 2 or object.status == 3 %}
+            {% if object.status == 0 or object.status == 1 or object.status == 2 %}
               <button id="tcc_mark_reviewed_button" class="btn btn-light ms-2">
                 Marcar como corrigido
               </button>

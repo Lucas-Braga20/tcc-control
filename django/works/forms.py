@@ -3,7 +3,6 @@ Forms to works app.
 """
 
 import datetime
-from typing import Any, Dict
 
 from django import forms
 
@@ -12,7 +11,9 @@ from works.utils import validate_stage_content_json
 
 from users.models import User
 
-from core.defaults import WORK_STAGE_COMPLETED, WORK_STAGE_COMPLETED_LATE, WORK_STAGE_PRESENTED
+from core.defaults import (
+    WORK_STAGE_COMPLETED, WORK_STAGE_COMPLETED_LATE, WORK_STAGE_PRESENTED, WORK_STAGE_ADJUSTED, WORK_STAGE_ASSIGNED
+)
 
 
 
@@ -139,6 +140,17 @@ class FinalWorkVersionForm(forms.ModelForm):
             for content_field in content.get('fields'):
                 if content_field['key'] not in keys:
                     raise forms.ValidationError({'content': 'The content of the activity has invalid fields.'})
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        if instance.work_stage.status == WORK_STAGE_ADJUSTED:
+            instance.work_stage.status = WORK_STAGE_ASSIGNED
+
+        if commit:
+            instance.work_stage.save()
+
+        return instance
 
 
 class FinalWorkCreateVersionForm(forms.ModelForm):

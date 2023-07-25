@@ -20,6 +20,7 @@ from meetings.models import Meeting
 
 from core.permissions import UserGroup, GenericPermissionMixin
 from core.mixins import NotificationMixin
+from core import defaults
 
 
 class WorkStageView(NotificationMixin, LoginRequiredMixin, DetailView, View):
@@ -57,6 +58,9 @@ class WorkStageDevelopmentView(NotificationMixin, LoginRequiredMixin, SuccessMes
         versions = stage.work_stage_version.all().order_by('created_at')
         if object != versions.last():
             return HttpResponseForbidden('This versions is blocked.')
+
+        if stage.status in defaults.completed_status:
+            return HttpResponseBadRequest('This stage already completed.')
 
         return super().post(request, *args, **kwargs)
 
@@ -110,12 +114,23 @@ class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, Vie
     def get(self, request, *args, **kwargs):
         error_param = request.GET.get('error')
         success_review_request = request.GET.get('success_review_request')
+        success_mark_completed = request.GET.get('success_mark_completed')
 
         if success_review_request and success_review_request == 'true':
             messages.success(request, 'Correção solicitada com sucesso.')
 
             params = request.GET.copy()
             params.pop('success_review_request', None)
+            querystring_without_error = params.urlencode()
+
+            url_without_error = request.path + '?' + querystring_without_error
+            return redirect(url_without_error)
+
+        if success_mark_completed and success_mark_completed == 'true':
+            messages.success(request, 'Atividade concluída com sucesso.')
+
+            params = request.GET.copy()
+            params.pop('success_mark_completed', None)
             querystring_without_error = params.urlencode()
 
             url_without_error = request.path + '?' + querystring_without_error
