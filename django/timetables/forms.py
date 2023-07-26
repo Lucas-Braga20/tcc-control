@@ -32,8 +32,8 @@ class TimetableForm(forms.ModelForm):
     )
     teacher = forms.ModelChoiceField(
         label='Teacher',
-        queryset=User.objects.filter(username='joao.amancio'),
-        initial=User.objects.get(username='joao.amancio'),
+        # Test: Troca da query estática de usuários para query de group.
+        queryset=User.objects.filter(groups__name='Professor da disciplina'),
         widget=forms.Select(attrs={'readonly': 'readonly', 'class': 'd-none'})
     )
 
@@ -44,6 +44,7 @@ class TimetableForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # Choice
         self.fields['mentee_field'].choices = [
             (user.pk, user.get_full_name()) for user in User.objects.filter(groups__name='Orientando')
         ]
