@@ -62,6 +62,10 @@ class WorkStageDevelopmentView(NotificationMixin, LoginRequiredMixin, SuccessMes
         if stage.status in defaults.completed_status:
             return HttpResponseBadRequest('This stage already completed.')
 
+        if stage.status == defaults.WORK_STAGE_UNDER_CHANGE:
+            stage.status = defaults.WORK_STAGE_UPDATED
+            stage.save()
+
         return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -116,6 +120,7 @@ class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, Vie
         success_review_request = request.GET.get('success_review_request')
         success_mark_completed = request.GET.get('success_mark_completed')
         success_mark_presented = request.GET.get('success_mark_presented')
+        success_change_request = request.GET.get('success_change_request')
 
         if success_review_request and success_review_request == 'true':
             messages.success(request, 'Correção solicitada com sucesso.')
@@ -147,6 +152,16 @@ class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, Vie
             url_without_error = request.path + '?' + querystring_without_error
             return redirect(url_without_error)
 
+        if success_change_request and success_change_request == 'true':
+            messages.success(request, 'Solicitação de alteração requisitada com sucesso.')
+
+            params = request.GET.copy()
+            params.pop('success_change_request', None)
+            querystring_without_error = params.urlencode()
+
+            url_without_error = request.path + '?' + success_change_request
+            return redirect(url_without_error)
+
         if error_param and error_param == 'true':
             messages.error(request, 'Houve um erro no servidor. Tente novamente!')
 
@@ -171,6 +186,7 @@ class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, Vie
         change_requests = object.work_stage_change_request.all().order_by('-created_at')
 
         if change_requests.exists():
+            context['last_change_request'] = change_requests.first()
             context['change_already_requested'] = change_requests.first().approved == None
         else:
             context['change_already_requested'] = False

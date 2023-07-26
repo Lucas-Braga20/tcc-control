@@ -867,10 +867,20 @@ const FinalWorkStageDetail = () => {
 
             $('#tcc_change_description').val('');
 
-            Toast.fire({
-              icon: 'success',
-              title: 'Solicitação de alteração requisitada com sucesso.'
-            });
+            let currentUrl = window.location.href;
+
+            let hasQueryParams = currentUrl.includes('?');
+
+            let newParam = 'success_change_request=true';
+
+            let newUrl;
+            if (hasQueryParams) {
+              newUrl = currentUrl + '&' + newParam;
+            } else {
+              newUrl = currentUrl + '?' + newParam;
+            }
+
+            window.location.href = newUrl;
           }
         })
         .catch((err) => {

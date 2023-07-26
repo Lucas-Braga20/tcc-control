@@ -83,3 +83,8 @@ class ChangeRequestSerializer(serializers.ModelSerializer):
 
     def get_created_at_formated(self, obj):
         return obj.get_created_at()
+
+    def update(self, instance, validated_data):
+        instance.approved = validated_data.get('approved', None)
+        instance.save()
+        return instance

@@ -15,7 +15,7 @@ from works.serializers import (
 from core.permissions import RoleAccessPermission, UserGroup
 from core.defaults import (
     WORK_STAGE_WAITING_CORRECTION, WORK_STAGE_ADJUSTED, WORK_STAGE_COMPLETED, WORK_STAGE_PRESENTED,
-    completed_status
+    WORK_STAGE_UNDER_CHANGE, completed_status
 )
 
 from notifications.serializers import NotificationSerializer
@@ -278,3 +278,66 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
     model = ChangeRequest
     permission_classes = [RoleAccessPermission, permissions.IsAuthenticated]
     roles_required = ['Orientando', 'Professor da disciplina']
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        self.perform_create(serializer)
+
+        user = self.request.user
+
+        notification_serializer = NotificationSerializer(data={
+            'description': f'O orientando do TCC: "{serializer.instance.work_stage.final_work.description}" ' \
+                           f'solicitou uma alteração na etapa: {serializer.instance.work_stage.stage.description}',
+            'author': user.id,
+            'receiver': [serializer.instance.work_stage.stage.timetable.teacher.id],
+        })
+
+        notification_serializer.is_valid(raise_exception=True)
+        notification_serializer.save()
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        user = self.request.user
+
+        if serializer.instance.approved:
+            message = 'aprovou'
+        else:
+            message = 'reprovou'
+
+        receivers = list(serializer.instance.work_stage.final_work.mentees.values_list('id', flat=True))
+
+        notification_serializer = NotificationSerializer(data={
+            'description': f'O professor: "{user.get_full_name()}" {message} a solicitação de alteração da etapa: ' \
+                           f'{serializer.instance.work_stage.stage.description}',
+            'author': user.id,
+            'receiver': receivers,
+        })
+
+        notification_serializer.is_valid(raise_exception=True)
+        notification_serializer.save()
+
+        serializer.instance.work_stage.status = WORK_STAGE_UNDER_CHANGE
+        serializer.instance.work_stage.save()
+
+        version = FinalWorkVersion(
+            content=serializer.instance.work_stage.get_last_version().content,
+            work_stage=serializer.instance.work_stage
+        )
+        version.save()
+
+        return Response(serializer.data)

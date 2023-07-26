@@ -69,6 +69,10 @@
                 <span class="badge badge-light-success fw-bolder fs-7">Entregue</span>
               {% elif object.status == 6 %}
                 <span class="badge badge-light-success fw-bolder fs-7">Apresentado</span>
+              {% elif object.status == 7 %}
+                <span class="badge badge-light-info fw-bolder fs-7">Em alteração</span>
+              {% elif object.status == 8 %}
+                <span class="badge badge-light-info fw-bolder fs-7">Alterado</span>
               {% endif %}
             </div>
           </div>
@@ -223,30 +227,43 @@
               </button>
             {% endif %}
 
-            {% if object.status == 4 or object.status == 5 or object.status == 6 %}
+            {% if object.status == 4 or object.status == 5 or object.status == 6 or object.status == 8 %}
               {% if change_already_requested %}
-                <div>
+                <div
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Já existe uma solicitação pendente.">
                   <button
                     id="tcc_change_request_button"
                     class="btn btn-light ms-2 disabled"
-                    disabled
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="Já existe uma solicitação pendente.">
+                    disabled>
                     Solicitar alteração
                   </button>
                 </div>
               {% else %}
-                <div>
-                  <button
-                    id="tcc_change_request_button"
-                    class="btn btn-light ms-2"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title="A sua última solicitação foi reprovada.">
-                    Solicitar novamente uma alteração
-                  </button>
-                </div>
+                {% if last_change_request is not None and last_change_request.approved == True %}
+                  <div>
+                    <button
+                      id="tcc_change_request_button"
+                      class="btn btn-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="A sua última solicitação foi aprovada.">
+                      Solicitar novamente uma alteração
+                    </button>
+                  </div>
+                {% else %}
+                  <div>
+                    <button
+                      id="tcc_change_request_button"
+                      class="btn btn-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="A sua última solicitação foi reprovada.">
+                      Solicitar novamente uma alteração
+                    </button>
+                  </div>
+                {% endif %}
               {% endif %}
             {% endif %}
 
