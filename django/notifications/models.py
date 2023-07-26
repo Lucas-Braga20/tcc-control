@@ -29,6 +29,9 @@ class Receiver(models.Model):
         verbose_name = _('Receiver')
         verbose_name_plural = _('Receivers')
 
+    def __str__(self):
+        return f"Destinatário: {self.user} - Visualizado: {self.visualized}"
+
 
 class Notification(models.Model):
     """
@@ -49,3 +52,6 @@ class Notification(models.Model):
 
     def get_created_at(self):
         return get_datetime_tz(self.created_at).strftime("%d/%m/%Y %H:%M") if self.created_at is not None else None
+
+    def __str__(self):
+        return f"Notificação: {self.description}"

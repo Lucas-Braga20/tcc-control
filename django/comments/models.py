@@ -29,3 +29,6 @@ class Comment(models.Model):
 
     def get_created_at(self):
         return get_datetime_tz(self.created_at).strftime("%d/%m/%Y %H:%M")
+
+    def __str__(self):
+        return f'Comentário: "{self.description}" - Etapa: {self.work_stage}'

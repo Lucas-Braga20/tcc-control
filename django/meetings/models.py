@@ -26,6 +26,9 @@ class ApprovedMeeting(models.Model):
         verbose_name = _('Approved meeting')
         verbose_name_plural = _('Approved meetings')
 
+    def __str__(self):
+        return f'Aprovação: {self.user} - {self.approved}'
+
 
 class Meeting(models.Model):
     """
@@ -76,3 +79,6 @@ class Meeting(models.Model):
             raise Exception('User is required.')
 
         return self.meeting_approved.all().filter(approved=None, user=user).exists()
+
+    def __str__(self):
+        return f'Reunião: "{self.description}" às {self.get_meeting_date()} - {self.work_stage}'

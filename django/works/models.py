@@ -45,6 +45,9 @@ class FinalWork(models.Model):
 
         return stage.first()
 
+    def __str__(self):
+        return f'TCC: "{self.description}"'
+
 
 class FinalWorkStage(models.Model):
     """
@@ -78,6 +81,9 @@ class FinalWorkStage(models.Model):
     def get_last_version(self):
         return self.work_stage_version.all().order_by('-created_at').first()
 
+    def __str__(self):
+        return f'Etapa do {self.final_work.description}: "{self.stage.description}"'
+
 
 class FinalWorkVersion(models.Model):
     """
@@ -106,6 +112,9 @@ class FinalWorkVersion(models.Model):
 
         return False
 
+    def __str__(self):
+        return f'Versão: "{self.work_stage}"'
+
 
 class VersionContentImage(models.Model):
     """
@@ -115,6 +124,9 @@ class VersionContentImage(models.Model):
     image = models.ImageField(upload_to=get_version_content_image_folder, verbose_name=_('image'), max_length=255)
     version = models.ForeignKey('works.FinalWorkVersion', verbose_name=_('work version'),
                                 on_delete=models.CASCADE, related_name='version_images')
+
+    def __str__(self):
+        return f'Imagem da versão: "{self.version}"'
 
 
 class ChangeRequest(models.Model):
@@ -146,3 +158,6 @@ class ChangeRequest(models.Model):
 
     def get_created_at(self):
         return get_datetime_tz(self.created_at).strftime("%d/%m/%Y %H:%M") if self.created_at is not None else None
+
+    def __str__(self):
+        return f'Solicitação de alteração: "{self.work_stage}"'

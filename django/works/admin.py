@@ -29,7 +29,7 @@ class FinalWorkStageAdmin(admin.ModelAdmin):
     """
     Final work stage configuration model admin.
     """
-    list_display = ('id', 'presented', 'status')
+    list_display = ('id', 'presented', 'status', 'final_work')
 
 
 @admin.register(FinalWorkVersion)
@@ -37,7 +37,7 @@ class FinalWorkVersionAdmin(admin.ModelAdmin):
     """
     Final work version configuration model admin.
     """
-    list_display = ('id', 'created_at', 'content')
+    list_display = ('id', 'created_at', 'content', 'work_stage')
 
 
 @admin.register(ChangeRequest)
@@ -45,4 +45,4 @@ class ChangeRequestAdmin(admin.ModelAdmin):
     """
     Change Request configuration model admin.
     """
-    list_display = ('id', 'approved', 'description', 'created_at', 'requester')
+    list_display = ('id', 'approved', 'description', 'created_at', 'requester', 'work_stage')

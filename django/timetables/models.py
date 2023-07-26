@@ -27,6 +27,9 @@ class Timetable(models.Model):
         verbose_name = _('Timetable')
         verbose_name_plural = _('Timetables')
 
+    def __str__(self):
+        return f"Cronograma: {self.description} - Professor: {self.teacher}"
+
 
 class Stage(models.Model):
     """
@@ -79,6 +82,9 @@ class Stage(models.Model):
     def get_presentation_date(self):
         return self.presentation_date.strftime('%d/%m/%Y') if self.presentation_date is not None else None
 
+    def __str__(self):
+        return f"Etapa: {self.description} - Cronograma: {self.timetable}"
+
 
 class StageExample(models.Model):
     """
@@ -102,3 +108,6 @@ class StageExample(models.Model):
 
     def get_file_extension(self):
         return os.path.splitext(self.file.name)[1] if self.file is not None else None
+
+    def __str__(self):
+        return f"Documento: {self.file} - Etapa: {self.stage}"
