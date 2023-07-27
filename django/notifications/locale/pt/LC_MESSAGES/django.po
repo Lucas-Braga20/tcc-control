@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-25 22:41-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: notifications/models.py:18
+msgid "visualized"
+msgstr "visualizado"
+
+#: notifications/models.py:20
+msgid "notification"
+msgstr "notificação"
+
+#: notifications/models.py:24
+msgid "user"
+msgstr "usuário"
+
+#: notifications/models.py:29
+msgid "Receiver"
+msgstr "Destinatário"
+
+#: notifications/models.py:30
+msgid "Receivers"
+msgstr "Destinatários"
+
+#: notifications/models.py:41
+msgid "description"
+msgstr "descrição"
+
+#: notifications/models.py:42
+msgid "author"
+msgstr "autor"
+
+#: notifications/models.py:47
+msgid "created at"
+msgstr "criado em"
+
+#: notifications/models.py:50
+msgid "Notification"
+msgstr "Notificação"
+
+#: notifications/models.py:51
+msgid "Notifications"
+msgstr "Notificações"

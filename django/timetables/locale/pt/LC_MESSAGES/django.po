@@ -1,0 +1,86 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-25 22:41-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: timetables/models.py:19 timetables/models.py:39
+msgid "description"
+msgstr "descrição"
+
+#: timetables/models.py:20
+msgid "teacher"
+msgstr "professor"
+
+#: timetables/models.py:23
+msgid "pariticipants"
+msgstr "participantes"
+
+#: timetables/models.py:24
+msgid "archived"
+msgstr "arquivado"
+
+#: timetables/models.py:27
+msgid "Timetable"
+msgstr "Calendário"
+
+#: timetables/models.py:28
+msgid "Timetables"
+msgstr "Calendários"
+
+#: timetables/models.py:40
+msgid "start date"
+msgstr "data de início"
+
+#: timetables/models.py:41
+msgid "send date supervisor"
+msgstr "data de envio ao supervisor"
+
+#: timetables/models.py:42
+msgid "send date"
+msgstr "data de envio"
+
+#: timetables/models.py:43
+msgid "presentation date"
+msgstr "data de apresentação"
+
+#: timetables/models.py:47
+msgid "activity configuration"
+msgstr "configuração de atividade"
+
+#: timetables/models.py:50
+msgid "timetable"
+msgstr "calendário"
+
+#: timetables/models.py:53
+msgid "Stage"
+msgstr "Etapa"
+
+#: timetables/models.py:54
+msgid "Stages"
+msgstr "Etapas"
+
+#: timetables/models.py:96
+msgid "stage"
+msgstr "etapa"
+
+#: timetables/models.py:100
+msgid "Stage example"
+msgstr "Exemplo de etapa"
+
+#: timetables/models.py:101
+msgid "Stage examples"
+msgstr "Exemplos de etapa"

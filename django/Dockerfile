@@ -8,7 +8,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 RUN apt-get update && \
-    apt-get install -y gcc python3-dev default-mysql-client default-libmysqlclient-dev
+    apt-get install -y gcc python3-dev default-mysql-client default-libmysqlclient-dev gettext
 
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"

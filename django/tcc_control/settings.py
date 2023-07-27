@@ -148,7 +148,7 @@ AUTH_USER_MODEL = "users.User"
 
 # Internationalization
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'America/Cuiaba'
 
