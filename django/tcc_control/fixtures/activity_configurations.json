@@ -207,5 +207,41 @@
       "template_abnt": "documents/Padrão__Projeto_TCC_2023_SHDUOuG.docx",
       "archived": false
     }
+  },
+  {
+    "model": "activities.activityconfiguration",
+    "pk": "35304122-2a43-4716-8ed9-d18b9bb918f3",
+    "fields": {
+      "name": "Link do GitHUB",
+      "fields": {
+        "fields": [
+          {
+            "key": "link",
+            "name": "Link",
+            "type": "text"
+          }
+        ]
+      },
+      "template_abnt": null,
+      "archived": false
+    }
+  },
+  {
+    "model": "activities.activityconfiguration",
+    "pk": "b9f9cfc1-c9f5-42e1-a652-512eae8b0b79",
+    "fields": {
+      "name": "Andamento do Projeto",
+      "fields": {
+        "fields": [
+          {
+            "key": "resumo",
+            "name": "Resumo",
+            "type": "rich"
+          }
+        ]
+      },
+      "template_abnt": null,
+      "archived": false
+    }
   }
 ]
