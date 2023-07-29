@@ -1,0 +1,82 @@
+[
+  {
+    "model": "timetables.stageexample",
+    "pk": "1e90a617-885c-44bf-9370-5d95600542ce",
+    "fields": {
+      "file": "documents/stage-example/Exemplo_PROJETO_TCC_2023_m8vKXVB.docx",
+      "stage": "ecdd294a-b143-492f-8376-2a63a7dc521f"
+    }
+  },
+  {
+    "model": "timetables.stageexample",
+    "pk": "25404c30-cca4-4aaa-8e64-541a488e9999",
+    "fields": {
+      "file": "documents/stage-example/Exemplo_PROJETO_TCC_2023_cpFzulO.docx",
+      "stage": "d44fdd7a-6c73-4d1e-bdbe-6ca0ed5e04b1"
+    }
+  },
+  {
+    "model": "timetables.stageexample",
+    "pk": "57eb654e-cef1-4f0e-82bc-18ae8128bc1a",
+    "fields": {
+      "file": "documents/stage-example/Exemplo_PROJETO_TCC_2023.docx",
+      "stage": "0676cd07-fb62-4bd9-9542-dfd178ed095d"
+    }
+  },
+  {
+    "model": "timetables.stageexample",
+    "pk": "5f64e115-aec0-4f85-b931-ef080452af74",
+    "fields": {
+      "file": "documents/stage-example/Exemplo_PROJETO_TCC_2023_jJhjAAQ.docx",
+      "stage": "59227616-4ea1-41d4-8d25-e2ee784c13a5"
+    }
+  },
+  {
+    "model": "timetables.stageexample",
+    "pk": "93e150b7-b612-45d8-bdc4-69d1a6286eae",
+    "fields": {
+      "file": "documents/stage-example/Exemplo_PROJETO_TCC_2023_y9JWmNX.docx",
+      "stage": "56884ad4-e402-4d57-a0d9-7bd09ec5382a"
+    }
+  },
+  {
+    "model": "timetables.stageexample",
+    "pk": "9ff40709-0e30-4e9f-8902-052e2ef2e987",
+    "fields": {
+      "file": "documents/stage-example/Exemplo_PROJETO_TCC_2023_PRSzyo2.docx",
+      "stage": "7c7ff721-1c56-4cc7-81bd-fd1c561092fd"
+    }
+  },
+  {
+    "model": "timetables.stageexample",
+    "pk": "b64d4d43-45c8-4e62-bdbb-3ac021027d1b",
+    "fields": {
+      "file": "documents/stage-example/Proposta_de_Projeto_2023.doc",
+      "stage": "590623a2-ddad-4e8b-9d4e-beab2d26bab4"
+    }
+  },
+  {
+    "model": "timetables.stageexample",
+    "pk": "c551e8b6-9383-4dee-8e0b-4477853f27e9",
+    "fields": {
+      "file": "documents/stage-example/Exemplo_PROJETO_TCC_2023_Atm7yWV.docx",
+      "stage": "481acede-1802-4477-9017-415731ba4ac5"
+    }
+  },
+  {
+    "model": "timetables.stageexample",
+    "pk": "dc670a22-c5b3-4e8c-a8fe-84bafd754dcb",
+    "fields": {
+      "file": "documents/stage-example/Exemplo_PROJETO_TCC_2023_igVA7af.docx",
+      "stage": "b016ae92-f659-4a9a-b37a-ec6eaafce25a"
+    }
+  },
+  {
+    "model": "timetables.stageexample",
+    "pk": "e86584f8-b843-48df-926a-6fb93ecd2566",
+    "fields": {
+      "file": "documents/stage-example/Exemplo_PROJETO_TCC_2023_efEu1Rn.docx",
+      "stage": "0004e417-4eeb-4cc3-ba1a-03f1181593be"
+    }
+  }
+]

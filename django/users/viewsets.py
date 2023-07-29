@@ -3,6 +3,7 @@ Users viewsets.
 """
 
 from rest_framework import viewsets, mixins, permissions
+from rest_framework.exceptions import PermissionDenied
 from django_filters.rest_framework import DjangoFilterBackend
 
 from users.models import User
@@ -25,3 +26,11 @@ class UserViewSet(mixins.RetrieveModelMixin,
     filterset_fields = ['is_active']
     permission_classes = [permissions.IsAuthenticated, RoleAccessPermission]
     roles_required = ['Professor da disciplina']
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        if instance.is_superuser:
+            raise PermissionDenied('Não é possível alterar um admin.')
+
+        return super().update(request, *args, **kwargs)

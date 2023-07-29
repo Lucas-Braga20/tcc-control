@@ -1,9 +1,124 @@
 [
   {
     "model": "activities.activityconfiguration",
+    "pk": "00f6aed6-589a-4eec-99a3-74397860dc66",
+    "fields": {
+      "name": "Crongorama",
+      "fields": {
+        "fields": [
+          {
+            "key": "cronograma",
+            "name": "Cronograma",
+            "type": "rich"
+          }
+        ]
+      },
+      "template_abnt": "documents/Padrão__Projeto_TCC_2023_3YBEmpE.docx",
+      "archived": false
+    }
+  },
+  {
+    "model": "activities.activityconfiguration",
+    "pk": "4f43a5a3-357c-42b5-bdb5-b2f8d7a289b8",
+    "fields": {
+      "name": "Casos de uso",
+      "fields": {
+        "fields": [
+          {
+            "key": "casos-de-uso-gerais",
+            "name": "Casos de uso gerais",
+            "type": "rich"
+          },
+          {
+            "key": "casos-de-uso-especificos",
+            "name": "Casos de uso específicos",
+            "type": "rich"
+          }
+        ]
+      },
+      "template_abnt": "documents/Padrão__Projeto_TCC_2023_u5yX1kl.docx",
+      "archived": false
+    }
+  },
+  {
+    "model": "activities.activityconfiguration",
+    "pk": "93f94d6f-c94e-4a15-aaaf-e6aa57be648f",
+    "fields": {
+      "name": "Metodologia de desenvolvimento de Software (MDS)",
+      "fields": {
+        "fields": [
+          {
+            "key": "metodologia-de-desenvolvimento-de-software",
+            "name": "Metodologia de desenvolvimento de Software",
+            "type": "rich"
+          }
+        ]
+      },
+      "template_abnt": "documents/Padrão__Projeto_TCC_2023_19pB2no.docx",
+      "archived": false
+    }
+  },
+  {
+    "model": "activities.activityconfiguration",
+    "pk": "999b523b-644c-44a6-8682-9accc8436ddd",
+    "fields": {
+      "name": "Proposta de projeto",
+      "fields": {
+        "fields": [
+          {
+            "key": "titulo",
+            "name": "Título",
+            "type": "text"
+          },
+          {
+            "key": "problema",
+            "name": "Problema",
+            "type": "rich"
+          },
+          {
+            "key": "publico-alvo",
+            "name": "Público-alvo",
+            "type": "rich"
+          },
+          {
+            "key": "metodologia",
+            "name": "Metodologia",
+            "type": "rich"
+          },
+          {
+            "key": "referencias",
+            "name": "Referências",
+            "type": "rich"
+          }
+        ]
+      },
+      "template_abnt": "documents/Proposta_de_Projeto_2023.doc",
+      "archived": false
+    }
+  },
+  {
+    "model": "activities.activityconfiguration",
+    "pk": "9b950d35-81d2-4f35-82db-d5f69c89e3cd",
+    "fields": {
+      "name": "Protótipo funcional",
+      "fields": {
+        "fields": [
+          {
+            "key": "mockups",
+            "name": "Mockups",
+            "type": "rich"
+          }
+        ]
+      },
+      "template_abnt": "documents/Padrão__Projeto_TCC_2023_59zM0ef.docx",
+      "archived": false
+    }
+  },
+  {
+    "model": "activities.activityconfiguration",
     "pk": "df9a7654-75a4-4209-8566-f7968c037fb6",
     "fields": {
-      "name": "Termo de abertura de projeto",
+      "name": "Termo de Abertura do Projeto (TAP)",
       "fields": {
         "fields": [
           {
@@ -12,18 +127,85 @@
             "type": "text"
           },
           {
-            "key": "subtitle",
-            "name": "Sub-Título",
+            "key": "patrocinador",
+            "name": "Patrocinador",
             "type": "text"
           },
           {
-            "key": "content",
-            "name": "Conteúdo",
+            "key": "gerente-do-projeto",
+            "name": "Gerente do projeto",
+            "type": "text"
+          },
+          {
+            "key": "objetivo",
+            "name": "Objetivo",
+            "type": "rich"
+          },
+          {
+            "key": "justificativa",
+            "name": "Justificativa",
+            "type": "rich"
+          },
+          {
+            "key": "descrico-geral",
+            "name": "Descrição Geral",
+            "type": "rich"
+          },
+          {
+            "key": "riscos",
+            "name": "Riscos",
             "type": "rich"
           }
         ]
       },
-      "template_abnt": ""
+      "template_abnt": "documents/TAP_-_Termo_de_Abertura_do_Projeto_2023.doc",
+      "archived": false
+    }
+  },
+  {
+    "model": "activities.activityconfiguration",
+    "pk": "e818c0e0-f4d8-4885-b55a-072f28ad5bb6",
+    "fields": {
+      "name": "Escopo do sistema, Requisitos do sistema e Materiais e métodos",
+      "fields": {
+        "fields": [
+          {
+            "key": "escopo-do-sistema",
+            "name": "Escopo do sistema",
+            "type": "rich"
+          },
+          {
+            "key": "requisitos-do-sistema",
+            "name": "Requisitos do sistema",
+            "type": "rich"
+          },
+          {
+            "key": "materiais-e-metodos",
+            "name": "Materiais e métodos",
+            "type": "rich"
+          }
+        ]
+      },
+      "template_abnt": "documents/Padrão__Projeto_TCC_2023.docx",
+      "archived": false
+    }
+  },
+  {
+    "model": "activities.activityconfiguration",
+    "pk": "f69260f7-ec4d-438b-937b-d2dc20ab5833",
+    "fields": {
+      "name": "Modelo de classe ou DER",
+      "fields": {
+        "fields": [
+          {
+            "key": "modelo-de-classe-ou-der",
+            "name": "Modelo de classe ou DER",
+            "type": "rich"
+          }
+        ]
+      },
+      "template_abnt": "documents/Padrão__Projeto_TCC_2023_SHDUOuG.docx",
+      "archived": false
     }
   }
 ]

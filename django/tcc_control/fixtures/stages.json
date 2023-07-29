@@ -1,14 +1,131 @@
 [
   {
     "model": "timetables.stage",
+    "pk": "0004e417-4eeb-4cc3-ba1a-03f1181593be",
+    "fields": {
+      "description": "Quarta etapa: Modelo de classe ou DER",
+      "start_date": "2023-03-30",
+      "send_date_supervisor": "2023-04-18",
+      "send_date": "2023-04-20",
+      "presentation_date": null,
+      "activity_configuration": "f69260f7-ec4d-438b-937b-d2dc20ab5833",
+      "timetable": "a90dd479-de02-440f-94e3-d6af553af551"
+    }
+  },
+  {
+    "model": "timetables.stage",
     "pk": "0676cd07-fb62-4bd9-9542-dfd178ed095d",
     "fields": {
-      "description": "Esta é a etapa termo de abertura de projeto.",
-      "start_date": "2023-06-11",
-      "send_date_supervisor": "2023-06-12",
-      "send_date": "2023-06-13",
-      "presentation_date": "2023-06-14",
+      "description": "Primeira etapa: Termo de abertura de projeto.",
+      "start_date": "2023-02-16",
+      "send_date_supervisor": "2023-02-27",
+      "send_date": "2023-02-28",
+      "presentation_date": null,
       "activity_configuration": "df9a7654-75a4-4209-8566-f7968c037fb6",
+      "timetable": "a90dd479-de02-440f-94e3-d6af553af551"
+    }
+  },
+  {
+    "model": "timetables.stage",
+    "pk": "481acede-1802-4477-9017-415731ba4ac5",
+    "fields": {
+      "description": "Sexta Etapa: Cronograma de Atividades de Desenvolvimento",
+      "start_date": "2023-05-04",
+      "send_date_supervisor": "2023-05-15",
+      "send_date": "2023-05-18",
+      "presentation_date": null,
+      "activity_configuration": "00f6aed6-589a-4eec-99a3-74397860dc66",
+      "timetable": "a90dd479-de02-440f-94e3-d6af553af551"
+    }
+  },
+  {
+    "model": "timetables.stage",
+    "pk": "56884ad4-e402-4d57-a0d9-7bd09ec5382a",
+    "fields": {
+      "description": "Terceira Etapa: Casos de uso",
+      "start_date": "2023-03-16",
+      "send_date_supervisor": "2023-03-27",
+      "send_date": "2023-03-30",
+      "presentation_date": null,
+      "activity_configuration": "4f43a5a3-357c-42b5-bdb5-b2f8d7a289b8",
+      "timetable": "a90dd479-de02-440f-94e3-d6af553af551"
+    }
+  },
+  {
+    "model": "timetables.stage",
+    "pk": "590623a2-ddad-4e8b-9d4e-beab2d26bab4",
+    "fields": {
+      "description": "Apresentação da proposta",
+      "start_date": "2023-02-09",
+      "send_date_supervisor": "2023-02-14",
+      "send_date": "2023-02-16",
+      "presentation_date": "2023-02-16",
+      "activity_configuration": "999b523b-644c-44a6-8682-9accc8436ddd",
+      "timetable": "a90dd479-de02-440f-94e3-d6af553af551"
+    }
+  },
+  {
+    "model": "timetables.stage",
+    "pk": "59227616-4ea1-41d4-8d25-e2ee784c13a5",
+    "fields": {
+      "description": "Quinta etapa: Metodologia de desenvolvimento de software (MDS)",
+      "start_date": "2023-04-20",
+      "send_date_supervisor": "2023-05-02",
+      "send_date": "2023-05-04",
+      "presentation_date": null,
+      "activity_configuration": "93f94d6f-c94e-4a15-aaaf-e6aa57be648f",
+      "timetable": "a90dd479-de02-440f-94e3-d6af553af551"
+    }
+  },
+  {
+    "model": "timetables.stage",
+    "pk": "7c7ff721-1c56-4cc7-81bd-fd1c561092fd",
+    "fields": {
+      "description": "Segunda Etapa: Requisitos",
+      "start_date": "2023-03-01",
+      "send_date_supervisor": "2023-03-13",
+      "send_date": "2023-03-16",
+      "presentation_date": null,
+      "activity_configuration": "e818c0e0-f4d8-4885-b55a-072f28ad5bb6",
+      "timetable": "a90dd479-de02-440f-94e3-d6af553af551"
+    }
+  },
+  {
+    "model": "timetables.stage",
+    "pk": "b016ae92-f659-4a9a-b37a-ec6eaafce25a",
+    "fields": {
+      "description": "PIT: Andamento do Projeto",
+      "start_date": "2023-06-15",
+      "send_date_supervisor": "2023-07-25",
+      "send_date": "2023-06-27",
+      "presentation_date": "2023-06-27",
+      "activity_configuration": "b9f9cfc1-c9f5-42e1-a652-512eae8b0b79",
+      "timetable": "a90dd479-de02-440f-94e3-d6af553af551"
+    }
+  },
+  {
+    "model": "timetables.stage",
+    "pk": "d44fdd7a-6c73-4d1e-bdbe-6ca0ed5e04b1",
+    "fields": {
+      "description": "Sétima Etapa: Protótipo Funcional",
+      "start_date": "2023-05-18",
+      "send_date_supervisor": "2023-05-22",
+      "send_date": "2023-05-25",
+      "presentation_date": null,
+      "activity_configuration": "9b950d35-81d2-4f35-82db-d5f69c89e3cd",
+      "timetable": "a90dd479-de02-440f-94e3-d6af553af551"
+    }
+  },
+  {
+    "model": "timetables.stage",
+    "pk": "ecdd294a-b143-492f-8376-2a63a7dc521f",
+    "fields": {
+      "description": "Oitava Etapa: Submeter implementações",
+      "start_date": "2023-05-25",
+      "send_date_supervisor": "2023-06-13",
+      "send_date": "2023-06-15",
+      "presentation_date": null,
+      "activity_configuration": "35304122-2a43-4716-8ed9-d18b9bb918f3",
       "timetable": "a90dd479-de02-440f-94e3-d6af553af551"
     }
   }

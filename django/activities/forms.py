@@ -12,7 +12,7 @@ class ActivityConfigurationForm(forms.ModelForm):
     """
     Activity Configuration form.
     """
-    template_abnt = forms.FileField(required=True)
+    template_abnt = forms.FileField(required=False)
 
     class Meta:
         model = ActivityConfiguration

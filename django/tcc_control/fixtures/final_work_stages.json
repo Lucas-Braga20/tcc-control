@@ -1,12 +1,2 @@
 [
-  {
-    "model": "works.finalworkstage",
-    "pk": "53b389cf-de59-4564-98a7-94e3db4ab041",
-    "fields": {
-      "presented": false,
-      "status": 0,
-      "stage": "0676cd07-fb62-4bd9-9542-dfd178ed095d",
-      "final_work": "b0b66199-fc9f-433a-844a-376705af5154"
-    }
-  }
 ]

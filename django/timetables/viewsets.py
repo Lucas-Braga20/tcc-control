@@ -81,8 +81,8 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
         files = request.FILES.getlist('examples')
         for file in files:
             extension = os.path.splitext(file.name)[1]
-            if extension.lower() not in ['.pdf', '.docx']:
-                return Response(data={'examples': 'Only PDF or DOCX files are allowed.'},
+            if extension.lower() not in ['.pdf', '.docx', '.doc']:
+                return Response(data={'examples': 'Apenas PDF ou DOC/DOCX são permitidos.'},
                                 status=status.HTTP_400_BAD_REQUEST)
 
         stage = serializer.save()
@@ -106,8 +106,8 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
         files = request.FILES.getlist('examples')
         for file in files:
             extension = os.path.splitext(file.name)[1]
-            if extension.lower() not in ['.pdf', '.docx']:
-                return Response(data={'examples': 'Only PDF or DOCX files are allowed.'},
+            if extension.lower() not in ['.pdf', '.docx', '.doc']:
+                return Response(data={'examples': 'Apenas PDF ou DOC/DOCX são permitidos.'},
                                 status=status.HTTP_400_BAD_REQUEST)
 
         stage = serializer.save()

@@ -1,29 +1,2 @@
 [
-  {
-    "model": "meetings.approvedmeeting",
-    "pk": "b91b6bff-6fd8-4e6a-b1e0-70e8f49db1c9",
-    "fields": {
-      "approved": false,
-      "meeting": "e25166fb-6f27-48d9-86ef-2b6ae4f3d0c4",
-      "user": "4c091994-078f-4c94-9df4-29ea135ddd08"
-    }
-  },
-  {
-    "model": "meetings.approvedmeeting",
-    "pk": "d51827ef-bafa-418c-8046-d750076b7746",
-    "fields": {
-      "approved": false,
-      "meeting": "e25166fb-6f27-48d9-86ef-2b6ae4f3d0c4",
-      "user": "74112f96-51ae-4f48-b0f6-319ee836c267"
-    }
-  },
-  {
-    "model": "meetings.approvedmeeting",
-    "pk": "eef1f2bb-a831-43f8-a50a-a8c1ea61dc17",
-    "fields": {
-      "approved": false,
-      "meeting": "e25166fb-6f27-48d9-86ef-2b6ae4f3d0c4",
-      "user": "912642d8-cc18-43a2-819d-350756044caa"
-    }
-  }
 ]

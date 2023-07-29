@@ -194,7 +194,10 @@ const TimetablesList = () => {
               `;
             }
 
-            return `${activeButtonElement} ${changeRoleElement}`;
+            if (!data.is_superuser)
+              return `${activeButtonElement} ${changeRoleElement}`;
+
+            return '';
           },
         },
       ]
@@ -405,10 +408,17 @@ const TimetablesList = () => {
     });
   }
 
+  function handleSearchInput() {
+    $(searchInputElement).keyup(function() {
+      dataTableObject.search($(this).val()).draw();
+    });
+  }
+
 
   getElements();
   initUsersDataTable();
   handleActiveButtonFilters();
+  handleSearchInput();
 }
 
 KTUtil.onDOMContentLoaded(function() {

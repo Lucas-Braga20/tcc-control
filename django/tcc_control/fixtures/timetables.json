@@ -5,6 +5,7 @@
     "fields": {
       "description": "Trabalho de conclusão de curso 2023",
       "teacher": "7f7e4d1c-e707-4059-9d1a-27044afb6725",
+      "archived": false,
       "participants": [
         "4c091994-078f-4c94-9df4-29ea135ddd08",
         "74112f96-51ae-4f48-b0f6-319ee836c267",
