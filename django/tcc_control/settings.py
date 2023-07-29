@@ -52,6 +52,9 @@ INSTALLED_APPS += [
 
 INSTALLED_APPS += [
     'widget_tweaks',
+    'django_redis',
+    'django_celery_beat',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -172,3 +175,16 @@ MEDIA_ROOT = Path(BASE_DIR / 'tcc_control' / 'media')
 # Default primary key field type
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Celery settings
+
+CELERY_BROKER_URL = f'redis://redis:6379/0'
+
+CELERY_RESULT_BACKEND = 'django-db'
+
+CELERY_CACHE_BACKEND = 'django-cache'
+
+CELERY_RESULT_EXTENDED = True
+
+CELERY_TIMEZONE = 'America/Cuiaba'

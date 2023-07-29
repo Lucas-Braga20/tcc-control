@@ -15,4 +15,7 @@ python manage.py migrate
 echo 'Loading data...'
 python manage.py loaddata **/fixtures/*.json
 
+celery -A tcc_control worker --autoscale=3,1 --loglevel=INFO &
+celery -A tcc_control beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler &
+
 python manage.py runserver 0.0.0.0:8000
