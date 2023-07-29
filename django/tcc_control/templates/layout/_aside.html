@@ -225,6 +225,18 @@
                     {% if request.user.is_superuser %}
                       <span class="badge badge-light-info fw-bolder fs-8 px-2 py-1 ms-2">Admin</span>
                     {% endif %}
+
+                    {% if group.is_mentee %}
+                      <span class="badge badge-light-primary fw-bolder fs-8 px-2 py-1 ms-2">Orientando</span>
+                    {% endif %}
+
+                    {% if group.is_teacher %}
+                      <span class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">Professor</span>
+                    {% endif %}
+
+                    {% if group.is_supervisor %}
+                      <span class="badge badge-light-warning fw-bolder fs-8 px-2 py-1 ms-2">Professor</span>
+                    {% endif %}
                   </div>
                   <span class="fw-bold text-muted fs-7">{{ request.user.email }}</span>
                 </div>
