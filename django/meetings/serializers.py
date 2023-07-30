@@ -71,7 +71,7 @@ class MeetingSerializer(serializers.ModelSerializer):
             ApprovedMeeting.objects.create(meeting=meeting, user=supervisor, approved=True)
         else:
             ApprovedMeeting.objects.create(meeting=meeting, user=supervisor, approved=None)
-            receivers.append(mentee)
+            receivers.append(supervisor)
 
         send_notification(
             description=f'Uma reunião foi solicitada por: "{author.get_full_name()}", durante a ' \

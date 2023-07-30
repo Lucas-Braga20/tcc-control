@@ -49,18 +49,12 @@ class Meeting(models.Model):
         verbose_name_plural = _('Meetings')
 
     def get_is_approved(self):
-        """
-        Method to return whether a meeting has been approved.
-        """
+        """Método que retorna o estado de aprovação de uma reunião."""
         approved_meeting = self.meeting_approved.all()
 
         is_approved = not approved_meeting.exclude(approved=True).exists()
         if is_approved:
             return True
-
-        is_pending = approved_meeting.filter(approved=None).exists()
-        if is_pending:
-            return None
 
         is_disapproved = approved_meeting.filter(approved=False).exists()
         if is_disapproved:

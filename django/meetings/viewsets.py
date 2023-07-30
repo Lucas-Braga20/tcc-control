@@ -12,6 +12,8 @@ from rest_framework.response import Response
 from meetings.models import Meeting
 from meetings.serializers import MeetingSerializer
 
+from notifications.utils import send_notification
+
 
 class MeetingViewSet(mixins.CreateModelMixin,
                      mixins.RetrieveModelMixin,
@@ -40,6 +42,7 @@ class MeetingViewSet(mixins.CreateModelMixin,
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        """Processa queryset."""
         queryset = super().get_queryset()
 
         no_page = self.request.query_params.get('no_page')
@@ -52,6 +55,7 @@ class MeetingViewSet(mixins.CreateModelMixin,
 
     @action(methods=['post'], detail=False)
     def approve(self, request, **kwargs):
+        """Ação de aprovação."""
         meeting_id = self.request.data.get('meeting')
 
         if meeting_id is None:
@@ -74,10 +78,18 @@ class MeetingViewSet(mixins.CreateModelMixin,
         review.approved = True
         review.save()
 
+        if not meeting.meeting_approved.exclude(approved=True).exists():
+            send_notification(
+                description=f'A reunião: "{meeting.description}", foi aprovada.',
+                author=None,
+                receivers=list(meeting.participants.all())
+            )
+
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(methods=['post'], detail=False)
     def disapprove(self, request, **kwargs):
+        """Ação de reprovação."""
         meeting_id = self.request.data.get('meeting')
 
         if meeting_id is None:
@@ -91,6 +103,7 @@ class MeetingViewSet(mixins.CreateModelMixin,
         user = self.request.user
 
         review = meeting.meeting_approved.all().filter(user=user)
+        already_disapproved = meeting.get_is_approved() == False
 
         if review.exists() is False:
             return Response(data={'meeting': 'You are not included in this meeting.'},
@@ -99,5 +112,12 @@ class MeetingViewSet(mixins.CreateModelMixin,
         review = review.first()
         review.approved = False
         review.save()
+
+        if not already_disapproved and meeting.get_is_approved() == False:
+            send_notification(
+                description=f'A reunião: "{meeting.description}", foi reprovada.',
+                author=None,
+                receivers=list(meeting.participants.all())
+            )
 
         return Response(status=status.HTTP_204_NO_CONTENT)
