@@ -53,7 +53,7 @@
                   title="Reprovado"></i>
               {% endif %}
 
-              {% with last_stage=object.work_stage.last %}
+              {% with last_stage=object.work_stage.first %}
                 {% if last_stage and last_stage.status < 3 %}
                   <span class="badge badge-light fw-bolder ms-2 fs-8 py-1 px-3">
                     Pendente

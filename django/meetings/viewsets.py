@@ -9,6 +9,8 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 from meetings.models import Meeting
 from meetings.serializers import MeetingSerializer
 
@@ -40,10 +42,16 @@ class MeetingViewSet(mixins.CreateModelMixin,
     serializer_class = MeetingSerializer
     model = Meeting
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['work_stage']
 
     def get_queryset(self):
         """Processa queryset."""
         queryset = super().get_queryset()
+
+        user = self.request.user
+
+        queryset = queryset.filter(work_stage__final_work__mentees=user)
 
         no_page = self.request.query_params.get('no_page')
         if no_page:

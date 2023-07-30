@@ -2,6 +2,7 @@
 
 Contém as telas para:
     - WorkStageView (Listagem de etapas);
+    - WorkProposalListView (Listagem de propostas);
 """
 
 from typing import Any
@@ -47,7 +48,12 @@ class WorkStageView(NotificationMixin, LoginRequiredMixin, DetailView, View):
         user = self.request.user
         self.object = self.get_object()
 
-        if user != self.object.supervisor and not self.object.mentees.filter(id=user.id).exists():
+        user_group = UserGroup(user=user)
+
+        if user_group.is_supervisor() and user != self.object.supervisor:
+            return HttpResponseForbidden(_('You do not belong to this TCC.'))
+
+        if user_group.is_mentee() and not self.object.mentees.filter(id=user.id).exists():
             return HttpResponseForbidden(_('You do not belong to this TCC.'))
 
         return super().get(request, *args, **kwargs)
@@ -59,6 +65,8 @@ class WorkStageView(NotificationMixin, LoginRequiredMixin, DetailView, View):
 
         context['meetings'] = Meeting.objects.filter(work_stage__final_work=self.object).exclude(
             meeting_approved__approved=False
+        ).exclude(
+            meeting_approved__approved=None
         )
         context['work_stages'] = self.object.work_stage.order_by('stage__start_date')
 
@@ -235,13 +243,27 @@ class WorkProposalCreateView(NotificationMixin, GenericPermissionMixin, LoginReq
 
 
 class WorkProposalListView(NotificationMixin, LoginRequiredMixin, ListView, View):
-    """
-    Work proposal list screen.
+    """View genérica para propostas de TCC.
+
+    Através desta view será implementado a tela de listagem de propostas de
+    TCC. Implementando através da View Genérica: ListView.
+
+    Método suportado:
+        - List;
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
+
+    Perfis:
+        - Professor: Visualiza todas as propostas;
+        - Orientador: Visualiza apenas as propostas que orienta;
+        - Orientando: Visualiza apenas as suas propostas;
     """
     template_name = 'final-work-proposal/list.html'
     model = FinalWork
 
     def get_queryset(self):
+        """Processa queryset."""
         queryset = super().get_queryset()
 
         user_group = UserGroup(self.request.user)
@@ -257,6 +279,7 @@ class WorkProposalListView(NotificationMixin, LoginRequiredMixin, ListView, View
         return queryset
 
     def get_context_data(self, **kwargs):
+        """Gera o contexto da requisição."""
         context = super().get_context_data(**kwargs)
 
         context['supervisor'] = User.objects.filter(groups__name='Orientador')

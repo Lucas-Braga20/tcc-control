@@ -2,6 +2,8 @@
 Viewsets to works app.
 """
 
+import datetime
+
 from rest_framework import viewsets, mixins, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -13,12 +15,15 @@ from works.serializers import (
 )
 
 from core.permissions import RoleAccessPermission, UserGroup
+from core.utils import generate_work_stages
 from core.defaults import (
     WORK_STAGE_WAITING_CORRECTION, WORK_STAGE_ADJUSTED, WORK_STAGE_COMPLETED, WORK_STAGE_PRESENTED,
     WORK_STAGE_UNDER_CHANGE, completed_status
 )
 
 from notifications.serializers import NotificationSerializer
+
+from timetables.models import Timetable
 
 
 class FinalWorkViewSet(mixins.CreateModelMixin,
@@ -54,6 +59,23 @@ class FinalWorkViewSet(mixins.CreateModelMixin,
         queryset = queryset.filter(archived=False)
 
         return queryset
+
+    def update(self, request, *args, **kwargs):
+        data = request.data
+        approved = data.get('approved')
+
+        if approved and approved is True:
+            # today = datetime.date.today()
+            today = datetime.date(2023, 3, 4)
+
+            final_work = self.get_object()
+            timetable = Timetable.objects.filter(stages__start_date__lte=today,
+                                                  stages__send_date__gte=today,
+                                                  archived=False).first()
+
+            generate_work_stages(final_work=final_work, timetable=timetable)
+
+        return super().update(request, *args, **kwargs)
 
 
 class FinalWorkStageViewSet(viewsets.ModelViewSet):
