@@ -25,7 +25,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     filterset_fields = ['work_stage']
 
     def get_queryset(self):
-        queryset =super().get_queryset()
+        queryset = super().get_queryset()
 
         user_group = UserGroup(self.request.user)
 

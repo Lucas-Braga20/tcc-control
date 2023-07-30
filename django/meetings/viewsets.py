@@ -16,6 +16,8 @@ from meetings.serializers import MeetingSerializer
 
 from notifications.utils import send_notification
 
+from core.permissions import UserGroup
+
 
 class MeetingViewSet(mixins.CreateModelMixin,
                      mixins.RetrieveModelMixin,
@@ -50,8 +52,13 @@ class MeetingViewSet(mixins.CreateModelMixin,
         queryset = super().get_queryset()
 
         user = self.request.user
+        user_group = UserGroup(user)
 
-        queryset = queryset.filter(work_stage__final_work__mentees=user)
+        if user_group.is_supervisor():
+            queryset = queryset.filter(work_stage__final_work__supervisor=user)
+
+        if user_group.is_mentee():
+            queryset = queryset.filter(work_stage__final_work__mentees__in=[user])
 
         no_page = self.request.query_params.get('no_page')
         if no_page:

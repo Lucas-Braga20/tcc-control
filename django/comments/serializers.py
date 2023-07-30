@@ -10,6 +10,8 @@ from users.serializers import UserSerializer
 
 from core.permissions import UserGroup
 
+from notifications.utils import send_notification
+
 
 class CommentSerializer(serializers.ModelSerializer):
     """
@@ -34,3 +36,28 @@ class CommentSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('It is not possible to create a comment without a link to the tcc.')
 
         return work_stage
+
+    def create(self, request, *args, **kwargs):
+        comment = super().create(request, *args, **kwargs)
+
+        mentees = comment.work_stage.final_work.mentees.all()
+        supervisor = comment.work_stage.final_work.supervisor
+
+        receivers = []
+        author = self.context['request'].user
+
+        for mentee in mentees:
+            if mentee != author:
+                receivers.append(mentee)
+
+        if supervisor != author:
+            receivers.append(supervisor)
+
+        send_notification(
+            description=f'Um comentário foi feito por: "{author.get_full_name()}", durante a ' \
+                        f'etapa: "{comment.work_stage.stage.description}".',
+            author=author,
+            receivers=receivers
+        )
+
+        return comment
