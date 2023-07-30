@@ -9,6 +9,8 @@ from meetings.models import Meeting, ApprovedMeeting
 from users.serializers import UserSerializer
 from users.models import User
 
+from notifications.utils import send_notification
+
 
 class ApprovedMeetingSerializer(serializers.ModelSerializer):
     """
@@ -54,6 +56,7 @@ class MeetingSerializer(serializers.ModelSerializer):
 
         mentees = meeting.work_stage.final_work.mentees.all()
         supervisor = meeting.work_stage.final_work.supervisor
+        receivers = []
 
         author = self.context['request'].user
 
@@ -62,10 +65,19 @@ class MeetingSerializer(serializers.ModelSerializer):
                 ApprovedMeeting.objects.create(meeting=meeting, user=mentee, approved=True)
             else:
                 ApprovedMeeting.objects.create(meeting=meeting, user=mentee, approved=None)
+                receivers.append(mentee)
 
         if supervisor == author:
             ApprovedMeeting.objects.create(meeting=meeting, user=supervisor, approved=True)
         else:
             ApprovedMeeting.objects.create(meeting=meeting, user=supervisor, approved=None)
+            receivers.append(mentee)
+
+        send_notification(
+            description=f'Uma reunião foi solicitada por: "{author.get_full_name()}", durante a ' \
+                        f'etapa: "{meeting.work_stage.stage.description}".',
+            author=None,
+            receivers=receivers
+        )
 
         return meeting

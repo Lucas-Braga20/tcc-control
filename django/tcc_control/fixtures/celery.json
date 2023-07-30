@@ -44,7 +44,7 @@
         "pk": 2,
         "fields": {
             "name": "Processar TCCs",
-            "task": "works.tasks.generate_works",
+            "task": "works.tasks.process_final_works",
             "interval": null,
             "crontab": 1,
             "solar": null,

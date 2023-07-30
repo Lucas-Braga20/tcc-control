@@ -1,5 +1,7 @@
-"""
-Meeting viewsets.
+"""Implementação dos ViewSets do app de meetings.
+
+Contém os endpoints para:
+    - Meetings (Reuniões);
 """
 
 from rest_framework import mixins, permissions, status
@@ -15,8 +17,22 @@ class MeetingViewSet(mixins.CreateModelMixin,
                      mixins.RetrieveModelMixin,
                      mixins.ListModelMixin,
                      GenericViewSet):
-    """
-    Meeting viewset.
+    """ViewSet para manipulação de objetos Meetings.
+
+    Através deste endpoint que todos os usuários poderão solicitar
+    reuniões e aprová-las ou reprová-las.
+
+    Métodos suportados:
+        - Create;
+        - Retrieve;
+        - List;
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
+
+    Ações customizadas:
+        - Approve: Aprova uma reunião solicitada;
+        - Disapprove: Reprova uma reunião solicitada;
     """
     queryset = Meeting.objects.all()
     serializer_class = MeetingSerializer

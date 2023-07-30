@@ -9,12 +9,11 @@ from users.models import User
 from timetables.models import Timetable
 from works.models import FinalWork
 
-from core import defaults
 from core.utils import generate_work_stages, process_stage_status
 
 
 @shared_task
-def generate_works():
+def process_final_works():
     # today = datetime.date.today()
     today = datetime.date(2023, 3, 4)
 
@@ -47,5 +46,3 @@ def send_notifications():
     serializer.is_valid(raise_exception=True)
 
     instance = serializer.save()
-
-    print(instance)
