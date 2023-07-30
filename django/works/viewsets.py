@@ -22,6 +22,7 @@ from core.defaults import (
 )
 
 from notifications.serializers import NotificationSerializer
+from notifications.utils import send_notification
 
 from timetables.models import Timetable
 
@@ -304,20 +305,15 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         self.perform_create(serializer)
 
         user = self.request.user
-
-        notification_serializer = NotificationSerializer(data={
-            'description': f'O orientando do TCC: "{serializer.instance.work_stage.final_work.description}" ' \
-                           f'solicitou uma alteração na etapa: {serializer.instance.work_stage.stage.description}',
-            'author': user.id,
-            'receiver': [serializer.instance.work_stage.stage.timetable.teacher.id],
-        })
-
-        notification_serializer.is_valid(raise_exception=True)
-        notification_serializer.save()
+        send_notification(
+            description=f'O orientando do TCC: "{serializer.instance.work_stage.final_work.description}" ' \
+                        f'solicitou uma alteração na etapa: {serializer.instance.work_stage.stage.description}',
+            author=user,
+            receivers=[serializer.instance.work_stage.stage.timetable.teacher],
+        )
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -341,17 +337,12 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
         else:
             message = 'reprovou'
 
-        receivers = list(serializer.instance.work_stage.final_work.mentees.values_list('id', flat=True))
-
-        notification_serializer = NotificationSerializer(data={
-            'description': f'O professor: "{user.get_full_name()}" {message} a solicitação de alteração da etapa: ' \
-                           f'{serializer.instance.work_stage.stage.description}',
-            'author': user.id,
-            'receiver': receivers,
-        })
-
-        notification_serializer.is_valid(raise_exception=True)
-        notification_serializer.save()
+        send_notification(
+            description=f'O professor: "{user.get_full_name()}" {message} a solicitação de alteração da etapa: ' \
+                        f'{serializer.instance.work_stage.stage.description}',
+            author=user,
+            receivers=list(serializer.instance.work_stage.final_work.mentees.all())
+        )
 
         serializer.instance.work_stage.status = WORK_STAGE_UNDER_CHANGE
         serializer.instance.work_stage.save()

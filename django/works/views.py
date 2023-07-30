@@ -208,13 +208,13 @@ class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, Vie
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        object = self.get_object()
+        self.object = self.get_object()
 
-        context['comments'] = object.stage_comment.all().order_by('-created_at')
-        context['meetings'] = object.stage_meeting.all().filter().order_by('-meeting_date')
+        context['comments'] = self.object.stage_comment.all().order_by('-created_at')
+        context['meetings'] = self.object.stage_meeting.all().filter().order_by('-meeting_date')
         context['user_group'] = UserGroup(self.request.user)
 
-        change_requests = object.work_stage_change_request.all().order_by('-created_at')
+        change_requests = self.object.work_stage_change_request.all().order_by('-created_at')
 
         if change_requests.exists():
             context['last_change_request'] = change_requests.first()

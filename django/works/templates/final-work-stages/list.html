@@ -128,7 +128,11 @@
                     {% elif work_stage.status == 5 %}
                       <span class="badge badge-light-success">Entregue</span>
                     {% elif work_stage.status == 6 %}
-                      <span class="badge badge-light-success">Apresentado</span>
+                      <span class="badge badge-light-success fw-bolder fs-7">Apresentado</span>
+                    {% elif work_stage.status == 7 %}
+                      <span class="badge badge-light-info fw-bolder fs-7">Em alteração</span>
+                    {% elif work_stage.status == 8 %}
+                      <span class="badge badge-light-info fw-bolder fs-7">Alterado</span>
                     {% endif %}
                   </div>
                 </a>

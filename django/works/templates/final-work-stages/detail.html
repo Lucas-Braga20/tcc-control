@@ -252,7 +252,7 @@
                       Solicitar novamente uma alteração
                     </button>
                   </div>
-                {% else %}
+                {% elif last_change_request is not None and last_change_request.approved == False %}
                   <div>
                     <button
                       id="tcc_change_request_button"
@@ -263,6 +263,12 @@
                       Solicitar novamente uma alteração
                     </button>
                   </div>
+                {% else %}
+                  <button
+                    id="tcc_change_request_button"
+                    class="btn btn-light ms-2">
+                    Solicitar alteração
+                  </button>
                 {% endif %}
               {% endif %}
             {% endif %}
