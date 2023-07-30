@@ -107,7 +107,7 @@
           </div>
           <div class="mt-5">
             <div class="d-flex flex-column">
-              {% for work_stage in object.work_stage.all %}
+              {% for work_stage in work_stages %}
                 <a
                   href="{% url 'works:detail' work_stage.id %}"
                   class="border border-gray-300 rounded p-2 mt-3">

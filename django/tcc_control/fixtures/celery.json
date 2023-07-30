@@ -38,5 +38,33 @@
             "date_changed": "2023-07-28T01:33:13.126Z",
             "description": ""
         }
+    },
+    {
+        "model": "django_celery_beat.periodictask",
+        "pk": 2,
+        "fields": {
+            "name": "Processar TCCs",
+            "task": "works.tasks.generate_works",
+            "interval": null,
+            "crontab": 1,
+            "solar": null,
+            "clocked": null,
+            "args": "[]",
+            "kwargs": "{}",
+            "queue": null,
+            "exchange": null,
+            "routing_key": null,
+            "headers": "{}",
+            "priority": null,
+            "expires": null,
+            "expire_seconds": null,
+            "one_off": false,
+            "start_time": null,
+            "enabled": true,
+            "last_run_at": null,
+            "total_run_count": 0,
+            "date_changed": "2023-07-28T01:33:13.126Z",
+            "description": ""
+        }
     }
 ]

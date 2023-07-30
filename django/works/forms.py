@@ -150,6 +150,8 @@ class FinalWorkVersionForm(forms.ModelForm):
         if commit:
             instance.work_stage.save()
 
+        instance.save()
+
         return instance
 
 

@@ -39,6 +39,8 @@ class WorkStageView(NotificationMixin, LoginRequiredMixin, DetailView, View):
             meeting_approved__approved=False
         )
 
+        context['work_stages'] = object.work_stage.order_by('stage__start_date')
+
         return context
 
 
@@ -52,11 +54,11 @@ class WorkStageDevelopmentView(NotificationMixin, LoginRequiredMixin, SuccessMes
     success_message = 'Trabalho salvo com sucesso.'
 
     def post(self, request, *args, **kwargs):
-        object = self.get_object()
+        self.object = self.get_object()
 
-        stage = object.work_stage
+        stage = self.object.work_stage
         versions = stage.work_stage_version.all().order_by('created_at')
-        if object != versions.last():
+        if self.object != versions.last():
             return HttpResponseForbidden('This versions is blocked.')
 
         if stage.status in defaults.completed_status:
