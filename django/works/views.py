@@ -1,13 +1,17 @@
-"""
-Works views.
+"""Implementação das Views do app de works.
+
+Contém as telas para:
+    - WorkStageView (Listagem de etapas);
 """
 
+from typing import Any
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView, UpdateView, CreateView, View, ListView, DetailView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
 from django.urls import reverse_lazy, reverse
-from django.http import HttpResponseForbidden, HttpResponseBadRequest, Http404
+from django.http import HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseBadRequest, Http404
 from django.shortcuts import redirect
 from django.contrib import messages
 
@@ -24,22 +28,39 @@ from core import defaults
 
 
 class WorkStageView(NotificationMixin, LoginRequiredMixin, DetailView, View):
-    """
-    Work Stage screen.
+    """View genérica para etapas do TCC.
+
+    Através desta view será implementado a tela de listagem de etapas do
+    TCC. Implementando através da View Genérica: DetailView.
+
+    Método suportado:
+        - Retrieve;
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
     template_name = 'final-work-stages/list.html'
     model = FinalWork
 
+    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """Método GET da rota."""
+        user = self.request.user
+        self.object = self.get_object()
+
+        if user != self.object.supervisor and not self.object.mentees.filter(id=user.id).exists():
+            return HttpResponseForbidden(_('You do not belong to this TCC.'))
+
+        return super().get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
+        """Gera o contexto da requisição."""
         context = super().get_context_data(**kwargs)
+        self.object = self.get_object()
 
-        object = self.get_object()
-
-        context['meetings'] = Meeting.objects.filter(work_stage__final_work=object).exclude(
+        context['meetings'] = Meeting.objects.filter(work_stage__final_work=self.object).exclude(
             meeting_approved__approved=False
         )
-
-        context['work_stages'] = object.work_stage.order_by('stage__start_date')
+        context['work_stages'] = self.object.work_stage.order_by('stage__start_date')
 
         return context
 
