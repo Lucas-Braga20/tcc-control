@@ -16,7 +16,7 @@ def send_notification(description, receivers, author=None):
         author (User | None): [Usuário responsável pela notificação]
 
     Returns:
-        [Notification]: [Instância do model de Notificação]
+        [NotificationSerializer]: [Serializer do model de Notificação]
     """
 
     # Quando a notificação é disparada pelo sistema a autoria é da administração.
@@ -37,4 +37,4 @@ def send_notification(description, receivers, author=None):
     emails.append(author.email)
     emails += [receiver.email for receiver in receivers]
 
-    return notification_serializer.instance
+    return notification_serializer

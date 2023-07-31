@@ -104,76 +104,70 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def request_review(self, request, pk=None):
-        object = self.get_object()
+        self.object = self.get_object()
 
         user = self.request.user
 
-        if not object.final_work.mentees.filter(id=user.id).exists():
+        if not self.object.final_work.mentees.filter(id=user.id).exists():
             return Response(data={
                 'work_stage': 'Você não pertence a este TCC.'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        if object.status in [4, 5, 6]:
+        if self.object.status in [4, 5, 6]:
             return Response(data={
                 'status': 'Esta etapa já foi completada.'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        object.status = WORK_STAGE_WAITING_CORRECTION
-        object.save()
+        self.object.status = WORK_STAGE_WAITING_CORRECTION
+        self.object.save()
 
         receivers = []
-        receivers.append(object.final_work.supervisor.id)
+        receivers.append(self.object.final_work.supervisor)
 
-        notification_serializer = NotificationSerializer(data={
-            'description': f'Os orientando(s) do TCC: "{object.final_work.description}" solicitaram uma correção na ' \
-                           f'etapa: {object.stage.description}',
-            'author': user.id,
-            'receiver': receivers,
-        })
+        notification = send_notification(
+            description=f'Os orientando(s) do TCC: "{self.object.final_work.description}" solicitaram uma ' \
+                        f'correção na etapa: {self.object.stage.description}',
+            author=user,
+            receivers=receivers,
+        )
 
-        notification_serializer.is_valid(raise_exception=True)
-        notification_serializer.save()
-
-        headers = self.get_success_headers(notification_serializer.data)
-        return Response(notification_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        headers = self.get_success_headers(notification.data)
+        return Response(notification.data, status=status.HTTP_201_CREATED, headers=headers)
 
     @action(detail=True, methods=['get'])
     def mark_reviewed(self, request, pk=None):
-        object = self.get_object()
+        self.object = self.get_object()
 
         user = self.request.user
 
-        if object.final_work.supervisor.id != user.id:
+        if self.object.final_work.supervisor.id != user.id:
             return Response(data={
                 'work_stage': 'Você não pertence a este TCC.'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        if object.status in [4, 5, 6]:
+        if self.object.status in [4, 5, 6]:
             return Response(data={
                 'status': 'Esta etapa já foi completada.'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        object.status = WORK_STAGE_ADJUSTED
-        object.save()
+        self.object.status = WORK_STAGE_ADJUSTED
+        self.object.save()
 
-        receivers = list(object.final_work.mentees.values_list('id', flat=True))
+        receivers = list(self.object.final_work.mentees.all())
 
-        notification_serializer = NotificationSerializer(data={
-            'description': f'O supervisor do TCC: "{object.final_work.description}" marcou como corrigido a etapa: ' \
-                           f'{object.stage.description}',
-            'author': user.id,
-            'receiver': receivers,
-        })
+        notification = send_notification(
+            description=f'O supervisor do TCC: "{self.object.final_work.description}" marcou como corrigido a ' \
+                        f'etapa: "{self.object.stage.description}"',
+            author=user,
+            receivers=receivers
+        )
 
-        notification_serializer.is_valid(raise_exception=True)
-        notification_serializer.save()
-
-        headers = self.get_success_headers(notification_serializer.data)
-        return Response(notification_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        headers = self.get_success_headers(notification.data)
+        return Response(notification.data, status=status.HTTP_201_CREATED, headers=headers)
 
     @action(detail=True, methods=['get'])
     def mark_completed(self, request, pk=None):
-        object = self.get_object()
+        self.object = self.get_object()
 
         user = self.request.user
 
@@ -182,32 +176,29 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
                 'work_stage': 'Você não é professor.'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        if object.status in completed_status:
+        if self.object.status in completed_status:
             return Response(data={
                 'status': 'Esta etapa já foi completada.'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        object.status = WORK_STAGE_COMPLETED
-        object.save()
+        self.object.status = WORK_STAGE_COMPLETED
+        self.object.save()
 
-        receivers = list(object.final_work.mentees.values_list('id', flat=True))
+        receivers = list(self.object.final_work.mentees.all())
 
-        notification_serializer = NotificationSerializer(data={
-            'description': f'O professor: "{user.get_full_name()}" marcou como concluído a etapa: ' \
-                           f'{object.stage.description}',
-            'author': user.id,
-            'receiver': receivers,
-        })
+        notification = send_notification(
+            description=f'O professor: "{user.get_full_name()}" marcou como concluído a etapa: ' \
+                        f'{self.object.stage.description}',
+            author=user,
+            receivers=receivers
+        )
 
-        notification_serializer.is_valid(raise_exception=True)
-        notification_serializer.save()
-
-        headers = self.get_success_headers(notification_serializer.data)
-        return Response(notification_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        headers = self.get_success_headers(notification.data)
+        return Response(notification.data, status=status.HTTP_201_CREATED, headers=headers)
 
     @action(detail=True, methods=['get'])
     def mark_presented(self, request, pk=None):
-        object = self.get_object()
+        self.object = self.get_object()
 
         user = self.request.user
 
@@ -216,28 +207,25 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
                 'work_stage': 'Você não é professor.'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        if object.status in [WORK_STAGE_PRESENTED]:
+        if self.object.status in [WORK_STAGE_PRESENTED]:
             return Response(data={
                 'status': 'Esta etapa já foi apresentada.'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        object.status = WORK_STAGE_PRESENTED
-        object.save()
+        self.object.status = WORK_STAGE_PRESENTED
+        self.object.save()
 
-        receivers = list(object.final_work.mentees.values_list('id', flat=True))
+        receivers = list(self.object.final_work.mentees.all())
 
-        notification_serializer = NotificationSerializer(data={
-            'description': f'O professor: "{user.get_full_name()}" marcou como apresentado a etapa: ' \
-                           f'{object.stage.description}',
-            'author': user.id,
-            'receiver': receivers,
-        })
+        notification = send_notification(
+            description=f'O professor: "{user.get_full_name()}" marcou como apresentado a etapa: ' \
+                        f'{self.object.stage.description}',
+            author=user,
+            receivers=receivers
+        )
 
-        notification_serializer.is_valid(raise_exception=True)
-        notification_serializer.save()
-
-        headers = self.get_success_headers(notification_serializer.data)
-        return Response(notification_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        headers = self.get_success_headers(notification.data)
+        return Response(notification.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class FinalWorkVersionViewSet(viewsets.ModelViewSet):
