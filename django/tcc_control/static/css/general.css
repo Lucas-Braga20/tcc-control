@@ -5,3 +5,21 @@
 .navbar-secondary-icon i {
   font-size: 1.2rem;
 }
+
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.max-w-200px {
+  max-width: 150px;
+}
+
+td.end-column {
+  text-align: end !important;
+}
+
+.end-column .dtr-title {
+  text-align: start !important;
+}

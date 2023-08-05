@@ -89,7 +89,9 @@ const ActivityConfigurationList = () => {
               `;
             } else {
               element = `
-                <a href="${data.file}">${data.name}</a>
+                <div class="text-ellipsis max-w-200px">
+                  <a href="${data.file}">${data.name}</a>
+                </div>
               `;
             }
             return element
@@ -98,7 +100,7 @@ const ActivityConfigurationList = () => {
         {
           data: null,
           orderable: false,
-          className: 'text-end',
+          className: 'end-column',
           render(data) {
             let updateButtonElement = '';
             let archivedButtonElement = '';
