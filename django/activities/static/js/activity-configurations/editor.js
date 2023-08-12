@@ -18,18 +18,12 @@ const ActivityConfigurationEditor = () => {
           minlength: 3,
           maxlength: 255
         },
-        template_abnt: {
-          required: true
-        },
       },
       messages: {
         name: {
           required: 'A descrição deve ser inserida.',
           minlength: 'A descrição deve ter pelo menos 3 caracteres.',
           maxlength: 'A descrição não pode ter mais de 255 caracteres.'
-        },
-        template_abnt: {
-          required: 'O template ABNT deve ser inserida.'
         },
       },
     });
