@@ -53,6 +53,36 @@
         });
       </script>
 
+      <!-- Datatable -->
+      <script>
+        const dataTableLanguages = {
+          sEmptyTable: 'Nenhum registro encontrado.',
+          sInfo: 'Mostrando _START_ até _END_ de _TOTAL_.',
+          sInfoEmpty: 'Mostrando 0 até 0 de 0.',
+          sInfoFiltered: '(filtrado do total de _MAX_ registros)',
+          sInfoPostFix: '',
+          sInfoThousands: ',',
+          sLengthMenu: 'Mostrando _MENU_',
+          sLoadingRecords: 'Carregando...',
+          sProcessing: 'Processando...',
+          sSearch: 'Buscar:',
+          sZeroRecords: 'Nenhum registro encontrado.',
+          oPaginate: {
+            sFirst: 'Primeiro',
+            sLast: 'Úlitmo',
+            sNext: 'Próximo',
+            sPrevious: 'Anterior'
+          },
+          select: {
+            rows: {
+              '_': 'Você possui %d linhas selecionadas',
+              '0': 'Clique em um linha para selecionar',
+              '1': '1 linha selecionada'
+            }
+          }
+        }
+      </script>
+
       {% if request.user.is_authenticated %}
         <!-- Notification JS -->
         <script src="{% static 'js/notification/notification.js' %}"></script>

@@ -89,7 +89,7 @@ const ActivityConfigurationList = () => {
               `;
             } else {
               element = `
-                <div class="text-ellipsis max-w-200px">
+                <div class="d-inline-flex align-items-center text-ellipsis max-w-200px">
                   <a href="${data.file}">${data.name}</a>
                 </div>
               `;
@@ -148,8 +148,13 @@ const ActivityConfigurationList = () => {
             return `${updateButtonElement}${archivedButtonElement}`;
           },
         },
-      ]
+      ],
+      language: dataTableLanguages,
     });
+
+    $(dataTableElement).on('responsive-display.dt', () => {
+      handleArchiveButtonActions();
+    })
   }
 
   function handleArchiveButtonActions() {

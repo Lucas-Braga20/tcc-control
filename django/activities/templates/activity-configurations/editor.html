@@ -56,7 +56,7 @@
             <!-- Name -->
             <div class="fv-row mb-8">
               <label for="title" class="required form-label">
-                Name
+                Descrição
               </label>
 
               {% if form.name.errors %}
@@ -77,6 +77,14 @@
               <label for="template" class="required form-label">
                 Template
               </label>
+
+              <span
+                class="ms-2"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Selecione um arquivo docx com até no máximo 10Mb.">
+                <i class="fas fa-info-circle text-muted"></i>
+              </span>
 
               {% if form.template_abnt.errors %}
                 <div class="is-invalid">
@@ -208,6 +216,10 @@
 
 {% block css-styles %}
   <link rel="stylesheet" href="{% static 'css/custom-accordion.css' %}">
+{% endblock %}
+
+{% block js-vendors %}
+  <script src="{% static 'vendor/jquery.validate.js/jquery.validate.min.js' %}"></script>
 {% endblock %}
 
 {% block js-scripts %}

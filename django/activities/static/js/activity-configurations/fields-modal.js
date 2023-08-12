@@ -325,6 +325,9 @@ class ActivityFieldsEditor {
 
         this.resetForm();
         this.modal.object.hide();
+
+        $('[name="fields"]').removeClass('is-invalid');
+        $('[name="fields"]').parent().find('.invalid-feedback').remove();
       } else {
         this.validateNameField(name, this.formFieldsElements.name);
       }
