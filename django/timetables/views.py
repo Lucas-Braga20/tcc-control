@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from timetables.models import Timetable, Stage
 from timetables.forms import TimetableForm
 
-from core.permissions import GenericPermissionMixin
+from core.permissions import GenericPermissionMixin, UserGroup
 from core.mixins import NotificationMixin
 
 
@@ -65,3 +65,10 @@ class TimetableStageCalendarView(NotificationMixin, LoginRequiredMixin, Template
     """
     template_name = 'timetables/calendar.html'
     model = Stage
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['allow_create'] = UserGroup(self.request.user).is_teacher() if self.request.user is not None else False
+
+        return context
