@@ -17,7 +17,7 @@ from core.defaults import completed_status
 @shared_task
 def process_final_works():
     # today = datetime.date.today()
-    today = datetime.date(2023, 3, 4)
+    today = datetime.date(2023, 1, 1)
 
     timetables = Timetable.objects.filter(stages__start_date__lte=today, stages__send_date__gte=today, archived=False)
 
@@ -37,7 +37,6 @@ def process_final_works():
 @shared_task()
 def send_notifications():
     today = datetime.date.today()
-    # today = datetime.date(2023, 6, 26)
 
     tomorrow = datetime.timedelta(days=1) + today
 

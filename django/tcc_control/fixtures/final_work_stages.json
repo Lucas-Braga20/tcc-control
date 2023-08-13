@@ -1,2 +1,102 @@
 [
+  {
+    "model": "works.finalworkstage",
+    "pk": "15f64554-efa0-4a6a-bf1d-b01463ac75dc",
+    "fields": {
+      "presented": false,
+      "status": 0,
+      "stage": "d44fdd7a-6c73-4d1e-bdbe-6ca0ed5e04b1",
+      "final_work": "b0b66199-fc9f-433a-844a-376705af5154"
+    }
+  },
+  {
+    "model": "works.finalworkstage",
+    "pk": "571926b8-5eb1-48d8-922a-ab2fcdb92ac4",
+    "fields": {
+      "presented": false,
+      "status": 0,
+      "stage": "590623a2-ddad-4e8b-9d4e-beab2d26bab4",
+      "final_work": "b0b66199-fc9f-433a-844a-376705af5154"
+    }
+  },
+  {
+    "model": "works.finalworkstage",
+    "pk": "5a5b737b-8659-47b4-bba5-b6829e5d10cb",
+    "fields": {
+      "presented": false,
+      "status": 0,
+      "stage": "56884ad4-e402-4d57-a0d9-7bd09ec5382a",
+      "final_work": "b0b66199-fc9f-433a-844a-376705af5154"
+    }
+  },
+  {
+    "model": "works.finalworkstage",
+    "pk": "7b020008-b6fa-4592-8b7c-84e2ba57fd36",
+    "fields": {
+      "presented": false,
+      "status": 0,
+      "stage": "7c7ff721-1c56-4cc7-81bd-fd1c561092fd",
+      "final_work": "b0b66199-fc9f-433a-844a-376705af5154"
+    }
+  },
+  {
+    "model": "works.finalworkstage",
+    "pk": "87e6d777-e8e2-4675-8e66-27986f3dce8a",
+    "fields": {
+      "presented": false,
+      "status": 0,
+      "stage": "0004e417-4eeb-4cc3-ba1a-03f1181593be",
+      "final_work": "b0b66199-fc9f-433a-844a-376705af5154"
+    }
+  },
+  {
+    "model": "works.finalworkstage",
+    "pk": "90aa2469-fac1-4b36-b469-a766a2ebcb28",
+    "fields": {
+      "presented": false,
+      "status": 0,
+      "stage": "ecdd294a-b143-492f-8376-2a63a7dc521f",
+      "final_work": "b0b66199-fc9f-433a-844a-376705af5154"
+    }
+  },
+  {
+    "model": "works.finalworkstage",
+    "pk": "c203fa19-580b-4e53-a32c-c267bed67390",
+    "fields": {
+      "presented": false,
+      "status": 0,
+      "stage": "59227616-4ea1-41d4-8d25-e2ee784c13a5",
+      "final_work": "b0b66199-fc9f-433a-844a-376705af5154"
+    }
+  },
+  {
+    "model": "works.finalworkstage",
+    "pk": "c9308428-0df4-4fa2-84cb-a6f7b99d2994",
+    "fields": {
+      "presented": false,
+      "status": 0,
+      "stage": "0676cd07-fb62-4bd9-9542-dfd178ed095d",
+      "final_work": "b0b66199-fc9f-433a-844a-376705af5154"
+    }
+  },
+  {
+    "model": "works.finalworkstage",
+    "pk": "cb698b03-cb20-4181-be7d-4007e1380d95",
+    "fields": {
+      "presented": false,
+      "status": 0,
+      "stage": "b016ae92-f659-4a9a-b37a-ec6eaafce25a",
+      "final_work": "b0b66199-fc9f-433a-844a-376705af5154"
+    }
+  },
+  {
+    "model": "works.finalworkstage",
+    "pk": "d69ce470-2299-43ca-af75-6f8a684f9fb6",
+    "fields": {
+      "presented": false,
+      "status": 0,
+      "stage": "481acede-1802-4477-9017-415731ba4ac5",
+      "final_work": "b0b66199-fc9f-433a-844a-376705af5154"
+    }
+  }
 ]

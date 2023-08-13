@@ -24,7 +24,7 @@ def generate_work_stages(final_work, timetable):
 
 def process_stage_status(final_work):
     # today = datetime.date.today()
-    today = datetime.date(2023, 3, 4)
+    today = datetime.date(2023, 1, 1)
 
     stages = final_work.work_stage.all()
 
