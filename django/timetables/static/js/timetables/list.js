@@ -86,7 +86,7 @@ const TimetablesList = () => {
         {
           data: null,
           orderable: false,
-          className: 'text-end',
+          className: 'end-column',
           render(data) {
             let updateButtonElement = '';
             let archivedButtonElement = '';
@@ -134,7 +134,8 @@ const TimetablesList = () => {
             return `${updateButtonElement}${archivedButtonElement}`;
           },
         },
-      ]
+      ],
+      language: dataTableLanguages,
     });
   }
 

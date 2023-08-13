@@ -7,17 +7,20 @@
     class="header"
     data-kt-sticky="true"
     data-kt-sticky-name="header"
-    data-kt-sticky-offset="{default: '200px', lg: '300px'}">
+    data-kt-sticky-offset="{default: '200px', lg: '300px'}"
+    style="animation-duration: 0.3s;">
     <div class="container-xxl d-flex align-items-center justify-content-between" id="kt_header_container">
-      <!-- Page Title -->
       <div
         class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-5 pb-lg-0"
         data-kt-swapper="true"
         data-kt-swapper-mode="prepend"
         data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
-        <h1 class="text-dark fw-bold my-0 fs-2">Listagem</h1>
+        <h1 class="text-dark fw-semibold my-0 fs-2">
+          Listagem
+        </h1>
+
         <ul class="breadcrumb breadcrumb-line text-muted fw-semibold fs-base my-1">
-          <li class="breadcrumb-item">
+          <li class="breadcrumb-item text-muted">
             Cronogramas
           </li>
           <li class="breadcrumb-item text-dark">
@@ -26,13 +29,22 @@
         </ul>
       </div>
 
-      <!-- Actions -->
+      <div class="d-flex d-lg-none align-items-center ms-n2 me-2">
+        <div class="btn btn-icon btn-active-icon-primary" id="kt_aside_toggle">
+          <i class="fas fa-bars fs-2x"></i>
+        </div>
+
+        <a href="{% url 'home' %}">
+          <div class="symbol symbol-40px symbol-circle">
+            <div class="symbol-label fs-2 fw-semibold bg-primary text-white" style="font-weight: bolder">TC</div>
+          </div>
+        </a>
+      </div>
+
       <div class="d-flex flex-shrink-0">
         <div class="d-flex ms-3">
-          <a
-            href="{% url 'timetables:create' %}"
-            class="btn btn-primary">
-            Novo cronograma
+          <a href="{% url 'timetables:create' %}" class="btn btn-primary">
+            Adicionar
           </a>
         </div>
       </div>
@@ -46,8 +58,8 @@
       <div class="card">
         <div class="card-header border-0 p-8 pb-4">
           <!-- Searh -->
-          <div class="card-title">
-            <div class="d-flex align-items-center position-relative my-1 me-2">
+          <div class="card-title w-100 w-md-auto mb-3 my-0 me-0 my-md-2 me-md-2">
+            <div class="d-flex align-items-center position-relative my-0 me-0 my-md-1 me-md-2 w-100">
               <span class="position-absolute ms-6">
                 <i class="fas fa-search"></i>
               </span>
@@ -55,25 +67,28 @@
                 id="tcc_datatable_search_input"
                 type="text"
                 data-tcc-timetables-table-filter="search"
-                class="form-control form-control-solid w-250px ps-14"
-                placeholder="Buscar atividade">
+                class="form-control form-control-solid w-100 w-md-250px ps-14"
+                placeholder="Buscar cronogramas">
             </div>
           </div>
 
           <!-- Toolbar -->
-          <div class="card-toolbar p-0 m-0">
+          <div class="card-toolbar p-0 m-0 justify-content-center justify-content-md-start w-100 w-md-auto">
             <!-- Archived options -->
-            <div id="tcc_archived_button_filters" class="d-flex flex-stack gap-2" data-kt-buttons="true">
+            <div
+              id="tcc_archived_button_filters"
+              class="d-flex flex-column flex-sm-row flex-stack gap-2 w-100 w-sm-auto"
+              data-kt-buttons="true">
               <button
                 type="button"
-                class="btn btn-light-primary active"
+                class="btn btn-light-primary active w-100 w-sm-auto"
                 data-kt-docs-advanced-forms="interactive"
                 data-archived="false">
                 Não arquivados
               </button>
               <button
                 type="button"
-                class="btn btn-light-primary"
+                class="btn btn-light-primary w-100 w-sm-auto"
                 data-kt-docs-advanced-forms="interactive"
                 data-archived="true">
                 Arquivados
@@ -91,7 +106,7 @@
                 <th class="rounded-start min-w-200px" data-data="description">Descrição</th>
                 <th class="min-w-150px" data-data="start">Início</th>
                 <th class="min-w-150px" data-data="end">Fim</th>
-                <th class="w-auto rounded-end text-end">Ações</th>
+                <th class="w-auto rounded-end text-start text-sm-end min-w-100px">Ações</th>
               </tr>
             </thead>
             <tbody>
