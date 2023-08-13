@@ -7,7 +7,8 @@
     class="header"
     data-kt-sticky="true"
     data-kt-sticky-name="header"
-    data-kt-sticky-offset="{default: '200px', lg: '300px'}">
+    data-kt-sticky-offset="{default: '200px', lg: '300px'}"
+    style="animation-duration: 0.3s;">
     <div class="container-xxl d-flex align-items-center justify-content-between" id="kt_header_container">
       <!-- Page Title -->
       <div
@@ -15,7 +16,10 @@
         data-kt-swapper="true"
         data-kt-swapper-mode="prepend"
         data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
-        <h1 class="text-dark fw-bold my-0 fs-2">Adicionar</h1>
+        <h1 class="text-dark fw-semibold my-0 fs-2">
+          Adicionar
+        </h1>
+
         <ul class="breadcrumb breadcrumb-line text-muted fw-semibold fs-base my-1">
           <li class="breadcrumb-item text-muted">
             <a href="{% url 'activities:list' %}" class="text-muted">
@@ -26,6 +30,18 @@
             Adicionar
           </li>
         </ul>
+      </div>
+
+      <div class="d-flex d-lg-none align-items-center ms-n2 me-2">
+        <div class="btn btn-icon btn-active-icon-primary" id="kt_aside_toggle">
+          <i class="fas fa-bars fs-2x"></i>
+        </div>
+
+        <a href="{% url 'home' %}">
+          <div class="symbol symbol-40px symbol-circle">
+            <div class="symbol-label fs-2 fw-semibold bg-primary text-white" style="font-weight: bolder">TC</div>
+          </div>
+        </a>
       </div>
 
       <!-- Actions -->
@@ -149,9 +165,18 @@
               {% endfor %}
             </div>
           </div>
-          <div class="card-footer d-flex justify-content-end pt-4 border-0">
-            <a href="{% url 'activities:list' %}" class="btn btn-secondary">Cancelar</a>
-            <button type="submit" class="btn btn-primary ms-5">Salvar</button>
+          <div class="card-footer d-flex flex-column flex-sm-row justify-content-end pt-4 border-0">
+            <a
+              href="{% url 'activities:list' %}"
+              class="btn btn-secondary">
+              Cancelar
+            </a>
+
+            <button
+              type="submit"
+              class="btn btn-primary ms-0 mt-2 ms-sm-5 mt-sm-0">
+              Salvar
+            </button>
           </div>
         </div>
       </form>

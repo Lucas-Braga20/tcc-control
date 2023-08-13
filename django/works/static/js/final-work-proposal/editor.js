@@ -26,9 +26,55 @@ const FinalWorkEditor = () => {
     });
   }
 
+  function addFormValidator() {
+    $('#work_proposal_editor').validate({
+      errorElement: 'div',
+      errorClass: 'invalid-feedback',
+      highlight: function(element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function(element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      },
+      rules: {
+        description: {
+          required: true,
+          minlength: 3,
+          maxlength: 255
+        },
+        supervisor: {
+          required: true,
+        },
+      },
+      messages: {
+        description: {
+          required: 'A descrição deve ser inserida.',
+          minlength: 'A descrição deve ter pelo menos 3 caracteres.',
+          maxlength: 'A descrição não pode ter mais de 255 caracteres.'
+        },
+        supervisor: {
+          required: 'O orientador deve ser selecionado.',
+        },
+      },
+      errorPlacement(error, element) {
+        element.parent().append(error);
+      },
+    });
+  }
+
+  function addBootstrapMaxLength() {
+    $('#id_description').maxlength({
+      warningClass: "badge badge-warning",
+      limitReachedClass: "badge badge-success"
+    });
+  }
+
 
   getElements();
   handleMenteesSelectElement();
+
+  addFormValidator();
+  addBootstrapMaxLength();
 }
 
 KTUtil.onDOMContentLoaded(function() {

@@ -33,6 +33,11 @@ class FinalWorkForm(forms.ModelForm):
 
         super().__init__(*args, **kwargs)
 
+        self.fields['description'].widget.attrs.update({
+            'maxlength': 255,
+            'minlength': 3,
+        })
+
         if user:
             self.fields['mentees'].initial = user
 

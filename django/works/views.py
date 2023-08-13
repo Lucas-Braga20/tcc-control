@@ -304,6 +304,7 @@ class WorkProposalListView(NotificationMixin, LoginRequiredMixin, ListView, View
         """Gera o contexto da requisição."""
         context = super().get_context_data(**kwargs)
 
+        context['user_group'] = UserGroup(self.request.user)
         context['supervisor'] = User.objects.filter(groups__name='Orientador')
         context['mentee_group'] = Group.objects.get(name='Orientando')
         context['teacher_group'] = Group.objects.get(name='Professor da disciplina')

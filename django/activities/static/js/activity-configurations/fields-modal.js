@@ -123,15 +123,15 @@ class ActivityFieldsEditor {
   // Manipulate elements in list.
   addItemElementToList(name, type, key, id) {
     const nameField = $(this.formFieldsElements.name).parent().clone();
-    nameField.addClass('col');
+    nameField.addClass('col-12 col-md');
     nameField.find('input').attr('id', `tcc_fields_editor_update_name_${id}`);
 
     const typeField = $(this.formFieldsElements.type).parent().clone();
-    typeField.addClass('col');
+    typeField.addClass('col-12 col-md');
     typeField.find('select').attr('id', `tcc_fields_editor_update_type_${id}`);
 
     const keyField = $(this.formFieldsElements.key).parent().clone();
-    keyField.addClass('col');
+    keyField.addClass('col-12 col-md');
     keyField.find('input').attr('id', `tcc_fields_editor_update_key_${id}`);
 
     const element = `
@@ -144,8 +144,8 @@ class ActivityFieldsEditor {
             data-bs-target="#tcc_accordion_body_${id}"
             aria-expanded="true"
             aria-controls="tcc_accordion_body_${id}">
-            <div class="d-flex justify-content-between w-100">
-              <div>
+            <div class="d-flex justify-content-between w-100 row">
+              <div class="col-12 col-md-auto mb-2 mb-md-0">
                 <h3 class="mb-0 fs-6 text-dark">
                   Nome:
                   <span class="fw-light">
@@ -153,16 +153,19 @@ class ActivityFieldsEditor {
                   </span>
                 </h3>
               </div>
-              <div>
-                <p class="mb-0 fs-6 text-dark">
+              <div class="col-12 col-md-auto mb-2 mb-md-0">
+                <h3 class="mb-0 fs-6 text-dark">
                   Chave:
-                  <span class="badge badge-light">
+                  <span class="badge badge-secondary">
                     ${key}
                   </span>
-                </p>
+                </h3>
               </div>
-              <div class="me-3">
-                ${this.badge[type]}
+              <div class="me-3 col-12 col-md-auto">
+                <h3 class="mb-0 fs-6 text-dark">
+                  Tipo:
+                  ${this.badge[type]}
+                </h3>
               </div>
             </div>
           </button>
@@ -179,7 +182,7 @@ class ActivityFieldsEditor {
               ${keyField.get(0).outerHTML}
             </div>
 
-            <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-end mt-8 mt-md-0">
               <div>
                 <button type="button" class="btn btn-sm btn-danger tcc_remove_button" data-id="${id}">Remover</button>
               </div>

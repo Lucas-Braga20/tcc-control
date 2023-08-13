@@ -77,6 +77,8 @@ const FinalWorkProposalList = () => {
             $(`#tcc_accordion_item_${id}`).find('.tcc-work-proposal-badges').html(`
               <span class="badge badge-light-danger">Reprovado</span>
             `);
+
+            $('.element-only-requested').remove();
           }).catch(err => {
             Toast.fire({
               icon: 'error',
@@ -128,7 +130,7 @@ const FinalWorkProposalList = () => {
 
             $(`#tcc_accordion_item_${id}`).find('.tcc-work-proposal-supervisor').html(supervisor);
 
-            $(`#tcc_accordion_body_${id}`).remove();
+            $('.element-only-requested').remove();
           }).catch(err => {
             Toast.fire({
               icon: 'error',
