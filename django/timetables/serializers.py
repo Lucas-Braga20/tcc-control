@@ -22,7 +22,7 @@ class TimetableSerializer(serializers.ModelSerializer):
         queryset = obj.stages.all().order_by('start_date')
 
         if queryset.exists():
-            return queryset.first().start_date
+            return queryset.first().start_date.strftime("%d/%m/%Y")
 
         return None
 
@@ -30,7 +30,7 @@ class TimetableSerializer(serializers.ModelSerializer):
         queryset = obj.stages.all().order_by('-send_date')
 
         if queryset.exists():
-            return queryset.first().send_date
+            return queryset.first().send_date.strftime("%d/%m/%Y")
 
         return None
 
