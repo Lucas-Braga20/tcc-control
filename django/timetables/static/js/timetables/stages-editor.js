@@ -145,10 +145,13 @@ class StageEditor {
     return `
       <div class="fv-row mb-8">
         <label for="${elementId}" class="form-label">Data de apresentação</label>
-        <input
-          class="form-control form-control-solid tcc_presentation_date_field"
-          placeholder="dd/mm/aaaa"
-          id="${elementId}"/>
+        <div class="input-with-icon">
+          <input
+            class="form-control form-control-solid tcc_presentation_date_field"
+            placeholder="dd/mm/aaaa"
+            id="${elementId}"/>
+          <i class="fas fa-times-circle flatpickr-clear-button"></i>
+        </div>
       </div>
     `;
   }
@@ -255,9 +258,13 @@ class StageEditor {
       defaultDate: getFlatpickrFormat(stage.send_date),
     });
 
-    $(`#tcc_stage_editor_presentation_date_${stage.id}`).flatpickr({
+    const presentationDateFlatpickr = $(`#tcc_stage_editor_presentation_date_${stage.id}`).flatpickr({
       dateFormat: 'd/m/Y',
       defaultDate: getFlatpickrFormat(stage.presentation_date),
+    });
+
+    $(`#tcc_stage_editor_presentation_date_${stage.id}`).parent().find('.flatpickr-clear-button').click(function () {
+      presentationDateFlatpickr.clear();
     });
 
     $(`#tcc_stage_editor_description_${stage.id}`).val(stage.description);
@@ -546,19 +553,19 @@ class StageEditor {
     }
 
     if (data.start_date) {
-      this.addErrorInField(data.start_date, `#tcc_stage_editor_start_date${id}`);
+      this.addErrorInField(data.start_date, `#tcc_stage_editor_start_date_${id}`);
     }
 
     if (data.send_date_supervisor) {
-      this.addErrorInField(data.send_date_supervisor, `#tcc_stage_editor_supervisor_date${id}`);
+      this.addErrorInField(data.send_date_supervisor, `#tcc_stage_editor_supervisor_date_${id}`);
     }
 
     if (data.send_date) {
-      this.addErrorInField(data.send_date, `#tcc_stage_editor_send_date${id}`);
+      this.addErrorInField(data.send_date, `#tcc_stage_editor_send_date_${id}`);
     }
 
     if (data.presentation_date) {
-      this.addErrorInField(data.presentation_date, `#tcc_stage_editor_presentation_date${id}`);
+      this.addErrorInField(data.presentation_date, `#tcc_stage_editor_presentation_date_${id}`);
     }
 
     if (data.examples) {
@@ -606,12 +613,12 @@ class StageEditor {
   }
 
   resetCollapseFormError(id) {
-    this.removeErrorInField(`#tcc_stage_editor_description${id}`);
-    this.removeErrorInField(`#tcc_stage_editor_activity${id}`);
-    this.removeErrorInField(`#tcc_stage_editor_start_date${id}`);
-    this.removeErrorInField(`#tcc_stage_editor_supervisor_date${id}`);
+    this.removeErrorInField(`#tcc_stage_editor_description_${id}`);
+    this.removeErrorInField(`#tcc_stage_editor_activity_${id}`);
+    this.removeErrorInField(`#tcc_stage_editor_start_date_${id}`);
+    this.removeErrorInField(`#tcc_stage_editor_supervisor_date_${id}`);
     this.removeErrorInField(`#tcc_stage_editor_send_date_${id}`);
-    this.removeErrorInField(`#tcc_stage_editor_presentation_date${id}`);
+    this.removeErrorInField(`#tcc_stage_editor_presentation_date_${id}`);
     this.removeErrorInField(`#tcc_stage_examples_repeater_${id}`);
   }
 
@@ -713,6 +720,8 @@ class StageEditor {
 
       if ($(accordion).find('.tcc_presentation_date_field').val()) {
         formData.append('presentation_date', getDatetimeFormat($(accordion).find('.tcc_presentation_date_field').val()));
+      } else {
+        formData.append('presentation_date', '');
       }
 
       $(`.tcc_create_stage_examples_${id}`).each(function(index, element) {
