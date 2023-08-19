@@ -22,7 +22,11 @@ class TimetableListView(NotificationMixin, GenericPermissionMixin, LoginRequired
     required_groups = ['Professor da disciplina']
 
 
-class TimetableCreateView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class TimetableCreateView(NotificationMixin,
+                          GenericPermissionMixin,
+                          LoginRequiredMixin,
+                          SuccessMessageMixin,
+                          CreateView):
     """
     Timetable view to create object.
     """
@@ -34,6 +38,11 @@ class TimetableCreateView(NotificationMixin, GenericPermissionMixin, LoginRequir
     permission_classes = None
     authentication_classes = None
     required_groups = ['Professor da disciplina']
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['teacher'] = self.request.user
+        return initial
 
 
 class TimetableUpdateView(NotificationMixin, LoginRequiredMixin, SuccessMessageMixin, UpdateView):

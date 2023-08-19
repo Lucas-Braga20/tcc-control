@@ -32,7 +32,6 @@ class TimetableForm(forms.ModelForm):
     )
     teacher = forms.ModelChoiceField(
         label='Teacher',
-        # Test: Troca da query estática de usuários para query de group.
         queryset=User.objects.filter(groups__name='Professor da disciplina'),
         widget=forms.Select(attrs={'readonly': 'readonly', 'class': 'd-none'})
     )

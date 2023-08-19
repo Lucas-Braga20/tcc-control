@@ -68,6 +68,8 @@
       <form method="post" id="tcc_editor_timetables" novalidate>
         {% csrf_token %}
 
+        {{ form.errors }}
+
         <div class="card">
           <div class="card-header border-0 p-8 pb-4">
             <h1 class="mb-0">
@@ -79,7 +81,7 @@
             </h1>
           </div>
           <div class="card-body py-4">
-            {{ form.teacher  }}
+            {{ form.teacher }}
 
             <!-- Description -->
             <div class="fv-row mb-8">
