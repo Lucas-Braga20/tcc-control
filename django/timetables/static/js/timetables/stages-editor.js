@@ -18,7 +18,7 @@ class StageEditor {
       list() {
         const timetable = $('#tcc_stage_editor_container').data('timetable');
 
-        return fetch(`/api/stages/?no_page=true&timetable=${timetable}`, {
+        return fetch(`/api/stages/?no_page=true&timetable=${timetable}&ordering=start_date`, {
           method: 'get',
           headers: {
             'Content-Type': 'application/json',

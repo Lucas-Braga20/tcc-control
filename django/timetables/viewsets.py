@@ -11,9 +11,8 @@ from rest_framework.response import Response
 from timetables.models import Timetable, Stage, StageExample
 from timetables.serializers import TimetableSerializer, StageSerializer
 
+from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
-
-from datetime import date
 
 from core.mixins import DisablePaginationMixin
 from core.permissions import RoleAccessPermission
@@ -57,8 +56,9 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
     """
     queryset = Stage.objects.all()
     serializer_class = StageSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['timetable']
+    ordering_fields = ['start_date']
     parser_classes = [FormParser, MultiPartParser]
     permission_classes = [permissions.IsAuthenticated, RoleAccessPermission]
     roles_required = ['Professor da disciplina', 'Orientador', 'Orientando']
