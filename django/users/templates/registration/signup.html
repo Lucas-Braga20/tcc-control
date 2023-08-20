@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% load widget_tweaks %}
+{% load widget_tweaks static %}
 
 {% block layout %}
   <div class="d-flex flex-column flex-root">
     <div class="d-flex flex-column flex-column-fluid">
       <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
         <div class="w-lg-1000px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
-          <form method="post" class="form w-100" novalidate>
+          <form id="singup_form" method="post" class="form w-100" novalidate>
             {% csrf_token %}
 
             <div class="text-center mb-10">
@@ -104,6 +104,10 @@
                 {{ form.phone|add_class:"form-control form-control-solid" }}
               {% endif %}
 
+              {% if form.phone.help_text and not form.phone.errors %}
+                <p class="mb-0 mt-1">{{ form.phone.help_text }}</p>
+              {% endif %}
+
               {% for error in form.phone.errors %}
                 <div class="fv-plugins-message-container invalid-feedback">{{ error }}</div>
               {% endfor %}
@@ -182,4 +186,12 @@
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block js-vendors %}
+  <script src="{% static 'vendor/jquery.mask/jquery.mask.min.js' %}"></script>
+{% endblock %}
+
+{% block js-scripts %}
+  <script src="{% static 'js/registration/singup.js' %}"></script>
 {% endblock %}

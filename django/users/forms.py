@@ -15,6 +15,11 @@ class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=False, help_text='Optional')
     last_name = forms.CharField(max_length=30, required=False, help_text='Optional')
     email = forms.EmailField(max_length=254, help_text='Enter a valid email address')
+    phone = forms.CharField(
+        label='Telefone',
+        widget=forms.TextInput(attrs={'placeholder': '(999) 9999-9999'}),
+        help_text='Informe o número de telefone no formato (999) 9999-9999.'
+    )
 
     class Meta:
         model = User
