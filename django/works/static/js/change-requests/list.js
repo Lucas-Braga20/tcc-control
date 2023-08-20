@@ -80,6 +80,12 @@ const ChangeRequestList = () => {
           },
         },
         {
+          data: 'work_stage_detail',
+          render(data) {
+            return `<span>${data.stage_detail.description}</span>`;
+          },
+        },
+        {
           data: 'created_at_formated',
           render(data) {
             return data;
