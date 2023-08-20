@@ -232,7 +232,7 @@ class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, Vie
 
         self.object = self.get_object()
 
-        context['comments'] = self.object.stage_comment.all().order_by('-created_at')
+        context['comments'] = self.object.stage_comment.all().order_by('created_at')
         context['meetings'] = self.object.stage_meeting.all().filter().order_by('-meeting_date')
         context['user_group'] = UserGroup(self.request.user)
 

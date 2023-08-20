@@ -39,6 +39,6 @@ class CommentViewSet(viewsets.ModelViewSet):
         if no_page:
             self.pagination_class = None
 
-        queryset = queryset.order_by('-created_at')
+        queryset = queryset.order_by('created_at')
 
         return queryset
