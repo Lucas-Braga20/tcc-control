@@ -27,6 +27,7 @@ class FinalWork(models.Model):
     mentees = models.ManyToManyField('users.User', related_name='work_mentee',
                                     verbose_name=_('mentee'))
     archived = models.BooleanField(default=False, verbose_name=_('archived'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'), blank=True, null=True)
 
     class Meta:
         verbose_name = _('Final work')

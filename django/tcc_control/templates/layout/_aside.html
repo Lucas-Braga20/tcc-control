@@ -343,11 +343,11 @@
                     </div>
                   {% endif %}
 
-                  {% if group.is_mentee %}
+                  {% if group.is_mentee and request.user.get_current_work != None %}
                     <div class="menu-item">
                       <a
                         class="menu-link {% get_link_is_active request 'works:stages' %} {% get_link_is_active request 'works:detail' %} {% get_link_is_active request 'works:development' %}"
-                        href="{% url 'works:stages' 'b0b66199-fc9f-433a-844a-376705af5154' %}">
+                        href="{% url 'works:stages' request.user.get_current_work.id %}">
                         <span class="menu-icon navbar-secondary-icon">
                           <i class="fas fa-tasks"></i>
                         </span>
