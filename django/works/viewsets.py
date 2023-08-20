@@ -18,7 +18,7 @@ from core.permissions import RoleAccessPermission, UserGroup
 from core.utils import generate_work_stages
 from core.defaults import (
     WORK_STAGE_WAITING_CORRECTION, WORK_STAGE_ADJUSTED, WORK_STAGE_COMPLETED, WORK_STAGE_PRESENTED,
-    WORK_STAGE_UNDER_CHANGE, completed_status
+    WORK_STAGE_COMPLETED_LATE, WORK_STAGE_UNDER_CHANGE, completed_status
 )
 
 from notifications.serializers import NotificationSerializer
@@ -181,7 +181,13 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
                 'status': 'Esta etapa já foi completada.'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        self.object.status = WORK_STAGE_COMPLETED
+        today = datetime.date.today()
+
+        if today > self.object.stage.send_date:
+            self.object.status = WORK_STAGE_COMPLETED_LATE
+        else:
+            self.object.status = WORK_STAGE_COMPLETED
+
         self.object.save()
 
         receivers = list(self.object.final_work.mentees.all())
