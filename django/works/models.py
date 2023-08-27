@@ -87,13 +87,12 @@ class FinalWorkStage(models.Model):
 
 
 class FinalWorkVersion(models.Model):
-    """
-    Final work version model.
-    """
+    """Final work version model."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name=_('created at'))
     content = models.JSONField(verbose_name=_('content'), blank=True, null=True)
+    confirmed = models.BooleanField(verbose_name=_('confirmed'), default=False)
     work_stage = models.ForeignKey('works.FinalWorkStage', verbose_name=_('work stage'),
                                    on_delete=models.DO_NOTHING, related_name='work_stage_version')
 

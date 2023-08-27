@@ -18,7 +18,7 @@ from core.permissions import RoleAccessPermission, UserGroup
 from core.utils import generate_work_stages
 from core.defaults import (
     WORK_STAGE_WAITING_CORRECTION, WORK_STAGE_ADJUSTED, WORK_STAGE_COMPLETED, WORK_STAGE_PRESENTED,
-    WORK_STAGE_COMPLETED_LATE, WORK_STAGE_UNDER_CHANGE, completed_status
+    WORK_STAGE_COMPLETED_LATE, WORK_STAGE_UNDER_CHANGE, WORK_STAGE_UPDATED, completed_status
 )
 
 from notifications.serializers import NotificationSerializer
@@ -304,7 +304,7 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        instance = serializer.save()
 
         user = self.request.user
         send_notification(
@@ -313,6 +313,35 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
             author=user,
             receivers=[serializer.instance.work_stage.stage.timetable.teacher],
         )
+
+        last_version = instance.work_stage.get_last_version()
+
+        activity_fields = instance.work_stage.stage.activity_configuration.fields
+        content = []
+
+        for fields in activity_fields['fields']:
+            content.append({
+                'key': fields['key'],
+                'value': '',
+            })
+
+        if last_version:
+            version = FinalWorkVersion(
+                content=instance.work_stage.get_last_version().content,
+                work_stage=instance.work_stage
+            )
+        else:
+            version = FinalWorkVersion(
+                content={
+                    'fields': content,
+                },
+                work_stage=instance.work_stage
+            )
+
+        instance.work_stage.status = WORK_STAGE_UNDER_CHANGE
+        instance.work_stage.save()
+
+        version.save()
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -343,13 +372,33 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
             receivers=list(serializer.instance.work_stage.final_work.mentees.all())
         )
 
-        serializer.instance.work_stage.status = WORK_STAGE_UNDER_CHANGE
-        serializer.instance.work_stage.save()
+        if serializer.instance.approved:
+            serializer.instance.work_stage.status = WORK_STAGE_UPDATED
+            serializer.instance.work_stage.save()
 
-        version = FinalWorkVersion(
-            content=serializer.instance.work_stage.get_last_version().content,
-            work_stage=serializer.instance.work_stage
-        )
-        version.save()
+            version = serializer.instance.work_stage.get_last_version()
+
+            if version.confirmed == False:
+                version.confirmed = True
+                version.save()
+        else:
+            serializer.instance.work_stage.status = WORK_STAGE_COMPLETED
+            serializer.instance.work_stage.save()
+
+            version = serializer.instance.work_stage.get_last_version()
+
+            if version.confirmed == False:
+                version.delete()
+
+        # delete
+
+        # serializer.instance.work_stage.status = WORK_STAGE_UNDER_CHANGE
+        # serializer.instance.work_stage.save()
+
+        # version = FinalWorkVersion(
+        #     content=serializer.instance.work_stage.get_last_version().content,
+        #     work_stage=serializer.instance.work_stage
+        # )
+        # version.save()
 
         return Response(serializer.data)

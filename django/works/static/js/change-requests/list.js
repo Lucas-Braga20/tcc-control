@@ -151,6 +151,10 @@ const ChangeRequestList = () => {
         },
       ]
     });
+
+    $(dataTableElement).on('responsive-display.dt', () => {
+      handleApproveButtonActions();
+    })
   }
 
   function handleSearchInput() {

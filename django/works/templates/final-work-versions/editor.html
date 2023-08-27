@@ -44,7 +44,19 @@
 
         <div class="card">
           <div class="card-header border-0 p-8 pb-4">
-            <h1 class="card-title fs-1 m-0">{{ object.work_stage.stage.description }}</h1>
+            <div class="d-flex align-items-center">
+              <h1 class="card-title fs-1 m-0">
+                {{ object.work_stage.stage.description }}
+              </h1>
+
+              {% if object.confirmed == False %}
+                <div class="ms-3">
+                  <span class="badge badge-light-warning">
+                    Temporário.
+                  </span>
+                </div>
+              {% endif %}
+            </div>
             <div class="card-toolbar">
               <div class="d-flex align-items-center">
                 <ul class="nav nav-tabs flex-nowrap text-nowrap">
