@@ -3,19 +3,22 @@
 
 {% block header %}
   <div
-  id="kt_header"
-  class="header"
-  data-kt-sticky="true"
-  data-kt-sticky-name="header"
-  data-kt-sticky-offset="{default: '200px', lg: '300px'}">
+    id="kt_header"
+    class="header"
+    data-kt-sticky="true"
+    data-kt-sticky-name="header"
+    data-kt-sticky-offset="{default: '200px', lg: '300px'}"
+    style="animation-duration: 0.3s;">
     <div class="container-xxl d-flex align-items-center justify-content-between" id="kt_header_container">
-      <!-- Page Title -->
       <div
         class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-5 pb-lg-0"
         data-kt-swapper="true"
         data-kt-swapper-mode="prepend"
         data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
-        <h1 class="text-dark fw-bold my-0 fs-2">Etapas</h1>
+        <h1 class="text-dark fw-semibold my-0 fs-2">
+          Etapas
+        </h1>
+
         <ul class="breadcrumb breadcrumb-line text-muted fw-semibold fs-base my-1">
           <li class="breadcrumb-item text-muted">
             TCC
@@ -24,6 +27,18 @@
             Etapas
           </li>
         </ul>
+      </div>
+
+      <div class="d-flex d-lg-none align-items-center ms-n2 me-2">
+        <div class="btn btn-icon btn-active-icon-primary" id="kt_aside_toggle">
+          <i class="fas fa-bars fs-2x"></i>
+        </div>
+
+        <a href="{% url 'home' %}">
+          <div class="symbol symbol-40px symbol-circle">
+            <div class="symbol-label fs-2 fw-semibold bg-primary text-white" style="font-weight: bolder">TC</div>
+          </div>
+        </a>
       </div>
     </div>
   </div>
@@ -65,20 +80,20 @@
                 {% endif %}
               {% endwith %}
             </div>
-            <div class="d-flex">
-              <div class="d-flex fw-semibold fs-6 pe-2">
-                <div class="d-flex align-items-center me-5 mb-2">
+            <div class="d-flex flex-column flex-sm-row flex-wrap">
+              <div class="d-flex flex-column flex-sm-row fw-semibold fs-6 pe-2 me-2">
+                <div class="d-flex align-items-center me-3 mb-2">
                   <i class="fas fa-user-tie text-gray-400 fa-fw"></i>
-                  <span class="ms-2 text-gray-400">Orientador:</span>
+                  <span class="ms-1 text-gray-400">Orientador:</span>
                 </div>
                 <span class="text-gray-700 fw-bold">
                   {{ object.supervisor.get_full_name }}
                 </span>
               </div>
-              <div class="ms-10 d-flex fw-semibold fs-6 pe-2">
-                <div class="d-flex align-items-center me-5 mb-2">
+              <div class="d-flex flex-column flex-sm-row fw-semibold fs-6 mt-3 mt-sm-0">
+                <div class="d-flex align-items-center me-3 mb-2">
                   <i class="fas fa-user-graduate text-gray-400 fa-fw"></i>
-                  <span class="ms-2 text-gray-400">Orientado(s):</span>
+                  <span class="ms-1 text-gray-400">Orientado(s):</span>
                 </div>
                 <span class="text-gray-700 fw-bold">
                   {{ object.get_mentees }}
@@ -86,35 +101,39 @@
               </div>
             </div>
           </div>
-          <div class="d-flex align-items-center">
-            <button type="button" class="btn btn-sm btn-primary btn-icon-white btn-text-white">
+          <div class="d-flex align-items-center w-100 w-sm-auto mt-2 mt-sm-0">
+            <button type="button" class="btn btn-sm btn-primary btn-icon-white btn-text-white w-100">
               <span class="svg-icon svg-icon-1">
                 <i class="fas fa-file-contract fs-5"></i>
               </span>
-              Comprovante de Orientação
+              Orientação
             </button>
           </div>
         </div>
         <div class="card-body pt-4">
-          <div class="d-flex justify-content-between align-items-center">
-            <h2 class="mb-0">Etapas</h2>
-            <button type="button" class="btn btn-sm btn-light">
+          <div class="d-flex flex-wrap justify-content-between align-items-center">
+            <h2 class="mb-0">
+              Etapas
+            </h2>
+
+            <button type="button" class="btn btn-sm btn-light w-100 w-sm-auto mt-2 mt-sm-0">
               <span class="svg-icon svg-icon-1">
                 <i class="fas fa-file-pdf fs-4"></i>
               </span>
               Documento
             </button>
           </div>
-          <div class="mt-5">
+          <div class="mt-2 mt-sm-5">
             <div class="d-flex flex-column">
               {% for work_stage in work_stages %}
                 <a
                   href="{% url 'works:detail' work_stage.id %}"
                   class="border border-gray-300 rounded p-2 mt-3">
-                  <div class="d-flex align-items-center justify-content-between p-4">
+                  <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between p-4">
                     <h3 class="fs-7 fw-light text-gray-700 mb-0">
                       {{ work_stage.stage.description }}
                     </h3>
+
                     {% if work_stage.status == 0 %}
                       <span class="badge badge-light-dark">Atribuído</span>
                     {% elif work_stage.status == 1 %}
@@ -150,25 +169,32 @@
             </div>
           </div>
 
-          <div class="d-flex justify-content-between align-items-center pt-8">
-            <h2 class="mb-0">Reuniões aprovadas</h2>
-            <button type="button" class="btn btn-sm btn-light ms-2">
+          <div class="d-flex flex-wrap justify-content-between align-items-center pt-5 pt-sm-8">
+            <h2 class="mb-0">
+              Reuniões aprovadas
+            </h2>
+
+            <button type="button" class="btn btn-sm btn-light w-100 w-sm-auto mt-2 mt-sm-0">
               <span class="svg-icon svg-icon-1">
                 <i class="fas fa-users-cog fs-4"></i>
               </span>
               Ata de acompanhamento
             </button>
           </div>
-          <div class="mt-5">
+
+          <div class="mt-5 mt-sm-8">
             <div class="d-flex flex-column">
               {% for meeting in meetings %}
                 {% if meeting.get_is_approved %}
-                  <a href="#" class="border border-gray-300 rounded p-2">
-                    <div class="d-flex align-items-center justify-content-between p-4">
+                  <a class="border border-gray-300 rounded p-2 mt-3">
+                    <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between p-4">
                       <h3 class="fs-7 fw-light text-gray-700 mb-0">
                         {{ meeting.description }}
                       </h3>
-                      <span class="fw-light fs-7 text-gray-400">{{ meeting.get_meeting_date }}</span>
+
+                      <span class="fw-light fs-7 text-gray-400">
+                        {{ meeting.get_meeting_date }}
+                      </span>
                     </div>
                   </a>
                 {% endif %}

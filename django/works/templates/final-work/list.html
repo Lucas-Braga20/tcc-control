@@ -7,15 +7,18 @@
     class="header"
     data-kt-sticky="true"
     data-kt-sticky-name="header"
-    data-kt-sticky-offset="{default: '200px', lg: '300px'}">
+    data-kt-sticky-offset="{default: '200px', lg: '300px'}"
+    style="animation-duration: 0.3s;">
     <div class="container-xxl d-flex align-items-center justify-content-between" id="kt_header_container">
-      <!-- Page Title -->
       <div
         class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-5 pb-lg-0"
         data-kt-swapper="true"
         data-kt-swapper-mode="prepend"
         data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
-        <h1 class="text-dark fw-bold my-0 fs-2">Listagem</h1>
+        <h1 class="text-dark fw-semibold my-0 fs-2">
+          Listagem
+        </h1>
+
         <ul class="breadcrumb breadcrumb-line text-muted fw-semibold fs-base my-1">
           <li class="breadcrumb-item text-muted">
             TCC
@@ -24,6 +27,18 @@
             Listagem
           </li>
         </ul>
+      </div>
+
+      <div class="d-flex d-lg-none align-items-center ms-n2 me-2">
+        <div class="btn btn-icon btn-active-icon-primary" id="kt_aside_toggle">
+          <i class="fas fa-bars fs-2x"></i>
+        </div>
+
+        <a href="{% url 'home' %}">
+          <div class="symbol symbol-40px symbol-circle">
+            <div class="symbol-label fs-2 fw-semibold bg-primary text-white" style="font-weight: bolder">TC</div>
+          </div>
+        </a>
       </div>
     </div>
   </div>
@@ -35,8 +50,8 @@
       <div class="card">
         <div class="card-header border-0 p-8 pb-4">
           <!-- Searh -->
-          <div class="card-title">
-            <div class="d-flex align-items-center position-relative my-1 me-2">
+          <div class="card-title w-100 w-md-auto">
+            <div class="d-flex align-items-center position-relative w-100">
               <span class="position-absolute ms-6">
                 <i class="fas fa-search"></i>
               </span>
@@ -44,7 +59,7 @@
                 id="tcc_datatable_search_input"
                 type="text"
                 data-tcc-activity-table-filter="search"
-                class="form-control form-control-solid w-250px ps-14"
+                class="form-control form-control-solid w-100 w-md-250px ps-14"
                 placeholder="Buscar atividade">
             </div>
           </div>
@@ -61,8 +76,8 @@
                 <th class="min-w-150px" data-data="mentees_detail">Orientandos</th>
                 <th class="min-w-150px" data-data="supervisor_detail">Orientador</th>
                 <th class="min-w-150px" data-data="current_stage">Etapa atual</th>
-                <th>Estado da etapa atual</th>
-                <th class="w-auto rounded-end text-end">Ações</th>
+                <th class="min-w-100px">Estado da etapa atual</th>
+                <th class="w-auto rounded-end text-start text-sm-end min-w-100px">Ações</th>
               </tr>
             </thead>
             <tbody>

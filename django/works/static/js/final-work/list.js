@@ -99,7 +99,7 @@ const FinalWorkList = () => {
         {
           data: null,
           orderable: false,
-          className: 'text-end',
+          className: 'end-column',
           render(data) {
             return `
               <a
@@ -113,7 +113,8 @@ const FinalWorkList = () => {
             `;
           },
         },
-      ]
+      ],
+      language: dataTableLanguages,
     });
   }
 
