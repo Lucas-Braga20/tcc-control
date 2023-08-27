@@ -390,15 +390,4 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
             if version.confirmed == False:
                 version.delete()
 
-        # delete
-
-        # serializer.instance.work_stage.status = WORK_STAGE_UNDER_CHANGE
-        # serializer.instance.work_stage.save()
-
-        # version = FinalWorkVersion(
-        #     content=serializer.instance.work_stage.get_last_version().content,
-        #     work_stage=serializer.instance.work_stage
-        # )
-        # version.save()
-
         return Response(serializer.data)

@@ -87,8 +87,6 @@ class WorkStageDevelopmentView(NotificationMixin, LoginRequiredMixin, SuccessMes
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
 
-        user = self.request.user
-
         stage = self.object.work_stage
         versions = stage.work_stage_version.all().order_by('created_at')
         if self.object != versions.last():
@@ -96,30 +94,6 @@ class WorkStageDevelopmentView(NotificationMixin, LoginRequiredMixin, SuccessMes
 
         if stage.status in defaults.completed_status:
             return HttpResponseBadRequest('This stage already completed.')
-
-        # delete
-
-        # if stage.status == defaults.WORK_STAGE_UNDER_CHANGE:
-        #     stage.status = defaults.WORK_STAGE_UPDATED
-        #     stage.save()
-
-        #     mentees = self.object.work_stage.final_work.mentees.all()
-        #     supervisor = self.object.work_stage.final_work.supervisor
-        #     receivers = []
-
-        #     for mentee in mentees:
-        #         if mentee != user:
-        #             receivers.append(mentee)
-
-        #     if supervisor != user:
-        #         receivers.append(supervisor)
-
-        #     send_notification(
-        #         description=f'A etapa: "{self.object.work_stage.stage.description}", foi atualizada ' \
-        #                     f'por: "{user.get_full_name()}".',
-        #         author=user,
-        #         receivers=receivers
-        #     )
 
         return super().post(request, *args, **kwargs)
 
