@@ -171,9 +171,9 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
 
         user = self.request.user
 
-        if UserGroup(user).is_teacher() is False:
+        if UserGroup(user).is_teacher() is False and UserGroup(user).is_mentee() is False:
             return Response(data={
-                'work_stage': 'Você não é professor.'
+                'work_stage': 'Você não é professor ou orientando.'
             }, status=status.HTTP_400_BAD_REQUEST)
 
         if self.object.status in completed_status:
@@ -192,8 +192,13 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
 
         receivers = list(self.object.final_work.mentees.all())
 
+        group_name = 'professor'
+
+        if UserGroup(user).is_mentee():
+            group_name = 'orientando'
+
         notification = send_notification(
-            description=f'O professor: "{user.get_full_name()}" marcou como concluído a etapa: ' \
+            description=f'O {group_name}: "{user.get_full_name()}" marcou como concluído a etapa: ' \
                         f'{self.object.stage.description}',
             author=user,
             receivers=receivers

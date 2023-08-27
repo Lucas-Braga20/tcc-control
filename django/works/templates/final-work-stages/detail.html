@@ -231,6 +231,12 @@
 
           {% if user_group.is_mentee %}
             {% if object.status == 0 or object.status == 1 or object.status == 2 or object.status == 3 %}
+              <button
+                id="tcc_complete_button"
+                class="btn btn-light ms-2">
+                Concluir a atividade
+              </button>
+
               <button id="tcc_request_meeting_request_button" class="btn btn-light ms-2">
                 Solicitar reunião
               </button>
