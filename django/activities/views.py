@@ -12,6 +12,7 @@ from core.defaults import ACTIVITY_TYPES
 
 from activities.models import ActivityConfiguration
 from activities.forms import ActivityConfigurationForm
+from activities.utils import check_worked_activity, update_worked_activity
 
 from core.permissions import GenericPermissionMixin
 from core.mixins import NotificationMixin
@@ -89,6 +90,7 @@ class ActivityConfigurationUpdateView(NotificationMixin,
     required_groups = ['Professor da disciplina']
 
     def get_object(self, queryset=None):
+        """Recupera objeto."""
         obj = super().get_object(queryset)
 
         if obj.archived:
@@ -97,7 +99,10 @@ class ActivityConfigurationUpdateView(NotificationMixin,
         return obj
 
     def get_context_data(self, **kwargs):
+        """Processa o contexto da view."""
         context = super().get_context_data(**kwargs)
+
+        context['activity_already_advanced'] = check_worked_activity(self.object)
 
         types = []
         for type in ACTIVITY_TYPES:
@@ -122,3 +127,11 @@ class ActivityConfigurationUpdateView(NotificationMixin,
         context['types'] = types
 
         return context
+
+    def post(self, request, *args, **kwargs):
+        """Método POST do endpoint."""
+        response = super().post(request, *args, **kwargs)
+
+        update_worked_activity(self.object)
+
+        return response

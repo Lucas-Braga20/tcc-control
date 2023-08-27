@@ -69,6 +69,29 @@
             <h1 class="mb-0">Adicione uma configuração de atividade</h1>
           </div>
           <div class="card-body py-4">
+            {% if activity_already_advanced %}
+              <div class="alert alert-dismissible bg-light-danger d-flex flex-column flex-sm-row w-100 p-5 mb-10">
+                <span class="svg-icon svg-icon-2hx me-4 mb-5 mb-sm-0">
+                  <i class="fas fa-exclamation-circle fa-fw fa-3x text-danger"></i>
+                </span>
+
+                <div class="d-flex flex-column pe-0 pe-sm-10">
+                  <h4 class="fw-semibold">Atenção!</h4>
+                  <span>
+                    Existem etapas de orientandos que foram adiantadas nessa atividade.
+                    Se mudar esta configuração, alguns conteúdos podem ser perdidos.
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto"
+                  data-bs-dismiss="alert">
+                  <i class="fas fa-times text-danger"></i>
+                </button>
+              </div>
+            {% endif %}
+
             <!-- Name -->
             <div class="fv-row mb-8">
               <label for="title" class="required form-label">
