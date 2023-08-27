@@ -35,3 +35,7 @@ td.end-column {
   transform: translateY(-50%);
   cursor: pointer;
 }
+
+.z-index-2000 {
+  z-index: 2000 !important;
+}

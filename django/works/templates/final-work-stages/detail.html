@@ -470,27 +470,35 @@
       </div>
 
       <div class="card mt-8">
-        <div class="card-header border-0 p-8 pb-4">
-          <h2 class="mb-0">
-            Adicionar comentário
-          </h2>
-        </div>
-        <div class="card-body py-4">
-          <form>
+        <form id="tcc_comment_form">
+          <div class="card-header border-0 p-8 pb-4">
+            <h2 class="mb-0">
+              Adicionar comentário
+            </h2>
+          </div>
+          <div class="card-body py-4">
             {% csrf_token %}
             <div class="fv-row">
               <label for="comment" class="required form-label">Comentário</label>
-              <textarea name="comment" id="tcc_comment_textarea" cols="30" rows="10" class="form-control form-control-solid"></textarea>
+              <textarea
+                name="comment"
+                id="tcc_comment_textarea"
+                cols="30"
+                rows="10"
+                minlength="3"
+                maxlength="255"
+                class="form-control form-control-solid"></textarea>
             </div>
-          </form>
-        </div>
-        <div class="card-footer pt-4 d-flex justify-content-end">
-          <button
-            id="tcc_add_comment"
-            class="btn btn-primary">
-            Comentar
-          </button>
-        </div>
+          </div>
+          <div class="card-footer pt-4 d-flex justify-content-end">
+            <button
+              type="submit"
+              id="tcc_add_comment"
+              class="btn btn-primary">
+              Comentar
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -498,45 +506,51 @@
   <div class="modal fade" tabindex="-1" id="tcc_request_meeting_modal">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Solicitar reunião</h5>
+        <form id="tcc_request_meeting_form">
+          <div class="modal-header">
+            <h5 class="modal-title">Solicitar reunião</h5>
 
-          <div
-            id="tcc_request_meeting_modal_close"
-            class="btn btn-icon btn-sm btn-active-light-primary ms-2"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          >
-            <i class="fas fa-times"></i>
-          </div>
-        </div>
-
-        <div class="modal-body p-8">
-          <div class="fv-row mb-8">
-            <label for="name" class="required form-label">Descrição</label>
-            <textarea
-              name="description"
-              id="tcc_meeting_description"
-              cols="30"
-              rows="10"
-              class="form-control form-control-solid"></textarea>
+            <div
+              id="tcc_request_meeting_modal_close"
+              class="btn btn-icon btn-sm btn-active-light-primary ms-2"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            >
+              <i class="fas fa-times"></i>
+            </div>
           </div>
 
-          <div class="fv-row mb-8">
-            <label for="name" class="required form-label">Data</label>
-            <input
-              class="form-control form-control-solid"
-              placeholder="dd/mm/aaaa hh:mm"
-              id="tcc_meeting_datetime"
-              autocomplete="off"
-            />
-          </div>
-        </div>
+          <div class="modal-body p-8">
+            <div class="fv-row mb-8">
+              <label for="name" class="required form-label">Descrição</label>
+              <textarea
+                required
+                name="description"
+                id="tcc_meeting_description"
+                cols="30"
+                rows="10"
+                minlength="3"
+                maxlength="255"
+                class="form-control form-control-solid"></textarea>
+            </div>
 
-        <div class="modal-footer">
-          <button id="tcc_request_meeting_modal_cancel" type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
-          <button id="tcc_request_meeting_modal_confirm" type="button" class="btn btn-primary">Solicitar</button>
-        </div>
+            <div class="fv-row mb-8">
+              <label for="name" class="required form-label">Data</label>
+              <input
+                class="form-control form-control-solid"
+                name="meeting_date"
+                placeholder="dd/mm/aaaa hh:mm"
+                id="tcc_meeting_datetime"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button id="tcc_request_meeting_modal_cancel" type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+            <button id="tcc_request_meeting_modal_confirm" type="submit" class="btn btn-primary">Solicitar</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -584,6 +598,10 @@
       {% endfor %}
     {% endif %}
   </div>
+{% endblock %}
+
+{% block js-vendors %}
+  <script src="{% static 'vendor/jquery.validate.js/jquery.validate.min.js' %}"></script>
 {% endblock %}
 
 {% block js-scripts %}

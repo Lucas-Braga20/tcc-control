@@ -154,6 +154,79 @@ const FinalWorkStageDetail = () => {
     },
   };
 
+  function handleCommetMaxLengthBadge() {
+    $('#tcc_comment_textarea').maxlength({
+      warningClass: "badge badge-warning z-index-2000",
+      limitReachedClass: "badge badge-success z-index-2000"
+    });
+  }
+
+  function handleMeetingModalMaxLengthBadge () {
+    $('#tcc_meeting_description').maxlength({
+      warningClass: "badge badge-warning z-index-2000",
+      limitReachedClass: "badge badge-success z-index-2000"
+    });
+  }
+
+  function handleCommentFormValidator() {
+    $('#tcc_comment_form').validate({
+      errorElement: 'div',
+      errorClass: 'invalid-feedback',
+      highlight: function(element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function(element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      },
+      rules: {
+        comment: {
+          required: true,
+          minlength: 3,
+          maxlength: 255
+        },
+      },
+      messages: {
+        comment: {
+          required: 'O comentário deve ser inserida.',
+          minlength: 'O comentário deve ter pelo menos 3 caracteres.',
+          maxlength: 'O comentário não pode ter mais de 255 caracteres.'
+        },
+      },
+    });
+  }
+
+  function handleMeetingModalValidator() {
+    $('#tcc_request_meeting_form').validate({
+      errorElement: 'div',
+      errorClass: 'invalid-feedback',
+      highlight: function(element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function(element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      },
+      rules: {
+        description: {
+          required: true,
+          minlength: 3,
+          maxlength: 255
+        },
+        meeting_date: {
+          required: true,
+        },
+      },
+      messages: {
+        description: {
+          required: 'A descrição deve ser inserida.',
+          minlength: 'A descrição deve ter pelo menos 3 caracteres.',
+          maxlength: 'A descrição não pode ter mais de 255 caracteres.'
+        },
+        meeting_date: {
+          required: 'A data da reunião deve ser inserida.',
+        }
+      },
+    });
+  }
 
   function getElements() {
     commentsContainer = $('#tcc_comments_container');
@@ -226,7 +299,13 @@ const FinalWorkStageDetail = () => {
   }
 
   function initAddCommentEvent() {
-    $(addCommentButton).click(e => {
+    $('#tcc_comment_form').submit(function (e) {
+      e.preventDefault();
+
+      if (!$(this).valid()) {
+        return;
+      }
+
       $(commentDescriptionTextarea).attr('disabled', true);
       $(addCommentButton).attr('disabled', true);
 
@@ -328,7 +407,13 @@ const FinalWorkStageDetail = () => {
   }
 
   function handleRequestMeetingConfirmEvent() {
-    $(modal.confirmButton).click(function(e) {
+    $('#tcc_request_meeting_form').submit(function(e) {
+      e.preventDefault();
+
+      if (!$(this).valid()) {
+        return;
+      }
+
       $(modal.cancelButton).attr('disabled', true);
       $(modal.confirmButton).attr('disabled', true);
       $(modal.closeButton).attr('disabled', true);
@@ -903,8 +988,14 @@ const FinalWorkStageDetail = () => {
 
 
   getElements();
-  initFlatpickrFields();
 
+  handleMeetingModalValidator();
+  handleMeetingModalMaxLengthBadge();
+
+  handleCommetMaxLengthBadge();
+  handleCommentFormValidator();
+
+  initFlatpickrFields();
   initAddCommentEvent();
 
   handleRequestMeetingEvent();
