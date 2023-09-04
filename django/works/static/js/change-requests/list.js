@@ -114,7 +114,7 @@ const ChangeRequestList = () => {
         {
           data: null,
           orderable: false,
-          className: 'text-end',
+          className: 'end-column',
           render(data) {
             let approvedButton = `
               <button
@@ -149,12 +149,13 @@ const ChangeRequestList = () => {
             return '';
           },
         },
-      ]
+      ],
+      language: dataTableLanguages,
     });
 
     $(dataTableElement).on('responsive-display.dt', () => {
       handleApproveButtonActions();
-    })
+    });
   }
 
   function handleSearchInput() {
