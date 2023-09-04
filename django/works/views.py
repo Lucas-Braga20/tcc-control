@@ -130,6 +130,9 @@ def create_work_stage_development(request):
         form = FinalWorkCreateVersionForm(request.POST)
         if form.is_valid():
             version = form.save(commit=True)
+            version.confirmed = True
+            version.save()
+
             return redirect(reverse('works:development', kwargs={'pk': version.id}))
         else:
             return redirect(reverse('works:detail', kwargs={'pk': work_stage.id}) + '?error=true')
