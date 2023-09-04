@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block header %}
+  <div
+  id="kt_header"
+  class="header"
+  data-kt-sticky="true"
+  data-kt-sticky-name="header"
+  data-kt-sticky-offset="{default: '200px', lg: '300px'}"
+  style="animation-duration: 0.3s;">
+    <div class="container-xxl d-flex align-items-center justify-content-between" id="kt_header_container">
+      <div
+        class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-5 pb-lg-0"
+        data-kt-swapper="true"
+        data-kt-swapper-mode="prepend"
+        data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
+        <h1 class="text-dark fw-semibold my-0 fs-2">
+          Reuniões
+        </h1>
+
+        <ul class="breadcrumb breadcrumb-line text-muted fw-semibold fs-base my-1">
+          <li class="breadcrumb-item text-muted">
+            TCC
+          </li>
+          <li class="breadcrumb-item text-dark">
+            Reuniões
+          </li>
+        </ul>
+      </div>
+
+      <div class="d-flex d-lg-none align-items-center ms-n2 me-2">
+        <div class="btn btn-icon btn-active-icon-primary" id="kt_aside_toggle">
+          <i class="fas fa-bars fs-2x"></i>
+        </div>
+
+        <a href="{% url 'home' %}">
+          <div class="symbol symbol-40px symbol-circle">
+            <div class="symbol-label fs-2 fw-semibold bg-primary text-white" style="font-weight: bolder">TC</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="container-xxl" id="kt_content_container">
+      <div class="card">
+        <div class="card-header border-0 p-8 pb-4">
+          <h1 class="mb-0">
+            Reuniões
+          </h1>
+        </div>
+
+        <div class="card-body pt-4">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

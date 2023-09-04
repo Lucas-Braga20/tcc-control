@@ -129,7 +129,7 @@ const TimetablesList = () => {
         {
           data: null,
           orderable: false,
-          className: 'text-end',
+          className: 'end-column',
           render(data) {
             let activeButtonElement = '';
             let changeRoleElement = '';
@@ -200,7 +200,13 @@ const TimetablesList = () => {
             return '';
           },
         },
-      ]
+      ],
+      language: dataTableLanguages,
+    });
+
+    $(dataTableElement).on('responsive-display.dt', () => {
+      handleArchiveButtonActions();
+      handleRoleButtonActions();
     });
   }
 

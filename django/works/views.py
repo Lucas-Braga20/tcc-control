@@ -75,6 +75,10 @@ class WorkStageView(NotificationMixin, LoginRequiredMixin, DetailView, View):
         return context
 
 
+class WorkMeetingsView(TemplateView):
+    template_name = 'meetings/list.html'
+
+
 class WorkStageDevelopmentView(NotificationMixin, LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
     Work stage development view.

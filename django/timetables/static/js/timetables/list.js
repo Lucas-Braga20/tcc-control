@@ -137,6 +137,10 @@ const TimetablesList = () => {
       ],
       language: dataTableLanguages,
     });
+
+    $(dataTableElement).on('responsive-display.dt', () => {
+      handleArchiveButtonActions();
+    });
   }
 
   function handleArchiveButtonActions() {

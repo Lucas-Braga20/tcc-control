@@ -156,7 +156,7 @@ const ActivityConfigurationList = () => {
 
     $(dataTableElement).on('responsive-display.dt', () => {
       handleArchiveButtonActions();
-    })
+    });
   }
 
   function handleArchiveButtonActions() {
