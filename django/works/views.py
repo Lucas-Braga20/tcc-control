@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
 from django.urls import reverse_lazy, reverse
 from django.http import HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseBadRequest, Http404
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
 
 from works.models import FinalWorkVersion, FinalWork, FinalWorkStage
@@ -77,6 +77,25 @@ class WorkStageView(NotificationMixin, LoginRequiredMixin, DetailView, View):
 
 class WorkMeetingsView(TemplateView):
     template_name = 'meetings/list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        final_work_id = kwargs.get('pk')
+
+        final_work = get_object_or_404(FinalWork, id=final_work_id)
+
+        meetings = Meeting.objects.filter(work_stage__final_work=final_work).exclude(
+            meeting_approved__approved=False
+        ).exclude(
+            meeting_approved__approved=None
+        )
+
+        context['final_work'] = final_work
+        context['meetings'] = meetings
+        context['total_meetings'] = meetings.count()
+
+        return context
 
 
 class WorkStageDevelopmentView(NotificationMixin, LoginRequiredMixin, SuccessMessageMixin, UpdateView):

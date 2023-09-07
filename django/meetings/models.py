@@ -43,6 +43,10 @@ class Meeting(models.Model):
                                    on_delete=models.DO_NOTHING, related_name='stage_meeting')
     participants = models.ManyToManyField('users.User', related_name='meeting_participants',
                                           through='ApprovedMeeting')
+    developed_activities = models.TextField(verbose_name=_('Developed activities'),
+                                            default='', blank=True)
+    instructions = models.TextField(verbose_name=_('Instructions'),
+                                    default='', blank=True)
 
     class Meta:
         verbose_name = _('Metting')

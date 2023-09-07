@@ -23,6 +23,11 @@
           <li class="breadcrumb-item text-muted">
             TCC
           </li>
+          <li class="breadcrumb-item text-muted">
+            <a href="{{ final_work.get_final_work_url }}" class="text-muted text-hover-primary">
+              {{ final_work.description }}
+            </a>
+          </li>
           <li class="breadcrumb-item text-dark">
             Reuniões
           </li>
@@ -50,12 +55,79 @@
       <div class="card">
         <div class="card-header border-0 p-8 pb-4">
           <h1 class="mb-0">
-            Reuniões
+            Ata de acompanhamento
           </h1>
         </div>
 
-        <div class="card-body pt-4">
-          
+        <div class="card-body py-4">
+          <h2>
+            {{ final_work.description }}
+          </h2>
+
+          <h6 class="text-muted fw-light">
+            {{ total_meetings }} total de reuniões.
+          </h6>
+
+          <div class="mt-8">
+            {% for meeting in meetings %}
+              <div class="p-4 border rounded mt-2">
+                <div class="d-flex">
+                  <h5 class="d-flex align-items-center">
+                    <span class="d-flex align-items-center">
+                      <i class="fas fa-calendar-alt me-2 text-primary"></i>
+                    </span>
+                    <span class="d-flex align-items-center">
+                      Reunião:
+                    </span>
+                    <div class="d-flex align-items-center text-muted fw-light fs-7 ms-2">
+                      {{ meeting.get_meeting_date }}
+                    </div>
+                  </h5>
+                </div>
+
+                <div>
+                  <p class="mb-0 fw-bold">
+                    Solicitado em:
+
+                    <span class="text-muted fw-light">
+                      {{ meeting.get_created_at }}
+                    </span>
+                  </p>
+                </div>
+
+                <div>
+                  <p class="mb-0 fw-bold">
+                    Atividades desenvolvidas:
+
+                    <span class="text-muted fw-light">
+                      {{ meeting.developed_activities }}
+                    </span>
+                  </p>
+                </div>
+
+                <div>
+                  <p class="mb-0 fw-bold">
+                    Instruções:
+
+                    <span class="text-muted fw-light">
+                      {{ meeting.instructions }}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="mt-4">
+            Eu, <span class="fw-bold text-primary">{{ final_work.supervisor.get_full_name }}</span> professor(a)
+            do Curso de Engenharia de Software desta Instituição, declaro, para os devidos fins a que se destina,
+            estar de acordo em assumir a orientação de Trabalho de Conclusão de Curso dos(as) alunos(as)
+            <span class="fw-bold text-primary">{{ final_work.get_mentees }}</span>.
+          </div>
+        </div>
+
+        <div class="card-footer d-flex justify-content-end pt-4 border-0">
+          <a href="{{ final_work.get_final_work_url }}" class="btn btn-light">Voltar ao TCC</a>
         </div>
       </div>
     </div>

@@ -22,6 +22,7 @@ from core.permissions import UserGroup
 class MeetingViewSet(mixins.CreateModelMixin,
                      mixins.RetrieveModelMixin,
                      mixins.ListModelMixin,
+                     mixins.UpdateModelMixin,
                      GenericViewSet):
     """ViewSet para manipulação de objetos Meetings.
 
@@ -67,6 +68,42 @@ class MeetingViewSet(mixins.CreateModelMixin,
         queryset = queryset.order_by('-meeting_date')
 
         return queryset
+
+    def update(self, request, *args, **kwargs):
+        """Atualiza reunião.
+
+        Operação permitida apenas para orientadores, sendo o
+        devido orientador do TCC. Deve ser utilizado para atualizar
+        apenas os campos developed_activities e instructions."""
+        user = self.request.user
+        user_group = UserGroup(user)
+
+        if not user_group.is_supervisor():
+            return Response(data={'detail': 'Você não é um orientador.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        instance = self.get_object()
+
+        if instance.work_stage.final_work.supervisor != user:
+            return Response(data={'detail': 'Você não é o orientador deste TCC.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        data = {
+            'developed_activities': request.data.get('developed_activities', ''),
+            'instructions': request.data.get('instructions', ''),
+        }
+
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
 
     @action(methods=['post'], detail=False)
     def approve(self, request, **kwargs):

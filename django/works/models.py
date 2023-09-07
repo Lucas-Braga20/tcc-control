@@ -8,6 +8,7 @@ from datetime import date
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 
 from core import defaults
 from core.datetime import get_datetime_tz
@@ -45,6 +46,9 @@ class FinalWork(models.Model):
             return self.work_stage.filter().order_by('-stage__send_date').first()
 
         return stage.first()
+
+    def get_final_work_url(self):
+        return reverse('works:stages', kwargs={'pk': self.id})
 
     def __str__(self):
         return f'TCC: "{self.description}"'

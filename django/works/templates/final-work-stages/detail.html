@@ -450,7 +450,10 @@
           </h2>
         </div>
 
-        <div class="card-body pt-4" id="tcc_request_meetings_container">
+        <div
+          class="card-body pt-4"
+          data-supervisor="{% if user_group.is_supervisor %}true{% else %}false{% endif %}"
+          id="tcc_request_meetings_container">
           {% if meetings|length == 0 %}
             <div class="p-4 border rounded">
               <div class="mt-2">
@@ -537,6 +540,80 @@
                     Aprovar
                   </button>
                 </div>
+              {% endif %}
+
+              {% if meeting.get_is_approved %}
+                {% if user_group.is_supervisor %}
+                  <div>
+                    <form class="tcc_meeting_supervisor_form_{{ meeting.id }}">
+                      <div class="fv-row mt-4 mb-8">
+                        <label for="developed_activities_{{ meeting.id }}" class="required form-label">
+                          Atividades desenvolvidas
+                        </label>
+
+                        <textarea
+                          id="tcc_developed_activities_{{ meeting.id }}"
+                          class="form-control form-control-solid tcc_developed_activities_field_{{ meeting.id }}"
+                          name="developed_activities_{{ meeting.id }}"
+                          cols="30"
+                          rows="10"
+                          minlength="3"
+                          maxlength="255">{{ meeting.developed_activities }}</textarea>
+                      </div>
+
+                      <div class="fv-row mb-8">
+                        <label for="instructions_{{ meeting.id }}" class="required form-label">
+                          Instruções
+                        </label>
+
+                        <textarea
+                          id="tcc_instructions_{{ meeting.id }}"
+                          class="form-control form-control-solid tcc_instructions_field_{{ meeting.id }}"
+                          name="instructions_{{ meeting.id }}"
+                          cols="30"
+                          rows="10"
+                          minlength="3"
+                          maxlength="255">{{ meeting.instructions }}</textarea>
+                      </div>
+
+                      <div class="d-flex mt-4 justify-content-end">
+                        <button class="btn btn-sm btn-primary w-100 w-sm-auto tcc_meeting_supervisor_confirm_{{ meeting.id }}">
+                          Salvar
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                {% else %}
+                  <div>
+                    <div class="fv-row mt-4 mb-8">
+                      <label class="required form-label">
+                        Atividades desenvolvidas
+                      </label>
+
+                      <textarea
+                        class="form-control form-control-solid disabled"
+                        cols="30"
+                        rows="10"
+                        minlength="3"
+                        maxlength="255"
+                        disabled>{{ meeting.developed_activities }}</textarea>
+                    </div>
+
+                    <div class="fv-row">
+                      <label class="required form-label">
+                        Instruções
+                      </label>
+
+                      <textarea
+                        class="form-control form-control-solid disabled"
+                        cols="30"
+                        rows="10"
+                        minlength="3"
+                        maxlength="255"
+                        disabled>{{ meeting.instructions }}</textarea>
+                    </div>
+                  </div>
+                {% endif %}
               {% endif %}
             </div>
           {% endfor %}

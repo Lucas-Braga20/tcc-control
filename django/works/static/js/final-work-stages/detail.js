@@ -74,6 +74,19 @@ const FinalWorkStageDetail = () => {
           }),
         });
       },
+      edit(meeting, developedActivities, instructions) {
+        return fetch(`/api/meetings/${meeting}/`, {
+          method: 'patch',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
+          },
+          body: JSON.stringify({
+            developed_activities: developedActivities,
+            instructions: instructions,
+          }),
+        });
+      },
       approve(meeting) {
         return fetch('/api/meetings/approve/', {
           method: 'post',
@@ -506,29 +519,108 @@ const FinalWorkStageDetail = () => {
           }
 
           let footer = ``;
+          let supervisorForm = ``;
 
           if (meeting.required_review) {
             footer = `
-              <div class="mt-2 d-flex justify-content-end">
+              <div class="mt-2 d-flex flex-column flex-sm-row justify-content-end">
                 <button
                   type="button"
-                  class="btn btn-sm btn-light me-2 tcc_meeting_requested_disapprove">
+                  class="btn btn-sm btn-light me-2 tcc_meeting_requested_disapprove w-100 w-sm-auto">
                   Recusar
                 </button>
 
                 <button
                   type="button"
-                  class="btn btn-sm btn-primary tcc_meeting_requested_approve">
+                  class="btn btn-sm btn-primary tcc_meeting_requested_approve w-100 w-sm-auto mt-2 mt-sm-0">
                   Aprovar
                 </button>
               </div>
             `;
           }
 
+          if (meeting.is_approved) {
+            if (meetingsContainer.data('supervisor')) {
+              supervisorForm = `
+                <div>
+                  <form class="tcc_meeting_supervisor_form_${meeting.id}">
+                    <div class="fv-row mt-4 mb-8">
+                      <label for="developed_activities_${meeting.id}" class="required form-label">
+                        Atividades desenvolvidas
+                      </label>
+  
+                      <textarea
+                        id="tcc_developed_activities_${meeting.id}"
+                        class="form-control form-control-solid tcc_developed_activities_field_${meeting.id}"
+                        name="developed_activities_${meeting.id}"
+                        cols="30"
+                        rows="10"
+                        minlength="3"
+                        maxlength="255">${meeting.developed_activities}</textarea>
+                    </div>
+  
+                    <div class="fv-row mb-8">
+                      <label for="instructions_${meeting.id}" class="required form-label">
+                        Instruções
+                      </label>
+  
+                      <textarea
+                        id="tcc_instructions_${meeting.id}"
+                        class="form-control form-control-solid tcc_instructions_field_${meeting.id}"
+                        name="instructions_${meeting.id}"
+                        cols="30"
+                        rows="10"
+                        minlength="3"
+                        maxlength="255">${meeting.instructions}</textarea>
+                    </div>
+  
+                    <div class="d-flex mt-4 justify-content-end">
+                      <button class="btn btn-sm btn-primary w-100 w-sm-auto tcc_meeting_supervisor_confirm_${meeting.id}">
+                        Salvar
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              `;
+            } else {
+              supervisorForm = `
+                <div>
+                  <div class="fv-row mt-4 mb-8">
+                    <label class="required form-label">
+                      Atividades desenvolvidas
+                    </label>
+  
+                    <textarea
+                      class="form-control form-control-solid disabled"
+                      cols="30"
+                      rows="10"
+                      minlength="3"
+                      maxlength="255"
+                      disabled>${meeting.developed_activities}</textarea>
+                  </div>
+  
+                  <div class="fv-row">
+                    <label class="required form-label">
+                      Instruções
+                    </label>
+  
+                    <textarea
+                      class="form-control form-control-solid disabled"
+                      cols="30"
+                      rows="10"
+                      minlength="3"
+                      maxlength="255"
+                      disabled>${meeting.instructions}</textarea>
+                  </div>
+                </div>
+              `;
+            }
+          }
+
           meetings += `
             <div class="p-4 border rounded mt-2 tcc_requested_meeting_item" data-meeting="${meeting.id}">
-              <div class="d-flex justify-content-between text-gray-500">
-                <div class="d-flex">
+              <div class="d-flex flex-wrap flex-column flex-sm-row justify-content-between text-gray-500">
+                <div class="d-flex flex-column flex-sm-row flex-wrap mb-0 mb-sm-2">
                   ${
                     meeting.participants.map(participant => {
                       let badge = `
@@ -558,7 +650,7 @@ const FinalWorkStageDetail = () => {
                       }
 
                       return `
-                        <div class="me-8 d-flex flex-row align-items-center">
+                        <div class="me-8 mb-2 mb-sm-0 d-flex flex-row align-items-center">
                           <h5 class="mb-0">
                             ${participant.user_detail.full_name}
                           </h5>
@@ -585,6 +677,8 @@ const FinalWorkStageDetail = () => {
               </div>
 
               ${footer}
+
+              ${supervisorForm}
             </div>
           `;
         });
@@ -685,6 +779,100 @@ const FinalWorkStageDetail = () => {
             });
         }
       });
+    });
+  }
+
+  function handleMeetingSupervisorForm() {
+    $('[class*="tcc_meeting_supervisor_confirm_"]').click(function(e) {
+      const form = $(this).parent().parent();
+      const valid = $(form).valid();
+
+      const id = $(form).attr('class').split('tcc_meeting_supervisor_form_')[1];
+
+      if (valid) {
+        const developedActivities = $(form).find(`#tcc_developed_activities_${id}`).val();
+        const instructions = $(form).find(`#tcc_instructions_${id}`).val();
+
+        API.meetings.edit(id, developedActivities, instructions)
+          .then(response => {
+            if (response.ok === false) {
+              throw new Error(response.statusText);
+            }
+          }).then(() => {
+            Toast.fire({
+              icon: 'success',
+              title: 'Reunião atualizada com sucesso.'
+            });
+          }).catch(err => {
+            Toast.fire({
+              icon: 'error',
+              title: 'Houve um erro no servidor.'
+            });
+          });
+      }
+    });
+  }
+
+  function handleMeetingFormValidator() {
+    $('[class*="tcc_meeting_supervisor_form_"]').submit(function(e) {
+      e.preventDefault();
+    });
+
+    $('[class*="tcc_meeting_supervisor_form_"]').each(function(index, element) {
+      const id = $(element).attr('class').split('tcc_meeting_supervisor_form_')[1];
+
+      const rules = {};
+      const messages = {};
+
+      const developedActivities = `developed_activities_${id}`;
+      const instructions = `instructions_${id}`;
+
+      rules[developedActivities] = {
+        required: true,
+        minlength: 3,
+        maxlength: 255
+      };
+      rules[instructions] = {
+        required: true,
+        minlength: 3,
+        maxlength: 255
+      };
+
+      messages[developedActivities] = {
+        required: 'As instrunções devem ser inserida.',
+        minlength: 'O campo de atividades deve ter pelo menos 3 caracteres.',
+        maxlength: 'O campo de atividades não pode ter mais de 255 caracteres.'
+      };
+      messages[instructions] = {
+        required: 'As instrunções desenvolvidas devem ser inserida.',
+        minlength: 'O campo de instrunções deve ter pelo menos 3 caracteres.',
+        maxlength: 'O campo de instrunções não pode ter mais de 255 caracteres.'
+      };
+
+      $(element).validate({
+        errorElement: 'div',
+        errorClass: 'invalid-feedback',
+        highlight: function(element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        },
+        rules,
+        messages,
+      });
+    });
+  }
+
+  function addMeetingFormBootstrapMaxLength() {
+    $('[class*="tcc_developed_activities_field_"]').maxlength({
+      warningClass: "badge badge-warning",
+      limitReachedClass: "badge badge-success"
+    });
+
+    $('[class*="tcc_instructions_field_"]').maxlength({
+      warningClass: "badge badge-warning",
+      limitReachedClass: "badge badge-success"
     });
   }
 
@@ -1057,6 +1245,9 @@ const FinalWorkStageDetail = () => {
   handleRequestMeetingConfirmEvent();
   handleMettingApproveButton();
   handleMettingDisapproveButton();
+  handleMeetingSupervisorForm();
+  handleMeetingFormValidator();
+  addMeetingFormBootstrapMaxLength();
 
   handleRequestReviewButton();
   handleMarkReviewedButton();
