@@ -54,7 +54,13 @@
               <h1 class="mb-0">
                 {{ object.description }}
               </h1>
-              {% if object.approved %}
+              {% if object.approved is None and object.archived is True %}
+                <i
+                class="fas fa-times-circle fa-fw fs-2 text-danger ms-3"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Cancelado"></i>
+              {% elif object.approved %}
                 <i
                   class="fas fa-check-circle fa-fw fs-2 text-primary ms-3"
                   data-bs-toggle="tooltip"
@@ -69,7 +75,11 @@
               {% endif %}
 
               {% with last_stage=object.work_stage.first %}
-                {% if last_stage and last_stage.status < 3 %}
+                {% if last_stage is None and object.archived is True %}
+                  <span class="badge badge-light fw-bolder ms-2 fs-8 py-1 px-3">
+                    Arquivado
+                  </span>
+                {% elif last_stage and last_stage.status < 3 %}
                   <span class="badge badge-light fw-bolder ms-2 fs-8 py-1 px-3">
                     Pendente
                   </span>
@@ -110,6 +120,7 @@
             </button>
           </div>
         </div>
+
         <div class="card-body pt-4">
           <div class="d-flex flex-wrap justify-content-between align-items-center">
             <h2 class="mb-0">

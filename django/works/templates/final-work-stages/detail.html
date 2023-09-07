@@ -50,10 +50,16 @@
 {% endblock %}
 
 {% block content %}
-  <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-    <div class="container-xxl" id="kt_content_container" data-work-stage="{{ object.id }}">
+  <div
+    id="kt_content"
+    class="content d-flex flex-column flex-column-fluid">
+    <div
+      id="kt_content_container"
+      class="container-xxl"
+      data-work-stage="{{ object.id }}">
       <div class="card">
-        <div class="card-header border-0 p-8 pb-4">
+        <div class="card-header border-0 p-8 pb-4 flex-column flex-sm-row">
+          <!-- Title -->
           <div class="d-flex flex-column">
             <div class="d-flex align-items-center mb-2">
               <h1 class="mb-0">
@@ -68,7 +74,9 @@
               </div>
             </div>
           </div>
-          <div class="d-flex">
+
+          <!-- Status badge -->
+          <div class="d-flex mt-3 mt-sm-0">
             <div>
               {% if object.status == 0 %}
                 <span class="badge badge-light-dark fw-bolder fs-7">Atribuído</span>
@@ -92,8 +100,12 @@
             </div>
           </div>
         </div>
+
         <div class="card-body pt-4 pb-2">
-          <div class="d-flex flex-column mt-2" style="height: 50px;">
+          <!-- Horizontal Time line -->
+          <div
+            class="d-none d-sm-flex flex-column mt-2"
+            style="height: 50px;">
             <div class="row g-0 w-100">
               <div class="col d-flex justify-content-center">
                 <div class="timeline-container start">
@@ -165,7 +177,70 @@
             </div>
           </div>
 
-          <div class="mt-2">
+          <!-- Vertical Time line -->
+          <div class="d-flex d-sm-none flex-column mt-2 w-100 align-items-center">
+            <div class="timeline-vertical-container start">
+              <div class="timeline-vertical-point"></div>
+              <div class="timeline-vertical-line"></div>
+              <div class="timeline-vertical-event">
+                <div class="bg-light p-2 border border-gray-300 rounded text-dark">
+                  Início
+                </div>
+
+                <div class="text-muted ms-2">
+                  {{ object.stage.get_start_date }}
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-vertical-container">
+              <div class="timeline-vertical-point"></div>
+              <div class="timeline-vertical-line"></div>
+              <div class="timeline-vertical-event">
+                <div class="bg-light p-2 border border-gray-300 rounded text-dark">
+                  Orientador
+                </div>
+
+                <div class="text-muted ms-2">
+                  {{ object.stage.get_send_date_supervisor }}
+                </div>
+              </div>
+            </div>
+
+            {% assign_if "has_presentation_date" "object.stage.presentation_date is not None" %}
+            <div class="timeline-vertical-container {% inline_if has_presentation_date '' 'end' %}">
+              <div class="timeline-vertical-point"></div>
+              <div class="timeline-vertical-line"></div>
+              <div class="timeline-vertical-event">
+                <div class="bg-light p-2 border border-gray-300 rounded text-dark">
+                  Conclusão
+                </div>
+
+                <div class="text-muted ms-2">
+                  {{ object.stage.get_send_date }}
+                </div>
+              </div>
+            </div>
+
+            {% if object.stage.presentation_date %}
+              <div class="timeline-vertical-container end">
+                <div class="timeline-vertical-point"></div>
+                <div class="timeline-vertical-line"></div>
+                <div class="timeline-vertical-event">
+                  <div class="bg-light p-2 border border-gray-300 rounded text-dark">
+                    Apresentação
+                  </div>
+
+                  <div class="text-muted ms-2">
+                    {{ object.stage.get_presentation_date }}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Documents examples -->
+          <div class="mt-10 mt-sm-2">
             {% if object.stage.stage_examples.all|length == 0 %}
               <div>
                 <h3 class="mb-0">Sem modelos de exemplo</h3>
@@ -177,9 +252,10 @@
             {% endif %}
 
             {% for example in object.stage.stage_examples.all %}
-              <div class="d-flex">
+              <div class="d-flex flex-column flex-sm-row">
                 <a href="{{ example.file.url }}" blank="true">
-                  <div class="cursor-pointer bg-light-primary border rounded border-primary border-dashed w-150px h-150px d-flex justify-content-center align-items-center">
+                  <div
+                    class="cursor-pointer bg-light-primary border rounded border-primary border-dashed w-100 w-sm-150px h-150px d-flex justify-content-center align-items-center">
                     <div class="d-flex">
                       <i class="far fa-file-pdf fa-fw fa-3x text-primary"></i>
                       <div class="d-flex flex-column justify-content-center">
@@ -193,14 +269,14 @@
                     </div>
                   </div>
                 </a>
-                <div class="ms-2">
+                <div class="ms-0 mt-2 ms-sm-2 mt-sm-0">
                   <p class="fw-bold fs-7 text-dark mb-0">
                     Nome:
                     <span class="fw-light">
                       {{ example.get_file_name }}
                     </span>
                   </p>
-                  <p class="fw-bold fs-7 text-dark">
+                  <p class="fw-bold fs-7 text-dark mb-0">
                     Tamanho:
                     <span class="fw-light">
                       {{ example.get_file_size }}MB
@@ -211,62 +287,74 @@
             {% endfor %}
           </div>
         </div>
-        <div class="card-footer pt-2 border-0 d-flex justify-content-start">
+
+        <div class="card-footer pt-2 border-0 d-flex flex-wrap justify-content-start">
           <!-- Development button -->
           {% if object.get_last_version is not None %}
             <a
               href="{% url 'works:development' object.get_last_version.id %}"
-              class="btn btn-primary">
+              class="btn btn-sm btn-primary me-0 me-sm-2 mb-2 w-100 w-sm-auto">
               Desenvolvimento
             </a>
           {% else %}
-            <form method="POST" action="{% url 'works:development-create' %}">
+            <form method="POST" action="{% url 'works:development-create' %}" class="w-100 w-sm-auto">
               {% csrf_token %}
               <input type="hidden" name="work_stage" value="{{ object.id }}">
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" class="btn btn-sm btn-primary me-0 me-sm-2 mb-2 w-100 w-sm-auto">
                 Desenvolvimento
               </button>
             </form>
           {% endif %}
 
+          <!-- Mentee -->
           {% if user_group.is_mentee %}
             {% if object.status == 0 or object.status == 1 or object.status == 2 or object.status == 3 %}
+              <!-- Complete activity -->
               <button
                 id="tcc_complete_button"
-                class="btn btn-light ms-2">
+                class="btn btn-sm btn-light me-0 me-sm-2 mb-2 w-100 w-sm-auto">
                 Concluir a atividade
               </button>
 
-              <button id="tcc_request_meeting_request_button" class="btn btn-light ms-2">
+              <!-- Request meeting -->
+              <button
+                id="tcc_request_meeting_request_button"
+                class="btn btn-sm btn-light me-0 me-sm-2 mb-2 w-100 w-sm-auto">
                 Solicitar reunião
               </button>
             {% endif %}
 
             {% if object.status == 0 or object.status == 1 %}
-              <button id="tcc_request_review_button" class="btn btn-light ms-2">
+              <!-- Request supervisor review -->
+              <button
+                id="tcc_request_review_button"
+                class="btn btn-sm btn-light me-0 me-sm-2 mb-2 w-100 w-sm-auto">
                 Solicitar correção
               </button>
             {% endif %}
 
             {% if object.status == 4 or object.status == 5 or object.status == 6 or object.status == 8 %}
               {% if change_already_requested %}
+                <!-- Request change (Pending) -->
                 <div
+                  class="w-100 w-sm-auto"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="Já existe uma solicitação pendente.">
                   <button
                     id="tcc_change_request_button"
-                    class="btn btn-light ms-2 disabled"
+                    class="btn btn-sm btn-light me-0 me-sm-2 mb-2 disabled w-100 w-sm-auto"
                     disabled>
                     Solicitar alteração
                   </button>
                 </div>
               {% else %}
                 {% if last_change_request is not None and last_change_request.approved == True %}
-                  <div>
+                  <!-- Request change (Again - Approved) -->
+                  <div class="w-100 w-sm-auto">
                     <button
                       id="tcc_change_request_button"
-                      class="btn btn-light ms-2"
+                      class="btn btn-sm btn-light me-0 me-sm-2 mb-2 w-100 w-sm-auto"
                       data-bs-toggle="tooltip"
                       data-bs-placement="top"
                       title="A sua última solicitação foi aprovada.">
@@ -274,10 +362,11 @@
                     </button>
                   </div>
                 {% elif last_change_request is not None and last_change_request.approved == False %}
-                  <div>
+                  <!-- Request change (Again - Disapproved) -->
+                  <div class="w-100 w-sm-auto">
                     <button
                       id="tcc_change_request_button"
-                      class="btn btn-light ms-2"
+                      class="btn btn-sm btn-light me-0 me-sm-2 mb-2 w-100 w-sm-auto"
                       data-bs-toggle="tooltip"
                       data-bs-placement="top"
                       title="A sua última solicitação foi reprovada.">
@@ -285,9 +374,10 @@
                     </button>
                   </div>
                 {% else %}
+                  <!-- Request change -->
                   <button
                     id="tcc_change_request_button"
-                    class="btn btn-light ms-2">
+                    class="btn btn-sm btn-light me-0 me-sm-2 mb-2 w-100 w-sm-auto">
                     Solicitar alteração
                   </button>
                 {% endif %}
@@ -295,10 +385,11 @@
             {% endif %}
 
             {% if object.status == 7 %}
-              <div>
+              <!-- Request change (Confirmed) -->
+              <div class="w-100 w-sm-auto">
                 <button
                   id="tcc_change_request_button"
-                  class="btn btn-light ms-2 disabled"
+                  class="btn btn-sm btn-light me-0 me-sm-2 mb-2 disabled w-100 w-sm-auto"
                   disabled
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
@@ -309,23 +400,34 @@
             {% endif %}
           {% endif %}
 
+          <!-- Supervisor -->
           {% if user_group.is_supervisor %}
             {% if object.status == 0 or object.status == 1 or object.status == 2 %}
-              <button id="tcc_mark_reviewed_button" class="btn btn-light ms-2">
+              <!-- Mark reviewed -->
+              <button
+                id="tcc_mark_reviewed_button"
+                class="btn btn-sm btn-light me-0 me-sm-2 mb-2 w-100 w-sm-auto">
                 Marcar como corrigido
               </button>
             {% endif %}
           {% endif %}
 
+          <!-- Teacher -->
           {% if user_group.is_teacher %}
             {% if object.status == 0 or object.status == 1 or object.status == 2 or object.status == 3 %}
-              <button id="tcc_mark_completed_button" class="btn btn-light ms-2">
+              <!-- Mark completed -->
+              <button
+                id="tcc_mark_completed_button"
+                class="btn btn-sm btn-light me-0 me-sm-2 mb-2 w-100 w-sm-auto">
                 Marcar como concluído
               </button>
             {% endif %}
 
             {% if object.status != 6 %}
-              <button id="tcc_mark_presented_button" class="btn btn-light ms-2">
+              <!-- Mark presented -->
+              <button
+                id="tcc_mark_presented_button"
+                class="btn btn-sm btn-light me-0 me-sm-2 mb-2 w-100 w-sm-auto">
                 Marcar como apresentado
               </button>
             {% endif %}
@@ -334,18 +436,20 @@
           <!-- Stage button -->
           <a
             href="{% url 'works:stages' 'b0b66199-fc9f-433a-844a-376705af5154' %}"
-            class="btn btn-light ms-2">
+            class="btn btn-sm btn-light me-0 me-sm-2 mb-2 w-100 w-sm-auto">
             Etapas
           </a>
         </div>
       </div>
 
+      <!-- Meetings requested -->
       <div class="card mt-8">
         <div class="card-header border-0 p-8 pb-4">
           <h2 class="mb-0">
             Reuniões solicitadas
           </h2>
         </div>
+
         <div class="card-body pt-4" id="tcc_request_meetings_container">
           {% if meetings|length == 0 %}
             <div class="p-4 border rounded">
@@ -359,10 +463,10 @@
 
           {% for meeting in meetings %}
             <div class="p-4 border rounded mt-2 tcc_requested_meeting_item" data-meeting="{{ meeting.id }}">
-              <div class="d-flex justify-content-between text-gray-500">
-                <div class="d-flex">
+              <div class="d-flex flex-wrap flex-column flex-sm-row justify-content-between text-gray-500">
+                <div class="d-flex flex-column flex-sm-row flex-wrap mb-0 mb-sm-2">
                   {% for participant in meeting.meeting_approved.all %}
-                    <div class="me-8 d-flex flex-row align-items-center">
+                    <div class="me-8 mb-2 mb-sm-0 d-flex flex-row align-items-center">
                       <h5 class="mb-0">
                         {{ participant.user.get_full_name }}
                       </h5>
@@ -390,7 +494,7 @@
                   {% endfor %}
                 </div>
 
-                <div>
+                <div class="mb-2">
                   <span class="me-2">
                     {{ meeting.get_meeting_date }}
                   </span>
@@ -410,7 +514,8 @@
                   {% endif %}
                 </div>
               </div>
-              <div class="mt-2">
+
+              <div>
                 <p class="mb-0">
                   {{ meeting.description }}
                 </p>
@@ -419,16 +524,16 @@
               {% review_meeting_required meeting request.user as required_review %}
 
               {% if required_review %}
-                <div class="mt-2 d-flex justify-content-end">
+                <div class="mt-2 d-flex flex-column flex-sm-row justify-content-end">
                   <button
                     type="button"
-                    class="btn btn-sm btn-light me-2 tcc_meeting_requested_disapprove">
+                    class="btn btn-sm btn-light me-2 tcc_meeting_requested_disapprove w-100 w-sm-auto">
                     Recusar
                   </button>
 
                   <button
                     type="button"
-                    class="btn btn-sm btn-primary tcc_meeting_requested_approve">
+                    class="btn btn-sm btn-primary tcc_meeting_requested_approve w-100 w-sm-auto mt-2 mt-sm-0">
                     Aprovar
                   </button>
                 </div>
@@ -438,12 +543,14 @@
         </div>
       </div>
 
+      <!-- Comments -->
       <div class="card mt-8">
         <div class="card-header border-0 p-8 pb-4">
           <h2 class="mb-0">
             Comentários
           </h2>
         </div>
+
         <div class="card-body pt-4" id="tcc_comments_container">
           {% if object.stage_comment.all|length == 0 %}
             <div class="p-4 border rounded">
@@ -457,7 +564,7 @@
 
           {% for comment in comments %}
             <div class="p-4 border rounded mt-2">
-              <div class="d-flex justify-content-between text-gray-500">
+              <div class="d-flex flex-column flex-sm-row justify-content-between text-gray-500">
                 <h5 class="mb-0">
                   {{ comment.author }}
                 </h5>
@@ -626,6 +733,64 @@
 
 {% block css-styles %}
   <style>
+    .timeline-vertical-container {
+      width: 100%;
+      height: 60px;
+      position: relative;
+      display: flex;
+      flex-direction: row;
+    }
+
+    .timeline-vertical-line {
+      width: 1px;
+      height: 100%;
+      background-color: #A1A5B7;
+    }
+
+    .timeline-vertical-point {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid #A1A5B7;
+      background-color: white;
+      z-index: 2;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .timeline-vertical-event {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+    }
+
+    .timeline-vertical-container.start,
+    .timeline-vertical-container.end {
+      height: 30px;
+    }
+
+    .timeline-vertical-container.start .timeline-vertical-event {
+      top: 0%;
+      transform: translateY(-50%);
+    }
+
+    .timeline-vertical-container.end .timeline-vertical-event {
+      top: 100%;
+      transform: translateY(-50%);
+    }
+
+    .timeline-vertical-container.start .timeline-vertical-point {
+      top: 0%;
+    }
+
+    .timeline-vertical-container.end .timeline-vertical-point {
+      top: 100%;
+    }
+
     .timeline-container {
       width: 100%;
       position: relative;
@@ -684,20 +849,20 @@
       transform: translateX(-50%);
     }
 
-    .timeline-container.start .timeline-date{
+    .timeline-container.start .timeline-date {
       left: 0%;
       transform: none;
     }
-    .timeline-container.start .timeline-event{
+    .timeline-container.start .timeline-event {
       left: 0%;
       transform: none;
     }
 
-    .timeline-container.end .timeline-date{
+    .timeline-container.end .timeline-date {
       left: 100%;
       transform: translateX(-100%);
     }
-    .timeline-container.end .timeline-event{
+    .timeline-container.end .timeline-event {
       left: 100%;
       transform: translateX(-100%);
     }

@@ -23,7 +23,7 @@ class User(AbstractUser):
         verbose_name_plural = _('Users')
 
     def get_current_work(self):
-        return FinalWork.objects.filter(mentees__in=[self.id]).order_by('-created_at').last()
+        return FinalWork.objects.filter(mentees__in=[self.id], archived=False).order_by('-created_at').last()
 
     def __str__(self) -> str:
         return self.get_full_name()
