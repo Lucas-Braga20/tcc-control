@@ -1,0 +1,196 @@
+{% extends 'layout.html' %}
+{% load static widget_tweaks %}
+
+{% block header %}
+  <div
+    id="kt_header"
+    class="header"
+    data-kt-sticky="true"
+    data-kt-sticky-name="header"
+    data-kt-sticky-offset="{default: '200px', lg: '300px'}"
+    style="animation-duration: 0.3s;">
+    <div class="container-xxl d-flex align-items-center justify-content-between" id="kt_header_container">
+      <div
+        class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-5 pb-lg-0"
+        data-kt-swapper="true"
+        data-kt-swapper-mode="prepend"
+        data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
+        <h1 class="text-dark fw-semibold my-0 fs-2">
+          Perfil
+        </h1>
+
+        <ul class="breadcrumb breadcrumb-line text-muted fw-semibold fs-base my-1">
+          <li class="breadcrumb-item text-muted">
+            Usuários
+          </li>
+          <li class="breadcrumb-item text-dark">
+            Perfil
+          </li>
+        </ul>
+      </div>
+
+      <div class="d-flex d-lg-none align-items-center ms-n2 me-2">
+        <div class="btn btn-icon btn-active-icon-primary" id="kt_aside_toggle">
+          <i class="fas fa-bars fs-2x"></i>
+        </div>
+
+        <a href="{% url 'home' %}">
+          <div class="symbol symbol-40px symbol-circle">
+            <div class="symbol-label fs-2 fw-semibold bg-primary text-white" style="font-weight: bolder">TC</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="container-xxl" id="kt_content_container">
+      <form id="tcc_profile_form" method="post" id="tcc_profile" novalidate>
+        {% csrf_token %}
+
+        <div class="card">
+          <div class="card-header border-0 p-8 pb-4">
+            <h1 class="mb-0">
+              {{ request.user.get_full_name }}
+            </h1>
+          </div>
+  
+          <div class="card-body py-4">
+            <div class="row">
+              <div class="col">
+                <div class="fv-row mb-10 fv-plugins-icon-container">
+                  <label class="form-label fs-6 fw-bold text-dark">
+                    Primeiro nome
+                  </label>
+
+                  {% if form.first_name.errors %}
+                    {{ form.first_name|add_class:"form-control form-control-solid is-invalid" }}
+                  {% else %}
+                    {{ form.first_name|add_class:"form-control form-control-solid" }}
+                  {% endif %}
+
+                  {% for error in form.first_name.errors %}
+                    <div class="fv-plugins-message-container invalid-feedback">{{ error }}</div>
+                  {% endfor %}
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="fv-row mb-10 fv-plugins-icon-container">
+                  <label class="form-label fs-6 fw-bold text-dark">
+                    Segundo nome
+                  </label>
+
+                  {% if form.last_name.errors %}
+                    {{ form.last_name|add_class:"form-control form-control-solid is-invalid" }}
+                  {% else %}
+                    {{ form.last_name|add_class:"form-control form-control-solid" }}
+                  {% endif %}
+
+                  {% for error in form.last_name.errors %}
+                    <div class="fv-plugins-message-container invalid-feedback">{{ error }}</div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <div class="fv-row mb-10 fv-plugins-icon-container">
+                  <label class="form-label fs-6 fw-bold text-dark">
+                    RGM
+                  </label>
+
+                  {% if form.rgm.errors %}
+                    {{ form.rgm|add_class:"form-control form-control-solid is-invalid" }}
+                  {% else %}
+                    {{ form.rgm|add_class:"form-control form-control-solid" }}
+                  {% endif %}
+
+                  {% for error in form.rgm.errors %}
+                    <div class="fv-plugins-message-container invalid-feedback">{{ error }}</div>
+                  {% endfor %}
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="fv-row mb-10 fv-plugins-icon-container">
+                  <label class="form-label fs-6 fw-bold text-dark">
+                    Curso
+                  </label>
+
+                  {% if form.university_course.errors %}
+                    {{ form.university_course|add_class:"form-control form-control-solid is-invalid" }}
+                  {% else %}
+                    {{ form.university_course|add_class:"form-control form-control-solid" }}
+                  {% endif %}
+
+                  {% for error in form.university_course.errors %}
+                    <div class="fv-plugins-message-container invalid-feedback">{{ error }}</div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
+            <div class="fv-row mb-10 fv-plugins-icon-container">
+              <label class="form-label fs-6 fw-bold text-dark required">
+                Telefone
+              </label>
+
+              {% if form.phone.errors %}
+                {{ form.phone|add_class:"form-control form-control-solid is-invalid" }}
+              {% else %}
+                {{ form.phone|add_class:"form-control form-control-solid" }}
+              {% endif %}
+
+              {% if form.phone.help_text and not form.phone.errors %}
+                <p class="mb-0 mt-1">{{ form.phone.help_text }}</p>
+              {% endif %}
+
+              {% for error in form.phone.errors %}
+                <div class="fv-plugins-message-container invalid-feedback">{{ error }}</div>
+              {% endfor %}
+            </div>
+          </div>
+  
+          <div class="card-footer pt-4">
+            <button
+              type="submit"
+              class="btn btn-primary ms-0 mt-2 ms-sm-5 mt-sm-0">
+              Salvar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="tcc_form_messages" class="d-none">
+    {% if messages %}
+      {% for message in messages %}
+        <div data-mode="{{ message.tags }}">{{ message|safe }}</div>
+      {% endfor %}
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block js-vendors %}
+  <script src="{% static 'vendor/jquery.mask/jquery.mask.min.js' %}"></script>
+{% endblock %}
+
+{% block js-scripts %}
+  <script src="{% static 'js/registration/profile.js' %}"></script>
+
+  <script>
+    $('#tcc_form_messages').find('div').each(function() {
+      const text = $(this).text();
+      const mode = $(this).data('mode');
+      Toast.fire({
+        icon: mode,
+        title: text,
+      });
+    });
+  </script>
+{% endblock %}

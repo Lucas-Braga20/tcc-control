@@ -14,6 +14,8 @@ class SignUpForm(UserCreationForm):
     """
     first_name = forms.CharField(max_length=30, required=False, help_text='Optional')
     last_name = forms.CharField(max_length=30, required=False, help_text='Optional')
+    rgm = forms.CharField(max_length=20, required=True)
+    university_course = forms.CharField(max_length=255, required=True)
     email = forms.EmailField(max_length=254, help_text='Enter a valid email address')
     phone = forms.CharField(
         label='Telefone',
@@ -24,11 +26,21 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = [
-            'username', 
-            'first_name', 
-            'last_name', 
-            'email', 
-            'password1', 
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'password1',
             'password2',
             'phone',
         ]
+
+
+class ProfieForm(forms.ModelForm):
+    """
+    Profile form.
+    """
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'rgm', 'university_course', 'phone']

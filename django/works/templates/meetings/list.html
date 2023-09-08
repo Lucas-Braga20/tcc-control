@@ -120,9 +120,9 @@
 
           <div class="mt-4">
             Eu, <span class="fw-bold text-primary">{{ final_work.supervisor.get_full_name }}</span> professor(a)
-            do Curso de Engenharia de Software desta Instituição, declaro, para os devidos fins a que se destina,
-            estar de acordo em assumir a orientação de Trabalho de Conclusão de Curso dos(as) alunos(as)
-            <span class="fw-bold text-primary">{{ final_work.get_mentees }}</span>.
+            do Curso de {{ final_work.supervisor.university_course }} desta Instituição, declaro, para os devidos
+            fins a que se destina, estar de acordo em assumir a orientação de Trabalho de Conclusão de
+            Curso dos(as) alunos(as) <span class="fw-bold text-primary">{{ final_work.get_mentees }}</span>.
           </div>
         </div>
 
