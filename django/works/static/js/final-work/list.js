@@ -2,7 +2,11 @@ const FinalWorkList = () => {
   let dataTableElement = null;
   let dataTableObject = null;
 
+  let completedButtonFilters = null;
+
   let searchInputElement = null;
+
+  let completed = false;
 
   const badges = {
     0: `
@@ -49,6 +53,7 @@ const FinalWorkList = () => {
   function getElements() {
     dataTableElement = document.getElementById('tcc_datatable_users');
     searchInputElement = document.getElementById('tcc_datatable_search_input');
+    completedButtonFilters = document.getElementById('tcc_completed_button_filters');
   }
 
   function handleCompleteButtons() {
@@ -95,6 +100,14 @@ const FinalWorkList = () => {
     });
   }
 
+  function handleCompletedButtonFilters() {
+    $(completedButtonFilters).find('button').click(function () {
+      completed = $(this).data('completed');
+      dataTableObject.ajax.reload();
+      dataTableObject.draw();
+    });
+  }
+
   function initFinalWorkDataTable() {
     dataTableObject = $(dataTableElement).DataTable({
       responsive: true,
@@ -108,6 +121,9 @@ const FinalWorkList = () => {
       },
       ajax: {
         url: $(dataTableElement).data('api'),
+        data(data) {
+          data.completed = completed;
+        },
       },
       columnDefs: [{
         targets: '_all',
@@ -171,7 +187,7 @@ const FinalWorkList = () => {
             } else {
               return `
                 <span class="badge badge-secondary">
-                  Pendente
+                  Incompleto
                 </span>
               `;
             }
@@ -220,6 +236,7 @@ const FinalWorkList = () => {
 
 
   getElements();
+  handleCompletedButtonFilters();
   initFinalWorkDataTable();
 }
 

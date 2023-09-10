@@ -7,6 +7,9 @@ import datetime
 from rest_framework import viewsets, mixins, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.filters import SearchFilter
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 from works.models import FinalWork, FinalWorkStage, FinalWorkVersion, ChangeRequest, VersionContentImage
 from works.serializers import (
@@ -21,7 +24,6 @@ from core.defaults import (
     WORK_STAGE_COMPLETED_LATE, WORK_STAGE_UNDER_CHANGE, WORK_STAGE_UPDATED, completed_status
 )
 
-from notifications.serializers import NotificationSerializer
 from notifications.utils import send_notification
 
 from timetables.models import Timetable
@@ -40,6 +42,8 @@ class FinalWorkViewSet(mixins.CreateModelMixin,
     model = FinalWork
     permission_classes = [RoleAccessPermission, permissions.IsAuthenticated]
     roles_required = ['Orientando', 'Professor da disciplina', 'Orientador']
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['completed']
 
     def get_permissions(self):
         if self.action == 'update':
