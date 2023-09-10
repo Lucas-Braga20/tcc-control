@@ -72,14 +72,18 @@ class StageEditor {
   // Handle fields inside collapse.
   generateDescriptionFieldElement(id) {
     const elementId = `tcc_stage_editor_description_${id}`;
+    const name = `stage_edit_description_${id}`;
 
     return `
       <div class="fv-row mb-8">
         <label for="${elementId}" class="required form-label">Descrição</label>
         <input
           id="${elementId}"
+          name="${name}"
           type="text"
           class="form-control form-control-solid tcc_description_field"
+          minlength="3"
+          maxlength="255"
           placeholder="Descrição">
       </div>
     `;
@@ -87,11 +91,15 @@ class StageEditor {
 
   generateActivityFieldElement(id) {
     const elementId = `tcc_stage_editor_activity_${id}`;
+    const name = `stage_edit_activity_${id}`;
 
     return `
       <div class="fv-row mb-8">
         <label for="${elementId}" class="required form-label">Configuração de atividade</label>
-        <select id="${elementId}" class="form-select form-select-solid tcc_activity_field">
+        <select
+          id="${elementId}"
+          name="${name}"
+          class="form-select form-select-solid tcc_activity_field">
         </select>
       </div>
     `;
@@ -99,11 +107,13 @@ class StageEditor {
 
   generateStartDateFieldElement(id) {
     const elementId = `tcc_stage_editor_start_date_${id}`;
+    const name = `stage_edit_start_date_${id}`;
 
     return `
       <div class="fv-row mb-8">
         <label for="${elementId}" class="required form-label">Data de início</label>
         <input
+          name="${name}"
           class="form-control form-control-solid tcc_start_date_field"
           placeholder="dd/mm/aaaa"
           id="${elementId}"/>
@@ -113,11 +123,13 @@ class StageEditor {
 
   generateSupervisorDateFieldElement(id) {
     const elementId = `tcc_stage_editor_supervisor_date_${id}`;
+    const name = `stage_edit_supervisor_date_${id}`;
 
     return `
       <div class="fv-row mb-8">
         <label for="${elementId}" class="required form-label">Data de envio ao supervisor</label>
         <input
+          name="${name}"
           class="form-control form-control-solid tcc_supervisor_date_field"
           placeholder="dd/mm/aaaa"
           id="${elementId}"/>
@@ -127,11 +139,13 @@ class StageEditor {
 
   generateSendDateFieldElement(id) {
     const elementId = `tcc_stage_editor_send_date_${id}`;
+    const name = `stage_edit_send_date_${id}`;
 
     return `
       <div class="fv-row mb-8">
         <label for="${elementId}" class="required form-label">Data de envio</label>
         <input
+          name="${name}"
           class="form-control form-control-solid tcc_send_date_field"
           placeholder="dd/mm/aaaa"
           id="${elementId}"/>
@@ -346,7 +360,7 @@ class StageEditor {
             </div>
           </button>
         </h2>
-        <div
+        <form
           id="tcc_accordion_body_${stage.id}"
           class="accordion-collapse collapse"
           aria-labelledby="tcc_accordion_header_${stage.id}"
@@ -369,11 +383,14 @@ class StageEditor {
               </div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     `);
 
     this.initFieldElements(stage);
+
+    this.handleCollapseFormValidation(stage.id);
+    this.handleCollapseBootstrapMaxlength(stage.id);
   }
   
   turnOnLoadingState() {
@@ -405,7 +422,15 @@ class StageEditor {
   }
 
   handleModalConfirmButton() {
-    $(this.modal.confirmButton).click(() => {
+    $('#tcc_stage_add_form').submit(function(e) {
+      e.preventDefault();
+    });
+
+    $(this.modal.confirmButton).click(function(e) {
+      if (!$('#tcc_stage_add_form').valid()) {
+        return;
+      }
+
       $(this.modal.cancelButton).html(`
         <div class="d-flex align-items-center">
           <div class="spinner-border spinner-border-sm text-light me-2" role="status">
@@ -477,6 +502,91 @@ class StageEditor {
             Confirmar
           `).removeAttr('disabled');
         });
+    });
+  }
+
+  handleModalFormValidation() {
+    $('#tcc_stage_add_form').validate({
+      errorElement: 'div',
+      errorClass: 'invalid-feedback',
+      highlight: function(element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function(element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      },
+      rules: {
+        stage_add_description: {
+          required: true,
+          minlength: 3,
+          maxlength: 255
+        },
+        stage_add_activity: {
+          required: true,
+        },
+        stage_add_start_date: {
+          required: true,
+        },
+        stage_add_supervisor_date: {
+          required: true,
+        },
+        stage_add_send_date: {
+          required: true,
+        },
+      },
+      messages: {
+        stage_add_description: {
+          required: 'A descrição deve ser inserida.',
+          minlength: 'A descrição deve ter pelo menos 3 caracteres.',
+          maxlength: 'A descrição não pode ter mais de 255 caracteres.'
+        },
+        stage_add_activity: {
+          required: 'A configuração de atividade deve ser inserida.',
+        },
+        stage_add_start_date: {
+          required: 'A data de início deve ser inserida.',
+        },
+        stage_add_supervisor_date: {
+          required: 'A data de envio ao supervisor deve ser inserida.',
+        },
+        stage_add_send_date: {
+          required: 'A data de envio deve ser inserida.',
+        },
+      },
+      errorPlacement(error, element) {
+        element.parent().append(error);
+      },
+    });
+
+    $('#tcc_stage_editor_description').keyup(function(e) {
+      $(this).valid();
+    });
+
+    $('[name="stage_add_activity"]').on('select2:select', function(e) {
+      $(this).valid();
+    });
+
+    $('[name="stage_add_activity"]').on('select2:unselect', function(e) {
+      $(this).valid();
+    });
+
+    $('[name="stage_add_start_date"]').change(function(e) {
+      $(this).valid();
+    });
+
+    $('[name="stage_add_supervisor_date"]').change(function(e) {
+      $(this).valid();
+    });
+
+    $('[name="stage_add_send_date"]').change(function(e) {
+      $(this).valid();
+    });
+  }
+
+  handleModalBootstrapMaxlength() {
+    $('#tcc_stage_editor_description').maxlength({
+      warningClass: "badge badge-warning z-index-2000",
+      limitReachedClass: "badge badge-success z-index-2000"
     });
   }
 
@@ -696,8 +806,22 @@ class StageEditor {
   handleCollapseSaveButton() {
     const ctx = this;
 
+    $('.tcc_save_button').each(function(element, index) {
+      const id = $(element).data('id');
+
+      const form = $(`#tcc_accordion_body_${id}`);
+
+      form.submit(function(e) {
+        e.preventDefault();
+      });
+    });
+
     $('.tcc_save_button').click(function (e) {
       const accordion = $(this).parent().parent().parent();
+
+      if (!$(accordion).parent().valid()) {
+        return;
+      }
 
       ctx.addLoadingStateInField($(accordion).find('.tcc_description_field'));
       ctx.addLoadingStateInField($(accordion).find('.tcc_activity_field'));
@@ -771,6 +895,103 @@ class StageEditor {
     });
   }
 
+  handleCollapseFormValidation(id) {
+    const description = `stage_edit_description_${id}`;
+    const activity = `stage_edit_activity_${id}`;
+    const startDate = `stage_edit_start_date_${id}`;
+    const supervisorDate = `stage_edit_supervisor_date_${id}`;
+    const sendDate = `stage_edit_send_date_${id}`;
+
+    const rules = {};
+    const messages = {};
+
+    rules[description] = {
+      required: true,
+      minlength: 3,
+      maxlength: 255
+    };
+    messages[description] = {
+      required: 'A descrição deve ser inserida.',
+      minlength: 'A descrição deve ter pelo menos 3 caracteres.',
+      maxlength: 'A descrição não pode ter mais de 255 caracteres.',
+    };
+
+    rules[activity] = {
+      required: true,
+    };
+    messages[activity] = {
+      required: 'A configuração de atividade deve ser inserida.',
+    };
+
+    rules[startDate] = {
+      required: true,
+    };
+    messages[startDate] = {
+      required: 'A data de início deve ser inserida.',
+    };
+
+    rules[supervisorDate] = {
+      required: true,
+    };
+    messages[supervisorDate] = {
+      required: 'A data de envio ao supervisor deve ser inserida.',
+    };
+
+    rules[sendDate] = {
+      required: true,
+    };
+    messages[sendDate] = {
+      required: 'A data de envio deve ser inserida.',
+    };
+
+    $(`#tcc_accordion_body_${id}`).validate({
+      errorElement: 'div',
+      errorClass: 'invalid-feedback',
+      highlight: function(element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function(element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      },
+      rules,
+      messages,
+      errorPlacement(error, element) {
+        element.parent().append(error);
+      },
+    });
+
+    $(`[name="${description}"]`).keyup(function(e) {
+      $(this).valid();
+    });
+
+    $(`[name="${activity}"]`).on('select2:select', function(e) {
+      $(this).valid();
+    });
+
+    $(`[name="${activity}"]`).on('select2:unselect', function(e) {
+      $(this).valid();
+    });
+
+    $(`[name="${startDate}"]`).change(function(e) {
+      $(this).valid();
+    });
+
+    $(`[name="${supervisorDate}"]`).change(function(e) {
+      $(this).valid();
+    });
+
+    $(`[name="${sendDate}"]`).change(function(e) {
+      $(this).valid();
+    });
+  }
+
+  handleCollapseBootstrapMaxlength(id) {
+    $(`[name="stage_edit_description_${id}"]`).maxlength({
+      warningClass: "badge badge-warning z-index-2000",
+      limitReachedClass: "badge badge-success z-index-2000"
+    });
+  }
+
 
   // Get HTML elements.
   getElements() {
@@ -825,6 +1046,9 @@ class StageEditor {
       this.handleModalConfirmButton();
       this.handleModalCloseEvent();
       this.handleModalFormRepeater();
+
+      this.handleModalFormValidation();
+      this.handleModalBootstrapMaxlength();
     } catch (err) {
       throw new Error(err.message)
     }

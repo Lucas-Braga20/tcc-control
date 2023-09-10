@@ -264,21 +264,27 @@
           </div>
         </div>
 
-        <div class="modal-body p-8">
+        <form id="tcc_stage_add_form" class="modal-body p-8">
           <!-- Description -->
           <div class="fv-row mb-8">
             <label for="tcc_stage_editor_description" class="required form-label">Descrição</label>
             <input
               id="tcc_stage_editor_description"
               type="text"
+              name="stage_add_description"
               class="form-control form-control-solid tcc_description_field"
+              minlength="3"
+              maxlength="255"
               placeholder="Descrição">
           </div>
 
           <!-- Activity configuration -->
           <div class="fv-row mb-8">
             <label for="tcc_stage_editor_activity" class="required form-label">Configuração de atividade</label>
-            <select id="tcc_stage_editor_activity" class="form-select form-select-solid tcc_activity_field">
+            <select
+              id="tcc_stage_editor_activity"
+              name="stage_add_activity"
+              class="form-select form-select-solid tcc_activity_field">
             </select>
           </div>
 
@@ -288,6 +294,7 @@
             <input
               class="form-control form-control-solid"
               placeholder="dd/mm/aaaa"
+              name="stage_add_start_date"
               id="tcc_stage_editor_start_date"/>
           </div>
 
@@ -297,6 +304,7 @@
             <input
               class="form-control form-control-solid"
               placeholder="dd/mm/aaaa"
+              name="stage_add_supervisor_date"
               id="tcc_stage_editor_supervisor_date"/>
           </div>
 
@@ -306,6 +314,7 @@
             <input
               class="form-control form-control-solid"
               placeholder="dd/mm/aaaa"
+              name="stage_add_send_date"
               id="tcc_stage_editor_send_date"/>
           </div>
 
@@ -337,7 +346,7 @@
               <input data-repeater-create type="button" class="btn btn-primary btn-sm" value="Adicionar"/>
             </div>
           </div>
-        </div>
+        </form>
 
         <div class="modal-footer">
           <button id="tcc_stage_editor_modal_cancel_button" type="button" class="btn btn-light" data-bs-dismiss="modal">

@@ -17,6 +17,7 @@ from core.defaults import completed_status
 @shared_task
 def process_final_works():
     # today = datetime.date.today()
+    # today hard coded
     today = datetime.date(2023, 1, 1)
 
     timetables = Timetable.objects.filter(stages__start_date__lte=today, stages__send_date__gte=today, archived=False)
@@ -24,7 +25,8 @@ def process_final_works():
     for timetable in timetables:
         mentees = timetable.participants.filter(groups__name='Orientando')
 
-        final_works = FinalWork.objects.filter(archived=False, mentees__in=list(mentees.values_list('id'))).distinct()
+        final_works = FinalWork.objects.filter(archived=False, completed=False,
+                                               mentees__in=list(mentees.values_list('id'))).distinct()
 
         for final_work in final_works:
             # Generate work stages for all final works.

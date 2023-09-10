@@ -42,6 +42,10 @@ const TimetableEditor = () => {
         element.parent().append(error);
       },
     });
+
+    $('#description').keyup(function(e) {
+      $(this).valid();
+    });
   }
 
   function addBootstrapMaxLength() {
@@ -51,10 +55,21 @@ const TimetableEditor = () => {
     });
   }
 
+  function handleSelect2Elements() {
+    $('[data-control="select2"]').on('select2:select', function(e) {
+      $(this).valid();
+    });
+
+    $('[data-control="select2"]').on('select2:unselect', function(e) {
+      $(this).valid();
+    });
+  }
+
 
   stageEditor = new StageEditor();
   addFormValidator();
   addBootstrapMaxLength();
+  handleSelect2Elements();
 }
 
 KTUtil.onDOMContentLoaded(function() {
