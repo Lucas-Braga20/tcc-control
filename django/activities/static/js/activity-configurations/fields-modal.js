@@ -297,7 +297,15 @@ class ActivityFieldsEditor {
   }
 
   handleConfirmButton() {
+    $('#tcc_activity_field_form').submit(function(e) {
+      e.preventDefault();
+    });
+
     $(this.modal.confirmButton).click(() => {
+      if (!$('#tcc_activity_field_form').valid()) {
+        return;
+      }
+
       let name = $(this.formFieldsElements.name).val();
       let type = $(this.formFieldsElements.type).val();
       let key = $(this.formFieldsElements.key).val();
@@ -391,6 +399,47 @@ class ActivityFieldsEditor {
     })
   }
 
+  handleFormValidation() {
+    $(`#tcc_activity_field_form`).validate({
+      errorElement: 'div',
+      errorClass: 'invalid-feedback',
+      highlight: function(element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function(element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      },
+      rules: {
+        fields_name: {
+          required: true,
+          minlength: 3,
+          maxlength: 255,
+        },
+      },
+      messages: {
+        fields_name: {
+          required: 'O campo nome deve ser inserido.',
+          minlength: 'O nome deve ter pelo menos 3 caracteres.',
+          maxlength: 'O nome não pode ter mais de 128 caracteres.',
+        },
+      },
+      errorPlacement(error, element) {
+        element.parent().append(error);
+      },
+    });
+
+    $(`#tcc_fields_editor_name`).keyup(function(e) {
+      $(this).valid();
+    });
+  }
+
+  handleBootstrapMaxlength () {
+    $('#tcc_fields_editor_name').maxlength({
+      warningClass: "badge badge-warning z-index-2000",
+      limitReachedClass: "badge badge-success z-index-2000"
+    });
+  }
+
 
   // Get HTML elements.
   getElements() {
@@ -427,6 +476,9 @@ class ActivityFieldsEditor {
       this.handleConfirmButton();
 
       this.handleNameFields();
+
+      this.handleFormValidation();
+      this.handleBootstrapMaxlength();
 
       if (this.items.length === 0) {
         $(this.container).html(this.emptyElement);

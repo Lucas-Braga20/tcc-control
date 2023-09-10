@@ -28,6 +28,10 @@ const ActivityConfigurationEditor = () => {
       },
     });
 
+    $('#id_name').keyup(function(e) {
+      $(this).valid();
+    });
+
     $('#tcc_editor_activity_configurations').submit(function(event) {
       const value = $('[name="fields"]').val();
 
