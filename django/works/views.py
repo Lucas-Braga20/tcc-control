@@ -72,6 +72,16 @@ class WorkStageView(NotificationMixin, LoginRequiredMixin, DetailView, View):
         )
         context['work_stages'] = self.object.work_stage.order_by('stage__start_date')
 
+        able_to_present = 'null'
+
+        if self.object.able_to_present is True:
+            able_to_present = 'true'
+        elif self.object.able_to_present is False:
+            able_to_present = 'false'
+
+        context['able_to_present'] = able_to_present
+        context['user_group'] = UserGroup(user=self.request.user)
+
         return context
 
 

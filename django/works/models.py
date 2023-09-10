@@ -29,6 +29,7 @@ class FinalWork(models.Model):
                                     verbose_name=_('mentee'))
     archived = models.BooleanField(default=False, verbose_name=_('archived'))
     completed = models.BooleanField(default=False, verbose_name=_('completed'))
+    able_to_present = models.BooleanField(default=None, null=True, verbose_name=_('able to present'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'), blank=True, null=True)
 
     class Meta:

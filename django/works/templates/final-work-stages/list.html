@@ -222,8 +222,210 @@
               {% endif %}
             </div>
           </div>
+
+          <div class="d-flex flex-wrap justify-content-between align-items-center pt-5 pt-sm-8">
+            <h2 class="mb-0">
+              Apresentação final
+            </h2>
+          </div>
+          {% if user_group.is_supervisor %}
+            <div class="mt-2 mt-sm-5">
+              <p class="text-muted">
+                Você <span class="text-primary">{{ request.user.get_full_name }}</span>, orientador do trabalho de
+                conclusão de curso considera que este trabalho está apto para a apresentação final?
+              </p>
+
+              <!-- Alternatives -->
+              <div
+                id="tcc_able_to_present_container"
+                data-final-work="{{ object.id }}"
+                data-default="{{ able_to_present }}">
+                {% csrf_token %}
+
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="tcc_able_to_present"
+                  value="null"
+                  {% if object.able_to_present is None %}
+                    checked="checked"
+                  {% endif %}
+                  id="tcc_able_to_present_null"/>
+                <label
+                  class="btn btn-outline btn-outline-dashed btn-active-light-primary btn-outline-default p-7 d-flex align-items-center mb-5 able-to-present-icons"
+                  for="tcc_able_to_present_null">
+                  <span class="able-to-present-icons me-2">
+                    <i class="fas fa-spinner"></i>
+                  </span>
+
+                  <span class="d-block fw-semibold text-start">
+                    <span class="text-dark fw-bold d-block fs-3">Trabalho em progresso.</span>
+                    <span class="text-muted fw-semibold fs-6">
+                      O trabalho ainda não está concluído e está sendo trabalhado. Sendo assim não é possível determinar
+                      se o trabalho está pronto para ser apresentado.
+                    </span>
+                  </span>
+                </label>
+
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="tcc_able_to_present"
+                  value="true"
+                  {% if object.able_to_present is True %}
+                    checked="checked"
+                  {% endif %}
+                  id="tcc_able_to_present_true"
+                />
+                <label
+                  class="btn btn-outline btn-outline-dashed btn-active-light-primary btn-outline-default p-7 d-flex align-items-center mb-5 able-to-present-icons"
+                  for="tcc_able_to_present_true">
+                  <span class="able-to-present-icons me-2">
+                    <i class="far fa-check-circle"></i>
+                  </span>
+
+                  <span class="d-block fw-semibold text-start">
+                    <span class="text-dark fw-bold d-block fs-3">Trabalho apto.</span>
+                    <span class="text-muted fw-semibold fs-6">
+                      O trabalho foi concluído e está apto para a apresentação final do projeto.
+                    </span>
+                  </span>
+                </label>
+
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="tcc_able_to_present"
+                  value="false"
+                  {% if object.able_to_present is False %}
+                    checked="checked"
+                  {% endif %}
+                  id="tcc_able_to_present_false"
+                />
+                <label
+                  class="btn btn-outline btn-outline-dashed btn-active-light-primary btn-outline-default p-7 d-flex align-items-center able-to-present-icons"
+                  for="tcc_able_to_present_false">
+                  <span class="able-to-present-icons me-2">
+                    <i class="far fa-times-circle"></i>
+                  </span>
+
+                  <span class="d-block fw-semibold text-start">
+                    <span class="text-dark fw-bold d-block fs-3">Trabalho inapto.</span>
+                    <span class="text-muted fw-semibold fs-6">
+                      O trabalho foi concluído, no entanto, o orientador não considera que a proposta foi executada,
+                      tornando o projeto inapto para a apresentação final.
+                    </span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          {% else %}
+          <div class="mt-2 mt-sm-5">
+            <!-- Alternatives -->
+            <div
+              id="tcc_able_to_present_container"
+              data-final-work="{{ object.id }}"
+              data-default="{{ able_to_present }}">
+              {% csrf_token %}
+
+              <input
+                type="radio"
+                class="btn-check custom-disabled"
+                name="tcc_able_to_present"
+                value="null"
+                {% if object.able_to_present is None %}
+                  checked="checked"
+                {% else %}
+                  disabled
+                {% endif %}
+                id="tcc_able_to_present_null"/>
+              <label
+                class="btn btn-outline btn-outline-dashed btn-active-light-primary btn-outline-default p-7 d-flex align-items-center mb-5 able-to-present-icons"
+                for="tcc_able_to_present_null">
+                <span class="able-to-present-icons me-2">
+                  <i class="fas fa-spinner"></i>
+                </span>
+
+                <span class="d-block fw-semibold text-start">
+                  <span class="text-dark fw-bold d-block fs-3">Trabalho em progresso.</span>
+                  <span class="text-muted fw-semibold fs-6">
+                    O trabalho ainda não está concluído e está sendo trabalhado. Sendo assim não é possível determinar
+                    se o trabalho está pronto para ser apresentado.
+                  </span>
+                </span>
+              </label>
+
+              <input
+                type="radio"
+                class="btn-check custom-disabled"
+                name="tcc_able_to_present"
+                value="true"
+                {% if object.able_to_present is True %}
+                  checked="checked"
+                {% else %}
+                  disabled
+                {% endif %}
+                id="tcc_able_to_present_true"
+              />
+              <label
+                class="btn btn-outline btn-outline-dashed btn-active-light-primary btn-outline-default p-7 d-flex align-items-center mb-5 able-to-present-icons"
+                for="tcc_able_to_present_true">
+                <span class="able-to-present-icons me-2">
+                  <i class="far fa-check-circle"></i>
+                </span>
+
+                <span class="d-block fw-semibold text-start">
+                  <span class="text-dark fw-bold d-block fs-3">Trabalho apto.</span>
+                  <span class="text-muted fw-semibold fs-6">
+                    O trabalho foi concluído e está apto para a apresentação final do projeto.
+                  </span>
+                </span>
+              </label>
+
+              <input
+                type="radio"
+                class="btn-check custom-disabled"
+                name="tcc_able_to_present"
+                value="false"
+                {% if object.able_to_present is False %}
+                  checked="checked"
+                {% else %}
+                  disabled
+                {% endif %}
+                id="tcc_able_to_present_false"
+              />
+              <label
+                class="btn btn-outline btn-outline-dashed btn-active-light-primary btn-outline-default p-7 d-flex align-items-center able-to-present-icons"
+                for="tcc_able_to_present_false">
+                <span class="able-to-present-icons me-2">
+                  <i class="far fa-times-circle"></i>
+                </span>
+
+                <span class="d-block fw-semibold text-start">
+                  <span class="text-dark fw-bold d-block fs-3">Trabalho inapto.</span>
+                  <span class="text-muted fw-semibold fs-6">
+                    O trabalho foi concluído, no entanto, o orientador não considera que a proposta foi executada,
+                    tornando o projeto inapto para a apresentação final.
+                  </span>
+                </span>
+              </label>
+            </div>
+          </div>
+          {% endif %}
         </div>
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block css-styles %}
+  <style>
+    .able-to-present-icons i {
+      font-size: 40px !important;
+    }
+  </style>
+{% endblock %}
+
+{% block js-scripts %}
+  <script src="{% static 'js/final-work-stages/list.js' %}"></script>
 {% endblock %}

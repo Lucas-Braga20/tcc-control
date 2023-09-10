@@ -69,13 +69,15 @@ class FinalWorkViewSet(mixins.CreateModelMixin,
         data = request.data
         approved = data.get('approved')
         completed = data.get('completed')
+        able_to_present = data.get('able_to_present')
+
+        final_work = self.get_object()
 
         if approved and approved is True:
             # today = datetime.date.today()
             # today hard coded
             today = datetime.date(2023, 3, 4)
 
-            final_work = self.get_object()
             timetable = Timetable.objects.filter(stages__start_date__lte=today,
                                                  stages__send_date__gte=today,
                                                  archived=False).first()
@@ -83,9 +85,19 @@ class FinalWorkViewSet(mixins.CreateModelMixin,
             generate_work_stages(final_work=final_work, timetable=timetable)
 
         if completed and completed is True:
-            final_work = self.get_object()
             final_work.completed = True
             final_work.save()
+
+        if able_to_present:
+            if able_to_present is None:
+                final_work.able_to_present = None
+                final_work.save()
+            elif able_to_present is True:
+                final_work.able_to_present = True
+                final_work.save()
+            elif able_to_present is False:
+                final_work.able_to_present = False
+                final_work.save()
 
         return super().update(request, *args, **kwargs)
 

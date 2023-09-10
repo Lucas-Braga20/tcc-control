@@ -16,9 +16,9 @@ from core.defaults import completed_status
 
 @shared_task
 def process_final_works():
-    # today = datetime.date.today()
+    today = datetime.date.today()
     # today hard coded
-    today = datetime.date(2023, 1, 1)
+    # today = datetime.date(2023, 1, 1)
 
     timetables = Timetable.objects.filter(stages__start_date__lte=today, stages__send_date__gte=today, archived=False)
 
