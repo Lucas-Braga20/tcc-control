@@ -66,10 +66,13 @@
         </div>
 
         <div class="card-body pt-4">
+          {% csrf_token %}
+
           <table
             id="tcc_datatable_users"
             class="table table-row-bordered gy-5"
-            data-api="{% url 'api:works-list' %}?format=datatables">
+            data-api="{% url 'api:works-list' %}?format=datatables"
+            data-teacher="{% if teacher %}true{% else %}false{% endif %}">
             <thead>
               <tr class="fw-bold fs-6 text-muted">
                 <th class="rounded-start min-w-200px" data-data="description">TCC</th>
@@ -77,6 +80,7 @@
                 <th class="min-w-150px" data-data="supervisor_detail">Orientador</th>
                 <th class="min-w-150px" data-data="current_stage">Etapa atual</th>
                 <th class="min-w-100px">Estado da etapa atual</th>
+                <th class="min-w-100px" data-data="completed">Completado</th>
                 <th class="w-auto rounded-end text-start text-sm-end min-w-100px">Ações</th>
               </tr>
             </thead>

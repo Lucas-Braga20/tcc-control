@@ -28,16 +28,79 @@ const FinalWorkList = () => {
     `,
   };
 
+  const API = {
+    works: {
+      completed(id) {
+        return fetch(`/api/final-works/${id}/`, {
+          method: 'patch',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
+          },
+          body: JSON.stringify({
+            completed: true
+          }),
+        });
+      },
+    },
+  };
+
 
   function getElements() {
     dataTableElement = document.getElementById('tcc_datatable_users');
     searchInputElement = document.getElementById('tcc_datatable_search_input');
   }
 
+  function handleCompleteButtons() {
+    $('.tcc_complete_action').click(function () {
+      const id = $(this).data('id');
+
+      Swal.fire({
+        title: 'Completar TCC',
+        text: 'Tem certeza que deseja completar este TCC?',
+        icon: 'warning',
+        customClass: {
+          actions: 'my-actions',
+          cancelButton: 'btn btn-secondary order-1',
+          confirmButton: 'btn btn-primary order-2',
+        },
+        buttonsStyling: false,
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar'
+      }).then(result => {
+        const { isConfirmed } = result;
+
+        if (isConfirmed) {
+          API.works.completed(id).then(response => {
+            if (response.ok === false) {
+              throw new Error(response.statusText);
+            }
+
+            return response.json();
+          }).then(() => {
+            dataTableObject.ajax.reload();
+            dataTableObject.draw();
+            Toast.fire({
+              icon: 'success',
+              title: 'TCC completado com sucesso.'
+            });
+          }).catch(err => {
+            Toast.fire({
+              icon: 'error',
+              title: 'Houve um erro no servidor.'
+            });
+          });
+        }
+      });
+    });
+  }
+
   function initFinalWorkDataTable() {
     dataTableObject = $(dataTableElement).DataTable({
       responsive: true,
       drawCallback(settings) {
+        handleCompleteButtons();
+
         const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         tooltipTriggerList.map(function (tooltipTriggerEl) {
           return new bootstrap.Tooltip(tooltipTriggerEl);
@@ -97,11 +160,29 @@ const FinalWorkList = () => {
           },
         },
         {
+          data: 'completed',
+          render(data) {
+            if (data === true) {
+              return `
+                <span class="badge badge-success">
+                  Completado
+                </span>
+              `;
+            } else {
+              return `
+                <span class="badge badge-secondary">
+                  Pendente
+                </span>
+              `;
+            }
+          },
+        },
+        {
           data: null,
           orderable: false,
           className: 'end-column',
           render(data) {
-            return `
+            let actions = `
               <a
                 href="/works/${data.id}/stages/"
                 class="btn btn-sm btn-icon btn-primary ms-1"
@@ -111,10 +192,29 @@ const FinalWorkList = () => {
                 <i class="fas fa-eye"></i>
               </a>
             `;
+
+            if ($('#tcc_datatable_users').data('teacher') && data.completed === false) {
+              actions += `
+                <button
+                  class="btn btn-sm btn-icon btn-primary ms-1 tcc_complete_action"
+                  data-id="${data.id}"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Completar TCC">
+                  <i class="fas fa-clipboard-check"></i>
+                </button>
+              `;
+            }
+
+            return actions;
           },
         },
       ],
       language: dataTableLanguages,
+    });
+
+    $(dataTableElement).on('responsive-display.dt', () => {
+      handleArchiveButtonActions();
     });
   }
 

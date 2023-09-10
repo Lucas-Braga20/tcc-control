@@ -324,6 +324,16 @@ class WorkListView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin
     template_name = 'final-work/list.html'
     required_groups = ['Orientador', 'Professor da disciplina']
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user = self.request.user
+        user_group = UserGroup(user)
+
+        context['teacher'] = user_group.is_teacher()
+
+        return context
+
 
 class ChangeRequestListView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, TemplateView):
     """

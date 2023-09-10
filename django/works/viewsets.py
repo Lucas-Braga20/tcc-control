@@ -64,17 +64,24 @@ class FinalWorkViewSet(mixins.CreateModelMixin,
     def update(self, request, *args, **kwargs):
         data = request.data
         approved = data.get('approved')
+        completed = data.get('completed')
 
         if approved and approved is True:
             # today = datetime.date.today()
+            # today hard coded
             today = datetime.date(2023, 3, 4)
 
             final_work = self.get_object()
             timetable = Timetable.objects.filter(stages__start_date__lte=today,
-                                                  stages__send_date__gte=today,
-                                                  archived=False).first()
+                                                 stages__send_date__gte=today,
+                                                 archived=False).first()
 
             generate_work_stages(final_work=final_work, timetable=timetable)
+
+        if completed and completed is True:
+            final_work = self.get_object()
+            final_work.completed = True
+            final_work.save()
 
         return super().update(request, *args, **kwargs)
 
