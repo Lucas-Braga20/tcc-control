@@ -206,6 +206,10 @@ const FinalWorkStageDetail = () => {
         },
       },
     });
+
+    $('#tcc_comment_textarea').keyup(function(e) {
+      $(this).valid();
+    });
   }
 
   function handleMeetingModalValidator() {
@@ -238,6 +242,10 @@ const FinalWorkStageDetail = () => {
           required: 'A data da reunião deve ser inserida.',
         }
       },
+    });
+
+    $('#tcc_meeting_description').keyup(function(e) {
+      $(this).valid();
     });
   }
 
@@ -839,7 +847,7 @@ const FinalWorkStageDetail = () => {
       };
 
       messages[developedActivities] = {
-        required: 'As instrunções devem ser inserida.',
+        required: 'As atividades desenvolvidas devem ser inserida.',
         minlength: 'O campo de atividades deve ter pelo menos 3 caracteres.',
         maxlength: 'O campo de atividades não pode ter mais de 255 caracteres.'
       };
@@ -860,6 +868,14 @@ const FinalWorkStageDetail = () => {
         },
         rules,
         messages,
+      });
+
+      $(`[name="${developedActivities}"]`).keyup(function(e) {
+        $(this).valid();
+      });
+
+      $(`[name="${instructions}"]`).keyup(function(e) {
+        $(this).valid();
       });
     });
   }

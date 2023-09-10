@@ -60,6 +60,18 @@ const FinalWorkEditor = () => {
         element.parent().append(error);
       },
     });
+
+    $('#id_description').keyup(function(e) {
+      $(this).valid();
+    });
+
+    $('[data-control="select2"]').on('select2:select', function(e) {
+      $(this).valid();
+    });
+
+    $('[data-control="select2"]').on('select2:unselect', function(e) {
+      $(this).valid();
+    });
   }
 
   function addBootstrapMaxLength() {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-25 22:41-0400\n"
+"POT-Creation-Date: 2023-09-10 11:44-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: users/admin.py:19
 msgid "Account"
 msgstr "Conta"
@@ -37,14 +38,22 @@ msgstr "Permissões"
 msgid "name"
 msgstr "nome"
 
-#: users/models.py:17
+#: users/models.py:20
 msgid "phone"
 msgstr "telefone"
 
-#: users/models.py:20
+#: users/models.py:21
+msgid "RGM"
+msgstr "RGM"
+
+#: users/models.py:23
+msgid "university course"
+msgstr "Disciplina"
+
+#: users/models.py:27
 msgid "User"
 msgstr "Usuário"
 
-#: users/models.py:21
+#: users/models.py:28
 msgid "Users"
 msgstr "Usuários"
