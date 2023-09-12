@@ -57,7 +57,7 @@ class ProfileDetailView(NotificationMixin,
         return self.request.user
 
 
-class UserListView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, TemplateView):
+class UserListView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, TemplateView, View):
     """
     User List View.
     """

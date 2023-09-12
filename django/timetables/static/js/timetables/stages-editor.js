@@ -70,7 +70,7 @@ class StageEditor {
 
 
   // Handle fields inside collapse.
-  generateDescriptionFieldElement(id) {
+  generateDescriptionFieldElement(id, disabled) {
     const elementId = `tcc_stage_editor_description_${id}`;
     const name = `stage_edit_description_${id}`;
 
@@ -84,12 +84,13 @@ class StageEditor {
           class="form-control form-control-solid tcc_description_field"
           minlength="3"
           maxlength="255"
+          ${disabled ? 'disabled="disabled"' : ''}
           placeholder="Descrição">
       </div>
     `;
   }
 
-  generateActivityFieldElement(id) {
+  generateActivityFieldElement(id, disabled) {
     const elementId = `tcc_stage_editor_activity_${id}`;
     const name = `stage_edit_activity_${id}`;
 
@@ -99,13 +100,14 @@ class StageEditor {
         <select
           id="${elementId}"
           name="${name}"
+          ${disabled ? 'disabled="disabled"' : ''}
           class="form-select form-select-solid tcc_activity_field">
         </select>
       </div>
     `;
   }
 
-  generateStartDateFieldElement(id) {
+  generateStartDateFieldElement(id, disabled) {
     const elementId = `tcc_stage_editor_start_date_${id}`;
     const name = `stage_edit_start_date_${id}`;
 
@@ -116,12 +118,13 @@ class StageEditor {
           name="${name}"
           class="form-control form-control-solid tcc_start_date_field"
           placeholder="dd/mm/aaaa"
+          ${disabled ? 'disabled="disabled"' : ''}
           id="${elementId}"/>
       </div>
     `;
   }
 
-  generateSupervisorDateFieldElement(id) {
+  generateSupervisorDateFieldElement(id, disabled) {
     const elementId = `tcc_stage_editor_supervisor_date_${id}`;
     const name = `stage_edit_supervisor_date_${id}`;
 
@@ -132,12 +135,13 @@ class StageEditor {
           name="${name}"
           class="form-control form-control-solid tcc_supervisor_date_field"
           placeholder="dd/mm/aaaa"
+          ${disabled ? 'disabled="disabled"' : ''}
           id="${elementId}"/>
       </div>
     `;
   }
 
-  generateSendDateFieldElement(id) {
+  generateSendDateFieldElement(id, disabled) {
     const elementId = `tcc_stage_editor_send_date_${id}`;
     const name = `stage_edit_send_date_${id}`;
 
@@ -148,12 +152,13 @@ class StageEditor {
           name="${name}"
           class="form-control form-control-solid tcc_send_date_field"
           placeholder="dd/mm/aaaa"
+          ${disabled ? 'disabled="disabled"' : ''}
           id="${elementId}"/>
       </div>
     `;
   }
 
-  generatePresentationDateFieldElement(id) {
+  generatePresentationDateFieldElement(id, disabled) {
     const elementId = `tcc_stage_editor_presentation_date_${id}`;
 
     return `
@@ -163,6 +168,7 @@ class StageEditor {
           <input
             class="form-control form-control-solid tcc_presentation_date_field"
             placeholder="dd/mm/aaaa"
+            ${disabled ? 'disabled="disabled"' : ''}
             id="${elementId}"/>
           <i class="fas fa-times-circle flatpickr-clear-button"></i>
         </div>
@@ -182,10 +188,20 @@ class StageEditor {
             <div class="tcc_create_stage_examples_link">
             </div>
             <div class="col mt-0">
-              <input type="file" class="form-control form-control-solid tcc_create_stage_examples_${id}" />
+              <input
+                type="file"
+                class="form-control form-control-solid tcc_create_stage_examples_${id}"
+                ${stage.past_stage ? 'disabled="disabled"' : ''}
+              />
             </div>
             <div class="col-auto">
-              <input data-repeater-delete type="button" class="btn btn-danger" value="Remover"/>
+              <input
+                data-repeater-delete
+                type="button"
+                class="btn btn-danger"
+                value="Remover"
+                ${stage.past_stage ? 'disabled="disabled"' : ''}
+              />
             </div>
           </div>
         </div>
@@ -199,10 +215,20 @@ class StageEditor {
             <div class="tcc_create_stage_examples_link">
             </div>
             <div class="col mt-0">
-              <input type="file" class="form-control form-control-solid tcc_create_stage_examples_${id}" />
+              <input
+                type="file"
+                class="form-control form-control-solid tcc_create_stage_examples_${id}"
+                ${stage.past_stage ? 'disabled="disabled"' : ''}
+              />
             </div>
             <div class="col-auto">
-              <input data-repeater-delete type="button" class="btn btn-danger" value="Remover"/>
+              <input
+                data-repeater-delete
+                type="button"
+                class="btn btn-danger"
+                value="Remover"
+                ${stage.past_stage ? 'disabled="disabled"' : ''}
+              />
             </div>
           </div>
         </div>
@@ -216,7 +242,13 @@ class StageEditor {
           <div data-repeater-list="stage-examples">
             ${rows}
           </div>
-          <input data-repeater-create type="button" class="btn btn-primary btn-sm" value="Adicionar"/>
+          <input
+            data-repeater-create
+            type="button"
+            class="btn btn-primary btn-sm"
+            ${stage.past_stage ? 'disabled="disabled"' : ''}
+            value="Adicionar"
+          />
         </div>
       </div>
     `;
@@ -366,20 +398,49 @@ class StageEditor {
           aria-labelledby="tcc_accordion_header_${stage.id}"
           data-bs-parent="#tcc_stage_editor_container">
           <div class="accordion-body">
-            ${this.generateDescriptionFieldElement(stage.id)}
-            ${this.generateActivityFieldElement(stage.id)}
-            ${this.generateStartDateFieldElement(stage.id)}
-            ${this.generateSupervisorDateFieldElement(stage.id)}
-            ${this.generateSendDateFieldElement(stage.id)}
-            ${this.generatePresentationDateFieldElement(stage.id)}
-            ${this.generateStageExamplesElement(stage.id, stage)}
+            ${stage.activity_already_advanced ?
+              `<div class="alert alert-dismissible bg-light-danger d-flex flex-column flex-sm-row w-100 p-5 mb-10">
+                <span class="svg-icon svg-icon-2hx me-4 mb-5 mb-sm-0">
+                  <i class="fas fa-exclamation-circle fa-fw fa-3x text-danger"></i>
+                </span>
+
+                <div class="d-flex flex-column pe-0 pe-sm-10">
+                  <h4 class="fw-semibold">Atenção!</h4>
+                  <span>
+                    Alguns orientandos já adiantaram essa etapa.
+                    Se mudar a configuração de atividade, alguns conteúdos podem ser perdidos.
+                  </span>
+                </div>
+              </div>` :
+              ''
+            }
+
+            ${this.generateDescriptionFieldElement(stage.id, stage.past_stage)}
+            ${this.generateActivityFieldElement(stage.id, stage.past_stage)}
+            ${this.generateStartDateFieldElement(stage.id, stage.past_stage)}
+            ${this.generateSupervisorDateFieldElement(stage.id, stage.past_stage)}
+            ${this.generateSendDateFieldElement(stage.id, stage.past_stage)}
+            ${this.generatePresentationDateFieldElement(stage.id, stage.past_stage)}
+            ${this.generateStageExamplesElement(stage.id, stage, stage.past_stage)}
 
             <div class="d-flex justify-content-end">
               <div>
-                <button type="button" class="btn btn-sm btn-danger tcc_remove_button" data-id="${stage.id}">Remover</button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-danger tcc_remove_button"
+                  ${stage.past_stage ? 'disabled="disabled"' : ''}
+                  data-id="${stage.id}">
+                  Remover
+                </button>
               </div>
               <div class="ms-2">
-                <button type="button" class="btn btn-sm btn-primary tcc_save_button" data-id="${stage.id}">Salvar</button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-primary tcc_save_button"
+                  ${stage.past_stage ? 'disabled="disabled"' : ''}
+                  data-id="${stage.id}">
+                  Salvar
+                </button>
               </div>
             </div>
           </div>
@@ -426,12 +487,14 @@ class StageEditor {
       e.preventDefault();
     });
 
+    const ctx = this;
+
     $(this.modal.confirmButton).click(function(e) {
       if (!$('#tcc_stage_add_form').valid()) {
         return;
       }
 
-      $(this.modal.cancelButton).html(`
+      $(ctx.modal.cancelButton).html(`
         <div class="d-flex align-items-center">
           <div class="spinner-border spinner-border-sm text-light me-2" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -439,7 +502,7 @@ class StageEditor {
           Fechar
         </div>
       `).attr('disabled', true);
-      $(this.modal.confirmButton).html(`
+      $(ctx.modal.confirmButton).html(`
         <div class="d-flex align-items-center">
           <div class="spinner-border spinner-border-sm text-primary me-2" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -449,7 +512,6 @@ class StageEditor {
       `).attr('disabled', true);
 
       let fetchResponse;
-      let ctx = this;
 
       let formData = new FormData();
       formData.append('description', $('#tcc_stage_editor_description').val());
@@ -471,13 +533,20 @@ class StageEditor {
         }
       });
 
-      this.API.stages.create(formData)
+      ctx.API.stages.create(formData)
         .then(response => fetchResponse = response)
         .then(response => response.json())
         .then(data => {
           if (fetchResponse.status >= 300) {
             ctx.resetModalFormError();
             ctx.handleModalFormError(data);
+
+            if (data.detail) {
+              Toast.fire({
+                icon: 'error',
+                title: data.detail
+              });
+            }
           } else {
             ctx.getStageList();
             ctx.modal.object.hide();
@@ -495,10 +564,10 @@ class StageEditor {
           });
         })
         .finally(() => {
-          $(this.modal.cancelButton).html(`
+          $(ctx.modal.cancelButton).html(`
             Fechar
           `).removeAttr('disabled');
-          $(this.modal.confirmButton).html(`
+          $(ctx.modal.confirmButton).html(`
             Confirmar
           `).removeAttr('disabled');
         });
@@ -869,6 +938,13 @@ class StageEditor {
           if (fetchResponse.status >= 300) {
             ctx.resetCollapseFormError($(this).data('id'));
             ctx.handleCollapseFormError(data, $(this).data('id'));
+
+            if (data.detail) {
+              Toast.fire({
+                icon: 'error',
+                title: data.detail
+              });
+            }
           } else {
             ctx.getStageList();
             Toast.fire({

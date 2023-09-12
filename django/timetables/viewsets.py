@@ -3,10 +3,14 @@ Timetable viewsets.
 """
 
 import os
+import datetime
 
 from rest_framework import viewsets, mixins, status, permissions
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
+
+from activities.utils import check_worked_activity
+from activities.models import ActivityConfiguration
 
 from timetables.models import Timetable, Stage, StageExample
 from timetables.serializers import TimetableSerializer, StageSerializer
@@ -100,7 +104,51 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+
+        data = request.data
+
+        today = datetime.date.today()
+        
+        if instance.start_date < today:
+            return Response(data={'detail': 'Não é possível alterar uma etapa passada.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        activity_configuration_id = data.get('activity_configuration')
+
+        if activity_configuration_id is not None and instance.activity_configuration is not None:
+            activity_configuration = ActivityConfiguration.objects.filter(id=activity_configuration_id)
+
+            if not activity_configuration.exists():
+                return Response(data={'activity_configuration': 'Esta configuração de atividade não existe.'},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            activity_configuration = activity_configuration.first()
+
+            if activity_configuration != instance.activity_configuration:
+                already_advanced = check_worked_activity(instance.activity_configuration)
+
+                if already_advanced:
+                    stages = instance.work_timetable_stage.all()
+
+                    for work_stage in stages:
+                        last_version = work_stage.get_last_version()
+
+                        if last_version:
+                            activity_fields = activity_configuration.fields
+                            content = []
+
+                            for fields in activity_fields['fields']:
+                                content.append({
+                                    'key': fields['key'],
+                                    'value': '',
+                                })
+
+                            last_version.content = {
+                                'fields': content
+                            }
+                            last_version.save()
+
+        serializer = self.get_serializer(instance, data=data, partial=partial)
         serializer.is_valid(raise_exception=True)
 
         files = request.FILES.getlist('examples')

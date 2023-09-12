@@ -402,7 +402,7 @@
                       <span class="menu-section text-muted text-uppercase fs-8 ls-1">Usuários</span>
                     </div>
                   </div>
-                  {% if user_group.is_teacher %}
+                  {% if group.is_teacher %}
                     <div class="menu-item">
                       <a
                         class="menu-link {% get_link_is_active request 'users:list' %}"
