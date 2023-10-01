@@ -25,6 +25,7 @@ from core.defaults import (
 )
 
 from notifications.utils import send_notification
+from notifications.tasks import send_mail
 
 from timetables.models import Timetable
 
@@ -147,11 +148,24 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
         receivers = []
         receivers.append(self.object.final_work.supervisor)
 
+        description = (
+            f'Os orientando(s) do TCC: "{self.object.final_work.description}" solicitaram uma ' \
+            f'correção na etapa: {self.object.stage.description}'
+        )
+
         notification = send_notification(
-            description=f'Os orientando(s) do TCC: "{self.object.final_work.description}" solicitaram uma ' \
-                        f'correção na etapa: {self.object.stage.description}',
+            description=description,
             author=user,
             receivers=receivers,
+        )
+
+        send_mail.delay(
+            description,
+            'Solicitação de correção',
+            [{
+                'name': receiver.get_full_name(),
+                'email': receiver.email,
+            } for receiver in receivers],
         )
 
         headers = self.get_success_headers(notification.data)
@@ -178,11 +192,24 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
 
         receivers = list(self.object.final_work.mentees.all())
 
+        description = (
+            f'O supervisor do TCC: "{self.object.final_work.description}" marcou como corrigido a ' \
+            f'etapa: "{self.object.stage.description}"'
+        )
+
         notification = send_notification(
-            description=f'O supervisor do TCC: "{self.object.final_work.description}" marcou como corrigido a ' \
-                        f'etapa: "{self.object.stage.description}"',
+            description=description,
             author=user,
-            receivers=receivers
+            receivers=receivers,
+        )
+
+        send_mail.delay(
+            description,
+            'Correção',
+            [{
+                'name': receiver.get_full_name(),
+                'email': receiver.email,
+            } for receiver in receivers],
         )
 
         headers = self.get_success_headers(notification.data)
@@ -220,11 +247,24 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
         if UserGroup(user).is_mentee():
             group_name = 'orientando'
 
+        description = (
+            f'O {group_name}: "{user.get_full_name()}" marcou como concluído a etapa: ' \
+            f'{self.object.stage.description}'
+        )
+
         notification = send_notification(
-            description=f'O {group_name}: "{user.get_full_name()}" marcou como concluído a etapa: ' \
-                        f'{self.object.stage.description}',
+            description=description,
             author=user,
             receivers=receivers
+        )
+
+        send_mail.delay(
+            description,
+            'Conclusão de etapa',
+            [{
+                'name': receiver.get_full_name(),
+                'email': receiver.email,
+            } for receiver in receivers],
         )
 
         headers = self.get_success_headers(notification.data)
@@ -251,11 +291,24 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
 
         receivers = list(self.object.final_work.mentees.all())
 
+        description = (
+            f'O professor: "{user.get_full_name()}" marcou como apresentado a etapa: ' \
+            f'{self.object.stage.description}'
+        )
+
         notification = send_notification(
-            description=f'O professor: "{user.get_full_name()}" marcou como apresentado a etapa: ' \
-                        f'{self.object.stage.description}',
+            description=description,
             author=user,
             receivers=receivers
+        )
+
+        send_mail.delay(
+            description,
+            'Apresentação',
+            [{
+                'name': receiver.get_full_name(),
+                'email': receiver.email,
+            } for receiver in receivers],
         )
 
         headers = self.get_success_headers(notification.data)
@@ -330,11 +383,27 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
         instance = serializer.save()
 
         user = self.request.user
+
+        description = (
+            f'O orientando do TCC: "{serializer.instance.work_stage.final_work.description}" ' \
+            f'solicitou uma alteração na etapa: {serializer.instance.work_stage.stage.description}'
+        )
+
+        receivers = [serializer.instance.work_stage.stage.timetable.teacher]
+
         send_notification(
-            description=f'O orientando do TCC: "{serializer.instance.work_stage.final_work.description}" ' \
-                        f'solicitou uma alteração na etapa: {serializer.instance.work_stage.stage.description}',
+            description=description,
             author=user,
-            receivers=[serializer.instance.work_stage.stage.timetable.teacher],
+            receivers=receivers,
+        )
+
+        send_mail.delay(
+            description,
+            'Alteração',
+            [{
+                'name': receiver.get_full_name(),
+                'email': receiver.email,
+            } for receiver in receivers],
         )
 
         last_version = instance.work_stage.get_last_version()
@@ -388,11 +457,26 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
         else:
             message = 'reprovou'
 
+        description = (
+            f'O professor: "{user.get_full_name()}" {message} a solicitação de alteração da etapa: ' \
+            f'{serializer.instance.work_stage.stage.description}'
+        )
+
+        receivers = list(serializer.instance.work_stage.final_work.mentees.all())
+
         send_notification(
-            description=f'O professor: "{user.get_full_name()}" {message} a solicitação de alteração da etapa: ' \
-                        f'{serializer.instance.work_stage.stage.description}',
+            description=description,
             author=user,
-            receivers=list(serializer.instance.work_stage.final_work.mentees.all())
+            receivers=receivers,
+        )
+
+        send_mail.delay(
+            description,
+            'Solicitação de alteração',
+            [{
+                'name': receiver.get_full_name(),
+                'email': receiver.email,
+            } for receiver in receivers],
         )
 
         if serializer.instance.approved:

@@ -23,8 +23,6 @@ from users.models import User
 
 from meetings.models import Meeting
 
-from notifications.utils import send_notification
-
 from core.permissions import UserGroup, GenericPermissionMixin
 from core.mixins import NotificationMixin
 from core import defaults

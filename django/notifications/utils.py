@@ -2,13 +2,46 @@
 Funções utilitárias para o app de notificações.
 """
 
-from notifications.serializers import NotificationSerializer
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
 
 from users.models import User
+from notifications.serializers import NotificationSerializer
+
+
+def send_tcc_mail(
+        context, receivers, template_name='emails/index.html', from_email=settings.EMAIL_HOST_USER
+    ):
+    """Envia um email usando um template HTML no Django.
+
+    Args:
+        context (dict): Um dicionário com as variáveis de contexto para o template.
+        receivers (list): Uma lista de destinatários (Nome e email).
+        template_name (str): O nome do arquivo de template HTML.
+        from_email (str): O endereço de email remetente.
+
+    Retorna:
+        bool: True se o email for enviado com sucesso, False em caso de erro.
+    """
+    try:
+        for receiver in receivers:
+            internal_context = context
+            internal_context['receiver'] = receiver.get('name')
+
+            html_message = render_to_string(template_name, internal_context)
+
+            msg = EmailMultiAlternatives(context.get('subject'), html_message, from_email, [receiver.get('email')])
+            msg.content_subtype = "html"
+            msg.send()
+
+        return True
+    except Exception as e:
+        return False
 
 
 def send_notification(description, receivers, author=None):
-    """Envia notificação e email.
+    """Envia notificação.
 
     Args:
         description (str): [Conteúdo da notificação]
@@ -31,10 +64,5 @@ def send_notification(description, receivers, author=None):
     })
     notification_serializer.is_valid(raise_exception=True)
     notification_serializer.save()
-
-    # TODO: Desenvolver o envio de e-mails.
-    emails = []
-    emails.append(author.email)
-    emails += [receiver.email for receiver in receivers]
 
     return notification_serializer

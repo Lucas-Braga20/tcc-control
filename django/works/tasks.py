@@ -4,9 +4,8 @@ from django.db.models import Q
 
 from celery import shared_task
 
-from notifications.serializers import NotificationSerializer
 from notifications.utils import send_notification
-from users.models import User
+from notifications.tasks import send_mail
 from timetables.models import Timetable
 from works.models import FinalWork, FinalWorkStage
 
@@ -47,13 +46,25 @@ def send_notifications():
     ).exclude(status__in=completed_status)
 
     for work in send_to_supervisor:
+        description = f'Amanhã é a data de entrega ao supervisor da etapa: "{work.stage.description}"'
+
         receivers = []
         receivers.append(work.final_work.supervisor)
         receivers += list(work.final_work.mentees.all())
+
         send_notification(
-            description=f'Amanhã é a data de entrega ao supervisor da etapa: "{work.stage.description}"',
+            description=description,
             author=None,
-            receivers=receivers
+            receivers=receivers,
+        )
+
+        send_mail.delay(
+            description,
+            'Data de entrega ao supervisor',
+            [{
+                'name': receiver.get_full_name(),
+                'email': receiver.email,
+            } for receiver in receivers],
         )
 
     send_date = FinalWorkStage.objects.filter(
@@ -61,13 +72,25 @@ def send_notifications():
     ).exclude(status__in=completed_status)
 
     for work in send_date:
+        description = f'Amanhã é a data de entrega da etapa: "{work.stage.description}"'
+
         receivers = []
         receivers.append(work.final_work.supervisor)
         receivers += list(work.final_work.mentees.all())
+
         send_notification(
-            description=f'Amanhã é a data de entrega da etapa: "{work.stage.description}"',
+            description=description,
             author=None,
-            receivers=receivers
+            receivers=receivers,
+        )
+
+        send_mail.delay(
+            description,
+            'Data de entrega',
+            [{
+                'name': receiver.get_full_name(),
+                'email': receiver.email,
+            } for receiver in receivers],
         )
 
     presentation_date = FinalWorkStage.objects.filter(
@@ -75,11 +98,23 @@ def send_notifications():
     ).exclude(status__in=completed_status)
 
     for work in presentation_date:
+        description = f'Amanhã é a data de apresentação da etapa: "{work.stage.description}"'
+
         receivers = []
         receivers.append(work.final_work.supervisor)
         receivers += list(work.final_work.mentees.all())
+
         send_notification(
-            description=f'Amanhã é a data de apresentação da etapa: "{work.stage.description}"',
+            description=description,
             author=None,
-            receivers=receivers
+            receivers=receivers,
+        )
+
+        send_mail.delay(
+            description,
+            'Data de apresentação',
+            [{
+                'name': receiver.get_full_name(),
+                'email': receiver.email,
+            } for receiver in receivers],
         )

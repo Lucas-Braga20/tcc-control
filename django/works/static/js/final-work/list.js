@@ -230,7 +230,7 @@ const FinalWorkList = () => {
     });
 
     $(dataTableElement).on('responsive-display.dt', () => {
-      handleArchiveButtonActions();
+      handleCompleteButtons();
     });
   }
 

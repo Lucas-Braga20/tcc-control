@@ -10,6 +10,7 @@ from users.serializers import UserSerializer
 from users.models import User
 
 from notifications.utils import send_notification
+from notifications.tasks import send_mail
 
 
 class ApprovedMeetingSerializer(serializers.ModelSerializer):
@@ -74,11 +75,24 @@ class MeetingSerializer(serializers.ModelSerializer):
             ApprovedMeeting.objects.create(meeting=meeting, user=supervisor, approved=None)
             receivers.append(supervisor)
 
+        description = (
+            f'Uma reunião foi solicitada por: "{author.get_full_name()}", durante a ' \
+            f'etapa: "{meeting.work_stage.stage.description}".'
+        )
+
         send_notification(
-            description=f'Uma reunião foi solicitada por: "{author.get_full_name()}", durante a ' \
-                        f'etapa: "{meeting.work_stage.stage.description}".',
+            description=description,
             author=None,
             receivers=receivers
+        )
+
+        send_mail.delay(
+            description,
+            'Requisição de reunião',
+            [{
+                'name': receiver.get_full_name(),
+                'email': receiver.email,
+            } for receiver in receivers],
         )
 
         return meeting

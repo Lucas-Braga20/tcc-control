@@ -11,6 +11,7 @@ from users.serializers import UserSerializer
 from core.permissions import UserGroup
 
 from notifications.utils import send_notification
+from notifications.tasks import send_mail
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -53,11 +54,24 @@ class CommentSerializer(serializers.ModelSerializer):
         if supervisor != author:
             receivers.append(supervisor)
 
+        description = (
+            f'Um comentário foi feito por: "{author.get_full_name()}", durante a ' \
+            f'etapa: "{comment.work_stage.stage.description}".'
+        )
+
         send_notification(
-            description=f'Um comentário foi feito por: "{author.get_full_name()}", durante a ' \
-                        f'etapa: "{comment.work_stage.stage.description}".',
+            description=description,
             author=author,
             receivers=receivers
+        )
+
+        send_mail.delay(
+            description,
+            'Envio de Comentário',
+            [{
+                'name': receiver.get_full_name(),
+                'email': receiver.email,
+            } for receiver in receivers],
         )
 
         return comment

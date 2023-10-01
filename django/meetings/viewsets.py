@@ -15,6 +15,7 @@ from meetings.models import Meeting
 from meetings.serializers import MeetingSerializer
 
 from notifications.utils import send_notification
+from notifications.tasks import send_mail
 
 from core.permissions import UserGroup
 
@@ -131,10 +132,22 @@ class MeetingViewSet(mixins.CreateModelMixin,
         review.save()
 
         if not meeting.meeting_approved.exclude(approved=True).exists():
+            description = f'A reunião: "{meeting.description}", foi aprovada.'
+            receivers = list(meeting.participants.all())
+
             send_notification(
-                description=f'A reunião: "{meeting.description}", foi aprovada.',
+                description=description,
                 author=None,
-                receivers=list(meeting.participants.all())
+                receivers=receivers,
+            )
+
+            send_mail.delay(
+                description,
+                'Aprovação da reunião',
+                [{
+                    'name': receiver.get_full_name(),
+                    'email': receiver.email,
+                } for receiver in receivers],
             )
 
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -166,10 +179,22 @@ class MeetingViewSet(mixins.CreateModelMixin,
         review.save()
 
         if not already_disapproved and meeting.get_is_approved() == False:
+            description = f'A reunião: "{meeting.description}", foi reprovada.'
+            receivers = list(meeting.participants.all())
+
             send_notification(
-                description=f'A reunião: "{meeting.description}", foi reprovada.',
+                description=description,
                 author=None,
-                receivers=list(meeting.participants.all())
+                receivers=receivers,
+            )
+
+            send_mail.delay(
+                description,
+                'Reprovação de reunião',
+                [{
+                    'name': receiver.get_full_name(),
+                    'email': receiver.email,
+                } for receiver in receivers],
             )
 
         return Response(status=status.HTTP_204_NO_CONTENT)

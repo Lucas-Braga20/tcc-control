@@ -1,0 +1,174 @@
+<div
+  style="
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  font-family: Poppins, Helvetica, 'sans-serif' !important;
+  text-align: start;
+  line-height: 19.5px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  ">
+  <div
+    style="
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      color: #181C32;
+      background-color: #F5F8FA;
+    ">
+    <div
+      style="
+        width: 100%;
+        display: flex;
+        flex-direction: column !important;
+        flex: 1;
+      ">
+      <div
+        style="
+          width: 100%;
+          display: flex;
+          flex-direction: column !important;
+          flex: 1 0 auto;
+        ">
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1 0 auto;
+            padding: 2.5rem !important;
+            margin: 0 auto;
+          ">
+          <div
+            style="
+              width: 500px;
+              background-color: rgba(255, 255, 255, 1) !important;
+              border-radius: 0.475rem !important;
+              box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05) !important;
+              padding: 3.75rem !important;
+              margin: 0 auto;
+            ">
+            <!-- Logo -->
+            <div>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column !important;
+                  flex: none;
+                  padding-bottom: 2.5rem !important;
+                  margin: 0 auto !important;
+                ">
+                <table>
+                  <tr>
+                    <td
+                      style="
+                        text-align: end;
+                        width: 60px;
+                        padding-left: 95px;
+                      ">
+                        <a
+                          href="{% url 'home' %}"
+                          style="
+                            display: inline-block;
+                            text-decoration: none;
+                            border-radius: 0.475rem;
+                          ">
+                          <table>
+                            <tr style="height: 50px;">
+                              <td style="
+                                vertical-align: middle;
+                                width: 50px;
+                                height: 100%;
+                                text-align: center;
+                                color: white;
+                                background-color: #7239EA !important;
+                                border-radius: 50% !important;
+                                font-size: 22px;
+                                font-weight: bolder;
+                              ">
+                                TC
+                              </td>
+                            </tr>
+                          </table>
+                        </a>
+                    </td>
+                    <td>
+                      <h1
+                        style="
+                          display: inline-block;
+                          color: #7239EA !important;
+                          margin: 0px;
+                          margin-left: 10px;
+                          line-height: 1.2;
+                          font-size: calc(1.3rem + 0.6vw);
+                          font-weight: bold;
+                        ">
+                        TCC Control
+                      </h1>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+    
+            <!-- Title -->
+            <div>
+              <h1>
+                {{ subject }}
+              </h1>
+            </div>
+    
+            <!-- Body -->
+            <div>
+              <p
+                style="
+                  display: block;
+                  margin-block-start: 1em;
+                  margin-block-end: 1em;
+                  margin-inline-start: 0px;
+                  margin-inline-end: 0px;
+                ">
+                Olá {{ receiver }},
+              </p>
+    
+              <p
+                style="
+                  display: block;
+                  margin-block-start: 1em;
+                  margin-block-end: 1em;
+                  margin-inline-start: 0px;
+                  margin-inline-end: 0px;
+                ">
+                {{ message }}
+              </p>
+            </div>
+    
+            <div
+              style="
+                background-color: #333;
+                border-radius: 0.475rem !important;
+                margin-top: 2.5rem !important;
+              ">
+              <p
+                style="
+                  display: block;
+                  text-align: center;
+                  color: white;
+                  padding: 1rem !important;
+                  margin-bottom: 0px;
+                ">
+                &copy; 2023 TCC Control.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

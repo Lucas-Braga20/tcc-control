@@ -19,6 +19,7 @@ urlpatterns = [
     path('activities/', include('activities.urls', namespace='activities')),
     path('works/', include('works.urls', namespace='works')),
     path('timetables/', include('timetables.urls', namespace='timetables')),
+    path('email/', views.EmailView.as_view(), name='email'),
 ]
 
 
