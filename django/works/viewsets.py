@@ -17,6 +17,9 @@ from works.serializers import (
     VersionContentImageSerializer
 )
 
+from users.models import User
+from users.serializers import UserSerializer
+
 from core.permissions import RoleAccessPermission, UserGroup
 from core.utils import generate_work_stages
 from core.defaults import (
@@ -101,6 +104,27 @@ class FinalWorkViewSet(mixins.CreateModelMixin,
                 final_work.save()
 
         return super().update(request, *args, **kwargs)
+
+    @action(detail=True, methods=['get'], url_path='available-supervisors')
+    def available_supervisors(self, request, pk=None):
+        supervisors = User.objects.filter(groups__name='orientador', is_active=True)
+
+        users = UserSerializer(data=supervisors, many=True)
+        users.is_valid()
+
+        return Response(users.data)
+
+    @action(detail=True, methods=['get'], url_path='available-mentees')
+    def available_mentees(self, request, pk=None):
+        instance = self.get_object()
+        mentees = User.objects.filter(groups__name='orientando', is_active=True)
+        mentees = list(filter(lambda mentee: (mentee.get_already_in_work() is False), mentees))
+        mentees = mentees + list(instance.mentees.all())
+
+        users = UserSerializer(data=mentees, many=True)
+        users.is_valid()
+
+        return Response(users.data)
 
 
 class FinalWorkStageViewSet(viewsets.ModelViewSet):

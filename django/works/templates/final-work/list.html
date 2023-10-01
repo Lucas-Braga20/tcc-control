@@ -103,9 +103,9 @@
                 <th class="min-w-150px" data-data="mentees_detail">Orientandos</th>
                 <th class="min-w-150px" data-data="supervisor_detail">Orientador</th>
                 <th class="min-w-150px" data-data="current_stage">Etapa atual</th>
-                <th class="min-w-100px">Estado da etapa atual</th>
+                <th class="min-w-100px">Etapa atual</th>
                 <th class="min-w-100px" data-data="completed">Completado</th>
-                <th class="w-auto rounded-end text-start text-sm-end min-w-100px">Ações</th>
+                <th class="w-auto rounded-end text-start text-sm-end min-w-150px">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -115,10 +115,88 @@
       </div>
     </div>
   </div>
+
+  <div id="tcc_participants_modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <form class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Atualizar participantes</h5>
+
+          <div
+            class="btn btn-icon btn-sm btn-active-light-primary ms-2"
+            data-bs-dismiss="modal"
+            aria-label="Close">
+            <i class="fas fa-times"></i>
+          </div>
+        </div>
+
+        <div class="modal-body p-8 tcc-participants-body">
+          <div id="tcc_participants_loading" class="d-none h-100 d-flex align-items-center justify-content-center">
+            <div class="d-flex justify-content-center align-items-center py-3">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <span class="ms-3">Carregando campos...</span>
+            </div>
+          </div>
+
+          <div id="tcc_participants_form_body">
+            <div class="fv-row mb-8">
+              <label for="tcc_participants_supervisor" class="required form-label">
+                Orientador
+              </label>
+  
+              <select
+                id="tcc_participants_supervisor"
+                class="form-select form-select-solid"
+                name="tcc_participants_supervisor">
+                <option></option>
+              </select>
+            </div>
+
+            <div class="fv-row">
+              <label for="tcc_participants_mentee" class="required form-label">
+                Orientadores
+              </label>
+  
+              <select
+                id="tcc_participants_mentee"
+                class="form-select form-select-solid"
+                name="tcc_participants_mentee"
+                data-control="select2"
+                data-close-on-select="false"
+                data-placeholder="Selecione os orientandos"
+                data-allow-clear="true"
+                multiple="multiple">
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="tcc_participants_cancel_button" type="button" class="btn btn-light form-actions" data-bs-dismiss="modal">
+            Fechar
+          </button>
+
+          <button id="tcc_participants_confirm_button" type="button" class="btn btn-primary form-actions">
+            Confirmar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 {% endblock %}
 
 {% block css-vendors %}
   <link rel="stylesheet" href="{% static 'vendor/datatable/datatables.bundle.css' %}">
+{% endblock %}
+
+{% block css-styles %}
+  <style>
+    .tcc-participants-body {
+      height: 218px;
+    }
+  </style>
 {% endblock %}
 
 {% block js-vendors %}

@@ -18,10 +18,14 @@ class User(AbstractUser):
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     phone = models.CharField(verbose_name=_('phone'), max_length=14, blank=True, null=True)
-    rgm = models.CharField(verbose_name=_('RGM'), max_length=20,
-                           default='', blank=True)
-    university_course = models.CharField(verbose_name=_('university course'),
-                                         max_length=255, default='', blank=True)
+    rgm = models.CharField(
+        verbose_name=_('RGM'), max_length=20, default='',
+        blank=True,
+    )
+    university_course = models.CharField(
+        verbose_name=_('university course'),
+        max_length=255, default='', blank=True,
+    )
 
     class Meta:
         verbose_name = _('User')
@@ -32,6 +36,9 @@ class User(AbstractUser):
 
     def get_profile_url(self):
         return reverse('users:profile', kwargs={'pk': self.id})
+
+    def get_already_in_work(self):
+        return self.work_mentee.filter(archived=False, completed=False).exists()
 
     def __str__(self) -> str:
         return self.get_full_name()

@@ -46,6 +46,30 @@ const FinalWorkList = () => {
           }),
         });
       },
+
+      details(id) {
+        return fetch(`/api/final-works/${id}/`, {
+          method: 'get',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
+          },
+        });
+      },
+
+      update(id) {
+        return fetch(`/api/final-works/${id}/`, {
+          method: 'patch',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
+          },
+          body: JSON.stringify({
+            supervisor: $('#tcc_participants_supervisor').val(),
+            mentees: $('#tcc_participants_mentee').val(),
+          }),
+        });
+      },
     },
   };
 
@@ -54,6 +78,215 @@ const FinalWorkList = () => {
     dataTableElement = document.getElementById('tcc_datatable_users');
     searchInputElement = document.getElementById('tcc_datatable_search_input');
     completedButtonFilters = document.getElementById('tcc_completed_button_filters');
+  }
+
+  function initParticipantsModal() {
+    new bootstrap.Modal($('#tcc_participants_modal'));
+  }
+
+  function handleSupervisorSelect(finalWorkId, initial) {
+    $('#tcc_participants_supervisor').html('');
+    $('#tcc_participants_supervisor').select2({
+      minimumResultsForSearch: -1,
+      placeholder: 'Selecione uma opção de orientador',
+      allowClear: false,
+      ajax: {
+        url: `/api/final-works/${finalWorkId}/available-supervisors/`,
+        dataType: 'json',
+        processResults: function(data) {
+          return {
+            results: data.map(item => ({ id: item.id, text: item.full_name }))
+          };
+        },
+        cache: true,
+      },
+    });
+
+    $('#tcc_participants_supervisor')
+      .append(new Option(
+        initial.full_name,
+        initial.id,
+        true,
+        true,
+      ))
+      .trigger('change');
+  }
+
+  function handleMenteeSelect(finalWorkId, initials) {
+    $('#tcc_participants_mentee').html('');
+    $('#tcc_participants_mentee').select2({
+      minimumResultsForSearch: -1,
+      placeholder: 'Selecione uma opção de orientando',
+      allowClear: false,
+      multiple: true,
+      closeOnSelect: false,
+      ajax: {
+        url: `/api/final-works/${finalWorkId}/available-mentees/`,
+        dataType: 'json',
+        processResults: function(data) {
+          return {
+            results: data.map(item => ({ id: item.id, text: item.full_name }))
+          };
+        },
+        cache: true,
+      },
+    });
+
+    for (const initial of initials) {
+      $('#tcc_participants_mentee')
+        .append(new Option(
+          initial.full_name,
+          initial.id,
+          true,
+          true,
+        ))
+        .trigger('change');
+    }
+  }
+
+  function handleParticipantsButtons() {
+    $('.tcc_participants_action').click(function () {
+      const modal = bootstrap.Modal.getInstance('#tcc_participants_modal');
+      const id = $(this).data('id');
+
+      $('#tcc_participants_modal').data('id', id);
+
+      $('#tcc_participants_modal').find('#tcc_participants_loading').removeClass('d-none');
+      $('#tcc_participants_modal').find('#tcc_participants_form_body').addClass('d-none');
+
+      modal.show();
+
+      API.works.details(id)
+        .then(response => response.json())
+        .then(response => {
+          // Processa select de orientador.
+          handleSupervisorSelect(response.id, response.supervisor_detail);
+
+          // Processa select de orientandos.
+          handleMenteeSelect(response.id, response.mentees_detail);
+
+          $('#tcc_participants_modal').find('#tcc_participants_loading').addClass('d-none');
+          $('#tcc_participants_modal').find('#tcc_participants_form_body').removeClass('d-none');
+        })
+        .catch(() => {
+          Toast.fire({
+            icon: 'error',
+            title: 'Houve um erro no servidor.'
+          });
+        });
+    });
+  }
+
+  function removeErrorInField(id) {
+    $(id).removeClass('is-invalid');
+    $(id).parent().find('.invalid-feedback').remove();
+  }
+
+  function addErrorInField(error, id) {
+    $(id).addClass('is-invalid');
+    if (Array.isArray(error)) {
+      error.forEach(err => {
+        $(id).parent().append(`
+          <div class="invalid-feedback">
+            ${err}
+          </div>
+        `);
+      });
+    } else {
+      $(id).parent().append(`
+        <div class="invalid-feedback">
+          ${error}
+        </div>
+      `);
+    }
+  }
+
+  function handleMenteesSelectElement() {
+    $('#tcc_participants_mentee').on('select2:unselecting', e => {
+      const currentUser = $('#tcc_participants_mentee').val();
+    
+      const userWillBeRemoved = e.params.args.data.id;
+    
+      if (currentUser === userWillBeRemoved) {
+        e.preventDefault();
+      }
+    });
+    
+    $('#tcc_participants_mentee').on('select2:selecting', e => {
+      const selectedItems = $('#tcc_participants_mentee').select2('val');
+    
+      if (selectedItems.length > 1) {
+        e.preventDefault();
+      }
+    });
+  }
+
+  function handleUpdateParticipantsForm() {
+    $('#tcc_participants_confirm_button').click(function () {
+      const finalWorkId = $('#tcc_participants_modal').data('id');
+
+      let fetchResponse;
+
+      $('#tcc_participants_modal .form-actions').addClass('disabled');
+      $('#tcc_participants_modal .form-actions').html(`
+        <div class="d-flex flex-row justify-content-center align-items-center">
+          <div class="spinner-border spinner-border-sm text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+
+          <span class="ms-1">
+            Carregando...
+          </span>
+        </div>
+      `);
+
+      API.works.update(finalWorkId)
+        .then(response => fetchResponse = response)
+        .then(response => response.json())
+        .then(data => {
+          if (fetchResponse.status >= 300) {
+            removeErrorInField('#tcc_participants_supervisor');
+            removeErrorInField('#tcc_participants_mentee');
+
+            if (data.supervisor) {
+              addErrorInField(data.supervisor, '#tcc_participants_supervisor');
+            }
+
+            if (data.mentees) {
+              addErrorInField(data.mentees, '#tcc_participants_mentee');
+            }
+
+            if (data.detail) {
+              Toast.fire({
+                icon: 'error',
+                title: data.detail
+              });
+            }
+          } else {
+            bootstrap.Modal.getInstance('#tcc_participants_modal').hide();
+
+            Toast.fire({
+              icon: 'success',
+              title: 'Participantes atualizados com sucesso.'
+            });
+
+            dataTableObject.ajax.reload();
+            dataTableObject.draw();
+          }
+        })
+        .catch(() => {
+          Toast.fire({
+            icon: 'error',
+            title: 'Houve um erro no servidor. Tente novamente!'
+          });
+        })
+        .finally(() => {
+          $('#tcc_participants_modal .form-actions').removeClass('disabled');
+
+          $('#tcc_participants_cancel_button').html('Fechar');
+          $('#tcc_participants_confirm_button').html('Confirmar');
+        });
+    });
   }
 
   function handleCompleteButtons() {
@@ -113,6 +346,7 @@ const FinalWorkList = () => {
       responsive: true,
       drawCallback(settings) {
         handleCompleteButtons();
+        handleParticipantsButtons();
 
         const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -219,6 +453,15 @@ const FinalWorkList = () => {
                   title="Completar TCC">
                   <i class="fas fa-clipboard-check"></i>
                 </button>
+
+                <button
+                  class="btn btn-sm btn-icon btn-primary ms-1 tcc_participants_action"
+                  data-id="${data.id}"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Atualizar participantes">
+                  <i class="fas fa-users"></i>
+                </button>
               `;
             }
 
@@ -231,13 +474,22 @@ const FinalWorkList = () => {
 
     $(dataTableElement).on('responsive-display.dt', () => {
       handleCompleteButtons();
+      handleParticipantsButtons();
+
+      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
     });
   }
 
 
   getElements();
   handleCompletedButtonFilters();
+  handleUpdateParticipantsForm();
+  handleMenteesSelectElement();
   initFinalWorkDataTable();
+  initParticipantsModal();
 }
 
 KTUtil.onDOMContentLoaded(function() {

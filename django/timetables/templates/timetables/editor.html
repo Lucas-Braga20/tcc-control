@@ -108,6 +108,14 @@
                 Orientandos
               </label>
 
+              <span
+                class="ms-2"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                data-bs-original-title="Caso seja necessário remover um orientando, atualize o TCC diretamente removendo-o.">
+                <i class="fas fa-info-circle text-muted"></i>
+              </span>
+
               {% if form.mentee_field.errors %}
                 <select
                   class="form-select form-select-solid is-invalid"
@@ -117,6 +125,9 @@
                   data-placeholder="Selecione os orientandos"
                   data-allow-clear="true"
                   multiple="multiple"
+                  {% if object %}
+                    disabled
+                  {% endif %}
                 >
                   <option></option>
                   {% for pk, choice in form.mentee_field.field.choices %}
@@ -138,6 +149,9 @@
                   data-placeholder="Selecione os orientandos"
                   data-allow-clear="true"
                   multiple="multiple"
+                  {% if object %}
+                    disabled
+                  {% endif %}
                 >
                   <option></option>
                   {% for pk, choice in form.mentee_field.field.choices %}
@@ -165,6 +179,14 @@
                 Orientadores
               </label>
 
+              <span
+                class="ms-2"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                data-bs-original-title="Caso seja necessário alterar um orientador, atualize o TCC diretamente removendo-o.">
+                <i class="fas fa-info-circle text-muted"></i>
+              </span>
+
               {% if form.supervisor_field.errors %}
                 <select
                   class="form-select form-select-solid is-invalid"
@@ -174,6 +196,9 @@
                   data-placeholder="Selecione os orientadores"
                   data-allow-clear="true"
                   multiple="multiple"
+                  {% if object %}
+                    disabled
+                  {% endif %}
                 >
                   <option></option>
                   {% for pk, choice in form.supervisor_field.field.choices %}
@@ -195,6 +220,9 @@
                   data-placeholder="Selecione os orientadores"
                   data-allow-clear="true"
                   multiple="multiple"
+                  {% if object %}
+                    disabled
+                  {% endif %}
                 >
                   <option></option>
                   {% for pk, choice in form.supervisor_field.field.choices %}
