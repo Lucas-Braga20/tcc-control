@@ -412,6 +412,58 @@
             </div>
           </div>
           {% endif %}
+
+          <div class="d-flex flex-wrap justify-content-between align-items-center pt-5 pt-sm-8">
+            <h2 class="mb-0">
+              Avaliação do professor
+            </h2>
+          </div>
+
+          <div class="mt-2 mt-sm-5">
+            O professor da disciplina de TCC avalia esse trabalho com atenção à dedicação demonstrada pelos estudantes.
+            A análise criteriosa resultou em uma nota que reflete diversos aspectos, incluindo o esforço investido,
+            a qualidade da pesquisa, a profundidade da análise e a originalidade das contribuições apresentadas.
+          </div>
+
+          <div
+            id="tcc_grading_score_container"
+            class="mt-2 mt-sm-5"
+            data-final-work="{{ object.id }}">
+            <label
+              for="tcc_grading_score_range"
+              class="d-flex form-label align-items-center">
+              <div>
+                <i class="fas fa-star text-warning"></i>
+              </div>
+
+              <span class="ms-1">
+                Nota avaliativa
+              </span>
+
+              <div class="ms-2">
+                <span id="tcc_grading_score" class="badge badge-light">
+                  {{ object.grading_score }}
+                </span>
+              </div>
+            </label>
+
+            <input
+              id="tcc_grading_score_range"
+              type="range"
+              class="form-range"
+              value="{{ object.grading_score }}"
+              min="0"
+              max="100"
+              {% if user_group.is_teacher is False %}
+                disabled
+              {% endif %}>
+
+            {% if user_group.is_teacher %}
+              <div class="d-flex justify-content-end">
+                <button id="tcc_grading_score_save" class="btn btn-sm btn-primary">Salvar</button>
+              </div>
+            {% endif %}
+          </div>
         </div>
       </div>
     </div>

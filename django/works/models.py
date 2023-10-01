@@ -23,14 +23,26 @@ class FinalWork(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
     approved = models.BooleanField(verbose_name=_('approved'), null=True, blank=True)
-    supervisor = models.ForeignKey('users.User', related_name='work_supervisor', verbose_name=_('supervisor'),
-                                   on_delete=models.DO_NOTHING)
-    mentees = models.ManyToManyField('users.User', related_name='work_mentee',
-                                    verbose_name=_('mentee'))
+    supervisor = models.ForeignKey(
+        'users.User', related_name='work_supervisor', verbose_name=_('supervisor'),
+        on_delete=models.DO_NOTHING,
+    )
+    mentees = models.ManyToManyField(
+        'users.User', related_name='work_mentee',
+        verbose_name=_('mentee'),
+    )
     archived = models.BooleanField(default=False, verbose_name=_('archived'))
     completed = models.BooleanField(default=False, verbose_name=_('completed'))
-    able_to_present = models.BooleanField(default=None, null=True, verbose_name=_('able to present'))
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'), blank=True, null=True)
+    grading_score = models.SmallIntegerField(
+        default=0, verbose_name=_('grading score'),
+    )
+    able_to_present = models.BooleanField(
+        default=None, null=True, verbose_name=_('able to present'),
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name=_('created at'),
+        blank=True, null=True,
+    )
 
     class Meta:
         verbose_name = _('Final work')

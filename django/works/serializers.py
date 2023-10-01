@@ -21,8 +21,10 @@ class FinalWorkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FinalWork
-        fields = ['id', 'description', 'approved', 'completed', 'supervisor', 'mentees', 'archived',
-                  'mentees_detail', 'current_stage', 'supervisor_detail', 'able_to_present']
+        fields = [
+            'id', 'description', 'approved', 'completed', 'supervisor', 'mentees', 'archived',
+            'mentees_detail', 'current_stage', 'supervisor_detail', 'able_to_present', 'grading_score',
+        ]
 
     def get_current_stage(self, obj):
         current_stage = obj.get_current_stage()
