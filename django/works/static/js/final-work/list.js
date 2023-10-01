@@ -165,6 +165,8 @@ const FinalWorkList = () => {
           // Processa select de orientandos.
           handleMenteeSelect(response.id, response.mentees_detail);
 
+          initParticipantsFormValidator();
+
           $('#tcc_participants_modal').find('#tcc_participants_loading').addClass('d-none');
           $('#tcc_participants_modal').find('#tcc_participants_form_body').removeClass('d-none');
         })
@@ -201,6 +203,54 @@ const FinalWorkList = () => {
     }
   }
 
+  function initParticipantsFormValidator() {
+    $('#tcc_participants_form').validate({
+      errorElement: 'div',
+      errorClass: 'invalid-feedback',
+      highlight: function(element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function(element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      },
+      rules: {
+        tcc_participants_supervisor: {
+          required: true,
+        },
+        tcc_participants_mentee: {
+          required: true,
+        },
+      },
+      messages: {
+        tcc_participants_supervisor: {
+          required: 'O orientador deve ser selecionado.',
+        },
+        tcc_participants_mentee: {
+          required: 'Os orientandos devem ser selecionados.',
+        },
+      },
+      errorPlacement(error, element) {
+        element.parent().append(error);
+      },
+    });
+
+    $('#tcc_participants_supervisor').on('select2:select', function(e) {
+      $(this).valid();
+    });
+
+    $('#tcc_participants_mentee').on('select2:select', function(e) {
+      $(this).valid();
+    });
+
+    $('#tcc_participants_supervisor').on('select2:unselect', function(e) {
+      $(this).valid();
+    });
+
+    $('#tcc_participants_supervisor').on('select2:select', function(e) {
+      $(this).valid();
+    });
+  }
+
   function handleMenteesSelectElement() {
     $('#tcc_participants_mentee').on('select2:unselecting', e => {
       const currentUser = $('#tcc_participants_mentee').val();
@@ -222,7 +272,13 @@ const FinalWorkList = () => {
   }
 
   function handleUpdateParticipantsForm() {
-    $('#tcc_participants_confirm_button').click(function () {
+    $('#tcc_participants_confirm_button').click(function (e) {
+      if (!$('#tcc_participants_form').valid()) {
+        e.preventDefault();
+
+        return;
+      }
+
       const finalWorkId = $('#tcc_participants_modal').data('id');
 
       let fetchResponse;

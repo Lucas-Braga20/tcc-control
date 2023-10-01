@@ -118,7 +118,7 @@
 
   <div id="tcc_participants_modal" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-xl">
-      <form class="modal-content">
+      <form id="tcc_participants_form" class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Atualizar participantes</h5>
 
@@ -201,6 +201,7 @@
 
 {% block js-vendors %}
   <script src="{% static 'vendor/datatable/datatables.bundle.js' %}"></script>
+  <script src="{% static 'vendor/jquery.validate.js/jquery.validate.min.js' %}"></script>
 {% endblock %}
 
 {% block js-scripts %}
