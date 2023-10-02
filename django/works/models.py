@@ -64,6 +64,19 @@ class FinalWork(models.Model):
     def get_final_work_url(self):
         return reverse('works:stages', kwargs={'pk': self.id})
 
+    def get_all_content_data(self):
+        work_stages = self.work_stage.all()
+
+        all_fields = []
+
+        for work_stage in work_stages:
+            last_version = work_stage.get_last_version()
+
+            if last_version:
+                all_fields = all_fields + last_version.content.get('fields', [])
+
+        return all_fields
+
     def __str__(self):
         return f'TCC: "{self.description}"'
 
