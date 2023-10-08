@@ -32,6 +32,8 @@ const Calendar = () => {
         right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
       },
 
+      locale: 'pt',
+
       height: 800,
       contentHeight: 780,
       aspectRatio: 3,
@@ -40,9 +42,9 @@ const Calendar = () => {
       now: TODAY + "T09:25:00",
 
       views: {
-        dayGridMonth: { buttonText: "month" },
-        timeGridWeek: { buttonText: "week" },
-        timeGridDay: { buttonText: "day" }
+        dayGridMonth: { buttonText: "Mês" },
+        timeGridWeek: { buttonText: "Semana" },
+        timeGridDay: { buttonText: "Dia" }
       },
 
       initialView: "dayGridMonth",
