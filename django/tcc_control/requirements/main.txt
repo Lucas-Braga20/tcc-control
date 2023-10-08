@@ -14,4 +14,3 @@ django-celery-results==2.5.1
 beautifulsoup4==4.12.2
 docxtpl==0.16.7
 htmldocx==0.0.6
-pywin32==306

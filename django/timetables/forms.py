@@ -17,28 +17,28 @@ class CustomSelectMultiple(forms.SelectMultiple):
 
 
 class TimetableForm(forms.ModelForm):
-    """
-    Timetable form.
-    """
+    """Formulário de calendário."""
+    document_template = forms.FileField(required=True)
     mentee_field = forms.ModelMultipleChoiceField(
         queryset=User.objects.filter(groups__name='Orientando'),
-        widget=CustomSelectMultiple(),
-        required=True
+        widget=CustomSelectMultiple(), required=True,
     )
     supervisor_field = forms.ModelMultipleChoiceField(
         queryset=User.objects.filter(groups__name='Orientador'),
-        widget=CustomSelectMultiple(),
-        required=True
+        widget=CustomSelectMultiple(), required=True,
     )
     teacher = forms.ModelChoiceField(
         label='Teacher',
         queryset=User.objects.filter(groups__name='Professor da disciplina'),
-        widget=forms.Select(attrs={'readonly': 'readonly', 'class': 'd-none'})
+        widget=forms.Select(attrs={'readonly': 'readonly', 'class': 'd-none'}),
     )
 
     class Meta:
         model = Timetable
-        fields = ['mentee_field', 'supervisor_field', 'description', 'teacher']
+        fields = [
+            'mentee_field', 'supervisor_field', 'description', 'teacher',
+            'document_template',
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -76,6 +76,25 @@ class TimetableForm(forms.ModelForm):
 
         return teacher
 
+    def clean_document_template(self):
+        """Valida o campo template.
+
+        Esse campo não pode ter formato diferente de docx e doc.
+        Seu tamanho máximo não pode exceder 10 MB.
+        """
+        document_template = self.cleaned_data.get('document_template')
+
+        if document_template:
+            allowed_extensions = ['.docx', '.doc']
+            if not any(document_template.name.lower().endswith(ext) for ext in allowed_extensions):
+                raise forms.ValidationError("Somente arquivos .docx e .doc são permitidos.")
+
+            max_size = 10 * 1024 * 1024  # 10 MB
+            if document_template.size > max_size:
+                raise forms.ValidationError("O tamanho máximo do arquivo é de 10 MB.")
+
+        return document_template
+
     def save(self, commit=True):
         instance = super().save(commit=False)
         instance.save()
@@ -86,22 +105,23 @@ class TimetableForm(forms.ModelForm):
         participants = instance.participants.values_list('id', flat=True)
 
         if mentees:
-            # add mentees
+            # Adiciona os novos orientandos.
             for mentee in mentees:
                 if mentee.id not in participants.values_list('id', flat=True):
                     instance.participants.add(mentee)
 
-            # remove mentees
+            # Remove todos os orientandos.
             for participant in participants.filter(groups__name='Orientando'):
                 if participant not in mentees.values_list('id', flat=True):
                     instance.participants.remove(participant)
+
         if supervisors:
-            # add supervisor
+            # Adiciona os novos orientadores.
             for supervisor in supervisors:
                 if supervisor.id not in participants.values_list('id', flat=True):
                     instance.participants.add(supervisor)
 
-            # remove supervisor
+            # Remove todos os orientadores.
             for participant in participants.filter(groups__name='Orientador'):
                 if participant not in supervisors.values_list('id', flat=True):
                     instance.participants.remove(participant)

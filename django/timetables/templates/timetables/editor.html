@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% load static utils %}
+{% load static utils widget_tweaks %}
 
 {% block header %}
   <div
@@ -65,10 +65,8 @@
 {% block content %}
   <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <div class="container-xxl" id="kt_content_container">
-      <form method="post" id="tcc_editor_timetables" novalidate>
+      <form method="post" id="tcc_editor_timetables" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
-
-        {{ form.errors }}
 
         <div class="card">
           <div class="card-header border-0 p-8 pb-4">
@@ -90,12 +88,50 @@
               </label>
 
               {% if form.description.errors %}
-                <textarea class="form-control form-control-solid is-invalid" name="description" id="description" cols="30" rows="10" minlength="3" maxlength="255">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
+                <textarea
+                  class="form-control form-control-solid is-invalid"
+                  name="description"
+                  id="description"
+                  cols="30"
+                  rows="10"
+                  minlength="3"
+                  maxlength="255">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
               {% else %}
-                <textarea class="form-control form-control-solid" name="description" id="description" cols="30" rows="10" minlength="3" maxlength="255">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
+                <textarea
+                  class="form-control form-control-solid"
+                  name="description"
+                  id="description"
+                  cols="30"
+                  rows="10"
+                  minlength="3"
+                  maxlength="255">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
               {% endif %}
 
               {% for error in form.description.errors %}
+                <div class="invalid-feedback">
+                  {{ error }}
+                </div>
+              {% endfor %}
+            </div>
+
+            <!-- Document template -->
+            {{ instance.document_template }}
+            <div class="fv-row mb-8">
+              <label for="document_template" class="required form-label">
+                Template do documento.
+              </label>
+
+              {% if form.document_template.errors %}
+                <div>
+                  {{ form.document_template|add_class:"form-control form-control-solid is-invalid" }}
+                </div>
+              {% else %}
+                <div>
+                  {{ form.document_template|add_class:"form-control form-control-solid" }}
+                </div>
+              {% endif %}
+
+              {% for error in form.document_template.errors %}
                 <div class="invalid-feedback">
                   {{ error }}
                 </div>
@@ -112,59 +148,36 @@
                 class="ms-2"
                 data-bs-toggle="tooltip"
                 data-bs-placement="top"
-                data-bs-original-title="Caso seja necessário remover um orientando, atualize o TCC diretamente removendo-o.">
+                data-bs-original-title="
+                  Caso seja necessário remover um orientando, atualize o TCC diretamente removendo-o.
+                ">
                 <i class="fas fa-info-circle text-muted"></i>
               </span>
 
-              {% if form.mentee_field.errors %}
-                <select
-                  class="form-select form-select-solid is-invalid"
-                  name="mentee_field"
-                  data-control="select2"
-                  data-close-on-select="false"
-                  data-placeholder="Selecione os orientandos"
-                  data-allow-clear="true"
-                  multiple="multiple"
-                  {% if object %}
-                    disabled
-                  {% endif %}
-                >
-                  <option></option>
-                  {% for pk, choice in form.mentee_field.field.choices %}
-                    <option
-                      {% if pk in mentees %}
-                        selected
-                      {% endif %}
-                      value="{{ pk }}">
-                      {{ choice }}
-                    </option>
-                  {% endfor %}
-                </select>
-              {% else %}
-                <select
-                  class="form-select form-select-solid"
-                  name="mentee_field"
-                  data-control="select2"
-                  data-close-on-select="false"
-                  data-placeholder="Selecione os orientandos"
-                  data-allow-clear="true"
-                  multiple="multiple"
-                  {% if object %}
-                    disabled
-                  {% endif %}
-                >
-                  <option></option>
-                  {% for pk, choice in form.mentee_field.field.choices %}
-                    <option
-                      {% if pk in mentees %}
-                        selected
-                      {% endif %}
-                      value="{{ pk }}">
-                      {{ choice }}
-                    </option>
-                  {% endfor %}
-                </select>
-              {% endif %}
+              <select
+                class="form-select form-select-solid disabled {% if form.mentee_field.errors %}is-invalid{% endif %}"
+                name="mentee_field"
+                data-control="select2"
+                data-close-on-select="false"
+                data-placeholder="Selecione os orientandos"
+                data-allow-clear="true"
+                multiple="multiple"
+                select2-readonly
+                {% if object %}
+                  readonly="readonly"
+                {% endif %}
+              >
+                <option></option>
+                {% for pk, choice in form.mentee_field.field.choices %}
+                  <option
+                    {% if pk in mentees %}
+                      selected
+                    {% endif %}
+                    value="{{ pk }}">
+                    {{ choice }}
+                  </option>
+                {% endfor %}
+              </select>
 
               {% for error in form.mentee_field.errors %}
                 <div class="invalid-feedback">
@@ -183,59 +196,36 @@
                 class="ms-2"
                 data-bs-toggle="tooltip"
                 data-bs-placement="top"
-                data-bs-original-title="Caso seja necessário alterar um orientador, atualize o TCC diretamente removendo-o.">
+                data-bs-original-title="
+                  Caso seja necessário alterar um orientador, atualize o TCC diretamente removendo-o.
+                ">
                 <i class="fas fa-info-circle text-muted"></i>
               </span>
 
-              {% if form.supervisor_field.errors %}
-                <select
-                  class="form-select form-select-solid is-invalid"
-                  name="supervisor_field"
-                  data-control="select2"
-                  data-close-on-select="false"
-                  data-placeholder="Selecione os orientadores"
-                  data-allow-clear="true"
-                  multiple="multiple"
-                  {% if object %}
-                    disabled
-                  {% endif %}
-                >
-                  <option></option>
-                  {% for pk, choice in form.supervisor_field.field.choices %}
-                    <option
-                      {% if pk in supervisors %}
-                        selected
-                      {% endif %}
-                      value="{{ pk }}">
-                      {{ choice }}
-                    </option>
-                  {% endfor %}
-                </select>
-              {% else %}
-                <select
-                  class="form-select form-select-solid"
-                  name="supervisor_field"
-                  data-control="select2"
-                  data-close-on-select="false"
-                  data-placeholder="Selecione os orientadores"
-                  data-allow-clear="true"
-                  multiple="multiple"
-                  {% if object %}
-                    disabled
-                  {% endif %}
-                >
-                  <option></option>
-                  {% for pk, choice in form.supervisor_field.field.choices %}
-                    <option
-                      {% if pk in supervisors %}
-                        selected
-                      {% endif %}
-                      value="{{ pk }}">
-                      {{ choice }}
-                    </option>
-                  {% endfor %}
-                </select>
-              {% endif %}
+              <select
+                class="form-select form-select-solid {% if form.supervisor_field.errors %}is-invalid{% endif %}"
+                name="supervisor_field"
+                data-control="select2"
+                data-close-on-select="false"
+                data-placeholder="Selecione os orientadores"
+                data-allow-clear="true"
+                multiple="multiple"
+                select2-readonly
+                {% if object %}
+                  readonly="readonly"
+                {% endif %}
+              >
+                <option></option>
+                {% for pk, choice in form.supervisor_field.field.choices %}
+                  <option
+                    {% if pk in supervisors %}
+                      selected
+                    {% endif %}
+                    value="{{ pk }}">
+                    {{ choice }}
+                  </option>
+                {% endfor %}
+              </select>
 
               {% for error in form.supervisor_field.errors %}
                 <div class="invalid-feedback">
@@ -272,6 +262,7 @@
               </div>
             {% endif %}
           </div>
+
           <div class="card-footer d-flex justify-content-end pt-4 border-0">
             <a href="{% url 'timetables:list' %}" class="btn btn-secondary">Cancelar</a>
             <button type="submit" class="btn btn-primary ms-5">Salvar</button>

@@ -1,7 +1,4 @@
 const TimetableEditor = () => {
-  let stageEditor = null;
-
-
   function addFormValidator() {
     $('#tcc_editor_timetables').validate({
       errorElement: 'div',
@@ -56,17 +53,44 @@ const TimetableEditor = () => {
   }
 
   function handleSelect2Elements() {
+    // Trata eventos do select2 relacionados a validação de formulário.
     $('[data-control="select2"]').on('select2:select', function(e) {
       $(this).valid();
     });
-
     $('[data-control="select2"]').on('select2:unselect', function(e) {
       $(this).valid();
+    });
+
+    // Trata eventos do select2 relacionados ao atributo readonly.
+    $('select[select2-readonly]').on('select2:opening', function (e) {
+      if($(this).attr('readonly') == 'readonly') {
+        e.preventDefault();
+        $(this).select2('close'); 
+        return false;
+      }
+    });
+    $('select[select2-readonly]').on('select2:clearing', function (e) {
+      if($(this).attr('readonly') == 'readonly') {
+        e.preventDefault();
+        return false;
+      }
+    });
+    $('select[select2-readonly]').on('select2:clear', function (e) {
+      if($(this).attr('readonly') == 'readonly') {
+        e.preventDefault();
+        return false;
+      }
+    });
+    $('select[select2-readonly]').on('select2:unselecting', function (e) {
+      if($(this).attr('readonly') == 'readonly') {
+        e.preventDefault();
+        return false;
+      }
     });
   }
 
 
-  stageEditor = new StageEditor();
+  new StageEditor();
   addFormValidator();
   addBootstrapMaxLength();
   handleSelect2Elements();

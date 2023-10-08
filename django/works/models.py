@@ -64,12 +64,17 @@ class FinalWork(models.Model):
     def get_final_work_url(self):
         return reverse('works:stages', kwargs={'pk': self.id})
 
-    def get_all_content_data(self):
+    def get_all_content_data(self, filter_insertion=True):
         work_stages = self.work_stage.all()
 
         all_fields = []
 
         for work_stage in work_stages:
+            # Pula etapas em que a atividade não possua inclusão.
+            document_insertion = work_stage.stage.activity_configuration.document_insertion
+            if filter_insertion is True and document_insertion is False:
+                continue
+
             last_version = work_stage.get_last_version()
 
             if last_version:

@@ -14,7 +14,10 @@ from core.permissions import GenericPermissionMixin, UserGroup
 from core.mixins import NotificationMixin
 
 
-class TimetableListView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, TemplateView):
+class TimetableListView(
+    NotificationMixin, GenericPermissionMixin, LoginRequiredMixin,
+    TemplateView,
+):
     """
     Timetable list screen.
     """
@@ -22,11 +25,10 @@ class TimetableListView(NotificationMixin, GenericPermissionMixin, LoginRequired
     required_groups = ['Professor da disciplina']
 
 
-class TimetableCreateView(NotificationMixin,
-                          GenericPermissionMixin,
-                          LoginRequiredMixin,
-                          SuccessMessageMixin,
-                          CreateView):
+class TimetableCreateView(
+    NotificationMixin, GenericPermissionMixin, LoginRequiredMixin,
+    SuccessMessageMixin, CreateView,
+):
     """
     Timetable view to create object.
     """
@@ -45,7 +47,9 @@ class TimetableCreateView(NotificationMixin,
         return initial
 
 
-class TimetableUpdateView(NotificationMixin, LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class TimetableUpdateView(
+    NotificationMixin, LoginRequiredMixin, SuccessMessageMixin, UpdateView,
+):
     """
     Timetable view to update object.
     """
@@ -60,15 +64,22 @@ class TimetableUpdateView(NotificationMixin, LoginRequiredMixin, SuccessMessageM
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        object = self.get_object()
+        timetable = self.get_object()
 
-        context['mentees'] = object.participants.filter(groups__name='Orientando').values_list('id', flat=True)
-        context['supervisors'] = object.participants.filter(groups__name='Orientador').values_list('id', flat=True)
+        context['mentees'] = timetable.participants.filter(
+            groups__name='Orientando',
+        ).values_list('id', flat=True)
+
+        context['supervisors'] = timetable.participants.filter(
+            groups__name='Orientador',
+        ).values_list('id', flat=True)
 
         return context
 
 
-class TimetableStageCalendarView(NotificationMixin, LoginRequiredMixin, TemplateView):
+class TimetableStageCalendarView(
+    NotificationMixin, LoginRequiredMixin, TemplateView,
+):
     """
     Timetable calendar view.
     """
