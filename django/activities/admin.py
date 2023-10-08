@@ -12,4 +12,4 @@ class ActivityConfigurationAdmin(admin.ModelAdmin):
     """
     Activity configuration model admin.
     """
-    list_display = ('name', 'fields', 'template_abnt')
+    list_display = ('name', 'fields', 'document_insertion')

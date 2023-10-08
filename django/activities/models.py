@@ -15,7 +15,7 @@ class ActivityConfiguration(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.TextField(verbose_name=_('name'), max_length=255)
     fields = models.JSONField(verbose_name=_('fields'))
-    template_abnt = models.FileField(upload_to='documents/', blank=True, null=True)
+    document_insertion = models.BooleanField(verbose_name=_('Document insertion'), default=True)
     archived = models.BooleanField(default=False, verbose_name=_('archived'))
 
     class Meta:

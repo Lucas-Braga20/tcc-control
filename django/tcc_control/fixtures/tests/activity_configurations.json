@@ -6,7 +6,7 @@
             "fields": {
                 "title": "required"
             },
-            "template_abnt": ""
+            "document_insertion": false
         }
     }
 ]

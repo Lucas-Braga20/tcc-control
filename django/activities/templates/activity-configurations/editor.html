@@ -111,31 +111,35 @@
               {% endfor %}
             </div>
 
-            <!-- Template ABNT -->
+            <!-- Document insertion -->
             <div class="fv-row mb-8">
-              <label for="template" class="form-label">
-                Template
+              <label for="document_insertion" class="form-label">
+                Inclusão no documento
               </label>
 
               <span
                 class="ms-2"
                 data-bs-toggle="tooltip"
                 data-bs-placement="top"
-                title="Este campo não é obrigatório quando a atividade não será incluída no documento ABNT. Selecione um arquivo docx com até no máximo 10Mb.">
+                title="
+                  Este campo referese a inclusão no documento. Algumas etapas podem não ser inseridas
+                  obrigatoriamente no documento ABNT. Como acontece com etapas que precisam apenas de um
+                  relatório da atividade desenvolvida.
+                ">
                 <i class="fas fa-info-circle text-muted"></i>
               </span>
 
-              {% if form.template_abnt.errors %}
+              {% if form.document_insertion.errors %}
                 <div class="is-invalid">
-                  {{ form.template_abnt }}
+                  {{ form.document_insertion|add_class:"form-check-input" }}
                 </div>
               {% else %}
                 <div>
-                  {{ form.template_abnt }}
+                  {{ form.document_insertion|add_class:"form-check-input" }}
                 </div>
               {% endif %}
 
-              {% for error in form.template_abnt.errors %}
+              {% for error in form.document_insertion.errors %}
                 <div class="invalid-feedback">
                   {{ error }}
                 </div>

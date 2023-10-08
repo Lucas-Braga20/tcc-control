@@ -80,22 +80,24 @@ const ActivityConfigurationList = () => {
           },
         },
         {
-          data: 'template_abnt_detail',
+          data: 'document_insertion',
           render(data) {
-            let element = ''
-            if (data === null || data === '') {
+            let element = '';
+
+            if (data) {
               element = `
-                <span class="text-muted">
-                  Sem template
-                </span>
+                <div>
+                  <i class="far fa-check-circle text-success fs-3"></i>
+                </div>
               `;
             } else {
               element = `
-                <div class="d-inline-flex align-items-center text-ellipsis max-w-200px">
-                  <a href="${data.file}">${data.name}</a>
+                <div>
+                  <i class="far fa-times-circle text-danger fs-3"></i>
                 </div>
               `;
             }
+
             return element
           },
         },

@@ -15,12 +15,11 @@ class ActivityConfigurationSerializer(serializers.ModelSerializer):
     Activity Configuration Serializer.
     """
     fields_description = serializers.SerializerMethodField(read_only=True)
-    template_abnt_detail = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = ActivityConfiguration
-        fields = ['id', 'name', 'fields', 'fields_description', 'template_abnt', 'template_abnt_detail', 'archived']
-        datatables_always_serialize = ('id', 'name', 'fields', 'fields_description', 'template_abnt', 'archived')
+        fields = ['id', 'name', 'fields', 'fields_description', 'document_insertion', 'archived']
+        datatables_always_serialize = ('id', 'name', 'fields', 'fields_description', 'document_insertion', 'archived')
         depth = 2
         extra_kwargs = {
             'fields': {'write_only': True}
@@ -32,14 +31,6 @@ class ActivityConfigurationSerializer(serializers.ModelSerializer):
         if fields is not None:
             return ', '.join([field['name'] for field in fields])
 
-        return None
-
-    def get_template_abnt_detail(self, obj):
-        if obj.template_abnt:
-            return {
-                'name': os.path.basename(obj.template_abnt.name),
-                'file': obj.template_abnt.url
-            }
         return None
 
     def validate_fields(self, value):

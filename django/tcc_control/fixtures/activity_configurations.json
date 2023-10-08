@@ -13,7 +13,7 @@
           }
         ]
       },
-      "template_abnt": "documents/Padrão__Projeto_TCC_2023_3YBEmpE.docx",
+      "document_insertion": true,
       "archived": false
     }
   },
@@ -36,7 +36,7 @@
           }
         ]
       },
-      "template_abnt": "documents/Padrão__Projeto_TCC_2023_u5yX1kl.docx",
+      "document_insertion": true,
       "archived": false
     }
   },
@@ -54,7 +54,7 @@
           }
         ]
       },
-      "template_abnt": "documents/Padrão__Projeto_TCC_2023_19pB2no.docx",
+      "document_insertion": true,
       "archived": false
     }
   },
@@ -92,7 +92,7 @@
           }
         ]
       },
-      "template_abnt": "documents/Proposta_de_Projeto_2023.doc",
+      "document_insertion": true,
       "archived": false
     }
   },
@@ -110,7 +110,7 @@
           }
         ]
       },
-      "template_abnt": "documents/Padrão__Projeto_TCC_2023_59zM0ef.docx",
+      "document_insertion": true,
       "archived": false
     }
   },
@@ -158,7 +158,7 @@
           }
         ]
       },
-      "template_abnt": "documents/TAP_-_Termo_de_Abertura_do_Projeto_2023.doc",
+      "document_insertion": true,
       "archived": false
     }
   },
@@ -186,7 +186,7 @@
           }
         ]
       },
-      "template_abnt": "documents/Padrão__Projeto_TCC_2023.docx",
+      "document_insertion": true,
       "archived": false
     }
   },
@@ -204,7 +204,7 @@
           }
         ]
       },
-      "template_abnt": "documents/Padrão__Projeto_TCC_2023_SHDUOuG.docx",
+      "document_insertion": true,
       "archived": false
     }
   },
@@ -222,7 +222,7 @@
           }
         ]
       },
-      "template_abnt": null,
+      "document_insertion": false,
       "archived": false
     }
   },
@@ -240,7 +240,7 @@
           }
         ]
       },
-      "template_abnt": null,
+      "document_insertion": false,
       "archived": false
     }
   }
