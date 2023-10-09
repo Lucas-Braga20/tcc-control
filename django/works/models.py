@@ -22,14 +22,15 @@ class FinalWork(models.Model):
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
-    approved = models.BooleanField(verbose_name=_('approved'), null=True, blank=True)
+    approved = models.BooleanField(
+        verbose_name=_('approved'), null=True, blank=True,
+    )
     supervisor = models.ForeignKey(
-        'users.User', related_name='work_supervisor', verbose_name=_('supervisor'),
-        on_delete=models.DO_NOTHING,
+        'users.User', related_name='work_supervisor',
+        verbose_name=_('supervisor'), on_delete=models.DO_NOTHING,
     )
     mentees = models.ManyToManyField(
-        'users.User', related_name='work_mentee',
-        verbose_name=_('mentee'),
+        'users.User', related_name='work_mentee', verbose_name=_('mentee'),
     )
     archived = models.BooleanField(default=False, verbose_name=_('archived'))
     completed = models.BooleanField(default=False, verbose_name=_('completed'))

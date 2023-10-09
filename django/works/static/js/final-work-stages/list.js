@@ -64,6 +64,8 @@ const FinalWorkStageList = () => {
             icon: 'success',
             title: 'TCC atualizado com sucesso.'
           });
+
+          $('#tcc_short_grading_score').text($('#tcc_grading_score_range').val());
         })
         .catch(err => {
           Toast.fire({
@@ -118,6 +120,14 @@ const FinalWorkStageList = () => {
         });
 
         $('#tcc_able_to_present_container').attr('data-default', String(value));
+
+        if (value === true) {
+          $('#tcc_short_able_to_present_container #tcc_short_able_to_present').text('Apto');
+        } else if (value === false) {
+          $('#tcc_short_able_to_present_container #tcc_short_able_to_present').text('Inapto');
+        } else {
+          $('#tcc_short_able_to_present_container #tcc_short_able_to_present').text('--');
+        }
       }).catch(err => {
         Toast.fire({
           icon: 'error',
