@@ -122,9 +122,9 @@
                   </label>
 
                   {% if form.university_course.errors %}
-                    {{ form.university_course|add_class:"form-control form-control-solid is-invalid" }}
+                    {{ form.university_course|add_class:"form-control form-control-solid is-invalid"|attr:"data-control:select2" }}
                   {% else %}
-                    {{ form.university_course|add_class:"form-control form-control-solid" }}
+                    {{ form.university_course|add_class:"form-control form-control-solid"|attr:"data-control:select2" }}
                   {% endif %}
 
                   {% for error in form.university_course.errors %}

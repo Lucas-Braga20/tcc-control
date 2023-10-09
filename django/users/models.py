@@ -1,6 +1,4 @@
-"""
-Users app models.
-"""
+"""Modelos do app de usuários."""
 
 import uuid
 
@@ -13,18 +11,18 @@ from works.models import FinalWork
 
 
 class User(AbstractUser):
-    """
-    User model.
-    """
+    """Modelo de usuário."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    phone = models.CharField(verbose_name=_('phone'), max_length=14, blank=True, null=True)
-    rgm = models.CharField(
-        verbose_name=_('RGM'), max_length=20, default='',
-        blank=True,
+    phone = models.CharField(
+        verbose_name=_('phone'), max_length=14, blank=True, null=True,
     )
-    university_course = models.CharField(
-        verbose_name=_('university course'),
-        max_length=255, default='', blank=True,
+    rgm = models.CharField(
+        verbose_name=_('RGM'), max_length=20, default='', blank=True,
+    )
+    university_course = models.ForeignKey(
+        'courses.Course', verbose_name=_('University course'),
+        on_delete=models.DO_NOTHING, related_name='course',
+        blank=True, null=True,
     )
 
     class Meta:

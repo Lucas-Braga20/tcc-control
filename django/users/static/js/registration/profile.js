@@ -18,11 +18,6 @@ const Profile = () => {
       warningClass: "badge badge-warning",
       limitReachedClass: "badge badge-success"
     });
-
-    $('#id_university_course').maxlength({
-      warningClass: "badge badge-warning",
-      limitReachedClass: "badge badge-success"
-    });
   }
 
   function handleFormValidation() {

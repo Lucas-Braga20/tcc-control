@@ -1,0 +1,186 @@
+[
+  {
+    "model": "courses.course",
+    "pk": "0f437bca-093f-4900-bb92-23752eb2d9b4",
+    "fields": {
+      "description": "Educação Física",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "2c6fc757-3da6-40e4-bef8-4209ef65032f",
+    "fields": {
+      "description": "Psicologia",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "32c72357-915f-45de-b240-60544567abb9",
+    "fields": {
+      "description": "Nutrição",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "3421d7c6-7926-4587-b4ef-0955925c5677",
+    "fields": {
+      "description": "Design de Interiores",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "357a57ab-e7cc-4b3a-b0f0-119f044c5c2a",
+    "fields": {
+      "description": "Agronomia",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "3c25c14e-ca77-466d-8264-2b6ff52f01f0",
+    "fields": {
+      "description": "Farmácia",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "3d37d4aa-4ddf-49b0-81ec-32f51ae5678c",
+    "fields": {
+      "description": "Estética e Cosmética",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "4170e67e-9100-41f5-af3a-fe0a2c6667dc",
+    "fields": {
+      "description": "Produção Agrícola",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "45dfe6ca-ddab-4d18-83c0-52bd9b39d62c",
+    "fields": {
+      "description": "Enfermagem",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "78d7b759-6750-4af1-b687-db8a1d512963",
+    "fields": {
+      "description": "Fisioterapia",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "8b244b58-f523-415f-9ad2-28b06d8973fb",
+    "fields": {
+      "description": "Medicina Veterinária",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "98ba4c0e-ca61-4878-bbbb-63445e89fe85",
+    "fields": {
+      "description": "Engenharia de Software",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "a953f589-abc3-4c9a-bdc9-82c38d027acc",
+    "fields": {
+      "description": "Administração",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "b65e66fe-f31a-45da-8a50-a85bf9eda74e",
+    "fields": {
+      "description": "Ciências Contábeis",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "bcecf3fb-aff8-4b20-a1a7-1173ab79d41b",
+    "fields": {
+      "description": "Biomedicina",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "c5188787-35fd-466f-94ad-ab74ea861d64",
+    "fields": {
+      "description": "Radiologia",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "c567223f-ba29-4f06-920a-65e383f83f13",
+    "fields": {
+      "description": "Direito",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "cb9f6956-82c3-44f4-9888-31adf9753238",
+    "fields": {
+      "description": "Engenharia Mecânica",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "d3f254ee-4238-4435-b635-3e920ff30bf4",
+    "fields": {
+      "description": "Arquitetura e urbanismo",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "d52a4dce-c045-4c15-92cf-ad6cd92c16f3",
+    "fields": {
+      "description": "Engenharia Civil",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "e0602128-a6d9-4c01-8691-47fe5f0066ad",
+    "fields": {
+      "description": "Odontologia",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "e143a2e2-c1a7-4373-b1c1-43da22cec1c2",
+    "fields": {
+      "description": "Publicidade e Propaganda",
+      "archived": false
+    }
+  },
+  {
+    "model": "courses.course",
+    "pk": "f9e907a9-132f-4b25-8e0c-1b8afced790f",
+    "fields": {
+      "description": "Gastronomia",
+      "archived": false
+    }
+  }
+]

@@ -1,6 +1,4 @@
-"""
-Forms to users app.
-"""
+"""Formulários do app de usuários."""
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
@@ -9,14 +7,17 @@ from users.models import User
 
 
 class SignUpForm(UserCreationForm):
-    """
-    Sign up form.
-    """
-    first_name = forms.CharField(max_length=30, required=False, help_text='Optional')
-    last_name = forms.CharField(max_length=30, required=False, help_text='Optional')
+    """Formulário de cadastro de conta."""
+    first_name = forms.CharField(
+        max_length=30, required=False, help_text='Optional',
+    )
+    last_name = forms.CharField(
+        max_length=30, required=False, help_text='Optional',
+    )
     rgm = forms.CharField(max_length=20, required=True)
-    university_course = forms.CharField(max_length=255, required=True)
-    email = forms.EmailField(max_length=254, help_text='Enter a valid email address')
+    email = forms.EmailField(
+        max_length=254, help_text='Enter a valid email address',
+    )
     phone = forms.CharField(
         label='Telefone',
         widget=forms.TextInput(attrs={'placeholder': '(999) 9999-9999'}),
@@ -26,21 +27,16 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = [
-            'username',
-            'first_name',
-            'last_name',
-            'email',
-            'password1',
-            'password2',
-            'phone',
+            'username', 'first_name', 'last_name', 'email', 'password1',
+            'password2', 'phone', 'university_course',
         ]
 
 
 class ProfieForm(forms.ModelForm):
-    """
-    Profile form.
-    """
+    """Formulário de perfil do usuário."""
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'rgm', 'university_course', 'phone']
+        fields = [
+            'first_name', 'last_name', 'rgm', 'university_course', 'phone',
+        ]

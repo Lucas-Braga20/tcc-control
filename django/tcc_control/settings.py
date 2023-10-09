@@ -46,6 +46,7 @@ INSTALLED_APPS += [
     'comments',
     'notifications',
     'works',
+    'courses',
 ]
 
 # Libs
