@@ -32,6 +32,11 @@ class FinalWork(models.Model):
     mentees = models.ManyToManyField(
         'users.User', related_name='work_mentee', verbose_name=_('mentee'),
     )
+    timetable = models.ForeignKey(
+        'timetables.Timetable', related_name='timetable_works',
+        verbose_name=_('timetable'), on_delete=models.DO_NOTHING,
+        null=True,
+    )
     archived = models.BooleanField(default=False, verbose_name=_('archived'))
     completed = models.BooleanField(default=False, verbose_name=_('completed'))
     grading_score = models.SmallIntegerField(
@@ -82,6 +87,9 @@ class FinalWork(models.Model):
                 all_fields = all_fields + last_version.content.get('fields', [])
 
         return all_fields
+
+    def get_timetable(self):
+        pass
 
     def __str__(self):
         return f'TCC: "{self.description}"'

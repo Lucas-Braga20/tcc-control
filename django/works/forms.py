@@ -3,6 +3,7 @@ Forms to works app.
 """
 
 import datetime
+from typing import Any
 
 from django import forms
 
@@ -30,6 +31,8 @@ class FinalWorkForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
+
+        self.user = user
 
         super().__init__(*args, **kwargs)
 
@@ -61,10 +64,37 @@ class FinalWorkForm(forms.ModelForm):
         works = FinalWork.objects.filter(mentees__in=mentees.values_list('id')).exclude(archived=True)
         if works.exists():
             raise forms.ValidationError(
-                'There is already a TCC proposal pending. Cancel the active proposal and create a new one.'
+                'Já existe uma proposta de TCC pendente. Cancele a proposta ativa e crie uma nova.'
             )
 
         return cleaned_data
+
+    def save(self, commit: bool = ...) -> Any:
+        if self.user is None:
+            raise forms.ValidationError(
+                'É necessário estar autenticado para criar uma proposta.'
+            )
+
+        timetable = self.user.get_current_timetable()
+        if timetable is None:
+            self.add_error(
+                None,
+                forms.ValidationError(
+                    'É necessário estar vinculado a um cronograma com etapas para criar uma proposta.',
+                ),
+            )
+            raise Exception('Proposal form error.')
+
+        instance = super().save(commit=False)
+        instance.timetable = timetable
+
+        if commit:
+            self.instance.save()
+            self._save_m2m()
+        else:
+            self.save_m2m = self._save_m2m
+
+        return instance
 
 
 class FinalWorkStageForm(forms.ModelForm):

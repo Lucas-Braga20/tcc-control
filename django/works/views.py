@@ -264,14 +264,22 @@ class WorkProposalCreateView(NotificationMixin, GenericPermissionMixin, LoginReq
     template_name = 'final-work-proposal/editor.html'
     model = FinalWork
     form_class = FinalWorkForm
-    success_url = reverse_lazy('works:proposal-list')
     success_message = 'Proposta de TCC criada com sucesso.'
     required_groups = ['Orientando']
+
+    def get_success_url(self) -> str:
+        return reverse_lazy('works:proposal-list')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
+
+    def form_valid(self, form):
+        try:
+            return super().form_valid(form)
+        except:
+            return self.form_invalid(form)
 
 
 class WorkProposalListView(NotificationMixin, LoginRequiredMixin, ListView, View):

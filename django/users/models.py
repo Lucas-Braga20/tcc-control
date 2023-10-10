@@ -2,12 +2,15 @@
 
 import uuid
 
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 
 from works.models import FinalWork
+from timetables.models import Timetable
 
 
 class User(AbstractUser):
@@ -37,6 +40,17 @@ class User(AbstractUser):
 
     def get_already_in_work(self):
         return self.work_mentee.filter(archived=False, completed=False).exists()
+
+    def get_current_timetable(self):
+        today = datetime.date.today()
+        today = datetime.date(2023, 2, 10) # Today Hardcoded
+
+        timetable = Timetable.objects.filter(stages__start_date__lte=today, stages__send_date__gte=today)
+
+        if timetable.exists():
+            return timetable.first()
+
+        return None
 
     def __str__(self) -> str:
         return self.get_full_name()
