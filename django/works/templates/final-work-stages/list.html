@@ -263,7 +263,7 @@
             </button>
           </div>
 
-          <div class="mt-5 mt-sm-8">
+          <div class="mt-5 mt-sm-8 d-flex flex-column gap-3">
             {% with final_documents=object.get_final_documents %}
               {% for document in final_documents %}
                 <a href="/{{ document }}" class="document-file" target="_blank">

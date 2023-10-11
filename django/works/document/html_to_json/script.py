@@ -1,4 +1,5 @@
-from html2json.main import ParseHtml
+from works.document.html_to_json.main import ParseHtml
+
 
 def convert(html_content):
     parse_html = ParseHtml(html=html_content)

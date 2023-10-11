@@ -3,8 +3,8 @@ import json
 from bs4 import BeautifulSoup
 from docxtpl import DocxTemplate
 
-from html2json.script import convert
-from html2docx.main import HTMLtoDocx
+from works.document.html_to_json.script import convert
+from works.document.html_to_docx.main import HTMLtoDocx
 
 
 def is_html(text):

@@ -1,7 +1,7 @@
 import json
 import logging
 from bs4 import BeautifulSoup
-from html2json.utils import get_sub_items
+from works.document.html_to_json.utils import get_sub_items
 
 
 class ParseHtml:

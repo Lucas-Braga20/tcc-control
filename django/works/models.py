@@ -89,22 +89,34 @@ class FinalWork(models.Model):
             if last_version:
                 all_fields = all_fields + last_version.content.get('fields', [])
 
-        return all_fields
+        return {
+            'fields': all_fields + [
+                {'key': 'coordenador', 'value': 'Felipe'},
+                {'key': 'titulo', 'value': 'TESTEEEEEEE'},
+                {'key': 'aluno', 'value': 'Lucas'},
+                {'key': 'orientador', 'value': 'Felipe'},
+            ],
+        }
 
     def get_template_document(self):
         if self.timetable is None:
             return None
 
-        return self.timetable.document_template
+        return os.path.join(settings.MEDIA_ROOT, str(self.timetable.document_template))
 
     def generate_final_document(self):
         template = self.get_template_document()
         content = self.get_all_content_data()
 
-        output_path_docx = f'works/{self.id}/final_documents/{uuid.uuid4()}.docx'
+        output_path_docx = os.path.join(
+            settings.MEDIA_ROOT,
+            f'works/{self.id}/final_documents/{uuid.uuid4()}.docx',
+        )
 
         if template:
-            JsonToDocx(template, content, output_path_docx)
+            json_to_docx = JsonToDocx(template, content, output_path_docx)
+
+            json_to_docx.convert()
 
         return None
 
