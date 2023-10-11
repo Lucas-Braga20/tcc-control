@@ -1,5 +1,4 @@
 import json
-import win32com.client
 
 from bs4 import BeautifulSoup
 from docxtpl import DocxTemplate
@@ -13,24 +12,11 @@ def is_html(text):
     return bool(soup.find())
 
 
-def docx2pdf(path_docx, path_pdf):
-    word = win32com.client.Dispatch('Word.Application')
-    doc = word.Documents.Open(path_docx)
-    try:
-        doc.SaveAs(path_pdf, FileFormat=17)
-    except Exception as e:
-        print(f"Erro ao converter para PDF: {str(e)}")
-    finally:
-        doc.Close()
-        word.Quit()
-
-
 class JsonToDocx:
-    def __init__(self, input_path_docx, json_data, output_path_docx, output_path_pdf):
+    def __init__(self, input_path_docx, json_data, output_path_docx):
         self.input_path_docx = input_path_docx
         self.json_data = json_data
         self.output_path_docx = output_path_docx
-        self.output_path_pdf = output_path_pdf
         self.doc = DocxTemplate(input_path_docx)
         self.html2docx = HTMLtoDocx(self.doc)
 
@@ -55,6 +41,5 @@ class JsonToDocx:
         try:
             self.doc.render(context)
             self.doc.save(self.output_path_docx)
-            docx2pdf(self.output_path_docx, self.output_path_pdf)
         except Exception as e:
             print(f"Erro ao criar o documento: {str(e)}")

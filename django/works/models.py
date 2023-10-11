@@ -3,17 +3,20 @@ Works app models.
 """
 
 import uuid
+import os
 
 from datetime import date
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
+from django.conf import settings
 
 from core import defaults
 from core.datetime import get_datetime_tz
 
 from works.utils import get_version_content_image_folder
+from works.document.json_to_docx import JsonToDocx
 
 
 class FinalWork(models.Model):
@@ -88,8 +91,37 @@ class FinalWork(models.Model):
 
         return all_fields
 
-    def get_timetable(self):
-        pass
+    def get_template_document(self):
+        if self.timetable is None:
+            return None
+
+        return self.timetable.document_template
+
+    def generate_final_document(self):
+        template = self.get_template_document()
+        content = self.get_all_content_data()
+
+        output_path_docx = f'works/{self.id}/final_documents/{uuid.uuid4()}.docx'
+
+        if template:
+            JsonToDocx(template, content, output_path_docx)
+
+        return None
+
+    def get_final_documents(self):
+        final_documents_dir = f'works/{self.id}/final_documents/'
+        media_dir = os.path.join(f'media/works/{self.id}/final_documents/')
+        final_documents_dir = os.path.join(settings.MEDIA_ROOT, final_documents_dir)
+
+        try:
+            documents = [
+                os.path.join(media_dir, document) for document in os.listdir(final_documents_dir)
+                if os.path.isfile(os.path.join(final_documents_dir, document))
+            ]
+        except:
+            documents = []
+
+        return documents
 
     def __str__(self):
         return f'TCC: "{self.description}"'
