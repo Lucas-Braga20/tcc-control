@@ -233,7 +233,7 @@ const FinalWorkStageList = () => {
 
           for (const document of response.documents) {
             $('#tcc_documents_container').append(`
-              <a href="/${document}" class="document-file" target="_blank">
+              <a href="/${document.path}" class="document-file" target="_blank">
                 <div class="d-flex justify-content-between border border-dashed rounded border-hover-primary border-gray-400 px-5 py-3 w-100">
                   <div class="d-flex align-items-center">
                     <span>
