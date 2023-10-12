@@ -114,9 +114,12 @@ class FinalWork(models.Model):
         )
 
         if template:
-            json_to_docx = JsonToDocx(template, content, output_path_docx)
+            try:
+                json_to_docx = JsonToDocx(template, content, output_path_docx)
 
-            json_to_docx.convert()
+                return json_to_docx.convert()
+            except:
+                return None
 
         return None
 

@@ -12,6 +12,7 @@ from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
 from works.models import FinalWork, FinalWorkStage, FinalWorkVersion, ChangeRequest, VersionContentImage
+from works.utils import get_document_creation_time
 from works.serializers import (
     FinalWorkSerializer, FinalWorkStageSerializer, FinalWorkVersionSerializer, ChangeRequestSerializer,
     VersionContentImageSerializer
@@ -33,11 +34,13 @@ from notifications.tasks import send_mail
 from timetables.models import Timetable
 
 
-class FinalWorkViewSet(mixins.CreateModelMixin,
-                       mixins.RetrieveModelMixin,
-                       mixins.UpdateModelMixin,
-                       mixins.ListModelMixin,
-                       viewsets.GenericViewSet):
+class FinalWorkViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
     """
     Final work viewset.
     """
@@ -125,6 +128,50 @@ class FinalWorkViewSet(mixins.CreateModelMixin,
         users.is_valid()
 
         return Response(users.data)
+
+    @action(detail=True, methods=['get'], url_path='documents')
+    def get_documents(self, request, pk=None):
+        instance = self.get_object()
+
+        documents = instance.get_final_documents()
+
+        documents = [{
+            'path': document,
+            'creation_time': get_document_creation_time(document),
+        } for document in documents]
+
+        documents = list(sorted(
+            documents,
+            key=lambda final_document: final_document['creation_time'],
+            reverse=True,
+        ))
+
+        documents = [{
+            'path': document.get('path'),
+            'creation_time': document.get('creation_time').strftime('%d-%m-%Y %H:%M:%S'),
+        } for document in documents]
+
+        return Response({
+            'documents': documents,
+        }, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'], url_path='generate-document')
+    def generate_document(self, request, pk=None):
+        instance = self.get_object()
+
+        response = instance.generate_final_document()
+
+        if response is None:
+            return Response(data={
+                'detail': 'Houve um erro ao gerar o documento.',
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(data={
+            'document': {
+                'path': response,
+                'creation_time': get_document_creation_time(response, concat=False),
+            },
+        }, status=status.HTTP_200_OK)
 
 
 class FinalWorkStageViewSet(viewsets.ModelViewSet):

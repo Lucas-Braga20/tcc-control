@@ -35,11 +35,17 @@ class JsonToDocx:
                         context[key] = self.html2docx.convert(items)
                     except Exception as e:
                         print(f"Erro ao converter HTML para JSON: {str(e)}")
+
+                        return None
                 else:
                     context[key] = value
 
         try:
             self.doc.render(context)
             self.doc.save(self.output_path_docx)
+
+            return self.output_path_docx
         except Exception as e:
             print(f"Erro ao criar o documento: {str(e)}")
+
+            return None

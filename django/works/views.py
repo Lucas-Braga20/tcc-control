@@ -18,6 +18,7 @@ from django.contrib import messages
 
 from works.models import FinalWorkVersion, FinalWork, FinalWorkStage
 from works.forms import FinalWorkVersionForm, FinalWorkForm, FinalWorkCreateVersionForm
+from works.utils import get_document_creation_time
 
 from users.models import User
 
@@ -79,6 +80,17 @@ class WorkStageView(NotificationMixin, LoginRequiredMixin, DetailView, View):
 
         context['able_to_present'] = able_to_present
         context['user_group'] = UserGroup(user=self.request.user)
+
+        final_documents = [{
+            'path': document,
+            'creation_time': get_document_creation_time(document),
+        } for document in self.object.get_final_documents()]
+
+        context['final_documents'] = sorted(
+            final_documents,
+            key=lambda final_document: final_document['creation_time'],
+            reverse=True,
+        )
 
         return context
 
