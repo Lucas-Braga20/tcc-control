@@ -1,13 +1,23 @@
 """
-Timetable viewsets.
+Implementação dos ViewSets do app de timetables.
+
+Contém os endpoints para:
+    - Timetables (Cronogramas);
+    - Stage (Etapas);
 """
 
 import os
 import datetime
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework import viewsets, mixins, status, permissions
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
+from rest_framework.filters import OrderingFilter
+
+from core.mixins import DisablePaginationMixin
+from core.permissions import RoleAccessPermission
 
 from activities.utils import check_worked_activity
 from activities.models import ActivityConfiguration
@@ -15,29 +25,36 @@ from activities.models import ActivityConfiguration
 from timetables.models import Timetable, Stage, StageExample
 from timetables.serializers import TimetableSerializer, StageSerializer
 
-from rest_framework.filters import OrderingFilter
-from django_filters.rest_framework import DjangoFilterBackend
 
-from core.mixins import DisablePaginationMixin
-from core.permissions import RoleAccessPermission
+class TimetableViewSet(
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
+    """ViewSet para manipulação de cronogramas.
 
+    Através deste endpoint que o professor da disciplina poderá ver
+    todas os seus cronogramas.
 
-class TimetableViewSet(mixins.RetrieveModelMixin,
-                       mixins.ListModelMixin,
-                       mixins.UpdateModelMixin,
-                       viewsets.GenericViewSet):
+    Métodos suportados:
+        - Retrieve;
+        - List;
+        - Update;
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
-    Timtable viewset.
-    """
+    model = Timetable
     queryset = Timetable.objects.all()
     serializer_class = TimetableSerializer
-    model = Timetable
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['archived']
     permission_classes = [permissions.IsAuthenticated, RoleAccessPermission]
     roles_required = ['Professor da disciplina']
 
     def update(self, request, *args, **kwargs):
+        """Atualização de cronograma."""
         instance = self.get_object()
         stages = instance.stages.all()
 
@@ -48,15 +65,28 @@ class TimetableViewSet(mixins.RetrieveModelMixin,
             for stage in stages:
                 if stage.already_started():
                     return Response(data={
-                        'detail': 'Cannot archive a schedule that has already started.'
+                        'detail': 'Cannot archive a schedule that has already started.',
                     }, status=status.HTTP_400_BAD_REQUEST)
 
         return super().update(request, *args, **kwargs)
 
 
 class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
-    """
-    Timetable stage.
+    """ViewSet para manipulação de etapas.
+
+    Através deste endpoint que o professor da disciplina poderá ver,
+    criar, atualizar e deletar todas as etapas que relacionadas
+    ao seu cronograma.
+
+    Métodos suportados:
+        - Retrieve;
+        - List;
+        - Create;
+        - Update;
+        - Delete;
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
     queryset = Stage.objects.all()
     serializer_class = StageSerializer
@@ -68,6 +98,7 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
     roles_required = ['Professor da disciplina', 'Orientador', 'Orientando']
 
     def get_queryset(self):
+        """Recupera o queryset de etapas."""
         queryset = super().get_queryset()
 
         no_page = self.request.query_params.get('no_page')
@@ -77,6 +108,7 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
         return queryset
 
     def create(self, request, *args, **kwargs):
+        """Cria uma nova etapa."""
         body = self.request.data.copy()
 
         serializer = self.get_serializer(data=body)
@@ -86,8 +118,10 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
         for file in files:
             extension = os.path.splitext(file.name)[1]
             if extension.lower() not in ['.pdf', '.docx', '.doc']:
-                return Response(data={'examples': 'Apenas PDF ou DOC/DOCX são permitidos.'},
-                                status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    data={'examples': 'Apenas PDF ou DOC/DOCX são permitidos.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
         stage = serializer.save()
 
@@ -102,6 +136,7 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
         return Response(serializer.data, status=201, headers=headers)
 
     def update(self, request, *args, **kwargs):
+        """Atualiza uma etapa."""
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
 
@@ -110,8 +145,10 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
         today = datetime.date.today()
         
         if instance.start_date < today:
-            return Response(data={'detail': 'Não é possível alterar uma etapa passada.'},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                data={'detail': 'Não é possível alterar uma etapa passada.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         activity_configuration_id = data.get('activity_configuration')
 
@@ -119,8 +156,10 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
             activity_configuration = ActivityConfiguration.objects.filter(id=activity_configuration_id)
 
             if not activity_configuration.exists():
-                return Response(data={'activity_configuration': 'Esta configuração de atividade não existe.'},
-                                status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    data={'activity_configuration': 'Esta configuração de atividade não existe.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
             activity_configuration = activity_configuration.first()
 
@@ -155,8 +194,10 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
         for file in files:
             extension = os.path.splitext(file.name)[1]
             if extension.lower() not in ['.pdf', '.docx', '.doc']:
-                return Response(data={'examples': 'Apenas PDF ou DOC/DOCX são permitidos.'},
-                                status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    data={'examples': 'Apenas PDF ou DOC/DOCX são permitidos.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
         stage = serializer.save()
 
@@ -173,11 +214,14 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def destroy(self, request, *args, **kwargs):
+        """Deleta uma etapa."""
         instance = self.get_object()
 
         if instance.already_started():
-            return Response(data={'detail': 'Cannot remove a step that has already started'},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                data={'detail': 'Cannot remove a step that has already started'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
