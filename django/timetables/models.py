@@ -1,5 +1,10 @@
 """
-Timetable app models.
+Implementação dos models do app de timetables.
+
+Contém os modelos de:
+    - Timetables (Cronogramas);
+    - Stage (Etapas);
+    - StageExample (Documento de exemplos de etapa);
 """
 
 import uuid
@@ -14,7 +19,7 @@ from timetables.documents import get_template_folder
 
 
 class Timetable(models.Model):
-    """Modelo de Calendário (Timetable)."""
+    """Modelo de Cronograma."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
     teacher = models.ForeignKey(
@@ -40,22 +45,20 @@ class Timetable(models.Model):
 
 
 class Stage(models.Model):
-    """
-    Timetable stage model.
-    """
+    """Modelo de Etapa do Cronograma."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
     start_date = models.DateField(verbose_name=_('start date'))
     send_date_supervisor = models.DateField(verbose_name=_('send date supervisor'))
     send_date = models.DateField(verbose_name=_('send date'))
-    presentation_date = models.DateField(verbose_name=_('presentation date'),
-                                         blank=True, null=True)
-    activity_configuration = models.ForeignKey('activities.ActivityConfiguration',
-                                               related_name='activity_configuration',
-                                               verbose_name=_('activity configuration'),
-                                               on_delete=models.DO_NOTHING)
-    timetable = models.ForeignKey('timetables.TimeTable', related_name='stages',
-                                  verbose_name=_('timetable'), on_delete=models.DO_NOTHING)
+    presentation_date = models.DateField(verbose_name=_('presentation date'), blank=True, null=True)
+    activity_configuration = models.ForeignKey(
+        'activities.ActivityConfiguration', related_name='activity_configuration',
+        verbose_name=_('activity configuration'), on_delete=models.DO_NOTHING,
+    )
+    timetable = models.ForeignKey(
+        'timetables.TimeTable', related_name='stages', verbose_name=_('timetable'), on_delete=models.DO_NOTHING,
+    )
 
     class Meta:
         verbose_name = _('Stage')
@@ -95,14 +98,13 @@ class Stage(models.Model):
 
 
 class StageExample(models.Model):
-    """
-    Stage example model.
-    """
+    """Modelo de documento de exemplo da etapa."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     file = models.FileField(upload_to='documents/stage-example/', blank=True, null=True)
-    stage = models.ForeignKey('timetables.Stage', related_name='stage_examples',
-                              verbose_name=_('stage'), on_delete=models.CASCADE,
-                              blank=True, null=True)
+    stage = models.ForeignKey(
+        'timetables.Stage', related_name='stage_examples', verbose_name=_('stage'), on_delete=models.CASCADE,
+        blank=True, null=True,
+    )
 
     class Meta:
         verbose_name = _('Stage example')

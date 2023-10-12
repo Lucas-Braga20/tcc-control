@@ -53,6 +53,14 @@ class TimetableViewSet(
     permission_classes = [permissions.IsAuthenticated, RoleAccessPermission]
     roles_required = ['Professor da disciplina']
 
+    def get_queryset(self):
+        """Recupera o queryset de cronoramas."""
+        queryset = super().get_queryset()
+
+        queryset = queryset.filter(teacher=self.request.user)
+
+        return queryset
+
     def update(self, request, *args, **kwargs):
         """Atualização de cronograma."""
         instance = self.get_object()
@@ -100,6 +108,8 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
     def get_queryset(self):
         """Recupera o queryset de etapas."""
         queryset = super().get_queryset()
+
+        queryset = queryset.filter(timetable__teacher=self.request.user)
 
         no_page = self.request.query_params.get('no_page')
         if no_page:
