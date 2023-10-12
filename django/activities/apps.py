@@ -1,6 +1,4 @@
-"""
-Activities app configuration to TCC Control Project.
-"""
+"""Definição do app de atividades."""
 
 from django.apps import AppConfig
 

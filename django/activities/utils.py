@@ -1,6 +1,4 @@
-"""
-Utils to activities app.
-"""
+"""Utilitários do app de activities."""
 
 from core.defaults import ACTIVITY_TYPES, NOT_COMPLETED_STATUS
 
@@ -8,11 +6,10 @@ from works.models import FinalWorkStage
 
 
 def validate_fields_json(fields_value):
-    """
-    Method to validate field "fields".
+    """Validação do campo "fields" da atividade.
 
-    The json field must contain the attribute "fields" as array of objects
-    contains the attributes: name, key and type.
+    O campo JSON deve conter o atributo "fields" como um array de objetos,
+    cada objeto contendo: name, key e type.
     """
 
     fields = fields_value.get('fields')
@@ -66,8 +63,10 @@ def check_worked_activity(activity):
 
 def update_worked_activity(activity):
     """Atualiza trabalhos com a atividade relacionada."""
-    work_stages = FinalWorkStage.objects.filter(stage__activity_configuration=activity.id,
-                                                status__in=NOT_COMPLETED_STATUS)
+    work_stages = FinalWorkStage.objects.filter(
+        stage__activity_configuration=activity.id,
+        status__in=NOT_COMPLETED_STATUS,
+    )
 
     for work_stage in work_stages:
         last_version = work_stage.get_last_version()

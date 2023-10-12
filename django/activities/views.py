@@ -1,5 +1,8 @@
 """
-Activities Views.
+Implementação das Views do app de activities.
+
+Contém as views para:
+    - ActivityConfigurationListView (Listagem);
 """
 
 from django.views.generic import TemplateView, CreateView, UpdateView, View
@@ -9,35 +12,52 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 
 from core.defaults import ACTIVITY_TYPES
+from core.permissions import GenericPermissionMixin
+from core.mixins import NotificationMixin
 
 from activities.models import ActivityConfiguration
 from activities.forms import ActivityConfigurationForm
 from activities.utils import check_worked_activity, update_worked_activity
 
-from core.permissions import GenericPermissionMixin
-from core.mixins import NotificationMixin
-
 
 class ActivityConfigurationListView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, TemplateView):
-    """
-    Activity configuration list screen.
+    """View para listagem de configurações de atividade.
+
+    Através desta view que o professor da disciplina poderá ver
+    todas as atividades.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
+
+    Perfil:
+        - Professor da disciplina;
     """
     template_name = 'activity-configurations/list.html'
     required_groups = ['Professor da disciplina']
 
 
-class ActivityConfigurationCreateView(NotificationMixin,
-                                      GenericPermissionMixin,
-                                      LoginRequiredMixin,
-                                      SuccessMessageMixin,
-                                      CreateView,
-                                      View):
+class ActivityConfigurationCreateView(
+    NotificationMixin,
+    GenericPermissionMixin,
+    LoginRequiredMixin,
+    SuccessMessageMixin,
+    CreateView,
+    View,
+):
+    """View para criação de configurações de atividade.
+
+    Através desta view que o professor da disciplina poderá criar
+    as atividades.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
+
+    Perfil:
+        - Professor da disciplina;
     """
-    Activity configuration create screen.
-    """
-    template_name = 'activity-configurations/editor.html'
     model = ActivityConfiguration
     form_class = ActivityConfigurationForm
+    template_name = 'activity-configurations/editor.html'
     success_url = reverse_lazy('activities:list')
     success_message = 'Configuração de atividade criada com sucesso.'
     permission_classes = None
@@ -45,6 +65,7 @@ class ActivityConfigurationCreateView(NotificationMixin,
     required_groups = ['Professor da disciplina']
 
     def get_context_data(self, **kwargs):
+        """Gera o contexto do template."""
         context = super().get_context_data(**kwargs)
 
         types = []
@@ -72,17 +93,23 @@ class ActivityConfigurationCreateView(NotificationMixin,
         return context
 
 
-class ActivityConfigurationUpdateView(NotificationMixin,
-                                      GenericPermissionMixin,
-                                      LoginRequiredMixin,
-                                      SuccessMessageMixin,
-                                      UpdateView):
+class ActivityConfigurationUpdateView(
+    NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, SuccessMessageMixin, UpdateView,
+):
+    """View para atualização de configurações de atividade.
+
+    Através desta view que o professor da disciplina poderá atualizar
+    as atividades.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
+
+    Perfil:
+        - Professor da disciplina;
     """
-    Activity configuration update screen.
-    """
-    template_name = 'activity-configurations/editor.html'
     model = ActivityConfiguration
     form_class = ActivityConfigurationForm
+    template_name = 'activity-configurations/editor.html'
     success_url = reverse_lazy('activities:list')
     success_message = 'Configuração de atividade atualizada com sucesso.'
     permission_classes = None
@@ -99,7 +126,7 @@ class ActivityConfigurationUpdateView(NotificationMixin,
         return obj
 
     def get_context_data(self, **kwargs):
-        """Processa o contexto da view."""
+        """Gera o contexto do template."""
         context = super().get_context_data(**kwargs)
 
         context['activity_already_advanced'] = check_worked_activity(self.object)
@@ -129,7 +156,7 @@ class ActivityConfigurationUpdateView(NotificationMixin,
         return context
 
     def post(self, request, *args, **kwargs):
-        """Método POST do endpoint."""
+        """Atualiza a atividade."""
         response = super().post(request, *args, **kwargs)
 
         update_worked_activity(self.object)

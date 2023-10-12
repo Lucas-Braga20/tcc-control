@@ -1,5 +1,8 @@
 """
-Forms to activities app.
+Implementação dos Formulários do app de activities.
+
+Contém os formulários para:
+    - ActivityConfigurationForm (Atividades);
 """
 
 from django import forms
@@ -9,9 +12,7 @@ from activities.utils import validate_fields_json
 
 
 class ActivityConfigurationForm(forms.ModelForm):
-    """
-    Activity Configuration form.
-    """
+    """Formulário de Configuração de atividade."""
 
     class Meta:
         model = ActivityConfiguration
@@ -23,13 +24,11 @@ class ActivityConfigurationForm(forms.ModelForm):
         self.fields['document_insertion'].value = True
 
     def clean_fields(self):
-        """
-        Validate "fields" field.
-        """
+        """Validação do campos "fields"."""
         fields = self.cleaned_data.get('fields')
 
         if fields is None:
-            raise forms.ValidationError('The "fields" field cannot be null.')
+            raise forms.ValidationError('O campo "fields" não pode ser nulo.')
 
         try:
             validate_fields_json(fields_value=fields)

@@ -1,29 +1,45 @@
 """
-Activities Viewsets.
+Implementação dos ViewSets do app de activities.
+
+Contém os endpoints para:
+    - Timetables (Cronogramas);
+    - Stage (Etapas);
 """
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import mixins, viewsets, status, permissions
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
 
+from core.permissions import RoleAccessPermission
+
 from activities.models import ActivityConfiguration
 from activities.serializers import ActivityConfigurationSerializer
 
-from django_filters.rest_framework import DjangoFilterBackend
 
-from core.permissions import RoleAccessPermission
+class ActivityConfigurationViewSet(
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
+    """ViewSet para manipulação de configurações de atividade.
 
+    Através deste endpoint que o professor da disciplina poderá ver
+    ou atualizar as atividades.
 
-class ActivityConfigurationViewSet(mixins.RetrieveModelMixin,
-                                   mixins.ListModelMixin,
-                                   mixins.UpdateModelMixin,
-                                   viewsets.GenericViewSet):
+    Métodos suportados:
+        - Retrieve;
+        - List;
+        - Update;
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
-    Activity Configuration ViewSet.
-    """
+    model = ActivityConfiguration
     queryset = ActivityConfiguration.objects.all()
     serializer_class = ActivityConfigurationSerializer
-    model = ActivityConfiguration
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['archived']
     search_fields = ['name']
@@ -31,6 +47,7 @@ class ActivityConfigurationViewSet(mixins.RetrieveModelMixin,
     roles_required = ['Professor da disciplina']
 
     def get_queryset(self):
+        """Recupera o queryset de atividades."""
         queryset = super().get_queryset()
 
         no_page = self.request.query_params.get('no_page')
@@ -40,6 +57,7 @@ class ActivityConfigurationViewSet(mixins.RetrieveModelMixin,
         return queryset
 
     def update(self, request, *args, **kwargs):
+        """Atualização de atividade."""
         instance = self.get_object()
 
         if instance.archived is True:
@@ -49,7 +67,9 @@ class ActivityConfigurationViewSet(mixins.RetrieveModelMixin,
                 serializer = self.get_serializer(instance)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
-                return Response(data={'detail': 'You can only change an activity setting if it is not archived'},
-                                status=status.HTTP_405_METHOD_NOT_ALLOWED)
+                return Response(
+                    data={'detail': 'You can only change an activity setting if it is not archived'},
+                    status=status.HTTP_405_METHOD_NOT_ALLOWED,
+                )
 
         return super().update(request, *args, **kwargs)

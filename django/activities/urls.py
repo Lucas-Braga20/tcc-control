@@ -1,11 +1,17 @@
 """
-Activities URL configuration for tcc_control project.
+Configurações de Urls do app de activities.
+
+Contém as urls para:
+    - Listagem de atividades;
+    - Criação de atividades;
+    - Atualização de atividades;
 """
 
 from django.urls import path
 
-from activities.views import (ActivityConfigurationListView, ActivityConfigurationCreateView,
-                              ActivityConfigurationUpdateView)
+from activities.views import (
+    ActivityConfigurationListView, ActivityConfigurationCreateView, ActivityConfigurationUpdateView,
+)
 
 
 app_name = 'activities'

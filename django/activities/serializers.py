@@ -1,8 +1,9 @@
 """
-Activities serializers.
-"""
+Implementação dos Serializers do app de activities.
 
-import os
+Contém os serializers para:
+    - ActivityConfigurationSerializer (Atividades);
+"""
 
 from rest_framework import serializers
 
@@ -11,9 +12,7 @@ from activities.utils import validate_fields_json
 
 
 class ActivityConfigurationSerializer(serializers.ModelSerializer):
-    """
-    Activity Configuration Serializer.
-    """
+    """Serializer de Configuração de atividade."""
     fields_description = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -26,6 +25,7 @@ class ActivityConfigurationSerializer(serializers.ModelSerializer):
         }
 
     def get_fields_description(self, obj):
+        """Retorna o valor descritivo do campo "fields"."""
         fields = obj.fields.get('fields')
 
         if fields is not None:
@@ -34,6 +34,7 @@ class ActivityConfigurationSerializer(serializers.ModelSerializer):
         return None
 
     def validate_fields(self, value):
+        """Validação do campos "fields"."""
         if value is None:
             raise serializers.ValidationError('The "fields" field cannot be null.')
 
