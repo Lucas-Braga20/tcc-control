@@ -224,7 +224,11 @@ const FinalWorkStageList = () => {
 
       API.works.generateDocument($(this).data('tcc'))
         .then(response => response.json())
-        .then(() => {
+        .then(response => {
+          if (response.detail != null) {
+            throw new Error('Generate document error.');
+          }
+
           return API.works.documents($(this).data('tcc'))
         })
         .then(response => response.json())
@@ -271,8 +275,6 @@ const FinalWorkStageList = () => {
           });
         })
         .catch((err) => {
-          console.log(err);
-
           Toast.fire({
             icon: 'error',
             title: 'Houve um erro ao gerar o documento.'

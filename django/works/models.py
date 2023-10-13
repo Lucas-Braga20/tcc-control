@@ -108,9 +108,17 @@ class FinalWork(models.Model):
         template = self.get_template_document()
         content = self.get_all_content_data()
 
-        output_path_docx = os.path.join(
+        base_path = os.path.join(
             settings.MEDIA_ROOT,
-            f'works/{self.id}/final_documents/{uuid.uuid4()}.docx',
+            f'works/{self.id}/final_documents/',
+        )
+
+        if not os.path.exists(base_path):
+            os.makedirs(base_path)
+
+        output_path_docx = os.path.join(
+            base_path,
+            f'{uuid.uuid4()}.docx',
         )
 
         if template:
@@ -119,8 +127,6 @@ class FinalWork(models.Model):
 
                 return json_to_docx.convert()
             except Exception as e:
-                print(e, flush=True)
-
                 return None
 
         return None
