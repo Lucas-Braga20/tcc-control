@@ -56,7 +56,7 @@
               </h1>
 
               <div class="d-flex">
-                {% if object.approved is None and object.archived is True %}
+                {% if object.approved is None and object.archived is False %}
                   <div class="d-flex align-items-center">
                     <i
                     class="fas fa-spinner fa-fw fs-2 text-warning ms-0 ms-sm-3"

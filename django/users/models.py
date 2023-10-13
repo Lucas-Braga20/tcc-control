@@ -42,15 +42,12 @@ class User(AbstractUser):
         return self.work_mentee.filter(archived=False, completed=False).exists()
 
     def get_current_timetable(self):
-        today = datetime.date.today()
-        today = datetime.date(2023, 2, 10) # Today Hardcoded
+        timetables = self.participants.all()
 
-        timetable = Timetable.objects.filter(stages__start_date__lte=today, stages__send_date__gte=today)
+        if timetables.exists() is False:
+            return None
 
-        if timetable.exists():
-            return timetable.first()
-
-        return None
+        return timetables.last()
 
     def __str__(self) -> str:
         return self.get_full_name()

@@ -68,6 +68,9 @@ class FinalWorkViewSet(
         if user_group.is_supervisor():
             queryset = queryset.filter(supervisor=self.request.user)
 
+        if user_group.is_teacher():
+            queryset = queryset.filter(timetable__teacher=self.request.user)
+
         queryset = queryset.filter(archived=False)
 
         return queryset
@@ -81,15 +84,7 @@ class FinalWorkViewSet(
         final_work = self.get_object()
 
         if approved and approved is True:
-            # today = datetime.date.today()
-            # today hard coded
-            today = datetime.date(2023, 3, 4)
-
-            timetable = Timetable.objects.filter(stages__start_date__lte=today,
-                                                 stages__send_date__gte=today,
-                                                 archived=False).first()
-
-            generate_work_stages(final_work=final_work, timetable=timetable)
+            generate_work_stages(final_work=final_work, timetable=final_work.timetable)
 
         if completed and completed is True:
             final_work.completed = True
@@ -194,6 +189,9 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
 
         if user_group.is_supervisor():
             queryset = queryset.filter(final_work__supervisor=self.request.user)
+
+        if user_group.is_teacher():
+            queryset = queryset.filter(final_work__timetable__teacher=self.request.user)
 
         return queryset
 
@@ -407,14 +405,19 @@ class FinalWorkVersionViewSet(viewsets.ModelViewSet):
         if user_group.is_supervisor():
             queryset = queryset.filter(work_stage__final_work__supervisor=self.request.user)
 
+        if user_group.is_teacher():
+            queryset = queryset.filter(work_stage__final_work__timetable__teacher=self.request.user)
+
         return queryset
 
 
-class VersionContentImageViewSet(mixins.CreateModelMixin,
-                                 mixins.RetrieveModelMixin,
-                                 mixins.DestroyModelMixin,
-                                 mixins.ListModelMixin,
-                                 viewsets.GenericViewSet):
+class VersionContentImageViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
     """
     Version content image viewset.
     """
@@ -435,6 +438,9 @@ class VersionContentImageViewSet(mixins.CreateModelMixin,
         if user_group.is_supervisor():
             queryset = queryset.filter(version__work_stage__final_work__supervisor=self.request.user)
 
+        if user_group.is_teacher():
+            queryset = queryset.filter(version__work_stage__final_work__timetable__teacher=self.request.user)
+
         return queryset
 
 
@@ -447,6 +453,19 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
     model = ChangeRequest
     permission_classes = [RoleAccessPermission, permissions.IsAuthenticated]
     roles_required = ['Orientando', 'Professor da disciplina']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        user_group = UserGroup(self.request.user)
+
+        if user_group.is_mentee():
+            queryset = queryset.filter(work_stage__final_work__mentees__in=[self.request.user])
+
+        if user_group.is_teacher():
+            queryset = queryset.filter(work_stage__final_work__timetable__teacher=self.request.user)
+
+        return queryset
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

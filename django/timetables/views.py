@@ -2,6 +2,7 @@
 Views to timetables apps.
 """
 
+from typing import Any
 from django.views.generic import CreateView, TemplateView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
@@ -15,8 +16,7 @@ from core.mixins import NotificationMixin
 
 
 class TimetableListView(
-    NotificationMixin, GenericPermissionMixin, LoginRequiredMixin,
-    TemplateView,
+    NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, TemplateView,
 ):
     """
     Timetable list screen.
@@ -26,8 +26,7 @@ class TimetableListView(
 
 
 class TimetableCreateView(
-    NotificationMixin, GenericPermissionMixin, LoginRequiredMixin,
-    SuccessMessageMixin, CreateView,
+    NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, SuccessMessageMixin, CreateView,
 ):
     """
     Timetable view to create object.
@@ -45,6 +44,13 @@ class TimetableCreateView(
         initial = super().get_initial()
         initial['teacher'] = self.request.user
         return initial
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+
+        kwargs.update({'is_creation': True})
+
+        return kwargs
 
 
 class TimetableUpdateView(

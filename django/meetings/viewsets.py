@@ -20,11 +20,13 @@ from notifications.tasks import send_mail
 from core.permissions import UserGroup
 
 
-class MeetingViewSet(mixins.CreateModelMixin,
-                     mixins.RetrieveModelMixin,
-                     mixins.ListModelMixin,
-                     mixins.UpdateModelMixin,
-                     GenericViewSet):
+class MeetingViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    mixins.UpdateModelMixin,
+    GenericViewSet,
+):
     """ViewSet para manipulação de objetos Meetings.
 
     Através deste endpoint que todos os usuários poderão solicitar
@@ -61,6 +63,9 @@ class MeetingViewSet(mixins.CreateModelMixin,
 
         if user_group.is_mentee():
             queryset = queryset.filter(work_stage__final_work__mentees__in=[user])
+
+        if user_group.is_teacher():
+            queryset = queryset.filter(work_stage__final_work__timetable__teacher=self.request.user)
 
         no_page = self.request.query_params.get('no_page')
         if no_page:

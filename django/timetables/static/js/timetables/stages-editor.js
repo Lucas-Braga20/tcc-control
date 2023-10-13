@@ -277,7 +277,7 @@ class StageEditor {
         cache: true,
       },
       closeOnSelect: true,
-      placeholder: 'Selecione a configuração de atividade'
+      placeholder: 'Selecione a configuração de atividade',
     });
 
     $.ajax({
@@ -339,7 +339,8 @@ class StageEditor {
         cache: true,
       },
       closeOnSelect: true,
-      placeholder: 'Selecione a configuração de atividade'
+      placeholder: 'Selecione a configuração de atividade',
+      dropdownParent: $('#tcc_modal_stage'),
     });
 
     $(`#tcc_stage_editor_start_date`).flatpickr({

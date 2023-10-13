@@ -12,10 +12,12 @@ from users.serializers import UserSerializer
 from core.permissions import RoleAccessPermission
 
 
-class UserViewSet(mixins.RetrieveModelMixin,
-                  mixins.ListModelMixin,
-                  mixins.UpdateModelMixin,
-                  viewsets.GenericViewSet):
+class UserViewSet(
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
     """
     User viewset.
     """

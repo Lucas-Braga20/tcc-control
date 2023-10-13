@@ -35,6 +35,9 @@ class CommentViewSet(viewsets.ModelViewSet):
         if user_group.is_mentee():
             queryset = queryset.filter(work_stage__final_work__mentees__in=[self.request.user])
 
+        if user_group.is_teacher():
+            queryset = queryset.filter(work_stage__final_work__timetable__teacher=self.request.user)
+
         no_page = self.request.query_params.get('no_page')
         if no_page:
             self.pagination_class = None

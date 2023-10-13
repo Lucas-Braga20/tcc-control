@@ -26,7 +26,7 @@ class FinalWork(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
     approved = models.BooleanField(
-        verbose_name=_('approved'), null=True, blank=True,
+        verbose_name=_('approved'), null=True, blank=True, default=None,
     )
     supervisor = models.ForeignKey(
         'users.User', related_name='work_supervisor',
@@ -86,7 +86,7 @@ class FinalWork(models.Model):
 
             last_version = work_stage.get_last_version()
 
-            if last_version:
+            if last_version and last_version.content:
                 all_fields = all_fields + last_version.content.get('fields', [])
 
         return {
@@ -118,7 +118,9 @@ class FinalWork(models.Model):
                 json_to_docx = JsonToDocx(template, content, output_path_docx)
 
                 return json_to_docx.convert()
-            except:
+            except Exception as e:
+                print(e, flush=True)
+
                 return None
 
         return None
@@ -228,12 +230,14 @@ class ChangeRequest(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     approved = models.BooleanField(verbose_name=_('approved'), blank=True, null=True, default=None)
     description = models.TextField(verbose_name=_('description'))
-    created_at = models.DateTimeField(auto_now_add=True,
-                                      verbose_name=_('created at'))
-    requester = models.ForeignKey('users.User', verbose_name=_('requester'),
-                                  on_delete=models.DO_NOTHING, related_name='requester')
-    work_stage = models.ForeignKey('works.FinalWorkStage', verbose_name=_('work stage'),
-                                   on_delete=models.DO_NOTHING, related_name='work_stage_change_request')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
+    requester = models.ForeignKey(
+        'users.User', verbose_name=_('requester'), on_delete=models.DO_NOTHING, related_name='requester',
+    )
+    work_stage = models.ForeignKey(
+        'works.FinalWorkStage', verbose_name=_('work stage'), on_delete=models.DO_NOTHING,
+        related_name='work_stage_change_request',
+    )
 
     class Meta:
         verbose_name = _('Change request')

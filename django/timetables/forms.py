@@ -41,6 +41,8 @@ class TimetableForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
+        self.is_creation = kwargs.pop('is_creation', False)
+
         super().__init__(*args, **kwargs)
 
         # Choice
@@ -59,9 +61,42 @@ class TimetableForm(forms.ModelForm):
 
         for participant in participants:
             if participant.groups.all().first().name not in ('Orientando', 'Orientadores'):
-                raise forms.ValidationError('Participants must have the profile of mentors or mentees.')
+                raise forms.ValidationError('Os participantes devem ter perfil de orientando ou orientador.')
+
+            if (
+                participant.groups.all().first().name == 'Orientando' and
+                participant.get_current_timetable() is not None
+            ):
+                raise forms.ValidationError('Já existe participante vinculado a um cronograma.')
 
         return participants
+
+    def clean_mentee_field(self):
+        mentees = self.cleaned_data.get('mentee_field')
+
+        if self.is_creation is False:
+            return mentees
+
+        for mentee in mentees:
+            if mentee.groups.all().first().name != 'Orientando':
+                raise forms.ValidationError('Os orientandos devem ter perfil de orientando.')
+
+            if mentee.get_current_timetable() is not None:
+                raise forms.ValidationError('Já existe orientando vinculado a um cronograma.')
+
+        return mentees
+
+    def clean_supervisor_field(self):
+        supervisors = self.cleaned_data.get('supervisor_field')
+
+        if self.is_creation is False:
+            return supervisors
+
+        for supervisor in supervisors:
+            if supervisor.groups.all().first().name != 'Orientador':
+                raise forms.ValidationError('Os orientandores devem ter perfil de orientandor.')
+
+        return supervisors
 
     def clean_teacher(self):
         """

@@ -14,10 +14,12 @@ from notifications.serializers import NotificationSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
 
-class NotificationViewSet(mixins.CreateModelMixin,
-                          mixins.RetrieveModelMixin,
-                          mixins.ListModelMixin,
-                          GenericViewSet):
+class NotificationViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    GenericViewSet,
+):
     """
     Notification viewset.
     """

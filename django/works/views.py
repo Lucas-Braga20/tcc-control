@@ -326,6 +326,9 @@ class WorkProposalListView(NotificationMixin, LoginRequiredMixin, ListView, View
         if user_group.is_supervisor():
             queryset = queryset.filter(supervisor=self.request.user)
 
+        if user_group.is_teacher():
+            queryset = queryset.filter(timetable__teacher=self.request.user)
+
         queryset = queryset.exclude(archived=True)
 
         return queryset
@@ -340,7 +343,7 @@ class WorkProposalListView(NotificationMixin, LoginRequiredMixin, ListView, View
         context['teacher_group'] = Group.objects.get(name='Professor da disciplina')
         context['allow_create'] = not FinalWork.objects.filter(
             mentees__in=[self.request.user]
-        ).exclude(archived=True).exists()
+        ).exclude(archived=True).exclude(approved=False).exists()
 
         return context
 

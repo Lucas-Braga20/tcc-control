@@ -61,7 +61,10 @@ class FinalWorkForm(forms.ModelForm):
         cleaned_data = super().clean()
         mentees = cleaned_data.get('mentees')
 
-        works = FinalWork.objects.filter(mentees__in=mentees.values_list('id')).exclude(archived=True)
+        works = FinalWork.objects.filter(
+            mentees__in=mentees.values_list('id'),
+        ).exclude(archived=True).exclude(approved=False)
+
         if works.exists():
             raise forms.ValidationError(
                 'Já existe uma proposta de TCC pendente. Cancele a proposta ativa e crie uma nova.'

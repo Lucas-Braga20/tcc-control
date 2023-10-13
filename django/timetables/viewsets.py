@@ -17,7 +17,7 @@ from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter
 
 from core.mixins import DisablePaginationMixin
-from core.permissions import RoleAccessPermission
+from core.permissions import RoleAccessPermission, UserGroup
 
 from activities.utils import check_worked_activity
 from activities.models import ActivityConfiguration
@@ -109,7 +109,28 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
         """Recupera o queryset de etapas."""
         queryset = super().get_queryset()
 
-        queryset = queryset.filter(timetable__teacher=self.request.user)
+        user = self.request.user
+
+        user_group = UserGroup(user=user)
+
+        if user_group.is_mentee():
+            timetables = map(
+                lambda work: str(work.timetable.id) if work.timetable is not None else None,
+                user.work_mentee.filter(approved=True),
+            )
+
+            queryset = queryset.filter(timetable__in=list(timetables))
+        elif user_group.is_teacher():
+            queryset = queryset.filter(timetable__teacher=user)
+        elif user_group.is_supervisor():
+            timetables = map(
+                lambda work: str(work.timetable.id) if work.timetable is not None else None,
+                user.work_supervisor.filter(approved=True),
+            )
+
+            queryset = queryset.filter(timetable__in=list(timetables))
+        else:
+            queryset = Stage.objects.none()
 
         no_page = self.request.query_params.get('no_page')
         if no_page:

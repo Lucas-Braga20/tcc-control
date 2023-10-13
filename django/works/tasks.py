@@ -7,7 +7,7 @@ from celery import shared_task
 from notifications.utils import send_notification
 from notifications.tasks import send_mail
 from timetables.models import Timetable
-from works.models import FinalWork, FinalWorkStage
+from works.models import FinalWorkStage
 
 from core.utils import generate_work_stages, process_stage_status
 from core.defaults import completed_status
@@ -19,13 +19,12 @@ def process_final_works():
     # today hard coded
     # today = datetime.date(2023, 1, 1)
 
-    timetables = Timetable.objects.filter(stages__start_date__lte=today, stages__send_date__gte=today, archived=False)
+    timetables = Timetable.objects.filter(
+        Q(stages__start_date__lte=today) | Q(stages__send_date__gte=today), archived=False,
+    )
 
     for timetable in timetables:
-        mentees = timetable.participants.filter(groups__name='Orientando')
-
-        final_works = FinalWork.objects.filter(archived=False, completed=False,
-                                               mentees__in=list(mentees.values_list('id'))).distinct()
+        final_works = timetable.timetable_works.all()
 
         for final_work in final_works:
             # Generate work stages for all final works.
