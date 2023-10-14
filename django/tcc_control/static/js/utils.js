@@ -9,8 +9,8 @@ function stringToSlug (str) {
   }
 
   str = str.replace(/[^a-z0-9 -]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
+    .replace(/\s+/g, '_')
+    .replace(/-+/g, '_');
 
   return str;
 }

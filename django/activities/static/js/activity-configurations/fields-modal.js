@@ -221,8 +221,8 @@ class ActivityFieldsEditor {
 
   updateItemElementInList(value) {
     $(`#tcc_accordion-item_${value.id}`).find('.accordion-button').html(`
-      <div class="d-flex justify-content-between w-100">
-        <div>
+      <div class="d-flex justify-content-between w-100 row">
+        <div class="col-12 col-md-auto mb-2 mb-md-0">
           <h3 class="mb-0 fs-6 text-dark">
             Nome:
             <span class="fw-light">
@@ -230,16 +230,19 @@ class ActivityFieldsEditor {
             </span>
           </h3>
         </div>
-        <div>
-          <p class="mb-0 fs-6 text-dark">
+        <div class="col-12 col-md-auto mb-2 mb-md-0">
+          <h3 class="mb-0 fs-6 text-dark">
             Chave:
-            <span class="badge badge-light">
+            <span class="badge badge-secondary">
               ${value.key}
             </span>
-          </p>
+          </h3>
         </div>
-        <div class="me-3">
-          ${this.badge[value.type]}
+        <div class="me-3 col-12 col-md-auto">
+          <h3 class="mb-0 fs-6 text-dark">
+            Tipo:
+            ${this.badge[value.type]}
+          </h3>
         </div>
       </div>
     `);
