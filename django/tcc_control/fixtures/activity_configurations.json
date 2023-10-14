@@ -19,18 +19,36 @@
   },
   {
     "model": "activities.activityconfiguration",
+    "pk": "35304122-2a43-4716-8ed9-d18b9bb918f3",
+    "fields": {
+      "name": "Link do GitHUB",
+      "fields": {
+        "fields": [
+          {
+            "key": "link",
+            "name": "Link",
+            "type": "text"
+          }
+        ]
+      },
+      "document_insertion": false,
+      "archived": false
+    }
+  },
+  {
+    "model": "activities.activityconfiguration",
     "pk": "4f43a5a3-357c-42b5-bdb5-b2f8d7a289b8",
     "fields": {
       "name": "Casos de uso",
       "fields": {
         "fields": [
           {
-            "key": "casos-de-uso-gerais",
+            "key": "casos_de_uso_gerais",
             "name": "Casos de uso gerais",
             "type": "rich"
           },
           {
-            "key": "casos-de-uso-especificos",
+            "key": "casos_de_uso_especificos",
             "name": "Casos de uso específicos",
             "type": "rich"
           }
@@ -48,7 +66,7 @@
       "fields": {
         "fields": [
           {
-            "key": "metodologia-de-desenvolvimento-de-software",
+            "key": "metodologia_de_desenvolvimento_de_software",
             "name": "Metodologia de desenvolvimento de Software",
             "type": "rich"
           }
@@ -76,7 +94,7 @@
             "type": "rich"
           },
           {
-            "key": "publico-alvo",
+            "key": "publico_alvo",
             "name": "Público-alvo",
             "type": "rich"
           },
@@ -116,6 +134,24 @@
   },
   {
     "model": "activities.activityconfiguration",
+    "pk": "b9f9cfc1-c9f5-42e1-a652-512eae8b0b79",
+    "fields": {
+      "name": "Andamento do Projeto",
+      "fields": {
+        "fields": [
+          {
+            "key": "resumo",
+            "name": "Resumo",
+            "type": "rich"
+          }
+        ]
+      },
+      "document_insertion": false,
+      "archived": false
+    }
+  },
+  {
+    "model": "activities.activityconfiguration",
     "pk": "df9a7654-75a4-4209-8566-f7968c037fb6",
     "fields": {
       "name": "Termo de Abertura do Projeto (TAP)",
@@ -132,7 +168,7 @@
             "type": "text"
           },
           {
-            "key": "gerente-do-projeto",
+            "key": "gerente_do_projeto",
             "name": "Gerente do projeto",
             "type": "text"
           },
@@ -147,7 +183,7 @@
             "type": "rich"
           },
           {
-            "key": "descrico-geral",
+            "key": "descrico_geral",
             "name": "Descrição Geral",
             "type": "rich"
           },
@@ -170,17 +206,17 @@
       "fields": {
         "fields": [
           {
-            "key": "escopo-do-sistema",
+            "key": "escopo_do_sistema",
             "name": "Escopo do sistema",
             "type": "rich"
           },
           {
-            "key": "requisitos-do-sistema",
+            "key": "requisitos_do_sistema",
             "name": "Requisitos do sistema",
             "type": "rich"
           },
           {
-            "key": "materiais-e-metodos",
+            "key": "materiais_e_metodos",
             "name": "Materiais e métodos",
             "type": "rich"
           }
@@ -198,49 +234,13 @@
       "fields": {
         "fields": [
           {
-            "key": "modelo-de-classe-ou-der",
+            "key": "modelo_de_classe_ou_der",
             "name": "Modelo de classe ou DER",
             "type": "rich"
           }
         ]
       },
       "document_insertion": true,
-      "archived": false
-    }
-  },
-  {
-    "model": "activities.activityconfiguration",
-    "pk": "35304122-2a43-4716-8ed9-d18b9bb918f3",
-    "fields": {
-      "name": "Link do GitHUB",
-      "fields": {
-        "fields": [
-          {
-            "key": "link",
-            "name": "Link",
-            "type": "text"
-          }
-        ]
-      },
-      "document_insertion": false,
-      "archived": false
-    }
-  },
-  {
-    "model": "activities.activityconfiguration",
-    "pk": "b9f9cfc1-c9f5-42e1-a652-512eae8b0b79",
-    "fields": {
-      "name": "Andamento do Projeto",
-      "fields": {
-        "fields": [
-          {
-            "key": "resumo",
-            "name": "Resumo",
-            "type": "rich"
-          }
-        ]
-      },
-      "document_insertion": false,
       "archived": false
     }
   }
