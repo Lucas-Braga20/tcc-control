@@ -51,7 +51,14 @@
         <div class="card-header border-0 p-8 pb-4">
           <div class="d-flex flex-column">
             <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center mb-2 flex-wrap gap-1">
-              <h1 class="mb-0">
+              <h1
+                id="tcc_title"
+                class="mb-0 text-hover-primary cursor-pointer text-select-none"
+                data-bs-toggle="collapse"
+                href="#tcc_update_title_container"
+                role="button"
+                aria-expanded="false"
+                aria-controls="tcc_update_title_container">
                 {{ object.title }}
               </h1>
 
@@ -194,6 +201,37 @@
                 </span>
               </div>
             {% endif %}
+          </div>
+        </div>
+
+        <div id="tcc_update_title_container" class="collapse" data-tcc="{{ object.id }}">
+          <div class="card-body py-4">
+            <form id="tcc_update_title_form">
+              <div class="w-100">
+                <div>
+                  <label for="title" class="form-label">Atualize o título do TCC</label>
+                </div>
+
+                <div class="w-100 d-flex">
+                  <div class="flex-grow">
+                    <input
+                      id="id_title"
+                      name="title"
+                      class="form-control form-control-solid"
+                      value="{{ object.title }}"
+                      minlength="3"
+                      maxlength="128"
+                    />
+                  </div>
+
+                  <div class="w-auto ms-3">
+                    <button id="tcc_update_title_save" type="submit" class="btn btn-primary">
+                      Salvar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
 
@@ -608,7 +646,19 @@
       color: #7239EA !important;
       transition: all 0.3s ease-out;
     }
+
+    .text-select-none {
+      user-select: none;
+    }
+
+    .flex-grow {
+      flex-grow: 1;
+    }
   </style>
+{% endblock %}
+
+{% block js-vendors %}
+  <script src="{% static 'vendor/jquery.validate.js/jquery.validate.min.js' %}"></script>
 {% endblock %}
 
 {% block js-scripts %}

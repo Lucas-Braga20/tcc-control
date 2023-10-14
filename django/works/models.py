@@ -91,7 +91,7 @@ class FinalWork(models.Model):
         return {
             'fields': all_fields + [
                 {'key': 'coordenador', 'value': 'Felipe'},
-                {'key': 'titulo', 'value': 'TESTEEEEEEE'},
+                {'key': 'titulo', 'value': self.title},
                 {'key': 'aluno', 'value': 'Lucas'},
                 {'key': 'orientador', 'value': 'Felipe'},
             ],

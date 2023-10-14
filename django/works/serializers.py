@@ -18,6 +18,10 @@ class FinalWorkSerializer(serializers.ModelSerializer):
     mentees_detail = UserSerializer(many=True, source='mentees', read_only=True)
     supervisor_detail = UserSerializer(many=False, source='supervisor', read_only=True)
     current_stage = serializers.SerializerMethodField()
+    title = serializers.CharField(
+        max_length=128,
+        required=True,
+    )
 
     class Meta:
         model = FinalWork

@@ -40,7 +40,7 @@ const FinalWorkEditor = () => {
         title: {
           required: true,
           minlength: 3,
-          maxlength: 255,
+          maxlength: 128,
         },
         description: {
           required: true,

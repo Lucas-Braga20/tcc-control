@@ -1,6 +1,19 @@
 const FinalWorkStageList = () => {
   const API = {
     works: {
+      updateTitle(id, title) {
+        return fetch(`/api/final-works/${id}/`, {
+          method: 'patch',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
+          },
+          body: JSON.stringify({
+            title,
+          }),
+        });
+      },
+
       updateAbleToPresent(id, ableToPresent) {
         return fetch(`/api/final-works/${id}/`, {
           method: 'patch',
@@ -296,10 +309,149 @@ const FinalWorkStageList = () => {
     });
   }
 
+  function handleUpdateTitleSection() {
+    function handleSubmitEvent() {
+      $('#tcc_update_title_form').submit(function (e) {
+        e.preventDefault();
+      });
+    }
+
+    function handleFormValidator() {
+      $('#tcc_update_title_form').validate({
+        errorElement: 'div',
+        errorClass: 'invalid-feedback',
+        highlight: function(element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        },
+        rules: {
+          title: {
+            required: true,
+            minlength: 3,
+            maxlength: 128,
+          },
+        },
+        messages: {
+          title: {
+            required: 'O título deve ser inserido.',
+            minlength: 'O título deve ter pelo menos 3 caracteres.',
+            maxlength: 'O título não pode ter mais de 128 caracteres.'
+          },
+        },
+        errorPlacement(error, element) {
+          element.parent().append(error);
+        },
+      });
+  
+      $('#id_title').keyup(function(e) {
+        $(this).valid();
+      });
+    }
+
+    function handleMaxLengthBadge() { 
+      $('#id_title').maxlength({
+        warningClass: "badge badge-warning",
+        limitReachedClass: "badge badge-success"
+      });
+    }
+
+    function addLoading() {
+      $('#id_title').addClass('disabled');
+      $('#id_title').attr('disabled', true);
+
+      $('#tcc_update_title_save').addClass('disabled');
+      $('#tcc_update_title_save').attr('disabled', true);
+      $('#tcc_update_title_save').html(`
+        <div class="spinner-border spinner-border-sm text-white me-2" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        Salvar
+      `);
+    }
+
+    function removeLoading() {
+      $('#id_title').removeClass('disabled');
+      $('#id_title').removeAttr('disabled');
+
+      $('#tcc_update_title_save').removeClass('disabled');
+      $('#tcc_update_title_save').removeAttr('disabled');
+      $('#tcc_update_title_save').html(`
+        Salvar
+      `);
+    }
+
+    function handleSaveEvent() {
+      $('#tcc_update_title_save').click(function (e) {
+        const isValid = $('#tcc_update_title_form').valid();
+
+        if (!isValid) {
+          return;
+        }
+
+        addLoading();
+
+        let fetchResponse;
+
+        API.works.updateTitle(
+          $('#tcc_update_title_container').data('tcc'),
+          $('#id_title').val(),
+        )
+          .then(response => {
+            fetchResponse = response;
+            return response.json();
+          })
+          .then(response => {
+            if (fetchResponse.ok === false) {
+              let error = 'Houve um erro ao atualizar o título';
+
+              if (response.title) {
+                error = response.title[0];
+              }
+
+              if (response.detail) {
+                error = response.detail[0];
+              }
+
+              Toast.fire({
+                icon: 'error',
+                title: error,
+              });
+            } else {
+              $('#tcc_title').text($('#id_title').val());
+
+              Toast.fire({
+                icon: 'success',
+                title: 'Título atualizado com sucesso.',
+              });
+
+              $('#tcc_update_title_container').removeClass('show');
+            }
+          })
+          .catch(() => {
+            Toast.fire({
+              icon: 'error',
+              title: 'Houve um erro ao atualizar o título.',
+            });
+          })
+          .finally(() => {
+            removeLoading();
+          });
+      });
+    }
+
+    handleSubmitEvent();
+    handleFormValidator();
+    handleMaxLengthBadge();
+    handleSaveEvent();
+  }
+
   handleAbleToPresentButtons();
   handleGradingScoreRange();
   handleGradingScoreSave();
   handleGenerateDocumentEvent();
+  handleUpdateTitleSection();
 }
 
 KTUtil.onDOMContentLoaded(function() {
