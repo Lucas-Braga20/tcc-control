@@ -20,10 +20,9 @@ from works.document.json_to_docx import JsonToDocx
 
 
 class FinalWork(models.Model):
-    """
-    Final work model.
-    """
+    """Entidate de TCC."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.TextField(verbose_name=_('title'), max_length=128, blank=True, null=True)
     description = models.TextField(verbose_name=_('description'))
     approved = models.BooleanField(
         verbose_name=_('approved'), null=True, blank=True, default=None,
@@ -183,7 +182,7 @@ class FinalWorkStage(models.Model):
         return self.work_stage_version.all().order_by('-created_at').first()
 
     def __str__(self):
-        return f'Etapa do {self.final_work.description}: "{self.stage.description}"'
+        return f'Etapa do {self.final_work.title}: "{self.stage.description}"'
 
 
 class FinalWorkVersion(models.Model):

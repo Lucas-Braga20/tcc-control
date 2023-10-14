@@ -37,9 +37,11 @@ class MeetingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Meeting
-        fields = ['id', 'description', 'work_stage', 'meeting_approved', 'participants', 'created_at',
-                  'created_at_formated', 'meeting_date', 'meeting_date_formated', 'is_approved', 'required_review',
-                  'developed_activities', 'instructions']
+        fields = [
+            'id', 'description', 'work_stage', 'meeting_approved', 'participants', 'created_at',
+            'created_at_formated', 'meeting_date', 'meeting_date_formated', 'is_approved', 'required_review',
+            'developed_activities', 'instructions',
+        ]
 
     def get_created_at_formated(self, obj):
         return obj.get_created_at()

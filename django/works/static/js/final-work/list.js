@@ -424,7 +424,7 @@ const FinalWorkList = () => {
       }],
       columns: [
         {
-          data: 'description',
+          data: 'title',
           render(data) {
             return data
           },

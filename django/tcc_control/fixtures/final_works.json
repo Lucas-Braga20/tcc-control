@@ -3,7 +3,8 @@
     "model": "works.finalwork",
     "pk": "b0b66199-fc9f-433a-844a-376705af5154",
     "fields": {
-      "description": "TCC Control",
+      "title": "TCC Control",
+      "description": "Sistema de gerenciamento de TCC.",
       "approved": true,
       "supervisor": "74112f96-51ae-4f48-b0f6-319ee836c267",
       "mentees": [

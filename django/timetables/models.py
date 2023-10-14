@@ -23,16 +23,13 @@ class Timetable(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
     teacher = models.ForeignKey(
-        'users.User', related_name='teacher', verbose_name=_('teacher'),
-        on_delete=models.DO_NOTHING,
+        'users.User', related_name='teacher', verbose_name=_('teacher'), on_delete=models.DO_NOTHING,
     )
     participants = models.ManyToManyField(
-        'users.User', related_name='participants',
-        verbose_name=_('pariticipants'),
+        'users.User', related_name='participants', verbose_name=_('pariticipants'),
     )
     document_template = models.FileField(
-        upload_to=get_template_folder, verbose_name=_('Document template'),
-        blank=True, null=False,
+        upload_to=get_template_folder, verbose_name=_('Document template'), blank=True, null=False,
     )
     archived = models.BooleanField(default=False, verbose_name=_('archived'))
 

@@ -22,7 +22,7 @@ class FinalWorkSerializer(serializers.ModelSerializer):
     class Meta:
         model = FinalWork
         fields = [
-            'id', 'description', 'approved', 'completed', 'supervisor', 'mentees', 'archived',
+            'id', 'title', 'description', 'approved', 'completed', 'supervisor', 'mentees', 'archived',
             'mentees_detail', 'current_stage', 'supervisor_detail', 'able_to_present', 'grading_score',
         ]
 
@@ -81,7 +81,7 @@ class ChangeRequestSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_final_work(self, obj):
-        return obj.work_stage.final_work.description
+        return obj.work_stage.final_work.title
 
     def get_created_at_formated(self, obj):
         return obj.get_created_at()

@@ -13,7 +13,7 @@ class FinalWorkAdmin(admin.ModelAdmin):
     """
     Final work configuration model admin.
     """
-    list_display = ('id', 'description', 'approved', 'supervisor', 'get_mentees', 'created_at')
+    list_display = ('id', 'title', 'description', 'approved', 'supervisor', 'get_mentees', 'created_at')
     list_filter = ('supervisor', 'mentees')
 
     @admin.display(description=_('mentees'))

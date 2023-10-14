@@ -13,21 +13,25 @@ from works.utils import validate_stage_content_json
 from users.models import User
 
 from core.defaults import (
-    WORK_STAGE_COMPLETED, WORK_STAGE_COMPLETED_LATE, WORK_STAGE_PRESENTED, WORK_STAGE_ADJUSTED, WORK_STAGE_ASSIGNED
+    WORK_STAGE_COMPLETED, WORK_STAGE_COMPLETED_LATE, WORK_STAGE_PRESENTED, WORK_STAGE_ADJUSTED, WORK_STAGE_ASSIGNED,
 )
 
 
 
 class FinalWorkForm(forms.ModelForm):
-    """
-    Final work form.
-    """
+    """Formulário de TCC."""
     mentees = forms.ModelMultipleChoiceField(queryset=User.objects.filter(is_active=True, groups__name='Orientando'))
     supervisor = forms.ModelChoiceField(queryset=User.objects.filter(is_active=True, groups__name='Orientador'))
+    title = forms.CharField(
+        widget=forms.TextInput(),
+        max_length=128,
+        required=True,
+        label='Título do seu TCC',
+    )
 
     class Meta:
         model = FinalWork
-        fields = ['description', 'supervisor', 'mentees']
+        fields = ['description', 'supervisor', 'mentees', 'title']
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)

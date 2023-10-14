@@ -39,11 +39,12 @@ class Notification(models.Model):
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
-    author = models.ForeignKey('users.User', verbose_name=_('author'),
-                               related_name='notification_author', on_delete=models.DO_NOTHING)
-    receiver = models.ManyToManyField('users.User',
-                                      related_name='notification_receiver',
-                                      through='Receiver')
+    author = models.ForeignKey(
+        'users.User', verbose_name=_('author'), related_name='notification_author', on_delete=models.DO_NOTHING,
+    )
+    receiver = models.ManyToManyField(
+        'users.User', related_name='notification_receiver', through='Receiver',
+    )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'), blank=False, null=True)
 
     class Meta:

@@ -90,7 +90,23 @@
             {% endif %}
 
             <div class="fv-row mb-8">
-              <label for="title" class="required form-label">Descrição</label>
+              <label for="title" class="required form-label">Título</label>
+
+              {% if form.title.errors %}
+                {{ form.title|add_class:"form-control form-control-solid is-invalid" }}
+              {% else %}
+                {{ form.title|add_class:"form-control form-control-solid" }}
+              {% endif %}
+
+              {% for error in form.title.errors %}
+                <div class="invalid-feedback">
+                  {{ error }}
+                </div>
+              {% endfor %}
+            </div>
+
+            <div class="fv-row mb-8">
+              <label for="description" class="required form-label">Descrição</label>
 
               {% if form.description.errors %}
                 {{ form.description|add_class:"form-control form-control-solid is-invalid" }}

@@ -99,8 +99,8 @@
                     aria-controls="tcc_accordion_body_{{ item.id }}">
                     <div class="row w-100">
                       <div class="col-12 col-sm-6 col-md d-flex align-items-center">
-                        <h1 class="fs-5 mb-0 max-w-200px text-ellipsis">
-                          {{ item.description }}
+                        <h1 class="fs-5 mb-0 max-w-300px text-ellipsis">
+                          {{ item.title }}
                         </h1>
                       </div>
 
@@ -139,6 +139,11 @@
                   data-bs-parent="#tcc_accordion">
                   <div class="accordion-body">
                     <div class="fv-row">
+                      <label class="form-label">Título</label>
+                      <input class="form-control form-control-solid disabled" value="{{ item.title }}" />
+                    </div>
+
+                    <div class="fv-row mt-8">
                       <label class="form-label">Descrição</label>
                       <textarea readonly cols="30" rows="10" class="form-control form-control-solid disabled">{{ item.description }}</textarea>
                     </div>

@@ -16,12 +16,14 @@ class Comment(models.Model):
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
-    created_at = models.DateTimeField(auto_now_add=True,
-                                      verbose_name=_('created at'))
-    work_stage = models.ForeignKey('works.FinalWorkStage', verbose_name=_('work stage'),
-                                   on_delete=models.DO_NOTHING, related_name='stage_comment')
-    author = models.ForeignKey('users.User', verbose_name=_('author'),
-                               on_delete=models.DO_NOTHING, related_name='comment_author')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
+    work_stage = models.ForeignKey(
+        'works.FinalWorkStage', verbose_name=_('work stage'), on_delete=models.DO_NOTHING,
+        related_name='stage_comment',
+    )
+    author = models.ForeignKey(
+        'users.User', verbose_name=_('author'), on_delete=models.DO_NOTHING, related_name='comment_author',
+    )
 
     class Meta:
         verbose_name = _('Comment')

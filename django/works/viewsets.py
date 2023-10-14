@@ -218,7 +218,7 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
         receivers.append(self.object.final_work.supervisor)
 
         description = (
-            f'Os orientando(s) do TCC: "{self.object.final_work.description}" solicitaram uma ' \
+            f'Os orientando(s) do TCC: "{self.object.final_work.title}" solicitaram uma ' \
             f'correção na etapa: {self.object.stage.description}'
         )
 
@@ -262,7 +262,7 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
         receivers = list(self.object.final_work.mentees.all())
 
         description = (
-            f'O supervisor do TCC: "{self.object.final_work.description}" marcou como corrigido a ' \
+            f'O supervisor do TCC: "{self.object.final_work.title}" marcou como corrigido a ' \
             f'etapa: "{self.object.stage.description}"'
         )
 
@@ -475,7 +475,7 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
         user = self.request.user
 
         description = (
-            f'O orientando do TCC: "{serializer.instance.work_stage.final_work.description}" ' \
+            f'O orientando do TCC: "{serializer.instance.work_stage.final_work.title}" ' \
             f'solicitou uma alteração na etapa: {serializer.instance.work_stage.stage.description}'
         )
 

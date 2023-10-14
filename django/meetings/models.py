@@ -36,17 +36,20 @@ class Meeting(models.Model):
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
-    created_at = models.DateTimeField(auto_now_add=True,
-                                      verbose_name=_('created at'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
     meeting_date = models.DateTimeField(verbose_name=_('meeting date'), blank=False, null=True)
-    work_stage = models.ForeignKey('works.FinalWorkStage', verbose_name=_('work stage'),
-                                   on_delete=models.DO_NOTHING, related_name='stage_meeting')
-    participants = models.ManyToManyField('users.User', related_name='meeting_participants',
-                                          through='ApprovedMeeting')
-    developed_activities = models.TextField(verbose_name=_('Developed activities'),
-                                            default='', blank=True)
-    instructions = models.TextField(verbose_name=_('Instructions'),
-                                    default='', blank=True)
+    work_stage = models.ForeignKey(
+        'works.FinalWorkStage', verbose_name=_('work stage'), on_delete=models.DO_NOTHING,
+        related_name='stage_meeting',
+    )
+    participants = models.ManyToManyField(
+        'users.User', related_name='meeting_participants',
+        through='ApprovedMeeting',
+    )
+    developed_activities = models.TextField(
+        verbose_name=_('Developed activities'), default='', blank=True,
+    )
+    instructions = models.TextField(verbose_name=_('Instructions'), default='', blank=True)
 
     class Meta:
         verbose_name = _('Metting')

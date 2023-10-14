@@ -36,8 +36,7 @@ class TimetableForm(forms.ModelForm):
     class Meta:
         model = Timetable
         fields = [
-            'mentee_field', 'supervisor_field', 'description', 'teacher',
-            'document_template',
+            'mentee_field', 'supervisor_field', 'description', 'teacher', 'document_template',
         ]
 
     def __init__(self, *args, **kwargs):

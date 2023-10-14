@@ -37,6 +37,11 @@ const FinalWorkEditor = () => {
         $(element).removeClass('is-invalid');
       },
       rules: {
+        title: {
+          required: true,
+          minlength: 3,
+          maxlength: 255,
+        },
         description: {
           required: true,
           minlength: 3,
@@ -47,6 +52,11 @@ const FinalWorkEditor = () => {
         },
       },
       messages: {
+        title: {
+          required: 'O título deve ser inserido.',
+          minlength: 'O título deve ter pelo menos 3 caracteres.',
+          maxlength: 'O título não pode ter mais de 128 caracteres.'
+        },
         description: {
           required: 'A descrição deve ser inserida.',
           minlength: 'A descrição deve ter pelo menos 3 caracteres.',
@@ -59,6 +69,10 @@ const FinalWorkEditor = () => {
       errorPlacement(error, element) {
         element.parent().append(error);
       },
+    });
+
+    $('#id_title').keyup(function(e) {
+      $(this).valid();
     });
 
     $('#id_description').keyup(function(e) {
@@ -76,6 +90,11 @@ const FinalWorkEditor = () => {
 
   function addBootstrapMaxLength() {
     $('#id_description').maxlength({
+      warningClass: "badge badge-warning",
+      limitReachedClass: "badge badge-success"
+    });
+
+    $('#id_title').maxlength({
       warningClass: "badge badge-warning",
       limitReachedClass: "badge badge-success"
     });

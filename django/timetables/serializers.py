@@ -58,9 +58,10 @@ class StageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stage
-        fields = ['id', 'description', 'start_date', 'send_date_supervisor', 'send_date',
-                  'presentation_date', 'activity_configuration', 'timetable', 'examples',
-                  'activity_already_advanced', 'past_stage']
+        fields = [
+            'id', 'description', 'start_date', 'send_date_supervisor', 'send_date', 'presentation_date',
+            'activity_configuration', 'timetable', 'examples', 'activity_already_advanced', 'past_stage',
+        ]
 
     def get_activity_already_advanced(self, obj):
         if obj.activity_configuration is not None:
