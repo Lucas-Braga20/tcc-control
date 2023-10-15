@@ -43,23 +43,24 @@
         </a>
       </div>
 
-      {% if allow_create %}
-        <!-- Actions -->
-        <div class="d-flex flex-shrink-0">
-          <div class="d-flex ms-3">
-            <a
-              href="{% url 'timetables:create' %}"
-              class="btn btn-primary">
-              Novo cronograma
-            </a>
-          </div>
+      <!-- Actions -->
+      <div class="d-flex flex-shrink-0">
+        <div class="d-flex ms-3">
+          <button
+            id="tcc_send_warning"
+            type="button"
+            class="btn btn-primary">
+            Enviar aviso
+          </button>
         </div>
-      {% endif %}
+      </div>
     </div>
   </div>
 {% endblock %}
 
 {% block content %}
+  {% csrf_token %}
+
   <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <div class="container-xxl" id="kt_content_container">
       <div class="row mb-8">
@@ -281,6 +282,96 @@
       </div>
     </div>
   </div>
+
+  <div
+    id="tcc_modal_send_warning"
+    class="modal fade"
+    tabindex="-1"
+    data-timetable="{{ object.id }}">
+    <div class="modal-dialog modal-xl">
+      <form id="tcc_send_warning_form" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Enviar aviso</h5>
+
+          <div
+            id="tcc_modal_send_warning_close"
+            class="btn btn-icon btn-sm btn-active-light-primary ms-2"
+            data-bs-dismiss="modal"
+            aria-label="Close">
+            <i class="fas fa-times"></i>
+          </div>
+        </div>
+
+        <div class="modal-body p-8">
+          <div
+            id="tcc_send_warning_info"
+            class="alert alert-dismissible bg-info d-flex flex-column flex-sm-row w-100 p-5 mb-10">
+            <span class="svg-icon svg-icon-2hx me-4 mb-5 mb-sm-0">
+              <i class="far fa-bell fa-fw fa-3x text-white"></i>
+            </span>
+
+            <div class="d-flex flex-column">
+              <h4 class="fw-semibold text-white">Envie avisos.</h4>
+              <span class="text-white">
+                Ao confirmar os destinatários receberão uma notificação no sistema e um email.
+                O aviso apenas será enviado aos destinatários que você selecionar. Utilize esse recurso
+                para enviar avisos, como por exemplo, local de apresentação, reforço de envio e outras
+                mensagens.
+              </span>
+            </div>
+          </div>
+
+          <div
+            id="tcc_send_warning_error"
+            class="alert alert-dismissible bg-danger d-flex flex-column flex-sm-row w-100 p-5 mb-10 d-none">
+            <span class="svg-icon svg-icon-2hx me-4 mb-5 mb-sm-0">
+              <i class="fas fa-exclamation-circle fa-fw fa-3x text-white"></i>
+            </span>
+
+            <div class="d-flex flex-column">
+              <h4 class="fw-semibold text-white">Houve um erro.</h4>
+              <span id="tcc_send_warning_error_message" class="text-white">
+              </span>
+            </div>
+          </div>
+
+          <div class="fv-row">
+            <label for="receivers" class="required form-label">
+              Destinatários
+            </label>
+
+            <select id="tcc_receivers" name="receivers" class="form-control form-control-solid">
+            </select>
+          </div>
+
+          <div class="fv-row mt-8">
+            <label for="message" class="required form-label">
+              Mensagem
+            </label>
+
+            <textarea
+              id="tcc_message"
+              name="message"
+              class="form-control form-control-solid"
+              cols="30"
+              rows="10"
+              minlength="3"
+              maxlength="255"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="tcc_send_warning_cancel" type="button" class="btn btn-light" data-bs-dismiss="modal">
+            Fechar
+          </button>
+
+          <button id="tcc_send_warning_confirm" type="submit" class="btn btn-primary">
+            Confirmar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 {% endblock %}
 
 {% block css-styles %}
@@ -325,6 +416,10 @@
       left: 0;
     }
   </style>
+{% endblock %}
+
+{% block js-vendors %}
+  <script src="{% static 'vendor/jquery.validate.js/jquery.validate.min.js' %}"></script>
 {% endblock %}
 
 {% block js-scripts %}

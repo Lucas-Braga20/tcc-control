@@ -131,7 +131,18 @@ const TimetablesList = () => {
               `;
             }
 
-            return `${updateButtonElement}${archivedButtonElement}`;
+            return `
+              ${updateButtonElement}
+              ${archivedButtonElement}
+              <a
+                href="/timetables/detail/${data.id}"
+                class="btn btn-sm btn-icon btn-primary ms-1"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Detalhes">
+                <i class="fas fa-eye"></i>
+              </a>
+            `;
           },
         },
       ],
