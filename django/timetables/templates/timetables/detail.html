@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% load static %}
+{% load static works %}
 
 {% block header %}
   <div
@@ -16,15 +16,17 @@
         data-kt-swapper-mode="prepend"
         data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
         <h1 class="text-dark fw-semibold my-0 fs-2">
-          Calendário
+          Cronogramas
         </h1>
 
         <ul class="breadcrumb breadcrumb-line text-muted fw-semibold fs-base my-1">
           <li class="breadcrumb-item text-muted">
-            Cronograma
+            <a href="{% url 'timetables:list' %}" class="text-muted text-hover-primary">
+              Cronogramas
+            </a>
           </li>
           <li class="breadcrumb-item text-dark">
-            Calendário
+            {{ object.description }}
           </li>
         </ul>
       </div>
@@ -60,25 +62,271 @@
 {% block content %}
   <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <div class="container-xxl" id="kt_content_container">
-      <div class="card">
-        <div class="card-header border-0 p-8 pb-4">
-          <div class="d-flex flex-column">
-            <h1 class="mb-0">
-              Cronogramas ativos
-            </h1>
+      <div class="row mb-8">
+        <div class="col col-9">
+          <div class="card">
+            <div class="card-header border-0 p-8 pb-4">
+              <div class="d-flex flex-column card-title">
+                <h1 class="fs-2 fw-bold text-dark mb-0">
+                  Olá, {{ request.user.get_full_name }}.
+                </h1>
+              </div>
+            </div>
 
-            <h2 class="fs-7 fw-bolder text-muted mt-2">
-              10 Cronogramas ativos
-            </h2>
+            <div class="card-body pt-4">
+              {% with current_stage=object.get_current_stage %}
+                {% if current_stage is not None %}
+                  <span class="fs-4 text-gray-700">
+                    Etapa atual: <span class="text-primary">{{ current_stage.description }}</span>
+                  </span>
+                {% else %}
+                  <span class="fs-4 text-gray-700">
+                    Por enquanto não há etapas atuais.
+                  </span>
+                {% endif %}
+              {% endwith %}
+            </div>
           </div>
         </div>
 
-        <div class="card-body">
-          <div>
-            
+        <div class="col-3">
+          <div class="card height-100">
+            <div class="card-body pt-2 pb-4 d-flex align-items-center">
+              <div class="d-flex flex-center me-5 pt-2">
+                <div id="tcc_donut_chart" class="donut-chart" data-size="70" data-line="11"></div>
+              </div>
+
+              {% with scores=object.get_score_works %}
+                <div class="d-flex flex-column content-justify-center w-100">
+                  <div class="d-flex fs-6 fw-semibold align-items-center">
+                    <div class="bullet w-8px h-6px rounded-2 bg-success me-3"></div>
+
+                    <div class="text-gray-500 flex-grow-1 me-4">Ótimos</div>
+
+                    <div id="tcc_great_score" class="fw-bolder text-gray-700 text-xxl-end" data-great-score="{{ scores.great_works }}">
+                      {{ scores.great_works }}
+                    </div>
+                  </div>
+
+                  <div class="d-flex fs-6 fw-semibold align-items-center">
+                    <div class="bullet w-8px h-6px rounded-2 bg-secondary me-3"></div>
+
+                    <div class="text-gray-500 flex-grow-1 me-4">Regular</div>
+
+                    <div id="tcc_regular_score" class="fw-bolder text-gray-700 text-xxl-end" data-regular-score="{{ scores.regular_works }}">
+                      {{ scores.regular_works }}
+                    </div>
+                  </div>
+
+                  <div class="d-flex fs-6 fw-semibold align-items-center">
+                    <div class="bullet w-8px h-6px rounded-2 bg-danger me-3"></div>
+
+                    <div class="text-gray-500 flex-grow-1 me-4">Péssimos</div>
+
+                    <div id="tcc_terrible_score" class="fw-bolder text-gray-700 text-xxl-end" data-terrible-score="{{ scores.terrible_works }}">
+                      {{ scores.terrible_works }}
+                    </div>
+                  </div>
+                </div>
+              {% endwith %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-9">
+          <div class="card flex-grow-1 works-card">
+            <div class="card-header border-0 p-8 pb-4">
+              <div class="d-flex flex-column card-title">
+                <h1 class="fs-5 fw-bold text-dark mb-0">
+                  Cronograma: {{ object.description }}
+                </h1>
+
+                <h2 class="text-muted mt-1 fw-semibold fs-7">
+                  Existe(m) {{ object.timetable_works.count }} TCC(s) vinculados ao cronograma.
+                </h2>
+              </div>
+            </div>
+
+            <div class="card-body pt-4">
+              <div class="card-scroll works-list">
+                {% for work in object.timetable_works.all %}
+                  <div class="d-flex align-items-center mb-6">
+                    <div class="position-relative">
+                      <span class="{% get_score_background work.get_work_score %} bullet bullet-vertical d-flex align-items-center me-4 work-bullet height-100"></span>
+
+                      <span
+                        class="{% get_score_background work.get_work_score %} bullet bullet-vertical d-flex align-items-center me-4 position-absolute work-bullet-progress"
+                        {% autoescape off %}
+                          {% calculate_height_percentage work.get_work_percentual %}
+                        {% endautoescape %}
+                      ></span>
+                    </div>
+
+                    <div class="flex-grow-1 me-5">
+                      <div class="text-gray-800 fw-bolder fs-2">
+                        {{ work.title }}
+
+                        <span class="{% get_score_color work.get_work_score %} fw-bold fs-7">
+                          {% get_score_label work.get_work_score %}.
+                        </span>
+                      </div>
+
+                      <div class="text-gray-700 fw-bolder fs-7">
+                        {% calculate_percentage work.get_work_percentual %}% desenvolvido.
+                        <span class="text-gray-600 fw-light">
+                          ({{ work.get_completed_stages.count }}/{{ work.get_all_stages.count }} Etapas)
+                        </span>
+                      </div>
+
+                      <div class="text-gray-700 fw-bold fs-7">
+                        {{ work.get_not_delayed_stages.count }} Etapas entregue sem atraso.
+                        <span class="mx-5"> | </span>
+                        {{ work.get_delayed_stages.count }} Entregas atrasadas.
+                      </div>
+
+                      <div class="text-gray-400 fw-semibold fs-7">
+                        Desenvolvido por
+
+                        {% for mentee in work.mentees.all %}
+                          <span class="text-primary fw-semibold">{{ mentee.get_full_name }}</span>
+
+                          {% if not forloop.last %}
+                            e
+                          {% endif %}
+                        {% endfor %}
+
+                        <span class="mx-5"> | </span>
+
+                        Orientado por
+
+                        <span class="text-primary fw-semibold">{{ work.supervisor.get_full_name }}</span>.
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-3">
+          <div class="row">
+            <div class="col-12 mb-8">
+              <div class="card participant-card">
+                <div class="card-header border-0 p-8 pb-4">
+                  <div class="d-flex flex-column card-title">
+                    <span class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">
+                      {{ object.get_mentees.count }}
+                    </span>
+
+                    <span class="text-gray-400 pt-1 fw-semibold fs-6">
+                      Orientando(s).
+                    </span>
+                  </div>
+                </div>
+
+                <div class="card-body pt-5">
+                  <div class="card-scroll participant-list">
+                    {% for mentee in object.get_mentees %}
+                      <div class="d-flex flex-stack">
+                        <div class="text-gray-700 fw-semibold fs-6 me-2">
+                          {{ mentee.get_full_name }}
+                        </div>
+                      </div>
+
+                      {% if not forloop.last %}
+                        <div class="separator separator-dashed my-1"></div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="card participant-card">
+                <div class="card-header border-0 p-8 pb-4">
+                  <div class="d-flex flex-column card-title">
+                    <span class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">
+                      {{ object.get_supervisors.count }}
+                    </span>
+
+                    <span class="text-gray-400 pt-1 fw-semibold fs-6">
+                      Orientadore(s).
+                    </span>
+                  </div>
+                </div>
+
+                <div class="card-body pt-4">
+                  <div class="card-scroll participant-list">
+                    {% for supervisor in object.get_supervisors %}
+                      <div class="d-flex flex-stack">
+                        <div class="text-gray-700 fw-semibold fs-6 me-2">
+                          {{ supervisor.get_full_name }}
+                        </div>
+                      </div>
+
+                      {% if not forloop.last %}
+                        <div class="separator separator-dashed my-1"></div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block css-styles %}
+  <style>
+    .donut-chart {
+      min-width: 70px !important;
+      min-height: 70px !important;
+    }
+
+    .participant-card {
+      min-height: 259.75px;
+      height: 100%;
+    }
+
+    .participant-list {
+      max-height: 108.797px;
+    }
+
+    .works-card {
+      min-height: 545.5px;
+    }
+
+    .works-list {
+      max-height: 418.5px;
+    }
+
+    .position-relative {
+      position: relative;
+    }
+
+    .position-absolute {
+      position: absolute;
+    }
+
+    .work-bullet {
+      min-height: 90px;
+      opacity: 0.3;
+    }
+
+    .work-bullet-progress {
+      bottom: 0;
+      left: 0;
+    }
+  </style>
+{% endblock %}
+
+{% block js-scripts %}
+  <script src="{% static 'js/timetables/detail.js' %}"></script>
 {% endblock %}

@@ -2,8 +2,7 @@
 Views to timetables apps.
 """
 
-from typing import Any
-from django.views.generic import CreateView, TemplateView, UpdateView
+from django.views.generic import CreateView, TemplateView, UpdateView, DetailView
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -98,3 +97,9 @@ class TimetableStageCalendarView(
         context['allow_create'] = UserGroup(self.request.user).is_teacher() if self.request.user is not None else False
 
         return context
+
+
+class TimetableDetailView(DetailView):
+    """View de detalhes do calendário."""
+    template_name = 'timetables/detail.html'
+    model = Timetable

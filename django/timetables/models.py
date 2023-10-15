@@ -13,6 +13,7 @@ import os
 from datetime import date
 
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from timetables.documents import get_template_folder
@@ -36,6 +37,45 @@ class Timetable(models.Model):
     class Meta:
         verbose_name = _('Timetable')
         verbose_name_plural = _('Timetables')
+
+    def get_current_stage(self):
+        today = date.today()
+
+        stage = self.stages.filter(start_date__lte=today, send_date__gte=today)
+
+        if not stage.exists():
+            return None
+
+        return stage.first()
+
+    def get_supervisors(self):
+        return self.participants.filter(groups__name='Orientador')
+
+    def get_mentees(self):
+        return self.participants.filter(groups__name='Orientando')
+
+    def get_score_works(self):
+        works = self.timetable_works.all()
+
+        great_works = 0
+        terrible_works = 0
+        regular_works = 0
+
+        for work in works:
+            score = work.get_work_score()
+
+            if score == -1:
+                terrible_works += 1
+            elif score == 1:
+                great_works += 1
+            else:
+                regular_works += 1
+
+        return {
+            'great_works': great_works,
+            'terrible_works': terrible_works,
+            'regular_works': regular_works,
+        }
 
     def __str__(self):
         return f"Cronograma: {self.description} - Professor: {self.teacher}"

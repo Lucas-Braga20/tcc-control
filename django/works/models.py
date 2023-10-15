@@ -145,6 +145,59 @@ class FinalWork(models.Model):
 
         return documents
 
+    def get_all_stages(self):
+        return self.work_stage.all()
+
+    def get_completed_stages(self):
+        all_stages = self.get_all_stages()
+
+        return all_stages.filter(status__in=defaults.completed_status)
+
+    def get_work_percentual(self):
+        all_stages = self.get_all_stages()
+
+        completed_stages = self.get_completed_stages()
+
+        if all_stages.count() == 0:
+            return 0
+
+        if completed_stages.count() == 0:
+            return 0
+
+        return completed_stages.count() / all_stages.count()
+
+    def get_delayed_stages(self):
+        all_stages = self.get_all_stages()
+
+        return all_stages.filter(status__in=[defaults.WORK_STAGE_COMPLETED_LATE])
+
+    def get_not_delayed_stages(self):
+        all_stages = self.get_all_stages()
+
+        return all_stages.filter(status__in=defaults.NOT_DELAYED_STATUS)
+
+    def get_work_score(self):
+        """Recupera o score do trabalho.
+
+        Essa função retorna o score do trabalho baseado nas etapas:
+            - Péssimo (-1): Se houver mais de 50% de etapas atrasadas;
+            - Ótimo (1): Se houver mais de 70% concluído sem atraso;
+            - Neutro (0): Nenhum dos casos;
+        """
+        all_stages = self.get_all_stages()
+
+        delayed_stages = self.get_delayed_stages()
+
+        not_delayed_stages = self.get_not_delayed_stages()
+
+        if (delayed_stages.count() / all_stages.count()) > 0.5:
+            return -1
+
+        if (not_delayed_stages.count() / all_stages.count()) > 0.7:
+            return 1
+
+        return 0
+
     def __str__(self):
         return f'TCC: "{self.description}"'
 
@@ -155,13 +208,16 @@ class FinalWorkStage(models.Model):
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     presented = models.BooleanField(verbose_name=_('presented'), default=False)
-    status = models.IntegerField(verbose_name=_('status'),
-                                 choices=defaults.WORK_STAGE_STATUS,
-                                 default=defaults.WORK_STAGE_ASSIGNED)
-    stage = models.ForeignKey('timetables.Stage', verbose_name=_('time table stage'),
-                              on_delete=models.DO_NOTHING, related_name='work_timetable_stage')
-    final_work = models.ForeignKey('works.FinalWork', verbose_name=_('final work'),
-                                   on_delete=models.DO_NOTHING, related_name='work_stage')
+    status = models.IntegerField(
+        verbose_name=_('status'), choices=defaults.WORK_STAGE_STATUS, default=defaults.WORK_STAGE_ASSIGNED,
+    )
+    stage = models.ForeignKey(
+        'timetables.Stage', verbose_name=_('time table stage'), on_delete=models.DO_NOTHING,
+        related_name='work_timetable_stage',
+    )
+    final_work = models.ForeignKey(
+        'works.FinalWork', verbose_name=_('final work'), on_delete=models.DO_NOTHING, related_name='work_stage',
+    )
 
     class Meta:
         verbose_name = _('Final work stage')
