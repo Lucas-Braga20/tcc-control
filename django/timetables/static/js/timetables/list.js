@@ -14,6 +14,7 @@ const TimetablesList = () => {
           method: 'patch',
           headers: {
             'Content-Type': 'application/json',
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
           },
           body: JSON.stringify({
             archived: true
@@ -25,6 +26,7 @@ const TimetablesList = () => {
           method: 'patch',
           headers: {
             'Content-Type': 'application/json',
+            'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
           },
           body: JSON.stringify({
             archived: false
