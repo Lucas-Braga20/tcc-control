@@ -25,7 +25,8 @@ from core.permissions import RoleAccessPermission, UserGroup
 from core.utils import generate_work_stages
 from core.defaults import (
     WORK_STAGE_WAITING_CORRECTION, WORK_STAGE_ADJUSTED, WORK_STAGE_COMPLETED, WORK_STAGE_PRESENTED,
-    WORK_STAGE_COMPLETED_LATE, WORK_STAGE_UNDER_CHANGE, WORK_STAGE_UPDATED, completed_status
+    WORK_STAGE_COMPLETED_LATE, WORK_STAGE_UNDER_CHANGE, WORK_STAGE_UPDATED, completed_status,
+    WORK_STAGE_PRESENTED_LATE, WORK_STAGE_UPDATED_LATE,
 )
 
 from notifications.utils import send_notification
@@ -206,7 +207,7 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
                 'work_stage': 'Você não pertence a este TCC.'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        if self.object.status in [4, 5, 6]:
+        if self.object.status in completed_status:
             return Response(data={
                 'status': 'Esta etapa já foi completada.'
             }, status=status.HTTP_400_BAD_REQUEST)
@@ -251,7 +252,7 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
                 'work_stage': 'Você não pertence a este TCC.'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        if self.object.status in [4, 5, 6]:
+        if self.object.status in completed_status:
             return Response(data={
                 'status': 'Esta etapa já foi completada.'
             }, status=status.HTTP_400_BAD_REQUEST)
@@ -355,7 +356,18 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
                 'status': 'Esta etapa já foi apresentada.'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        self.object.status = WORK_STAGE_PRESENTED
+        if self.object.stage.presentation_date is None:
+            return Response(data={
+                'status': 'Esta etapa não possui data de apresentação.',
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        today = datetime.date.today()
+
+        if today > self.object.stage.presentation_date:
+            self.object.status = WORK_STAGE_PRESENTED_LATE
+        else:
+            self.object.status = WORK_STAGE_PRESENTED
+
         self.object.save()
 
         receivers = list(self.object.final_work.mentees.all())
@@ -520,6 +532,7 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
                 work_stage=instance.work_stage
             )
 
+        instance.work_stage.last_status = instance.work_stage.status
         instance.work_stage.status = WORK_STAGE_UNDER_CHANGE
         instance.work_stage.save()
 
@@ -570,7 +583,13 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
         )
 
         if serializer.instance.approved:
-            serializer.instance.work_stage.status = WORK_STAGE_UPDATED
+            today = datetime.date.today()
+
+            if today > serializer.instance.work_stage.stage.send_date:
+                serializer.instance.work_stage.status = WORK_STAGE_UPDATED_LATE
+            else:
+                serializer.instance.work_stage.status = WORK_STAGE_UPDATED
+
             serializer.instance.work_stage.save()
 
             version = serializer.instance.work_stage.get_last_version()
@@ -579,7 +598,7 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
                 version.confirmed = True
                 version.save()
         else:
-            serializer.instance.work_stage.status = WORK_STAGE_COMPLETED
+            serializer.instance.work_stage.status = serializer.instance.work_stage.last_status
             serializer.instance.work_stage.save()
 
             version = serializer.instance.work_stage.get_last_version()

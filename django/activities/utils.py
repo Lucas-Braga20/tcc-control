@@ -38,8 +38,9 @@ def check_worked_activity(activity):
     Função para verificar se uma atividade possui um etapa de
     trabalho com conteúdo adiantado.
     """
-    work_stages = FinalWorkStage.objects.filter(stage__activity_configuration=activity.id,
-                                                status__in=NOT_COMPLETED_STATUS)
+    work_stages = FinalWorkStage.objects.filter(
+        stage__activity_configuration=activity.id, status__in=NOT_COMPLETED_STATUS,
+    )
 
     has_advanced_activities = False
 

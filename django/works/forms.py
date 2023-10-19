@@ -14,8 +14,8 @@ from users.models import User
 
 from core.defaults import (
     WORK_STAGE_COMPLETED, WORK_STAGE_COMPLETED_LATE, WORK_STAGE_PRESENTED, WORK_STAGE_ADJUSTED, WORK_STAGE_ASSIGNED,
+    WORK_STAGE_PRESENTED_LATE,
 )
-
 
 
 class FinalWorkForm(forms.ModelForm):
@@ -127,7 +127,7 @@ class FinalWorkStageForm(forms.ModelForm):
                     {'status': 'It is only possible to complete the activity if there is a development.'}
                 )
 
-        if self.instance is not None and status == WORK_STAGE_PRESENTED:
+        if self.instance is not None and (status == WORK_STAGE_PRESENTED or status == WORK_STAGE_PRESENTED_LATE):
             timetable_stage = self.instance.stage
 
             today = datetime.date.today()

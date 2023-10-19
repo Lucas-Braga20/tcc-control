@@ -96,6 +96,10 @@
                 <span class="badge badge-light-info fw-bolder fs-7">Em alteração</span>
               {% elif object.status == 8 %}
                 <span class="badge badge-light-info fw-bolder fs-7">Alterado</span>
+              {% elif object.status == 9 %}
+                <span class="badge badge-light-danger fw-bolder fs-7">Apresentado com atraso</span>
+              {% elif object.status == 10 %}
+                <span class="badge badge-light-danger fw-bolder fs-7">Atualizado com atraso</span>
               {% endif %}
             </div>
           </div>
@@ -333,7 +337,7 @@
               </button>
             {% endif %}
 
-            {% if object.status == 4 or object.status == 5 or object.status == 6 or object.status == 8 %}
+            {% if object.status == 4 or object.status == 5 or object.status == 6 or object.status == 8 or object.status == 9 or object.status == 10 %}
               {% if change_already_requested %}
                 <!-- Request change (Pending) -->
                 <div
@@ -423,7 +427,7 @@
               </button>
             {% endif %}
 
-            {% if object.status != 6 %}
+            {% if object.status != 6 and object.status != 9 %}
               <!-- Mark presented -->
               <button
                 id="tcc_mark_presented_button"

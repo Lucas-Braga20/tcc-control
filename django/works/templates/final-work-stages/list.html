@@ -266,11 +266,15 @@
                     {% elif work_stage.status == 5 %}
                       <span class="badge badge-light-success">Entregue</span>
                     {% elif work_stage.status == 6 %}
-                      <span class="badge badge-light-success fw-bolder fs-7">Apresentado</span>
+                      <span class="badge badge-light-success">Apresentado</span>
                     {% elif work_stage.status == 7 %}
-                      <span class="badge badge-light-info fw-bolder fs-7">Em alteração</span>
+                      <span class="badge badge-light-info">Em alteração</span>
                     {% elif work_stage.status == 8 %}
-                      <span class="badge badge-light-info fw-bolder fs-7">Alterado</span>
+                      <span class="badge badge-light-info">Alterado</span>
+                    {% elif work_stage.status == 9 %}
+                      <span class="badge badge-light-danger">Apresentado com atraso</span>
+                    {% elif work_stage.status == 10 %}
+                      <span class="badge badge-light-danger">Atualizado com atraso</span>
                     {% endif %}
                   </div>
                 </a>

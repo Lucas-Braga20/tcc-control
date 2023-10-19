@@ -169,7 +169,9 @@ class FinalWork(models.Model):
     def get_delayed_stages(self):
         all_stages = self.get_all_stages()
 
-        return all_stages.filter(status__in=[defaults.WORK_STAGE_COMPLETED_LATE])
+        return all_stages.filter(status__in=[
+            defaults.WORK_STAGE_COMPLETED_LATE, defaults.WORK_STAGE_PRESENTED_LATE, defaults.WORK_STAGE_UPDATED_LATE,
+        ])
 
     def get_not_delayed_stages(self):
         all_stages = self.get_all_stages()
@@ -210,6 +212,10 @@ class FinalWorkStage(models.Model):
     presented = models.BooleanField(verbose_name=_('presented'), default=False)
     status = models.IntegerField(
         verbose_name=_('status'), choices=defaults.WORK_STAGE_STATUS, default=defaults.WORK_STAGE_ASSIGNED,
+    )
+    last_status = models.IntegerField(
+        verbose_name=_('last_status'), choices=defaults.WORK_STAGE_STATUS, default=None,
+        null=True,
     )
     stage = models.ForeignKey(
         'timetables.Stage', verbose_name=_('time table stage'), on_delete=models.DO_NOTHING,
