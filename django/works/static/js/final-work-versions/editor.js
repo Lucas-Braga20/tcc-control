@@ -1,16 +1,29 @@
 const FinalWorkVersionEditor = () => {
-  let richTextEditors = tinymce.init({
+  tinymce.init({
     selector: '.tcc_rich_text',
     height: 400,
     images_upload_url: '/version-content-images/',
     images_upload_base_path: '/api',
     plugins: [
-      'advlist autolink lists link image charmap print preview anchor',
-      'searchreplace visualblocks code fullscreen',
-      'insertdatetime media table paste imagetools wordcount'
-    ],  
-    toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-    automatic_uploads: true,
+      'table paste image media imagetools lists',
+    ],
+    toolbar: 'undo redo | styleselect | bold italic underline | table | image | bullist',
+    formats: {
+      titulo1: { block: 'h1' },
+      titulo2: { block: 'h2' },
+      titulo3: { block: 'h3' },
+      citacao: { block: 'blockquote' },
+      referencia: { block: 'div' },
+      paragrafo: { block: 'p' },
+    },
+    style_formats: [
+      { title: 'Paragrafo', format: 'paragrafo' },
+      { title: 'Titulo 1', format: 'titulo1' },
+      { title: 'Titulo 2', format: 'titulo2' },
+      { title: 'Titulo 3', format: 'titulo3' },
+      { title: 'Citação', format: 'citacao' },
+      { title: 'Referência', format: 'referencia' },
+    ],
     images_upload_handler(blobInfo, success, failure, progress) {
       let xhr, formData;
 
@@ -56,6 +69,9 @@ const FinalWorkVersionEditor = () => {
       formData.append('version', $('#tcc_version_form').data('version'));
 
       xhr.send(formData);
+    },
+    paste_preprocess: function (plugin, args) {
+      args.content = args.content.replace(/<[^>]*>/g, "");
     },
   });
 

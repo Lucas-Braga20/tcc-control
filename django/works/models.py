@@ -90,10 +90,10 @@ class FinalWork(models.Model):
 
         return {
             'fields': all_fields + [
-                {'key': 'aluno1', 'value': self.mentees.first()},
+                {'key': 'aluno1', 'value': self.mentees.first().get_full_name()},
                 {'key': 'titulo', 'value': self.title},
-                {'key': 'aluno2', 'value': self.mentees.last()},
-                {'key': 'orientador', 'value': self.supervisor.first()},
+                {'key': 'aluno2', 'value': self.mentees.last().get_full_name()},
+                {'key': 'orientador', 'value': self.supervisor.get_full_name()},
             ],
         }
 

@@ -1,4 +1,9 @@
+import os
+
+from django.conf import settings
+
 from docx.shared import Inches
+
 
 def data_table(data):
     table_data = data['values'][0]['values']
@@ -49,13 +54,17 @@ class HTMLtoDocx:
                 width = value["attributes"].get("width", "")
                 height = value["attributes"].get("height", "")
                 source = value["attributes"]["src"]
-                if width == "":
-                    run.add_picture(source)
-                else:
-                    width = Inches(float(width) * 0.0138889)
-                    height = Inches(float(height) * 0.0138889)
-                    run.add_picture(source, width=width, height=height)
-                paragraph.style = 'imagem'
+                try:
+                    source = os.path.join(settings.MEDIA_ROOT, source.split('/media/')[1])
+                    if width == "":
+                        run.add_picture(source)
+                    else:
+                        width = Inches(16 * 0.393701)
+                        # height = Inches(float(height) * 0.0138889)
+                        run.add_picture(source, width=width)
+                    paragraph.style = 'imagem'
+                except Exception:
+                    pass
             elif value["tag_name"] == "strong":
                 run.bold = True
                 new_options = {
@@ -81,10 +90,21 @@ class HTMLtoDocx:
                 }
                 self.render_values(paragraph, value["values"], new_options)
 
-    def convert_list(self, li):
+    def convert_list(self, li, nivel):
         for item in li["values"]:
-            p = self.sub_document.add_paragraph("Teste", style="List Paragraph")
-            self.render_values(p, item["values"])
+            paragrafo = None
+            if nivel == 1:
+                paragrafo = self.sub_document.add_paragraph(style=f"lista{nivel}")
+            if len(item["values"]) > 1:
+                print(item["values"])
+                self.render_values(paragrafo, item["values"][0])
+                self.convert_list(item["values"][1], nivel + 1)
+            else:
+                if paragrafo is None:
+                    paragrafo = self.sub_document.add_paragraph(style=f"lista{nivel}")
+                    self.render_values(paragrafo, item["values"])
+                else:
+                    self.render_values(paragrafo, item["values"])
 
     def convert_table(self, data):
         table = self.sub_document.add_table(
@@ -95,12 +115,13 @@ class HTMLtoDocx:
             for index, cell_data in enumerate(row):
                 p = row_cells[index].paragraphs[0]
                 p.style = 'Normal'
-
                 if isinstance(cell_data[0], str):
                     self.render_values(p, cell_data)
                 else:
                     for index_item, item in enumerate(cell_data):
-                        if index_item == 0:
+                        if isinstance(item, str):
+                            self.render_values(p, item)
+                        elif index_item == 0:
                             self.render_values(p, item["values"])
                         else:
                             paragraph = row_cells[index].add_paragraph()
@@ -116,7 +137,7 @@ class HTMLtoDocx:
 
         for key in items["keys"]:
             if key["tag_name"] == "ul":
-                self.convert_list(key)
+                self.convert_list(key, 1)
             elif key["tag_name"] == "table":
                 data = data_table(key)
                 self.convert_table(data)

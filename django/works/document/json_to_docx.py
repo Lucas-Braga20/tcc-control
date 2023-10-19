@@ -18,7 +18,6 @@ class JsonToDocx:
         self.json_data = json_data
         self.output_path_docx = output_path_docx
         self.doc = DocxTemplate(input_path_docx)
-        self.html2docx = HTMLtoDocx(self.doc)
 
     def convert(self):
         context = {}
@@ -32,7 +31,8 @@ class JsonToDocx:
                     try:
                         json_string = convert(value)
                         items = json.loads(json_string)
-                        context[key] = self.html2docx.convert(items)
+                        html2docx = HTMLtoDocx(self.doc)
+                        context[key] = html2docx.convert(items)
                     except Exception as e:
                         print(f"Erro ao converter HTML para JSON: {str(e)}")
 
