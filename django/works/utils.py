@@ -8,6 +8,7 @@ import datetime
 
 from django.conf import settings
 from django.utils import timezone
+from django.utils.text import slugify
 
 
 def validate_stage_content_json(content):
@@ -35,7 +36,9 @@ def get_version_content_image_folder(instance, filename):
     """
     Get upload folder.
     """
-    return f'works/{instance.version.work_stage.final_work.id}/versions/{instance.version.id}/${filename}'
+    new_filename = slugify(filename)
+
+    return f'works/{instance.version.work_stage.final_work.id}/versions/{instance.version.id}/${new_filename}'
 
 
 def get_document_creation_time(document_path, concat=True):

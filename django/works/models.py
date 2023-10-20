@@ -283,8 +283,10 @@ class VersionContentImage(models.Model):
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     image = models.ImageField(upload_to=get_version_content_image_folder, verbose_name=_('image'), max_length=255)
-    version = models.ForeignKey('works.FinalWorkVersion', verbose_name=_('work version'),
-                                on_delete=models.CASCADE, related_name='version_images')
+    version = models.ForeignKey(
+        'works.FinalWorkVersion', verbose_name=_('work version'), on_delete=models.CASCADE,
+        related_name='version_images',
+    )
 
     def __str__(self):
         return f'Imagem da versão: "{self.version}"'
