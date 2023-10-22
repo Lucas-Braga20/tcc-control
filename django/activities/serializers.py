@@ -36,7 +36,7 @@ class ActivityConfigurationSerializer(serializers.ModelSerializer):
     def validate_fields(self, value):
         """Validação do campos "fields"."""
         if value is None:
-            raise serializers.ValidationError('The "fields" field cannot be null.')
+            raise serializers.ValidationError('O campo "fields" não pode ser nulo.')
 
         try:
             validate_fields_json(fields_value=value)

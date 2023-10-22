@@ -8,6 +8,7 @@ Contém os testes para:
 from django.test import TestCase
 
 from activities.forms import ActivityConfigurationForm
+from activities.serializers import ActivityConfigurationSerializer
 
 
 class ActivityConfigurationTest(TestCase):
@@ -16,8 +17,12 @@ class ActivityConfigurationTest(TestCase):
     def test_fields(self):
         data = {
             'name': 'Termo de abertura de projeto',
-            'fields': '{"fields": []}',
+            'fields': {"fields": []},
         }
         form = ActivityConfigurationForm(data=data)
+        serializer = ActivityConfigurationSerializer(data=data)
 
-        self.assertEqual(form.errors['fields'], ['At least one field must be entered.'])
+        self.assertFalse(serializer.is_valid())
+
+        self.assertEqual(form.errors['fields'], ['Pelo menos um campo deve ser inserido.'])
+        self.assertIn('Pelo menos um campo deve ser inserido.', serializer.errors.get('fields'))
