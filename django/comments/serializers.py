@@ -1,5 +1,8 @@
 """
-Comments serializers.
+Implementação dos Serializers do app de comments.
+
+Contém os serializers para:
+    - CommentSerializer (Comentários);
 """
 
 from rest_framework import serializers
@@ -8,16 +11,12 @@ from comments.models import Comment
 
 from users.serializers import UserSerializer
 
-from core.permissions import UserGroup
-
 from notifications.utils import send_notification
 from notifications.tasks import send_mail
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    """
-    Comment Serializer.
-    """
+    """Serializer de Comentário."""
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
     author_detail = UserSerializer(many=False, source='author', read_only=True)
 
@@ -26,19 +25,30 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ['id', 'description', 'created_at', 'work_stage', 'author', 'author_detail']
 
     def validate_work_stage(self, work_stage):
+        """Valida o campo work stage.
+
+        Apenas é possível criar um comentário se o usuário
+        for membro do TCC.
+
+        Está validação é feita a partir do campo work stage.
+        """
         user = self.context['request'].user
-        user_group = UserGroup(user)
 
-        if not user_group.is_teacher():
-            is_supervisor = user == work_stage.final_work.supervisor
-            is_mentee = work_stage.final_work.mentees.all().filter(id__in=[user.id]).exists()
+        is_supervisor = user == work_stage.final_work.supervisor
+        is_mentee = work_stage.final_work.mentees.all().filter(id__in=[user.id]).exists()
+        is_teacher = user.id == work_stage.final_work.timetable.teacher.id
 
-            if not is_supervisor and not is_mentee:
-                raise serializers.ValidationError('It is not possible to create a comment without a link to the tcc.')
+        if not is_supervisor and not is_mentee and not is_teacher:
+            raise serializers.ValidationError('O comentário só pode ser feito por um membro do TCC.')
 
         return work_stage
 
     def create(self, request, *args, **kwargs):
+        """Método de criação do serializer.
+
+        Ao criar um comentário, todos os envolvidos com exceção
+        do autor receberão uma notificação/email.
+        """
         comment = super().create(request, *args, **kwargs)
 
         mentees = comment.work_stage.final_work.mentees.all()

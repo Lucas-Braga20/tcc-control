@@ -86,5 +86,27 @@
       ],
       "user_permissions": []
     }
+  },
+  {
+    "model": "users.user",
+    "pk": "8bbc2d21-8d8c-436e-bcd1-140391155e0e",
+    "fields": {
+      "password": "pbkdf2_sha256$600000$i04NbFvCB8IW7D7qmKPOYj$B7UPR7Hb20XHjmDtQYPki5YRbMrYxxjIk6EtkuhtG3Y=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "matheus.ribeiro",
+      "first_name": "Matheus",
+      "last_name": "Ribeiro",
+      "email": "802.266@alunos.unigran.br",
+      "university_course": "98ba4c0e-ca61-4878-bbbb-63445e89fe85",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-06-11T19:20:47.349Z",
+      "phone": null,
+      "groups": [
+        2
+      ],
+      "user_permissions": []
+    }
   }
 ]

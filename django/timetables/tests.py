@@ -20,6 +20,7 @@ class TimetableTest(TestCase):
     Timetable test.
     """
     fixtures = [
+        'tcc_control/fixtures/courses.json',
         'tcc_control/fixtures/users.json',
         'tcc_control/fixtures/groups.json'
     ]
@@ -76,6 +77,7 @@ class StageTest(TestCase):
     Stage test.
     """
     fixtures = [
+        'tcc_control/fixtures/courses.json',
         'tcc_control/fixtures/users.json',
         'tcc_control/fixtures/groups.json',
         'tcc_control/fixtures/tests/activity_configurations.json'

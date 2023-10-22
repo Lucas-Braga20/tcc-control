@@ -1,5 +1,8 @@
 """
-Comments app models.
+Implementação dos models do app de comentários.
+
+Contém os modelos de:
+    - Comment (Comentário);
 """
 
 import uuid

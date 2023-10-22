@@ -1,3 +1,5 @@
+"""Definição do app de comentários."""
+
 from django.apps import AppConfig
 
 

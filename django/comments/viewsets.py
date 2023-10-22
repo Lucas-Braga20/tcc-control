@@ -1,5 +1,8 @@
 """
-Comments viewsets.
+Implementação dos ViewSets do app de comentários.
+
+Contém os endpoints para:
+    - CommentViewSet (Comentários);
 """
 
 from rest_framework import viewsets, permissions
@@ -14,8 +17,20 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    """
-    Comment viewset provides all http request methods.
+    """ViewSet para manipulação de comentários.
+
+    Através deste endpoint que será possível manipular
+    comentários.
+
+    Métodos suportados:
+        - Retrieve;
+        - List;
+        - Update;
+        - Create;
+        - Delete;
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
@@ -25,6 +40,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     filterset_fields = ['work_stage']
 
     def get_queryset(self):
+        """Recupera o queryset de comentários."""
         queryset = super().get_queryset()
 
         user_group = UserGroup(self.request.user)

@@ -12,6 +12,7 @@ class MeetingTest(TestCase):
     Meeting test.
     """
     fixtures = [
+        'tcc_control/fixtures/courses.json',
         'tcc_control/fixtures/users.json',
         'tcc_control/fixtures/activity_configurations.json',
         'tcc_control/fixtures/timetables.json',
