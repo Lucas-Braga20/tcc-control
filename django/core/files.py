@@ -1,3 +1,5 @@
+"""Utilitários de arquivos do app core."""
+
 import os
 
 from django.utils.text import slugify

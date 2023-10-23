@@ -1,16 +1,19 @@
-"""
-Mixins for the tcc control project.
+"""Mixins para o app core.
+
+Contém os mixins:
+    - DisablePaginationMixin;
+    - NotificationMixin;
 """
 
 from rest_framework.response import Response
 
-from notifications.models import Notification, Receiver
-
-from users.models import User
-
 
 class DisablePaginationMixin:
+    """Mixin de controle de paginação."""
+
     def paginate_queryset(self, queryset):
+        """Implementa a paginação no queryset."""
+
         if 'pagination' in self.request.query_params:
             pagination_enabled = self.request.query_params.get('pagination').lower() == 'true'
             if not pagination_enabled:
@@ -19,6 +22,7 @@ class DisablePaginationMixin:
         return super().paginate_queryset(queryset)
 
     def get_paginated_response(self, data):
+        """Recupera o response em páginas."""
         if data is None:
             return Response(data)
 
@@ -26,7 +30,14 @@ class DisablePaginationMixin:
 
 
 class NotificationMixin:
+    """Mixin de notificação.
+
+    Insere no contexto de toda view com esse mixin
+    os valores de notificação.
+    """
+
     def get_context_data(self, **kwargs):
+        """Gera o contexto do template."""
         context = super().get_context_data(**kwargs)
 
         user = self.request.user

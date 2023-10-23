@@ -1,3 +1,5 @@
+"""Utilitários do app core."""
+
 import datetime
 
 from core import defaults
@@ -6,6 +8,7 @@ from works.models import FinalWorkStage
 
 
 def generate_work_stages(final_work, timetable):
+    """Gera etapas do TCC."""
     if not final_work:
         raise Exception('Final work is required.')
     
@@ -23,6 +26,7 @@ def generate_work_stages(final_work, timetable):
 
 
 def process_stage_status(final_work):
+    """Avalia status das etapas."""
     # today = datetime.date.today()
     today = datetime.date(2023, 1, 1)
 

@@ -1,3 +1,5 @@
+"""Definição do app de core."""
+
 from django.apps import AppConfig
 
 

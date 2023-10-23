@@ -1,6 +1,4 @@
-"""
-Default values to Tcc Control Project.
-"""
+"""Constantes do projeto TCC Control."""
 
 from django.utils.translation import gettext_lazy as _
 
