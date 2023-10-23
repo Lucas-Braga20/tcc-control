@@ -1,5 +1,8 @@
 """
-Notification serializers.
+Implementação dos Serializers do app de notifications.
+
+Contém os serializers para:
+    - NotificationSerializer (Notificação);
 """
 
 from rest_framework import serializers
@@ -10,9 +13,7 @@ from users.models import User
 
 
 class NotificationSerializer(serializers.ModelSerializer):
-    """
-    Notification Serializer.
-    """
+    """Serializer de Notificação."""
     created_at = serializers.SerializerMethodField(read_only=True)
     receiver = serializers.PrimaryKeyRelatedField(queryset=User.objects.filter(), many=True)
 
@@ -21,4 +22,5 @@ class NotificationSerializer(serializers.ModelSerializer):
         fields = ['id', 'description', 'author', 'receiver', 'created_at']
 
     def get_created_at(self, obj):
+        """Retorna o datetime de criação da notificação."""
         return obj.get_created_at()

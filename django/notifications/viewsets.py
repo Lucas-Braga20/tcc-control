@@ -1,5 +1,8 @@
 """
-Notification viewsets.
+Implementação dos ViewSets do app de notifications.
+
+Contém os endpoints para:
+    - Notification (Notificação);
 """
 
 from rest_framework import mixins, permissions, status
@@ -27,8 +30,18 @@ class NotificationViewSet(
     mixins.ListModelMixin,
     GenericViewSet,
 ):
-    """
-    Notification viewset.
+    """ViewSet para manipulação de notificação.
+
+    Através deste endpoint que os usuários poderão criar ou
+    recuperar as notificações.
+
+    Métodos suportados:
+        - Create;
+        - Retrieve;
+        - List;
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
@@ -38,6 +51,7 @@ class NotificationViewSet(
     search_fields = ['description']
 
     def get_queryset(self):
+        """Recupera o queryset de notificações."""
         no_page = self.request.query_params.get('no_page')
         if no_page:
             self.pagination_class = None
@@ -72,6 +86,7 @@ class NotificationViewSet(
 
     @action(detail=False, methods=['get'])
     def mark_all_read(self, request):
+        """Ação de marcar como lida."""
         user = self.request.user
 
         receivers = Receiver.objects.filter(user=user, visualized=False)
@@ -84,6 +99,7 @@ class NotificationViewSet(
 
     @action(detail=False, methods=['post'], url_path='send-notification', url_name='send_notification')
     def send_notification(self, request):
+        """Ação para enviar notificação de forma manual."""
         user = self.request.user
 
         user_group = UserGroup(user)

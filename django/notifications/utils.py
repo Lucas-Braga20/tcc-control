@@ -1,6 +1,4 @@
-"""
-Funções utilitárias para o app de notificações.
-"""
+"""Utilitários do app de notifications."""
 
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -11,8 +9,8 @@ from notifications.serializers import NotificationSerializer
 
 
 def send_tcc_mail(
-        context, receivers, template_name='emails/index.html', from_email=settings.EMAIL_HOST_USER
-    ):
+    context, receivers, template_name='emails/index.html', from_email=settings.EMAIL_HOST_USER,
+):
     """Envia um email usando um template HTML no Django.
 
     Args:

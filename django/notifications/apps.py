@@ -1,3 +1,5 @@
+"""Definição do app de notifications."""
+
 from django.apps import AppConfig
 
 

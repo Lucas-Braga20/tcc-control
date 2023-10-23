@@ -1,5 +1,9 @@
 """
-Notifications app models.
+Implementação dos models do app de notifications.
+
+Contém os modelos de:
+    - Receiver (Pivô entre meeting e usuário);
+    - Notification (Reunião);
 """
 
 import uuid
@@ -11,19 +15,16 @@ from core.datetime import get_datetime_tz
 
 
 class Receiver(models.Model):
-    """
-    Receiver model.
-    """
+    """Modelo de destinatário."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     visualized = models.BooleanField(default=False, verbose_name=_('visualized'))
-    notification = models.ForeignKey('notifications.Notification',
-                                     verbose_name=_('notification'),
-                                     related_name='notification',
-                                     on_delete=models.CASCADE)
-    user = models.ForeignKey('users.User',
-                             verbose_name=_('user'),
-                             related_name='notification',
-                             on_delete=models.CASCADE)
+    notification = models.ForeignKey(
+        'notifications.Notification', verbose_name=_('notification'), related_name='notification',
+        on_delete=models.CASCADE,
+    )
+    user = models.ForeignKey(
+        'users.User', verbose_name=_('user'), related_name='notification', on_delete=models.CASCADE,
+    )
 
     class Meta:
         verbose_name = _('Receiver')
@@ -34,9 +35,7 @@ class Receiver(models.Model):
 
 
 class Notification(models.Model):
-    """
-    Notification model.
-    """
+    """Modelo de notificação."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
     author = models.ForeignKey(
@@ -52,6 +51,7 @@ class Notification(models.Model):
         verbose_name_plural = _('Notifications')
 
     def get_created_at(self):
+        """Retorna o datetime de criação da notificação."""
         return get_datetime_tz(self.created_at).strftime("%d/%m/%Y %H:%M") if self.created_at is not None else None
 
     def __str__(self):
