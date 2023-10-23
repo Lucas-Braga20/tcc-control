@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
+{% block body_class %}primary-gradient{% endblock %}
+
 {% block layout %}
-  <div class="d-flex flex-column flex-root">
+  <div class="d-flex flex-column flex-root z-index-1">
     <div class="d-flex flex-column flex-column-fluid">
       <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
         <div class="w-lg-500px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
@@ -95,4 +97,13 @@
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block css-styles %}
+  <style>
+    .primary-gradient {
+      background: rgb(95,77,239);
+      background: linear-gradient(120deg, rgba(95,77,239,1) 0%, rgba(95,77,239,1) 100%);
+    }
+  </style>
 {% endblock %}

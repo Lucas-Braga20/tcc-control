@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load widget_tweaks static %}
 
+{% block body_class %}primary-gradient{% endblock %}
+
 {% block layout %}
   <div class="d-flex flex-column flex-root">
     <div class="d-flex flex-column flex-column-fluid">
@@ -224,6 +226,15 @@
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block css-styles %}
+  <style>
+    .primary-gradient {
+      background: rgb(95,77,239);
+      background: linear-gradient(120deg, rgba(95,77,239,1) 0%, rgba(95,77,239,1) 100%);
+    }
+  </style>
 {% endblock %}
 
 {% block js-vendors %}

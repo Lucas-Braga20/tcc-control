@@ -32,7 +32,9 @@
 
     {% block css-styles %}{% endblock %}
   </head>
-  <body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-enabled">
+  <body
+    id="kt_body"
+    class="header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-enabled {% block body_class %}{% endblock %}">
     {% block layout %}{% endblock %}
 
     {% block js %}
