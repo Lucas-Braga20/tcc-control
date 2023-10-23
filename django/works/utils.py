@@ -9,7 +9,7 @@ import datetime
 from django.conf import settings
 from django.utils import timezone
 
-from core.utils import slugify_filename
+from core.files import slugify_filename
 
 
 def validate_stage_content_json(content):

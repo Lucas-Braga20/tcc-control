@@ -4,7 +4,7 @@ Contém todas as funções utilitárias para tratar documentos no módulo de
 TimeTable.
 """
 
-from core.utils import slugify_filename
+from core.files import slugify_filename
 
 
 def get_template_folder(instance, filename):
