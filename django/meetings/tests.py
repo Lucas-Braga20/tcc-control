@@ -1,6 +1,4 @@
-"""
-Tests for meetings app.
-"""
+"""Testes do app de meetings."""
 
 from django.test import TestCase
 
@@ -8,9 +6,8 @@ from meetings.models import Meeting
 
 
 class MeetingTest(TestCase):
-    """
-    Meeting test.
-    """
+    """Testes de reuniões."""
+
     fixtures = [
         'tcc_control/fixtures/courses.json',
         'tcc_control/fixtures/users.json',
@@ -19,14 +16,18 @@ class MeetingTest(TestCase):
         'tcc_control/fixtures/stages.json',
         'tcc_control/fixtures/final_works.json',
         'tcc_control/fixtures/final_work_stages.json',
-        'tcc_control/fixtures/meetings.json',
-        'tcc_control/fixtures/approved_meetings.json'
+        'tcc_control/fixtures/tests/meetings.json'
     ]
 
     @classmethod
     def setUpTestData(cls):
-        cls.meeting = Meeting.objects.get(id='e25166fb-6f27-48d9-86ef-2b6ae4f3d0c4')
+        cls.meeting = Meeting.objects.get(id='3aac2c77-3934-40a6-9725-e92eb8801eac')
         return super().setUpTestData()
 
     def test_approved_meeting(self):
+        """Testa o estado de aprovação da reunião.
+
+        Uma reunião apenas é considerada aprovada se todas as partes
+        aprovarem.
+        """
         self.assertEqual(self.meeting.get_is_approved(), False)

@@ -85,14 +85,18 @@ class MeetingViewSet(
         user_group = UserGroup(user)
 
         if not user_group.is_supervisor():
-            return Response(data={'detail': 'Você não é um orientador.'},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                data={'detail': 'Você não é um orientador.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         instance = self.get_object()
 
         if instance.work_stage.final_work.supervisor != user:
-            return Response(data={'detail': 'Você não é o orientador deste TCC.'},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                data={'detail': 'Você não é o orientador deste TCC.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         data = {
             'developed_activities': request.data.get('developed_activities', ''),
@@ -129,8 +133,10 @@ class MeetingViewSet(
         review = meeting.meeting_approved.all().filter(user=user)
 
         if review.exists() is False:
-            return Response(data={'meeting': 'You are not included in this meeting.'},
-                            status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                data={'meeting': 'You are not included in this meeting.'},
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
         review = review.first()
         review.approved = True
@@ -176,8 +182,10 @@ class MeetingViewSet(
         already_disapproved = meeting.get_is_approved() == False
 
         if review.exists() is False:
-            return Response(data={'meeting': 'You are not included in this meeting.'},
-                            status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                data={'meeting': 'You are not included in this meeting.'},
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
         review = review.first()
         review.approved = False

@@ -1,26 +1,33 @@
 """
-Meeting app models.
+Implementação dos models do app de meetings.
+
+Contém os modelos de:
+    - ApprovedMeeting (Pivô entre meeting e usuário);
+    - Meeting (Reunião);
 """
 
 import uuid
 
 from django.db import models
-from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from core.datetime import get_datetime_tz
 
 
 class ApprovedMeeting(models.Model):
-    """
-    Approved meetings model.
+    """Modelo de ApprovedMeeting.
+
+    Esta é a tabela pivô entre o relacionamento Many to Many
+    entre reunião e usuário;
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     approved = models.BooleanField(verbose_name=_('approved'), null=True, default=None)
-    meeting = models.ForeignKey('meetings.Meeting', verbose_name=_('meeting'),
-                                on_delete=models.CASCADE, related_name='meeting_approved')
-    user = models.ForeignKey('users.User', verbose_name=_('user'),
-                             on_delete=models.CASCADE, related_name='approved_meeting')
+    meeting = models.ForeignKey(
+        'meetings.Meeting', verbose_name=_('meeting'), on_delete=models.CASCADE, related_name='meeting_approved',
+    )
+    user = models.ForeignKey(
+        'users.User', verbose_name=_('user'), on_delete=models.CASCADE, related_name='approved_meeting',
+    )
 
     class Meta:
         verbose_name = _('Approved meeting')
@@ -31,9 +38,7 @@ class ApprovedMeeting(models.Model):
 
 
 class Meeting(models.Model):
-    """
-    Meeting model.
-    """
+    """Modelo de reunião."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(verbose_name=_('description'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
@@ -70,12 +75,15 @@ class Meeting(models.Model):
         return None
 
     def get_created_at(self):
+        """Retorna o datetime de criação da reunião."""
         return get_datetime_tz(self.created_at).strftime("%d/%m/%Y %H:%M") if self.created_at is not None else None
 
     def get_meeting_date(self):
+        """Retorna o datetime da reunião."""
         return get_datetime_tz(self.meeting_date).strftime("%d/%m/%Y %H:%M") if self.meeting_date is not None else None
 
     def review_meeting_required(self, user):
+        """Verifica se um usuário precisa aprovar/desaprovar a reunião."""
         if user is None:
             raise Exception('User is required.')
 

@@ -1,3 +1,5 @@
+"""Definição do app de meetings."""
+
 from django.apps import AppConfig
 
 

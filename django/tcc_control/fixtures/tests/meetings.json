@@ -1,0 +1,41 @@
+[
+  {
+    "model": "meetings.approvedmeeting",
+    "pk": "108532ff-faf6-4e3c-944c-f40d765d0284",
+    "fields": {
+      "approved": false,
+      "meeting": "3aac2c77-3934-40a6-9725-e92eb8801eac",
+      "user": "74112f96-51ae-4f48-b0f6-319ee836c267"
+    }
+  },
+  {
+    "model": "meetings.approvedmeeting",
+    "pk": "2971ff92-6733-4bf6-b3cc-247163361974",
+    "fields": {
+      "approved": null,
+      "meeting": "3aac2c77-3934-40a6-9725-e92eb8801eac",
+      "user": "4c091994-078f-4c94-9df4-29ea135ddd08"
+    }
+  },
+  {
+    "model": "meetings.approvedmeeting",
+    "pk": "807da602-7fa0-422d-8c41-b35a084c14c6",
+    "fields": {
+      "approved": null,
+      "meeting": "3aac2c77-3934-40a6-9725-e92eb8801eac",
+      "user": "912642d8-cc18-43a2-819d-350756044caa"
+    }
+  },
+  {
+    "model": "meetings.meeting",
+    "pk": "3aac2c77-3934-40a6-9725-e92eb8801eac",
+    "fields": {
+      "description": "Reunião teste",
+      "created_at": "2023-10-23T17:03:15.878Z",
+      "meeting_date": "2023-10-23T17:03:11Z",
+      "work_stage": "cb698b03-cb20-4181-be7d-4007e1380d95",
+      "developed_activities": "",
+      "instructions": ""
+    }
+  }
+]

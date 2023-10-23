@@ -14,6 +14,7 @@ from comments.serializers import CommentSerializer
 
 class CommentTest(TestCase):
     """Testes de comentário."""
+
     fixtures = [
         'tcc_control/fixtures/courses.json',
         'tcc_control/fixtures/users.json',

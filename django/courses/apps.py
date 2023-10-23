@@ -1,3 +1,5 @@
+"""Definição do app de courses."""
+
 from django.apps import AppConfig
 
 

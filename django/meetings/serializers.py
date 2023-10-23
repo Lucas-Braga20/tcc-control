@@ -1,5 +1,9 @@
 """
-Metting serializers.
+Implementação dos Serializers do app de meetings.
+
+Contém os serializers para:
+    - ApprovedMeetingSerializer (Pivô);
+    - MeetingSerializer (Reunião);
 """
 
 from rest_framework import serializers
@@ -14,9 +18,7 @@ from notifications.tasks import send_mail
 
 
 class ApprovedMeetingSerializer(serializers.ModelSerializer):
-    """
-    Approved Meeting Serializer.
-    """
+    """Serializer da tabela pivô de reunião e usuário."""
     user_detail = UserSerializer(many=False, read_only=True, source='user')
 
     class Meta:
@@ -25,9 +27,7 @@ class ApprovedMeetingSerializer(serializers.ModelSerializer):
 
 
 class MeetingSerializer(serializers.ModelSerializer):
-    """
-    Meeting Serializer.
-    """
+    """Serializer de Reunião."""
     created_at_formated = serializers.SerializerMethodField(read_only=True)
     participants = ApprovedMeetingSerializer(many=True, read_only=True, source='meeting_approved')
     is_approved = serializers.SerializerMethodField(read_only=True)
@@ -44,18 +44,27 @@ class MeetingSerializer(serializers.ModelSerializer):
         ]
 
     def get_created_at_formated(self, obj):
+        """Retorna o datetime de criação da reunião."""
         return obj.get_created_at()
 
     def get_is_approved(self, obj):
+        """Retorna o estado de aprovação da reunião."""
         return obj.get_is_approved()
 
     def get_meeting_date_formated(self, obj):
+        """Retorna o datetime da reunião."""
         return obj.get_meeting_date()
 
     def get_required_review(self, obj):
+        """Verifica se um usuário precisa aprovar/desaprovar a reunião."""
         return obj.review_meeting_required(self.context['request'].user)
 
     def create(self, validated_data):
+        """Cria a reunião a partir do endpoint.
+
+        Ao criar uma reunião todos os envolvidos, com exceção do autor
+        receberão uma notificação/email.
+        """
         meeting = super().create(validated_data)
 
         mentees = meeting.work_stage.final_work.mentees.all()
