@@ -1,5 +1,12 @@
 """
-Timetable URL configuration for tcc_control project.
+Configurações de Urls do app de timetables.
+
+Contém as urls para:
+    - Listagem de cronogramas;
+    - Criação de cronograma;
+    - Atualização de cronograma;
+    - Calendário de cronograma;
+    - Detalhes de cronograma;
 """
 
 from django.urls import path

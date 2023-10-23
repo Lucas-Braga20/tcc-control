@@ -55,7 +55,7 @@ class TimetableTest(TestCase):
         }
         form = TimetableForm(data=data)
 
-        self.assertEqual(form.errors['teacher'], ['This field must be contains user with teacher role.'])
+        self.assertEqual(form.errors['teacher'], ['Esse campo deve conter um usuário com perfil de professor.'])
 
     def test_participants(self):
         """
@@ -122,7 +122,7 @@ class StageTest(TestCase):
         }
         form = StageForm(data=data)
 
-        self.assertEqual(form.errors['start_date'], ['The date sent to the supervisor must be after the start date'])
+        self.assertEqual(form.errors['start_date'], ['A data de envio ao supervisor deve ser após a data de início.'])
 
     def test_date_advisor_order(self):
         data = {
@@ -136,5 +136,5 @@ class StageTest(TestCase):
         form = StageForm(data=data)
 
         self.assertEqual(form.errors['send_date_supervisor'], [
-            'The supervisor submission date should be after the platform submission date.'
+            'A data de envio ao orientador deve ser antes da data de envio'
         ])

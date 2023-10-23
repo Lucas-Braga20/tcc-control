@@ -1,3 +1,5 @@
+"""Definição do app de timetables."""
+
 from django.apps import AppConfig
 
 

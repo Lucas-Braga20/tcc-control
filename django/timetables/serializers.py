@@ -1,5 +1,8 @@
 """
-Timetable serializers.
+Implementação dos Serializers do app de timetables.
+
+Contém os serializers para:
+    - TimetableSerializer (Cronograma);
 """
 
 import datetime
@@ -11,9 +14,7 @@ from activities.utils import check_worked_activity
 
 
 class TimetableSerializer(serializers.ModelSerializer):
-    """
-    Timetable Serializer.
-    """
+    """Serializer de Cronograma."""
     start = serializers.SerializerMethodField()
     end = serializers.SerializerMethodField()
 
@@ -22,6 +23,7 @@ class TimetableSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_start(self, obj):
+        """Recupera a data de início."""
         queryset = obj.stages.all().order_by('start_date')
 
         if queryset.exists():
@@ -30,6 +32,7 @@ class TimetableSerializer(serializers.ModelSerializer):
         return None
 
     def get_end(self, obj):
+        """Recupera a data de fim."""
         queryset = obj.stages.all().order_by('-send_date')
 
         if queryset.exists():
@@ -39,9 +42,7 @@ class TimetableSerializer(serializers.ModelSerializer):
 
 
 class StageExampleSerializer(serializers.ModelSerializer):
-    """
-    Stage example serializer.
-    """
+    """Serializer de modelo de exemplo da etapa."""
 
     class Meta:
         model = StageExample
@@ -49,9 +50,7 @@ class StageExampleSerializer(serializers.ModelSerializer):
 
 
 class StageSerializer(serializers.ModelSerializer):
-    """
-    Timetable stage Serializer.
-    """
+    """Serializer de etapa do cronograma."""
     examples = StageExampleSerializer(many=True, read_only=True, source='stage_examples')
     activity_already_advanced = serializers.SerializerMethodField(read_only=True)
     past_stage = serializers.SerializerMethodField(read_only=True)
@@ -64,12 +63,14 @@ class StageSerializer(serializers.ModelSerializer):
         ]
 
     def get_activity_already_advanced(self, obj):
+        """Verifica se um etapa já foi adiantada."""
         if obj.activity_configuration is not None:
             return check_worked_activity(obj.activity_configuration)
 
         return False
 
     def get_past_stage(self, obj):
+        """Verifica se a etapa é uma etapa passada."""
         today = datetime.date.today()
 
         if obj.start_date < today:
@@ -87,6 +88,7 @@ class StageSerializer(serializers.ModelSerializer):
         return False
 
     def validate_start_date(self, start_date):
+        """Valida o campo de início."""
         today = datetime.date.today()
 
         if start_date < today:
@@ -95,6 +97,7 @@ class StageSerializer(serializers.ModelSerializer):
         return start_date
 
     def validate_send_date_supervisor(self, send_date_supervisor):
+        """Valida o campo de data de envio ao orientador."""
         today = datetime.date.today()
 
         if send_date_supervisor < today:
@@ -103,6 +106,7 @@ class StageSerializer(serializers.ModelSerializer):
         return send_date_supervisor
 
     def validate_send_date(self, send_date):
+        """Valida o campo de data de envio."""
         today = datetime.date.today()
 
         if send_date < today:
@@ -111,6 +115,7 @@ class StageSerializer(serializers.ModelSerializer):
         return send_date
 
     def validate_presentation_date(self, presentation_date):
+        """Valida o campo de data de apresentação."""
         today = datetime.date.today()
 
         if presentation_date is not None and presentation_date < today:

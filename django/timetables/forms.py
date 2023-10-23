@@ -1,5 +1,8 @@
 """
-Forms to timetables app.
+Implementação dos Formulários do app de timetables.
+
+Contém os formulários para:
+    - TimetableForm (Cronograma);
 """
 
 from django import forms
@@ -53,8 +56,10 @@ class TimetableForm(forms.ModelForm):
         ]
 
     def clean_participants(self):
-        """
-        Validate participants field.
+        """Valida campo de participantes.
+
+        Não é possível adicionar um participante que já esteja
+        em outro cronograma.
         """
         participants = self.cleaned_data.get('participants')
 
@@ -71,6 +76,11 @@ class TimetableForm(forms.ModelForm):
         return participants
 
     def clean_mentee_field(self):
+        """Valida campo de orientando.
+
+        Não é possível adicionar um orientando que já esteja
+        em outro cronograma.
+        """
         mentees = self.cleaned_data.get('mentee_field')
 
         if self.is_creation is False:
@@ -86,6 +96,11 @@ class TimetableForm(forms.ModelForm):
         return mentees
 
     def clean_supervisor_field(self):
+        """Valida campo de orientador.
+
+        Não é possível adicionar um participante que não tenha
+        perfil de orientador.
+        """
         supervisors = self.cleaned_data.get('supervisor_field')
 
         if self.is_creation is False:
@@ -98,15 +113,17 @@ class TimetableForm(forms.ModelForm):
         return supervisors
 
     def clean_teacher(self):
-        """
-        Validate teacher field.
+        """Valida campo de professor.
+
+        Não é possível adicionar um participante que não tenha
+        perfil de professor.
         """
         teacher = self.cleaned_data.get('teacher')
 
         group = teacher.groups.all().first()
 
         if group.name != 'Professor da disciplina':
-            raise forms.ValidationError('This field must be contains user with teacher role.')
+            raise forms.ValidationError('Esse campo deve conter um usuário com perfil de professor.')
 
         return teacher
 
@@ -130,6 +147,9 @@ class TimetableForm(forms.ModelForm):
         return document_template
 
     def save(self, commit=True):
+        """Salva a instância do Cronograma.
+
+        Cria o relacionamento entre cronograma e participantes."""
         instance = super().save(commit=False)
         instance.save()
 
@@ -167,15 +187,21 @@ class TimetableForm(forms.ModelForm):
 
 
 class StageForm(forms.ModelForm):
-    """
-    Stage form.
-    """
+    """Formulário de Etapas."""
 
     class Meta:
         model = Stage
         fields = '__all__'
 
     def clean(self):
+        """Valida todos os campos do formulário.
+
+        A datas de envio ao supervisor, envio a plataforma
+        deve ser após a data de início.
+
+        A data de envio a plataforma deve ser antes da data de apresentação.
+
+        A data de envio ao orientador deve ser antes da data de envio."""
         cleaned_data = super().clean()
 
         start_date = cleaned_data.get('start_date')
@@ -186,19 +212,21 @@ class StageForm(forms.ModelForm):
         if start_date:
             if start_date > send_date_supervisor:
                 raise forms.ValidationError(
-                    {'start_date': 'The date sent to the supervisor must be after the start date'}
+                    {'start_date': 'A data de envio ao supervisor deve ser após a data de início'}
                 )
 
             if start_date > send_date:
                 raise forms.ValidationError(
-                    {'start_date': 'The date sent to the platform must be after the start date'}
+                    {'start_date': 'A data de envio a plataforma deve ser após a data de início'}
                 )
 
             if presentation_date is not None and start_date > presentation_date:
-                raise forms.ValidationError({'start_date': 'The submission date must be after the start date'})
+                raise forms.ValidationError({
+                    'start_date': 'A data de envio a plataforma deve ser após a data de início.',
+                })
 
         if send_date_supervisor and send_date:
             if send_date_supervisor > send_date:
                 raise forms.ValidationError(
-                    {'send_date_supervisor': 'The supervisor submission date should be after the platform submission date.'}
+                    {'send_date_supervisor': 'A data de envio ao orientador deve ser antes da data de envio.'}
                 )

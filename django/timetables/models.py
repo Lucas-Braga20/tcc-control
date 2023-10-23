@@ -39,6 +39,7 @@ class Timetable(models.Model):
         verbose_name_plural = _('Timetables')
 
     def get_current_stage(self):
+        """Recupera a etapa atual."""
         today = date.today()
 
         stage = self.stages.filter(start_date__lte=today, send_date__gte=today)
@@ -49,12 +50,15 @@ class Timetable(models.Model):
         return stage.first()
 
     def get_supervisors(self):
+        """Retorna os orientadores."""
         return self.participants.filter(groups__name='Orientador')
 
     def get_mentees(self):
+        """Retorna os orientandos."""
         return self.participants.filter(groups__name='Orientando')
 
     def get_score_works(self):
+        """Recupera o contador por score de todos os trabalhos."""
         works = self.timetable_works.all()
 
         great_works = 0
@@ -102,6 +106,7 @@ class Stage(models.Model):
         verbose_name_plural = _('Stages')
 
     def already_started(self):
+        """Verifica se já foi iniciado."""
         today = date.today()
 
         if today > self.start_date:
@@ -119,15 +124,19 @@ class Stage(models.Model):
         return False
 
     def get_start_date(self):
+        """Recupera a data de início."""
         return self.start_date.strftime('%d/%m/%Y')
 
     def get_send_date_supervisor(self):
+        """Recupera a data de envio ao orientador."""
         return self.send_date_supervisor.strftime('%d/%m/%Y')
 
     def get_send_date(self):
+        """Recupera a data de envio."""
         return self.send_date.strftime('%d/%m/%Y')
 
     def get_presentation_date(self):
+        """Recupera a data de apresentação."""
         return self.presentation_date.strftime('%d/%m/%Y') if self.presentation_date is not None else None
 
     def __str__(self):
@@ -148,12 +157,15 @@ class StageExample(models.Model):
         verbose_name_plural = _('Stage examples')
 
     def get_file_name(self):
+        """Recupera o nome do arquivo."""
         return os.path.basename(self.file.name) if self.file is not None else None
 
     def get_file_size(self):
+        """Recupera o tamanho do arquivo em MB."""
         return round(self.file.size / (1024 * 1024), 3) if self.file is not None else None
 
     def get_file_extension(self):
+        """Recupera a extensão do arquivo."""
         return os.path.splitext(self.file.name)[1] if self.file is not None else None
 
     def __str__(self):

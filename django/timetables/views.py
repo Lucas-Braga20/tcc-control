@@ -1,5 +1,12 @@
 """
-Views to timetables apps.
+Implementação das Views do app de timetables.
+
+Contém as views para:
+    - TimetableListView (Listagem);
+    - TimetableCreateView (Create);
+    - TimetableUpdateView (Atualização);
+    - TimetableStageCalendarView (Calendário);
+    - TimetableDetailView (Detalhes);
 """
 
 from django.views.generic import CreateView, TemplateView, UpdateView, DetailView
@@ -17,8 +24,16 @@ from core.mixins import NotificationMixin
 class TimetableListView(
     NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, TemplateView,
 ):
-    """
-    Timetable list screen.
+    """View para listagem de cronogramas.
+
+    Através desta view que o professor da disciplina poderá ver
+    todas os cronogramas que ele é criador.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
+
+    Perfil:
+        - Professor da disciplina;
     """
     template_name = 'timetables/list.html'
     required_groups = ['Professor da disciplina']
@@ -27,8 +42,16 @@ class TimetableListView(
 class TimetableCreateView(
     NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, SuccessMessageMixin, CreateView,
 ):
-    """
-    Timetable view to create object.
+    """View para listagem de cronogramas.
+
+    Através desta view que o professor da disciplina poderá criar
+    um cronograma.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
+
+    Perfil:
+        - Professor da disciplina;
     """
     template_name = 'timetables/editor.html'
     model = Timetable
@@ -40,11 +63,13 @@ class TimetableCreateView(
     required_groups = ['Professor da disciplina']
 
     def get_initial(self):
+        """Seta os valores iniciais do formulário."""
         initial = super().get_initial()
         initial['teacher'] = self.request.user
         return initial
 
     def get_form_kwargs(self):
+        """Recupera os argumentos do formulário."""
         kwargs = super().get_form_kwargs()
 
         kwargs.update({'is_creation': True})
@@ -55,8 +80,16 @@ class TimetableCreateView(
 class TimetableUpdateView(
     NotificationMixin, LoginRequiredMixin, SuccessMessageMixin, UpdateView,
 ):
-    """
-    Timetable view to update object.
+    """View para atualização de cronogramas.
+
+    Através desta view que o professor da disciplina poderá atualizar
+    um cronograma.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
+
+    Perfil:
+        - Professor da disciplina;
     """
     template_name = 'timetables/editor.html'
     model = Timetable
@@ -67,6 +100,7 @@ class TimetableUpdateView(
     authentication_classes = None
 
     def get_context_data(self, **kwargs):
+        """Gera o contexto do template."""
         context = super().get_context_data(**kwargs)
 
         timetable = self.get_object()
@@ -85,13 +119,22 @@ class TimetableUpdateView(
 class TimetableStageCalendarView(
     NotificationMixin, LoginRequiredMixin, TemplateView,
 ):
-    """
-    Timetable calendar view.
+    """View de calendário.
+
+    Através desta view que os usuários poderão ver
+    as etapas de um cronograma.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
+
+    Perfil:
+        - Professor da disciplina;
     """
     template_name = 'timetables/calendar.html'
     model = Stage
 
     def get_context_data(self, **kwargs):
+        """Gera o contexto do template."""
         context = super().get_context_data(**kwargs)
 
         context['allow_create'] = UserGroup(self.request.user).is_teacher() if self.request.user is not None else False
