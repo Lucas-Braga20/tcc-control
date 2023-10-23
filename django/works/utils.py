@@ -8,7 +8,8 @@ import datetime
 
 from django.conf import settings
 from django.utils import timezone
-from django.utils.text import slugify
+
+from core.utils import slugify_filename
 
 
 def validate_stage_content_json(content):
@@ -36,7 +37,7 @@ def get_version_content_image_folder(instance, filename):
     """
     Get upload folder.
     """
-    new_filename = slugify(filename)
+    new_filename = slugify_filename(filename)
 
     return f'works/{instance.version.work_stage.final_work.id}/versions/{instance.version.id}/${new_filename}'
 
