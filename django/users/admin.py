@@ -1,5 +1,8 @@
 """
-Admin configuration to users app.
+Configurações de Adminsitração do app de users.
+
+Contém as configurações para:
+    - UserAdmin;
 """
 
 from django.contrib import admin
@@ -11,9 +14,7 @@ from users.models import User
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    """
-    User configuration model admin.
-    """
+    """Configuração de administração para o Usuário modelo."""
     list_display = ('username', 'name', 'email', 'is_active', 'is_staff', 'is_superuser')
     fieldsets = (
         (_('Account'), {'fields': ('username', 'password')}),
@@ -24,7 +25,5 @@ class UserAdmin(BaseUserAdmin):
 
     @admin.display(description=_('name'))
     def name(self, obj):
-        """
-        Method to return user full name.
-        """
+        """Recupera o nome completo do usuário."""
         return obj.get_full_name()

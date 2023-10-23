@@ -1,8 +1,11 @@
-"""Modelos do app de usuários."""
+"""
+Implementação dos models do app de users.
+
+Contém os modelos de:
+    - User (Usuários);
+"""
 
 import uuid
-
-import datetime
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -10,7 +13,6 @@ from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 
 from works.models import FinalWork
-from timetables.models import Timetable
 
 
 class User(AbstractUser):
@@ -33,15 +35,19 @@ class User(AbstractUser):
         verbose_name_plural = _('Users')
 
     def get_current_work(self):
+        """Recupera o TCC atual."""
         return FinalWork.objects.filter(mentees__in=[self.id], archived=False).order_by('-created_at').last()
 
     def get_profile_url(self):
+        """Recupera a url do perfil."""
         return reverse('users:profile', kwargs={'pk': self.id})
 
     def get_already_in_work(self):
+        """Checa se o usuário já está ocupado em um TCC."""
         return self.work_mentee.filter(archived=False, completed=False).exists()
 
     def get_current_timetable(self):
+        """Recupera o cronograma atual."""
         timetables = self.participants.all()
 
         if timetables.exists() is False:

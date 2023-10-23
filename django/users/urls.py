@@ -1,5 +1,10 @@
 """
-Users URL configuration for tcc_control project.
+Configurações de Urls do app de users.
+
+Contém as urls para:
+    - Criação de usuários;
+    - Atualização de perfil;
+    - Listagem de usuários;
 """
 
 from django.urls import path

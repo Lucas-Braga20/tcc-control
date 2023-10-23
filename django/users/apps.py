@@ -1,3 +1,5 @@
+"""Definição do app de users."""
+
 from django.apps import AppConfig
 
 

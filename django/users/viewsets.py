@@ -1,5 +1,8 @@
 """
-Users viewsets.
+Implementação dos ViewSets do app de users.
+
+Contém os endpoints para:
+    - UserViewSet (Usuários);
 """
 
 from rest_framework import viewsets, mixins, permissions
@@ -21,8 +24,18 @@ class UserViewSet(
     mixins.UpdateModelMixin,
     viewsets.GenericViewSet,
 ):
-    """
-    User viewset.
+    """ViewSet para manipulação de usuários.
+
+    Através deste endpoint que o professor da disciplina poderá ver
+    e atualizar os usuários
+
+    Métodos suportados:
+        - Retrieve;
+        - List;
+        - Update;
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -33,6 +46,7 @@ class UserViewSet(
     roles_required = ['Professor da disciplina']
 
     def get_queryset(self):
+        """Recupera o queryset de usuários."""
         queryset = super().get_queryset()
 
         if timetable := self.request.query_params.get('timetable'):
@@ -46,6 +60,7 @@ class UserViewSet(
         return queryset
 
     def update(self, request, *args, **kwargs):
+        """Atualiza um usuário."""
         instance = self.get_object()
 
         if instance.is_superuser:

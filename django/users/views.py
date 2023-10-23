@@ -1,5 +1,10 @@
 """
-Views to users apps.
+Implementação das Views do app de users.
+
+Contém as views para:
+    - SignUpView (Criação de conta);
+    - ProfileDetailView (Perfil do usuário);
+    - UserListView (Listagem de usuário);
 """
 
 from django.urls import reverse_lazy
@@ -17,11 +22,16 @@ from core.mixins import NotificationMixin
 
 
 class SignUpView(CreateView):
+    """View para criação de conta.
+
+    Através desta view que os usuários poderão criar contas.
+    """
     form_class = SignUpForm
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
 
     def form_valid(self, form):
+        """Checa se o usuário está válido."""
         group = Group.objects.get(name='Orientando')
 
         instance = form.save()
@@ -30,13 +40,16 @@ class SignUpView(CreateView):
         return super().form_valid(form)
 
 
-class ProfileDetailView(NotificationMixin,
-                        LoginRequiredMixin,
-                        SuccessMessageMixin,
-                        UpdateView,
-                        View):
-    """
-    Profile view.
+class ProfileDetailView(
+    NotificationMixin, LoginRequiredMixin, SuccessMessageMixin, UpdateView, View,
+):
+    """View para perfil de usuário.
+
+    Através desta view que os usuários poderão atualizar
+    o perfil.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
     model = User
     form_class = ProfieForm
@@ -44,11 +57,13 @@ class ProfileDetailView(NotificationMixin,
     success_message = 'Perfil atualizado com sucesso.'
 
     def get_success_url(self):
+        """Recupera a URL se sucesso do formulário."""
         instance = self.get_object()
 
         return instance.get_profile_url()
 
     def get_object(self):
+        """Recupera o objeto do formulário."""
         user_id = self.kwargs.get('pk')
 
         if not user_id != str(self.request.user.id):
@@ -58,8 +73,15 @@ class ProfileDetailView(NotificationMixin,
 
 
 class UserListView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, TemplateView, View):
-    """
-    User List View.
+    """View para listagem de usuário.
+
+    Através desta view que o professor pode ver todos os usuários.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
+
+    Perfil:
+        - Professor da disciplina;
     """
     template_name = 'users/list.html'
     required_groups = ['Professor da disciplina']
