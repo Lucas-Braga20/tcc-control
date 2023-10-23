@@ -1,6 +1,4 @@
-"""
-URL configuration for tcc_control project.
-"""
+"""Configuração de rotas do projeto TCC Control."""
 
 from django.contrib import admin
 from django.urls import path, include
@@ -19,7 +17,6 @@ urlpatterns = [
     path('activities/', include('activities.urls', namespace='activities')),
     path('works/', include('works.urls', namespace='works')),
     path('timetables/', include('timetables.urls', namespace='timetables')),
-    path('email/', views.EmailView.as_view(), name='email'),
 ]
 
 

@@ -1,6 +1,4 @@
-"""
-WSGI config for tcc_control project.
-"""
+"""WSGI configuração para o projeto TCC Control."""
 
 import os
 

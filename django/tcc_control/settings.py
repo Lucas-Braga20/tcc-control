@@ -1,6 +1,4 @@
-"""
-Django settings for tcc_control project.
-"""
+"""Configurações do Django para o projeto TCC Control."""
 
 import os
 

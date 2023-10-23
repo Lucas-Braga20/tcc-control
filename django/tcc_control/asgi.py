@@ -1,6 +1,4 @@
-"""
-ASGI config for tcc_control project.
-"""
+"""ASGI configuração para o projeto TCC Control."""
 
 import os
 

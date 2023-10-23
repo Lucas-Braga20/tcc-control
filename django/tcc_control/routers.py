@@ -1,6 +1,4 @@
-"""
-Django rest router.
-"""
+"""Definição de rotas (REST API) do projeto TCC Control."""
 
 from django.urls import path, include
 
@@ -9,7 +7,7 @@ from rest_framework.routers import DefaultRouter
 from activities.viewsets import ActivityConfigurationViewSet
 from timetables.viewsets import TimetableViewSet, StageViewSet
 from works.viewsets import (
-    FinalWorkViewSet, FinalWorkStageViewSet, FinalWorkVersionViewSet, ChangeRequestViewSet, VersionContentImageViewSet
+    FinalWorkViewSet, FinalWorkStageViewSet, FinalWorkVersionViewSet, ChangeRequestViewSet, VersionContentImageViewSet,
 )
 from comments.viewsets import CommentViewSet
 from users.viewsets import UserViewSet

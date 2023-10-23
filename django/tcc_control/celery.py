@@ -1,3 +1,5 @@
+"""Configuração do celery do projeto TCC Control."""
+
 import os
 
 from celery import Celery
