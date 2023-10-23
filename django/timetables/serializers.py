@@ -122,3 +122,41 @@ class StageSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Não é possível manipular um etapa em que a data de apresentação já passou.')
 
         return presentation_date
+
+    def validate(self, attrs):
+        """Valida todos os campos do serializer.
+
+        A datas de envio ao supervisor, envio a plataforma
+        deve ser após a data de início.
+
+        A data de envio a plataforma deve ser antes da data de apresentação.
+
+        A data de envio ao orientador deve ser antes da data de envio."""
+        start_date = attrs.get('start_date')
+        send_date_supervisor = attrs.get('send_date_supervisor')
+        send_date = attrs.get('send_date')
+        presentation_date = attrs.get('presentation_date')
+
+        if start_date:
+            if start_date > send_date_supervisor:
+                raise serializers.ValidationError(
+                    {'start_date': 'A data de envio ao supervisor deve ser após a data de início'}
+                )
+
+            if start_date > send_date:
+                raise serializers.ValidationError(
+                    {'start_date': 'A data de envio a plataforma deve ser após a data de início'}
+                )
+
+            if presentation_date is not None and start_date > presentation_date:
+                raise serializers.ValidationError({
+                    'start_date': 'A data de envio a plataforma deve ser após a data de início.',
+                })
+
+        if send_date_supervisor and send_date:
+            if send_date_supervisor > send_date:
+                raise serializers.ValidationError(
+                    {'send_date_supervisor': 'A data de envio ao orientador deve ser antes da data de envio.'}
+                )
+
+        return attrs
