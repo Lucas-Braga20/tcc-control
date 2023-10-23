@@ -494,7 +494,7 @@ const FinalWorkStageDetail = () => {
         if (response.length == 0) {
           $(meetingsContainer).html(`
             <div class="p-4 border rounded">
-              <div class="mt-2">
+              <div>
                 <p class="mb-0">
                   Sem reuniões
                 </p>
