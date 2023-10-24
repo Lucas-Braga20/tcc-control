@@ -46925,7 +46925,7 @@ body {
     padding: 0;
   }
   .aside-fixed.aside-secondary-enabled[data-kt-sticky-header=on] .header {
-    left: 425px;
+    left: 325px;
     transition: left 0.3s ease;
   }
   .aside-fixed.aside-secondary-disabled[data-kt-sticky-header=on] .header {
