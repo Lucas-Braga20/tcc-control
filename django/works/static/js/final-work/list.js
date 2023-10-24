@@ -398,6 +398,8 @@ const FinalWorkList = () => {
   }
 
   function initFinalWorkDataTable() {
+    $.fn.dataTable.ext.errMode = 'none';
+
     dataTableObject = $(dataTableElement).DataTable({
       responsive: true,
       drawCallback(settings) {
@@ -536,6 +538,10 @@ const FinalWorkList = () => {
         tooltipTriggerList.map(function (tooltipTriggerEl) {
           return new bootstrap.Tooltip(tooltipTriggerEl);
         });
+    });
+
+    $(dataTableElement).on('error.dt', (e, settings, techNote, message) => {
+      console.log(message);
     });
   }
 

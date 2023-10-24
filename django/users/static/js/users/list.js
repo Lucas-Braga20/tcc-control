@@ -71,6 +71,8 @@ const TimetablesList = () => {
   }
 
   function initUsersDataTable() {
+    $.fn.dataTable.ext.errMode = 'none';
+
     dataTableObject = $(dataTableElement).DataTable({
       responsive: true,
       drawCallback(settings) {
@@ -207,6 +209,10 @@ const TimetablesList = () => {
     $(dataTableElement).on('responsive-display.dt', () => {
       handleArchiveButtonActions();
       handleRoleButtonActions();
+    });
+
+    $(dataTableElement).on('error.dt', (e, settings, techNote, message) => {
+      console.log(message);
     });
   }
 

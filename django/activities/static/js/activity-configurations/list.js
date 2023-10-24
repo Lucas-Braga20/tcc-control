@@ -43,6 +43,8 @@ const ActivityConfigurationList = () => {
   }
 
   function initActivityConfigurationsDataTable() {
+    $.fn.dataTable.ext.errMode = 'none';
+
     dataTableObject = $(dataTableElement).DataTable({
       responsive: true,
       drawCallback(settings) {
@@ -158,6 +160,10 @@ const ActivityConfigurationList = () => {
 
     $(dataTableElement).on('responsive-display.dt', () => {
       handleArchiveButtonActions();
+    });
+
+    $(dataTableElement).on('error.dt', (e, settings, techNote, message) => {
+      console.log(message);
     });
   }
 

@@ -40,6 +40,8 @@ const ChangeRequestList = () => {
   }
 
   function initChangeRequestsDataTable() {
+    $.fn.dataTable.ext.errMode = 'none';
+
     dataTableObject = $(dataTableElement).DataTable({
       responsive: true,
       drawCallback(settings) {
@@ -155,6 +157,10 @@ const ChangeRequestList = () => {
 
     $(dataTableElement).on('responsive-display.dt', () => {
       handleApproveButtonActions();
+    });
+
+    $(dataTableElement).on('error.dt', (e, settings, techNote, message) => {
+      console.log(message);
     });
   }
 
