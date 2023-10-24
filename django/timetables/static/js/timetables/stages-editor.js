@@ -400,12 +400,12 @@ class StageEditor {
           data-bs-parent="#tcc_stage_editor_container">
           <div class="accordion-body">
             ${stage.activity_already_advanced ?
-              `<div class="alert alert-dismissible bg-light-danger d-flex flex-column flex-sm-row w-100 p-5 mb-10">
+              `<div class="alert alert-dismissible bg-danger d-flex flex-column flex-sm-row w-100 p-5 mb-10">
                 <span class="svg-icon svg-icon-2hx me-4 mb-5 mb-sm-0">
-                  <i class="fas fa-exclamation-circle fa-fw fa-3x text-danger"></i>
+                  <i class="fas fa-exclamation-circle fa-fw fa-3x text-white"></i>
                 </span>
 
-                <div class="d-flex flex-column pe-0 pe-sm-10">
+                <div class="d-flex flex-column pe-0 pe-sm-10 text-white">
                   <h4 class="fw-semibold">Atenção!</h4>
                   <span>
                     Alguns orientandos já adiantaram essa etapa.
