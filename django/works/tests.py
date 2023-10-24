@@ -14,6 +14,7 @@ class FinalWorkStageTest(TestCase):
     """Testes do TCC."""
 
     fixtures = [
+        'tcc_control/fixtures/courses.json',
         'tcc_control/fixtures/users.json',
         'tcc_control/fixtures/activity_configurations.json',
         'tcc_control/fixtures/timetables.json',
@@ -24,7 +25,7 @@ class FinalWorkStageTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.final_work_stage = FinalWorkStage.objects.get(id='53b389cf-de59-4564-98a7-94e3db4ab041')
+        cls.final_work_stage = FinalWorkStage.objects.get(id='571926b8-5eb1-48d8-922a-ab2fcdb92ac4')
         return super().setUpTestData()
 
     def test_finish_stage(self):
@@ -72,17 +73,20 @@ class FinalWorkVersionTest(TestCase):
     """Testes do versão do TCC."""
 
     fixtures = [
+        'tcc_control/fixtures/courses.json',
         'tcc_control/fixtures/users.json',
         'tcc_control/fixtures/activity_configurations.json',
         'tcc_control/fixtures/timetables.json',
         'tcc_control/fixtures/stages.json',
         'tcc_control/fixtures/final_works.json',
         'tcc_control/fixtures/final_work_stages.json',
+        'tcc_control/fixtures/versions.json',
     ]
 
     @classmethod
     def setUpTestData(cls):
-        cls.final_work_stage = FinalWorkStage.objects.get(id='53b389cf-de59-4564-98a7-94e3db4ab041')
+        cls.first_version = FinalWorkVersion.objects.get(id='4290ea3d-49d7-4c0b-8d63-24724dc77175')
+        cls.second_version = FinalWorkVersion.objects.get(id='123a9e57-c204-417b-be8b-429d5de22c7a')
         return super().setUpTestData()
 
     def test_contents(self):
@@ -91,11 +95,17 @@ class FinalWorkVersionTest(TestCase):
         Teste de integração usado para verificar se a versão
         contém os campos estruturados de forma correta com key/value.
         """
-        data = {
-            'content': '{"fields": [{"key": "title"}]}',
-            'work_stage': self.final_work_stage
-        }
-        form = FinalWorkVersionForm(data=data)
+        form = FinalWorkVersionForm(instance=self.first_version, data={
+            'content': {
+                'fields': [
+                    {
+                        'key': 'resumo',
+                    }
+                ],
+            },
+        })
+
+        self.assertFalse(form.is_valid())
 
         self.assertEqual(form.errors['content'], ['Um campo não foi inserido corretamente.'])
 
@@ -105,11 +115,18 @@ class FinalWorkVersionTest(TestCase):
         Teste de integração usado para verificar se a versão
         contém os campos com keys corretas baseados na atividade.
         """
-        data = {
-            'content': '{"fields": [{"key": "teste", "value": "teste"}]}',
-            'work_stage': self.final_work_stage,
-        }
-        form = FinalWorkVersionForm(data=data)
+        form = FinalWorkVersionForm(instance=self.second_version, data={
+            'content': {
+                'fields': [
+                    {
+                        'key': 'titulo_errado',
+                        'value': '',
+                    }
+                ]
+            },
+        })
+
+        self.assertFalse(form.is_valid())
 
         self.assertEqual(form.errors['content'], ['O conteúdo da atividade contém campos inválidos.'])
 
@@ -125,12 +142,12 @@ class ChangeRequestTest(TestCase):
         'tcc_control/fixtures/stages.json',
         'tcc_control/fixtures/final_works.json',
         'tcc_control/fixtures/final_work_stages.json',
-        'tcc_control/fixtures/change_requests.json',
+        'tcc_control/fixtures/tests/change_requests.json',
     ]
 
     @classmethod
     def setUpTestData(cls):
-        cls.change_request = ChangeRequest.objects.get(id='579376e1-2de0-4e70-86fc-f9f6fd3a6a86')
+        cls.change_request = ChangeRequest.objects.get(id='5827bbbc-b6f8-4bdb-92cc-70e8916422f9')
         return super().setUpTestData()
 
     def test_approve_request(self):

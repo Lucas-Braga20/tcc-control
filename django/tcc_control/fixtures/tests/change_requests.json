@@ -1,0 +1,13 @@
+[
+  {
+    "model": "works.changerequest",
+    "pk": "5827bbbc-b6f8-4bdb-92cc-70e8916422f9",
+    "fields": {
+      "approved": null,
+      "description": "Teste",
+      "created_at": "2023-10-24T17:59:52.098Z",
+      "requester": "912642d8-cc18-43a2-819d-350756044caa",
+      "work_stage": "15f64554-efa0-4a6a-bf1d-b01463ac75dc"
+    }
+  }
+]

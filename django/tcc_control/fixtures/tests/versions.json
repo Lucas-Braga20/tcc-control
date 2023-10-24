@@ -1,0 +1,35 @@
+[
+  {
+    "model": "works.finalworkversion",
+    "pk": "123a9e57-c204-417b-be8b-429d5de22c7a",
+    "fields": {
+      "created_at": "2023-10-16T01:36:08.346Z",
+      "content": {
+        "fields": [
+          {
+            "key": "titulo_errado",
+            "value": ""
+          }
+        ]
+      },
+      "confirmed": true,
+      "work_stage": "571926b8-5eb1-48d8-922a-ab2fcdb92ac4"
+    }
+  },
+  {
+    "model": "works.finalworkversion",
+    "pk": "4290ea3d-49d7-4c0b-8d63-24724dc77175",
+    "fields": {
+      "created_at": "2023-10-16T16:27:40.774Z",
+      "content": {
+        "fields": [
+          {
+            "key": "resumo"
+          }
+        ]
+      },
+      "confirmed": true,
+      "work_stage": "cb698b03-cb20-4181-be7d-4007e1380d95"
+    }
+  }
+]
