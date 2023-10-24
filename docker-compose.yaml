@@ -23,6 +23,8 @@ services:
       - ./django/:/code
     ports:
       - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=tcc_control.settings.dev
     env_file:
       - envs/mysql.env
       - envs/email.env

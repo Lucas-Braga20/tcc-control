@@ -1,4 +1,4 @@
-"""Configurações do Django para o projeto TCC Control."""
+"""Configurações básicas do Django para o projeto TCC Control."""
 
 import os
 
@@ -11,8 +11,6 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-o7o0lsm285o$=p1cchl3&qd()#p$ptcya3d67sts52&$i9q!59'
-
-DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -87,31 +85,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tcc_control.wsgi.application'
-
-
-# Django Rest
-
-REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-        'rest_framework_datatables.renderers.DatatablesRenderer',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
-    ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-    'DEFAULT_FILTER_BACKENDS': (
-        'rest_framework_datatables.filters.DatatablesFilterBackend',
-        'django_filters.rest_framework.DjangoFilterBackend',
-    ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework_datatables.pagination.DatatablesPageNumberPagination',
-    'PAGE_SIZE': 10,
-}
 
 
 # Database
