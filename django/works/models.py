@@ -1,5 +1,12 @@
 """
-Works app models.
+Implementação dos models do app de works.
+
+Contém os modelos de:
+    - FinalWork (TCC);
+    - FinalWorkStage (Etapa do TCC);
+    - FinalWorkVersion (Versão de etapa do TCC);
+    - VersionContentImage (Imagem de conteúdo do TCC);
+    - ChangeRequest (Pedido de alteração);
 """
 
 import uuid
@@ -57,9 +64,11 @@ class FinalWork(models.Model):
         verbose_name_plural = _('Final works')
 
     def get_mentees(self):
+        """Recupera o nome dos orientandos."""
         return ', '.join([mentee.get_full_name() for mentee in self.mentees.all()])
 
     def get_current_stage(self):
+        """Recupera a etapa atual."""
         today = date.today()
 
         stage = self.work_stage.filter(stage__start_date__lte=today, stage__send_date__gte=today)
@@ -70,9 +79,11 @@ class FinalWork(models.Model):
         return stage.first()
 
     def get_final_work_url(self):
+        """Recupera a URL de detalhes do TCC."""
         return reverse('works:stages', kwargs={'pk': self.id})
 
     def get_all_content_data(self, filter_insertion=True):
+        """Recupera todo o conteúdo do TCC."""
         work_stages = self.work_stage.all()
 
         all_fields = []
@@ -98,12 +109,14 @@ class FinalWork(models.Model):
         }
 
     def get_template_document(self):
+        """Recupera o documento de template."""
         if self.timetable is None:
             return None
 
         return os.path.join(settings.MEDIA_ROOT, str(self.timetable.document_template))
 
     def generate_final_document(self):
+        """Gera o documento final já formatado."""
         template = self.get_template_document()
         content = self.get_all_content_data()
 
@@ -131,6 +144,7 @@ class FinalWork(models.Model):
         return None
 
     def get_final_documents(self):
+        """Recupera todos os documentos gerados."""
         final_documents_dir = f'works/{self.id}/final_documents/'
         media_dir = os.path.join(f'media/works/{self.id}/final_documents/')
         final_documents_dir = os.path.join(settings.MEDIA_ROOT, final_documents_dir)
@@ -146,6 +160,7 @@ class FinalWork(models.Model):
         return documents
 
     def get_all_stages(self):
+        """Recupera todas as etapas."""
         return self.work_stage.all()
 
     def get_completed_stages(self):
@@ -205,9 +220,7 @@ class FinalWork(models.Model):
 
 
 class FinalWorkStage(models.Model):
-    """
-    Final work stage model.
-    """
+    """Modelo de etapa do TCC."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     presented = models.BooleanField(verbose_name=_('presented'), default=False)
     status = models.IntegerField(

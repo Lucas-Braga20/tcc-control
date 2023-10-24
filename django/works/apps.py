@@ -1,3 +1,5 @@
+"""Definição do app de works."""
+
 from django.apps import AppConfig
 
 

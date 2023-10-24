@@ -1,5 +1,11 @@
 """
-Forms to works app.
+Implementação dos Formulários do app de works.
+
+Contém os formulários para:
+    - FinalWorkForm (Formulário de Proposta);
+    - FinalWorkStageForm (Etapa de TCC);
+    - FinalWorkVersionForm (Versão de Etapa de TCC);
+    - FinalWorkCreateVersionForm (Criação de versão de etapa);
 """
 
 import datetime
@@ -62,6 +68,10 @@ class FinalWorkForm(forms.ModelForm):
         })
 
     def clean(self):
+        """Valida os campos do formulário.
+
+        Verifica se o orientando já possui proposta pendente.
+        """
         cleaned_data = super().clean()
         mentees = cleaned_data.get('mentees')
 
@@ -77,6 +87,7 @@ class FinalWorkForm(forms.ModelForm):
         return cleaned_data
 
     def save(self, commit: bool = ...) -> Any:
+        """Salva o TCC."""
         if self.user is None:
             raise forms.ValidationError(
                 'É necessário estar autenticado para criar uma proposta.'
@@ -105,17 +116,16 @@ class FinalWorkForm(forms.ModelForm):
 
 
 class FinalWorkStageForm(forms.ModelForm):
-    """
-    Final work stage form.
-    """
+    """Formulário de etapa do TCC."""
 
     class Meta:
         model = FinalWorkStage
         fields = '__all__'
 
     def clean(self):
-        """
-        Validate status field.
+        """Válida os campos do formulário.
+
+        Verifica os status do TCC.
         """
         status = self.cleaned_data.get('status')
 
@@ -144,18 +154,14 @@ class FinalWorkStageForm(forms.ModelForm):
 
 
 class FinalWorkVersionForm(forms.ModelForm):
-    """
-    Final work version form.
-    """
+    """Formulário de versão da etapa do TCC."""
 
     class Meta:
         model = FinalWorkVersion
         fields = ['content']
 
     def clean_content(self):
-        """
-        Validate content field.
-        """
+        """Vaĺida o conteúdo da versão."""
         content = self.cleaned_data.get('content')
 
         if content is None:
@@ -169,6 +175,7 @@ class FinalWorkVersionForm(forms.ModelForm):
         return content
 
     def clean(self):
+        """Válida todos os campos do formulário."""
         content = self.cleaned_data.get('content')
 
         work_stage = self.instance.work_stage
@@ -184,6 +191,7 @@ class FinalWorkVersionForm(forms.ModelForm):
                     raise forms.ValidationError({'content': 'The content of the activity has invalid fields.'})
 
     def save(self, commit=True):
+        """Salva a versão do TCC."""
         instance = super().save(commit=False)
 
         if instance.work_stage.status == WORK_STAGE_ADJUSTED:
@@ -198,15 +206,18 @@ class FinalWorkVersionForm(forms.ModelForm):
 
 
 class FinalWorkCreateVersionForm(forms.ModelForm):
-    """
-    Final work create version form.
-    """
+    """Formulário de criação de versão."""
 
     class Meta:
         model = FinalWorkVersion
         fields = ['work_stage']
 
     def save(self, commit):
+        """Salva a versão com a estrutura de campos.
+
+        Ao criar uma versão o sistema automaticamente cria a versão
+        com a definição de campos da configuração de atividade.
+        """
         version = super().save(commit)
 
         activity_fields = version.work_stage.stage.activity_configuration.fields
