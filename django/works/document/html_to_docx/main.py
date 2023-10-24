@@ -1,4 +1,5 @@
 import os
+import re
 
 from django.conf import settings
 
@@ -17,6 +18,10 @@ def data_table(data):
         matrix.append(row_values)
 
     return matrix
+
+def remover_caracteres_de_escape(texto):
+    string_sem_escape = re.sub(r'\\[xXnN]', '', texto)
+    return string_sem_escape
 
 
 class HTMLtoDocx:
@@ -49,7 +54,8 @@ class HTMLtoDocx:
                 run.bold = options["bold"]
                 run.underline = options["underline"]
             if isinstance(value, str):
-                run.add_text(value)
+                text = value.replace("\n", "")
+                run.add_text(text)
             elif value["tag_name"] == "img":
                 width = value["attributes"].get("width", "")
                 height = value["attributes"].get("height", "")
@@ -59,11 +65,12 @@ class HTMLtoDocx:
                     if width == "":
                         run.add_picture(source)
                     else:
-                        width = Inches(16 * 0.393701)
+                        width = Inches(16 * 0.393701 * (2/3))
                         # height = Inches(float(height) * 0.0138889)
                         run.add_picture(source, width=width)
                     paragraph.style = 'imagem'
-                except Exception:
+                except Exception as e:
+                    print(f"Erro ao colocar a imagem no docx: {str(e)}")
                     pass
             elif value["tag_name"] == "strong":
                 run.bold = True
@@ -90,21 +97,25 @@ class HTMLtoDocx:
                 }
                 self.render_values(paragraph, value["values"], new_options)
 
-    def convert_list(self, li, nivel):
-        for item in li["values"]:
+    def convert_list(self, ul, nivel):
+        for item in ul["values"]:
             paragrafo = None
-            if nivel == 1:
-                paragrafo = self.sub_document.add_paragraph(style=f"lista{nivel}")
-            if len(item["values"]) > 1:
-                print(item["values"])
-                self.render_values(paragrafo, item["values"][0])
-                self.convert_list(item["values"][1], nivel + 1)
-            else:
-                if paragrafo is None:
+            if isinstance(item["values"][0], str):
+                if len(item["values"]) > 1:
                     paragrafo = self.sub_document.add_paragraph(style=f"lista{nivel}")
-                    self.render_values(paragrafo, item["values"])
+                    self.render_values(paragrafo, item["values"][0])
+                    self.convert_list(item["values"][1], nivel + 1)
                 else:
-                    self.render_values(paragrafo, item["values"])
+                    if paragrafo is None:
+                        paragrafo = self.sub_document.add_paragraph(style=f"lista{nivel}")
+                        self.render_values(paragrafo, item["values"])
+                    else:
+                        self.render_values(paragrafo, item["values"])
+            else:
+                if nivel < 3:
+                    self.convert_list(item["values"][0], nivel + 1)
+                else:
+                    self.convert_list(item["values"][0], nivel)
 
     def convert_table(self, data):
         table = self.sub_document.add_table(
