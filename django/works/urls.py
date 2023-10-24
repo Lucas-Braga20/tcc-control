@@ -1,12 +1,23 @@
 """
-Works URL.
+Configurações de Urls do app de works.
+
+Contém as urls para:
+    - Listagem de TCCs;
+    - Listagem de etapas do TCC;
+    - Listagem de reuniões (Ata de acompanhamento);
+    - Criação de versão de desenvolvimento;
+    - Edição de desenvolvimento;
+    - Criação de proposta;
+    - Listagem de propostas;
+    - Pedidos de alteração;
 """
 
 from django.urls import path
 
-from works.views import (WorkStageView, WorkStageDevelopmentView, WorkStageDetailView, WorkProposalCreateView,
-                         WorkProposalListView, WorkListView, create_work_stage_development, ChangeRequestListView,
-                         WorkMeetingsView)
+from works.views import (
+    WorkStageView, WorkStageDevelopmentView, WorkStageDetailView, WorkProposalCreateView, WorkProposalListView,
+    WorkListView, create_work_stage_development, ChangeRequestListView, WorkMeetingsView,
+)
 
 
 app_name = 'works'

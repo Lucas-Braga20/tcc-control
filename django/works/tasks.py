@@ -1,3 +1,11 @@
+"""
+Implementação dos Tasks assíncronas do app de works.
+
+Contém as tasks de:
+    - process_final_works;
+    - send_notifications;
+"""
+
 import datetime
 
 from django.db.models import Q
@@ -15,6 +23,11 @@ from core.defaults import completed_status
 
 @shared_task
 def process_final_works():
+    """Processa os TCCs.
+
+    Essa task é executada todos os dias às 00:00
+    para gerar as etapas do tcc.
+    """
     today = datetime.date.today()
     # today hard coded
     # today = datetime.date(2023, 1, 1)
@@ -36,6 +49,11 @@ def process_final_works():
 
 @shared_task()
 def send_notifications():
+    """Envia notificações.
+
+    Essa task é executada todos os dias às 00:00
+    para enviar notificações de aviso para os orientandos.
+    """
     today = datetime.date.today()
 
     tomorrow = datetime.timedelta(days=1) + today

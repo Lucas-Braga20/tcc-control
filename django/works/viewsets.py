@@ -1,5 +1,12 @@
 """
-Viewsets to works app.
+Implementação dos ViewSets do app de works.
+
+Contém os endpoints para:
+    - FinalWorkViewSet;
+    - FinalWorkStageViewSet;
+    - FinalWorkVersionViewSet;
+    - VersionContentImageViewSet;
+    - ChangeRequestViewSet;
 """
 
 import datetime
@@ -32,8 +39,6 @@ from core.defaults import (
 from notifications.utils import send_notification
 from notifications.tasks import send_mail
 
-from timetables.models import Timetable
-
 
 class FinalWorkViewSet(
     mixins.CreateModelMixin,
@@ -42,8 +47,16 @@ class FinalWorkViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
-    """
-    Final work viewset.
+    """ViewSet para manipulação de tcc.
+
+    Métodos suportados:
+        - Create;
+        - Retrieve;
+        - Update;
+        - List;
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
     queryset = FinalWork.objects.all()
     serializer_class = FinalWorkSerializer
@@ -54,11 +67,13 @@ class FinalWorkViewSet(
     filterset_fields = ['completed']
 
     def get_permissions(self):
+        """Apenas o professor da disciplina pode atualizar o TCC."""
         if self.action == 'update':
             self.role_required = ['Professor da disciplina']
         return super().get_permissions()
 
     def get_queryset(self):
+        """Recupera o queryset de TCC."""
         queryset = super().get_queryset()
 
         user_group = UserGroup(self.request.user)
@@ -77,6 +92,7 @@ class FinalWorkViewSet(
         return queryset
 
     def update(self, request, *args, **kwargs):
+        """Método de atualização do TCC."""
         data = request.data
         approved = data.get('approved')
         completed = data.get('completed')
@@ -106,6 +122,7 @@ class FinalWorkViewSet(
 
     @action(detail=True, methods=['get'], url_path='available-supervisors')
     def available_supervisors(self, request, pk=None):
+        """Recupera todos os orientadores disponíveis para o TCC."""
         supervisors = User.objects.filter(groups__name='orientador', is_active=True)
 
         users = UserSerializer(data=supervisors, many=True)
@@ -115,6 +132,7 @@ class FinalWorkViewSet(
 
     @action(detail=True, methods=['get'], url_path='available-mentees')
     def available_mentees(self, request, pk=None):
+        """Recupera todos os orientandos disponíveis para o TCC."""
         instance = self.get_object()
         mentees = User.objects.filter(groups__name='orientando', is_active=True)
         mentees = list(filter(lambda mentee: (mentee.get_already_in_work() is False), mentees))
@@ -127,6 +145,7 @@ class FinalWorkViewSet(
 
     @action(detail=True, methods=['get'], url_path='documents')
     def get_documents(self, request, pk=None):
+        """Recupera todos documentos de um TCC."""
         instance = self.get_object()
 
         documents = instance.get_final_documents()
@@ -153,6 +172,7 @@ class FinalWorkViewSet(
 
     @action(detail=True, methods=['get'], url_path='generate-document')
     def generate_document(self, request, pk=None):
+        """Gera um novo documento para o TCC."""
         instance = self.get_object()
 
         response = instance.generate_final_document()
@@ -171,8 +191,10 @@ class FinalWorkViewSet(
 
 
 class FinalWorkStageViewSet(viewsets.ModelViewSet):
-    """
-    Final work stage viewset.
+    """ViewSet para manipulação de etapa do tcc.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
     queryset = FinalWorkStage.objects.all()
     serializer_class = FinalWorkStageSerializer
@@ -181,6 +203,7 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
     roles_required = ['Orientando', 'Professor da disciplina', 'Orientador']
 
     def get_queryset(self):
+        """Recupera o queryset de etapas do TCC."""
         queryset = super().get_queryset()
 
         user_group = UserGroup(self.request.user)
@@ -198,6 +221,7 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def request_review(self, request, pk=None):
+        """Ação para submeter o trabalho a correção."""
         self.object = self.get_object()
 
         user = self.request.user
@@ -243,6 +267,7 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def mark_reviewed(self, request, pk=None):
+        """Ação para marcar o trabalho como revisado."""
         self.object = self.get_object()
 
         user = self.request.user
@@ -287,6 +312,7 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def mark_completed(self, request, pk=None):
+        """Ação para marcar o trabalho como completado."""
         self.object = self.get_object()
 
         user = self.request.user
@@ -342,6 +368,7 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def mark_presented(self, request, pk=None):
+        """Ação para marcar o trabalho como apresentado."""
         self.object = self.get_object()
 
         user = self.request.user
@@ -397,8 +424,10 @@ class FinalWorkStageViewSet(viewsets.ModelViewSet):
 
 
 class FinalWorkVersionViewSet(viewsets.ModelViewSet):
-    """
-    Final work version viewset.
+    """ViewSet para manipulação de versões de etapa do tcc.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
     queryset = FinalWorkVersion.objects.all()
     serializer_class = FinalWorkVersionSerializer
@@ -407,6 +436,7 @@ class FinalWorkVersionViewSet(viewsets.ModelViewSet):
     roles_required = ['Orientando', 'Professor da disciplina', 'Orientador']
 
     def get_queryset(self):
+        """Recupera o queryset de versão do TCC."""
         queryset = super().get_queryset()
 
         user_group = UserGroup(self.request.user)
@@ -430,8 +460,10 @@ class VersionContentImageViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
-    """
-    Version content image viewset.
+    """ViewSet para manipulação de imagens do conteúdo do tcc.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
     queryset = VersionContentImage.objects.all()
     serializer_class = VersionContentImageSerializer
@@ -440,6 +472,7 @@ class VersionContentImageViewSet(
     roles_required = ['Orientando', 'Professor da disciplina', 'Orientador']
 
     def get_queryset(self):
+        """Recupera o queryset de imagens."""
         queryset = super().get_queryset()
 
         user_group = UserGroup(self.request.user)
@@ -457,8 +490,10 @@ class VersionContentImageViewSet(
 
 
 class ChangeRequestViewSet(viewsets.ModelViewSet):
-    """
-    Change request viewset.
+    """ViewSet para manipulação de pedidos de alteração do tcc.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
     queryset = ChangeRequest.objects.all()
     serializer_class = ChangeRequestSerializer
@@ -467,6 +502,7 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
     roles_required = ['Orientando', 'Professor da disciplina']
 
     def get_queryset(self):
+        """Recupera o queryset de pedidos de alteração."""
         queryset = super().get_queryset()
 
         user_group = UserGroup(self.request.user)
@@ -480,6 +516,7 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
         return queryset
 
     def create(self, request, *args, **kwargs):
+        """Método de criação do pedido de alteração."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         instance = serializer.save()
@@ -542,6 +579,7 @@ class ChangeRequestViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
+        """Método de atualização do pedido de alteração."""
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)

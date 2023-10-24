@@ -134,7 +134,7 @@ class FinalWorkStageForm(forms.ModelForm):
 
             if not versions.exists():
                 raise forms.ValidationError(
-                    {'status': 'It is only possible to complete the activity if there is a development.'}
+                    {'status': 'Só será possível marcar como completado se houver um desenvolvimento.'}
                 )
 
         if self.instance is not None and (status == WORK_STAGE_PRESENTED or status == WORK_STAGE_PRESENTED_LATE):
@@ -149,7 +149,7 @@ class FinalWorkStageForm(forms.ModelForm):
 
             if today < timetable_stage.presentation_date:
                 raise forms.ValidationError(
-                    {'status': 'It is only possible to mark a stage as "presented" when today\'s date is the presentation date or later'}
+                    {'status': 'Só é possível marcar como apresentado se hoje for a data ou posterior.'}
                 )
 
 
@@ -188,7 +188,7 @@ class FinalWorkVersionForm(forms.ModelForm):
 
             for content_field in content.get('fields'):
                 if content_field['key'] not in keys:
-                    raise forms.ValidationError({'content': 'The content of the activity has invalid fields.'})
+                    raise forms.ValidationError({'content': 'O conteúdo da atividade contém campos inválidos.'})
 
     def save(self, commit=True):
         """Salva a versão do TCC."""

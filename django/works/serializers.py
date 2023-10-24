@@ -1,5 +1,12 @@
 """
-Works serializers.
+Implementação dos Serializers do app de works.
+
+Contém os serializers para:
+    - FinalWorkSerializer (TCC);
+    - FinalWorkStageSerializer (Etapa);
+    - FinalWorkVersionSerializer (Versão);
+    - VersionContentImageSerializer (Imagem da versão);
+    - ChangeRequestSerializer (Pedido de alteração);
 """
 
 from rest_framework import serializers
@@ -12,9 +19,7 @@ from timetables.serializers import StageSerializer
 
 
 class FinalWorkSerializer(serializers.ModelSerializer):
-    """
-    Final work serializer.
-    """
+    """Serializer de TCC."""
     mentees_detail = UserSerializer(many=True, source='mentees', read_only=True)
     supervisor_detail = UserSerializer(many=False, source='supervisor', read_only=True)
     current_stage = serializers.SerializerMethodField()
@@ -31,6 +36,7 @@ class FinalWorkSerializer(serializers.ModelSerializer):
         ]
 
     def get_current_stage(self, obj):
+        """Recupera a etapa atual."""
         current_stage = obj.get_current_stage()
 
         if current_stage:
@@ -40,9 +46,7 @@ class FinalWorkSerializer(serializers.ModelSerializer):
 
 
 class FinalWorkStageSerializer(serializers.ModelSerializer):
-    """
-    Final work stage serializer.
-    """
+    """Serializer de Etapa do TCC."""
     stage_detail = StageSerializer(many=False, source='stage', read_only=True)
 
     class Meta:
@@ -51,9 +55,7 @@ class FinalWorkStageSerializer(serializers.ModelSerializer):
 
 
 class FinalWorkVersionSerializer(serializers.ModelSerializer):
-    """
-    Final work version Serializer.
-    """
+    """Serializer de Versão da Etapa do TCC."""
 
     class Meta:
         model = FinalWorkVersion
@@ -61,9 +63,7 @@ class FinalWorkVersionSerializer(serializers.ModelSerializer):
 
 
 class VersionContentImageSerializer(serializers.ModelSerializer):
-    """
-    Version content image serializer.
-    """
+    """Serializer de Imagem da Versão da Etapa do TCC."""
 
     class Meta:
         model = VersionContentImage
@@ -71,9 +71,7 @@ class VersionContentImageSerializer(serializers.ModelSerializer):
 
 
 class ChangeRequestSerializer(serializers.ModelSerializer):
-    """
-    Change request serializer.
-    """
+    """Serializer do pedido de alteração."""
     work_stage_detail = FinalWorkStageSerializer(many=False, read_only=True, source='work_stage')
     requester_detail = UserSerializer(many=False, read_only=True, source='requester')
     final_work = serializers.SerializerMethodField()
@@ -85,12 +83,15 @@ class ChangeRequestSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_final_work(self, obj):
+        """Recupera o TCC."""
         return obj.work_stage.final_work.title
 
     def get_created_at_formated(self, obj):
+        """Recupera a data de criação."""
         return obj.get_created_at()
 
     def update(self, instance, validated_data):
+        """Método de atualização."""
         instance.approved = validated_data.get('approved', None)
         instance.save()
         return instance

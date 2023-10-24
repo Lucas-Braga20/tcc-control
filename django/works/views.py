@@ -95,10 +95,20 @@ class WorkStageView(NotificationMixin, LoginRequiredMixin, DetailView, View):
         return context
 
 
-class WorkMeetingsView(TemplateView):
+class WorkMeetingsView(NotificationMixin, LoginRequiredMixin, TemplateView):
+    """View para listagem de reuniões.
+
+    Através desta view que o professor da disciplina poderá ver
+    a ata de acompanhamento.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
+    """
+
     template_name = 'meetings/list.html'
 
     def get_context_data(self, **kwargs):
+        """Gera o contexto da requisição."""
         context = super().get_context_data(**kwargs)
 
         final_work_id = kwargs.get('pk')
@@ -119,15 +129,22 @@ class WorkMeetingsView(TemplateView):
 
 
 class WorkStageDevelopmentView(NotificationMixin, LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    """View para desenvolvimento de etapas.
+
+    Através desta view que o orientando poderá desenvolver
+    o conteúdo das etapas.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
-    Work stage development view.
-    """
+
     template_name = 'final-work-versions/editor.html'
     model = FinalWorkVersion
     form_class = FinalWorkVersionForm
     success_message = 'Trabalho salvo com sucesso.'
 
     def post(self, request, *args, **kwargs):
+        """Método de atualização da view."""
         self.object = self.get_object()
 
         stage = self.object.work_stage
@@ -141,6 +158,7 @@ class WorkStageDevelopmentView(NotificationMixin, LoginRequiredMixin, SuccessMes
         return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
+        """Gera o contexto da requisição."""
         context = super().get_context_data(**kwargs)
 
         object = self.get_object()
@@ -155,10 +173,16 @@ class WorkStageDevelopmentView(NotificationMixin, LoginRequiredMixin, SuccessMes
         return context
 
     def get_success_url(self):
+        """Gera a url de sucesso."""
         return reverse('works:detail', kwargs={'pk': self.object.work_stage.id})
 
 
 def create_work_stage_development(request):
+    """View de criação do desenvolvimento da etapa.
+
+    Essa view é chamada toda vez que o orientando abrir o
+    desenvolvimento pela primeira vez.
+    """
     if request.method == 'POST':
         work_stage_id = request.POST.get('work_stage')
 
@@ -184,13 +208,13 @@ def create_work_stage_development(request):
 
 
 class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, View):
-    """
-    Work stage detail screen.
-    """
+    """View de detalhes da etapa."""
+
     template_name = 'final-work-stages/detail.html'
     model = FinalWorkStage
 
     def get(self, request, *args, **kwargs):
+        """Método get da view."""
         error_param = request.GET.get('error')
         success_review_request = request.GET.get('success_review_request')
         success_mark_completed = request.GET.get('success_mark_completed')
@@ -250,6 +274,7 @@ class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, Vie
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
+        """Gera o contexto da requisição."""
         context = super().get_context_data(**kwargs)
 
         self.object = self.get_object()
@@ -270,9 +295,12 @@ class WorkStageDetailView(NotificationMixin, LoginRequiredMixin, DetailView, Vie
 
 
 class WorkProposalCreateView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, CreateView, View):
+    """View para criação de proposta.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
-    Work proposal create screen.
-    """
+
     template_name = 'final-work-proposal/editor.html'
     model = FinalWork
     form_class = FinalWorkForm
@@ -280,14 +308,17 @@ class WorkProposalCreateView(NotificationMixin, GenericPermissionMixin, LoginReq
     required_groups = ['Orientando']
 
     def get_success_url(self) -> str:
+        """Recupera a url de sucesso."""
         return reverse_lazy('works:proposal-list')
 
     def get_form_kwargs(self):
+        """Recupera o kwargs do formulário."""
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
 
     def form_valid(self, form):
+        """Verifica a validação do formulário."""
         try:
             return super().form_valid(form)
         except:
@@ -349,13 +380,17 @@ class WorkProposalListView(NotificationMixin, LoginRequiredMixin, ListView, View
 
 
 class WorkListView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, TemplateView):
+    """View para listagem de TCCs.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
-    Final work list screen.
-    """
+
     template_name = 'final-work/list.html'
     required_groups = ['Orientador', 'Professor da disciplina']
 
     def get_context_data(self, **kwargs):
+        """Gera o contexto da requisição."""
         context = super().get_context_data(**kwargs)
 
         user = self.request.user
@@ -367,8 +402,11 @@ class WorkListView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin
 
 
 class ChangeRequestListView(NotificationMixin, GenericPermissionMixin, LoginRequiredMixin, TemplateView):
+    """View para listagem de pedidos de alteração.
+
+    Permissões necessárias:
+        - Autenticação: Apenas poderá consumir endpoint mediante autenticação;
     """
-    Change request list view.
-    """
+
     template_name = 'change-requests/list.html'
     required_groups = ['Professor da disciplina']

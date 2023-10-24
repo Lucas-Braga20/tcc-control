@@ -164,11 +164,13 @@ class FinalWork(models.Model):
         return self.work_stage.all()
 
     def get_completed_stages(self):
+        """Recupera todas as etapas completadas."""
         all_stages = self.get_all_stages()
 
         return all_stages.filter(status__in=defaults.completed_status)
 
     def get_work_percentual(self):
+        """Recupera o percentual de etapas completadas do TCC."""
         all_stages = self.get_all_stages()
 
         completed_stages = self.get_completed_stages()
@@ -182,6 +184,7 @@ class FinalWork(models.Model):
         return completed_stages.count() / all_stages.count()
 
     def get_delayed_stages(self):
+        """Recupera todas as etapas atrasadas."""
         all_stages = self.get_all_stages()
 
         return all_stages.filter(status__in=[
@@ -189,6 +192,7 @@ class FinalWork(models.Model):
         ])
 
     def get_not_delayed_stages(self):
+        """Recupera todas as etapas não atrasadas."""
         all_stages = self.get_all_stages()
 
         return all_stages.filter(status__in=defaults.NOT_DELAYED_STATUS)
@@ -243,6 +247,7 @@ class FinalWorkStage(models.Model):
         verbose_name_plural = _('Final work stages')
 
     def get_date_state(self):
+        """Recupera o estado da data."""
         today = date.today()
 
         if self.stage.send_date < today:
@@ -254,6 +259,7 @@ class FinalWorkStage(models.Model):
         return 'Etapa atual'
 
     def get_last_version(self):
+        """Recupera a última versão do TCC."""
         return self.work_stage_version.all().order_by('-created_at').first()
 
     def __str__(self):
@@ -261,20 +267,27 @@ class FinalWorkStage(models.Model):
 
 
 class FinalWorkVersion(models.Model):
-    """Final work version model."""
+    """Modelo de versão do TCC.
+
+    Esse model é utilizado para persistir as versões de desenvolvimento.
+    """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    created_at = models.DateTimeField(auto_now_add=True,
-                                      verbose_name=_('created at'))
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name=_('created at'),
+    )
     content = models.JSONField(verbose_name=_('content'), blank=True, null=True)
     confirmed = models.BooleanField(verbose_name=_('confirmed'), default=False)
-    work_stage = models.ForeignKey('works.FinalWorkStage', verbose_name=_('work stage'),
-                                   on_delete=models.DO_NOTHING, related_name='work_stage_version')
+    work_stage = models.ForeignKey(
+        'works.FinalWorkStage', verbose_name=_('work stage'), on_delete=models.DO_NOTHING,
+        related_name='work_stage_version',
+    )
 
     class Meta:
         verbose_name = _('Work stage version')
         verbose_name_plural = _('Work stage versions')
 
     def get_is_blocked(self):
+        """Verifica se a versão está bloqueada."""
         stage = self.work_stage
         versions = stage.work_stage_version.all().order_by('created_at')
 
@@ -291,9 +304,7 @@ class FinalWorkVersion(models.Model):
 
 
 class VersionContentImage(models.Model):
-    """
-    Version content image model.
-    """
+    """Modelo de imagem do conteúdo da versão."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     image = models.ImageField(upload_to=get_version_content_image_folder, verbose_name=_('image'), max_length=255)
     version = models.ForeignKey(
@@ -306,9 +317,7 @@ class VersionContentImage(models.Model):
 
 
 class ChangeRequest(models.Model):
-    """
-    Change request model.
-    """
+    """Modelo de pedido de alteração."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     approved = models.BooleanField(verbose_name=_('approved'), blank=True, null=True, default=None)
     description = models.TextField(verbose_name=_('description'))
@@ -326,15 +335,14 @@ class ChangeRequest(models.Model):
         verbose_name_plural = _('Change requests')
 
     def approve_request(self):
-        """
-        Method to approve a change request.
-        """
+        """Método para aprovar pedido."""
         self.approved = True
         new_version = FinalWorkVersion(content=None, work_stage=self.work_stage)
         self.save()
         new_version.save()
 
     def get_created_at(self):
+        """Recupera a data de criação."""
         return get_datetime_tz(self.created_at).strftime("%d/%m/%Y %H:%M") if self.created_at is not None else None
 
     def __str__(self):

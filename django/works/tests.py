@@ -1,6 +1,4 @@
-"""
-Tests for works app.
-"""
+"""Testes do app de works."""
 
 import datetime
 
@@ -13,9 +11,8 @@ from core.defaults import WORK_STAGE_COMPLETED, WORK_STAGE_PRESENTED
 
 
 class FinalWorkStageTest(TestCase):
-    """
-    Final work stage test.
-    """
+    """Testes do TCC."""
+
     fixtures = [
         'tcc_control/fixtures/users.json',
         'tcc_control/fixtures/activity_configurations.json',
@@ -31,24 +28,27 @@ class FinalWorkStageTest(TestCase):
         return super().setUpTestData()
 
     def test_finish_stage(self):
-        """
-        Integration test used to verify that it will only
-        be possible to mark a stage as completed when there
-        is at least one development.
+        """Teste de integração de etapa do TCC.
+
+        Esse teste verifica se só será possível marcar como concluído
+        uma etapa que possuir pelo menos um desenvolvimento.
         """
         data = {
             'status': WORK_STAGE_COMPLETED,
         }
         form = FinalWorkStageForm(data=data, instance=self.final_work_stage)
 
-        self.assertEqual(form.errors['status'],
-                         ['It is only possible to complete the activity if there is a development.'])
+        self.assertEqual(
+            form.errors['status'],
+            ['Só será possível marcar como completado se houver um desenvolvimento.'],
+        )
 
     def test_presented_stage(self):
-        """
-        Integration test used to verify that it will only
-        be possible to mark an activity as "presented" when
-        today's date is equal to or later than the presentation date.
+        """Teste de integração de apresentação de etapa.
+
+        Teste de integração usado para verificar se só será
+        será possível marcar uma atividade como "apresentada" quando
+        a data de hoje é igual ou posterior à data de apresentação.
         """
         data = {
             'status': WORK_STAGE_PRESENTED,
@@ -62,15 +62,15 @@ class FinalWorkStageTest(TestCase):
         if today >= presentation_date:
             self.assertEqual(form.errors.get('status'), None)
         else:
-            self.assertEqual(form.errors.get('status'),
-                            ['It is only possible to mark a stage as "presented" when today\'s date is the ' \
-                             'presentation date or later'])
+            self.assertEqual(
+                form.errors.get('status'),
+                ['Só é possível marcar como apresentado se hoje for a data ou posterior.'],
+            )
 
 
 class FinalWorkVersionTest(TestCase):
-    """
-    Final work version test.
-    """
+    """Testes do versão do TCC."""
+
     fixtures = [
         'tcc_control/fixtures/users.json',
         'tcc_control/fixtures/activity_configurations.json',
@@ -86,31 +86,37 @@ class FinalWorkVersionTest(TestCase):
         return super().setUpTestData()
 
     def test_contents(self):
+        """Teste de integração de conteúdo da versão.
+
+        Teste de integração usado para verificar se a versão
+        contém os campos estruturados de forma correta com key/value.
+        """
         data = {
             'content': '{"fields": [{"key": "title"}]}',
             'work_stage': self.final_work_stage
         }
         form = FinalWorkVersionForm(data=data)
 
-        self.assertEqual(form.errors['content'], ['A field was not entered correctly.'])
+        self.assertEqual(form.errors['content'], ['Um campo não foi inserido corretamente.'])
 
     def test_contents_keys(self):
-        """
-        Integration test to verify the fields of the activity.
+        """Teste de integração de keys do conteúdo da versão.
+
+        Teste de integração usado para verificar se a versão
+        contém os campos com keys corretas baseados na atividade.
         """
         data = {
             'content': '{"fields": [{"key": "teste", "value": "teste"}]}',
-            'work_stage': self.final_work_stage
+            'work_stage': self.final_work_stage,
         }
         form = FinalWorkVersionForm(data=data)
 
-        self.assertEqual(form.errors['content'], ['The content of the activity has invalid fields.'])
+        self.assertEqual(form.errors['content'], ['O conteúdo da atividade contém campos inválidos.'])
 
 
 class ChangeRequestTest(TestCase):
-    """
-    Change request test.
-    """
+    """Teste de pedido de alteração."""
+
     fixtures = [
         'tcc_control/fixtures/courses.json',
         'tcc_control/fixtures/users.json',
@@ -128,8 +134,10 @@ class ChangeRequestTest(TestCase):
         return super().setUpTestData()
 
     def test_approve_request(self):
-        """
-        Integration test to validate the approval of a change request.
+        """Teste de integração para aprovar pedido de alteração.
+
+        Esse teste de integração irá verificar se ao aprovar um pedido
+        uma nova versão será criada.
         """
         self.change_request.approve_request()
         self.assertEqual(FinalWorkVersion.objects.all().count(), 1)

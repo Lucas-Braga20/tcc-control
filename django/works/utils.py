@@ -1,6 +1,4 @@
-"""
-Utils to works app.
-"""
+"""Utilitários do app de works."""
 
 import os
 
@@ -13,36 +11,34 @@ from core.files import slugify_filename
 
 
 def validate_stage_content_json(content):
-    """
-    Method to validate field content.
+    """Valida o conteúdo da etapa.
 
-    The json field must contain the attribute "fields" as array of objects
-    contains the attributes: key and value.
+    O campo json deve conter o atributo "fields" como array de objetos
+    contém os atributos: chave e valor.
     """
 
     fields = content.get('fields')
 
     if fields is None:
-        raise Exception('The "fields" field cannot be null.')
+        raise Exception('O campo "fields" não pode ser nulo.')
 
     for field in fields:
         key = field.get('key')
         value = field.get('value')
 
         if key is None or value is None:
-            raise Exception('A field was not entered correctly.')
+            raise Exception('Um campo não foi inserido corretamente.')
 
 
 def get_version_content_image_folder(instance, filename):
-    """
-    Get upload folder.
-    """
+    """Recupera o diretório de upload da imagem do desenvolvimento."""
     new_filename = slugify_filename(filename)
 
     return f'works/{instance.version.work_stage.final_work.id}/versions/{instance.version.id}/${new_filename}'
 
 
 def get_document_creation_time(document_path, concat=True):
+    """Recupera o datetime de criação do documento final."""
     if concat:
         file_path = os.path.join(settings.BASE_DIR, 'tcc_control', document_path)
     else:
