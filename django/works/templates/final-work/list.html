@@ -94,18 +94,16 @@
 
           <table
             id="tcc_datatable_users"
-            class="table table-row-bordered gy-5"
+            class="table table-row-bordered"
             data-api="{% url 'api:works-list' %}?format=datatables"
             data-teacher="{% if teacher %}true{% else %}false{% endif %}">
             <thead>
               <tr class="fw-bold fs-6 text-muted">
                 <th class="rounded-start min-w-200px" data-data="title">TCC</th>
-                <th class="min-w-150px" data-data="mentees_detail">Orientandos</th>
+                <th class="min-w-200px" data-data="mentees_detail">Orientandos</th>
                 <th class="min-w-150px" data-data="supervisor_detail">Orientador</th>
-                <th class="min-w-150px" data-data="current_stage">Etapa atual</th>
-                <th class="min-w-100px">Etapa atual</th>
-                <th class="min-w-100px" data-data="completed">Completado</th>
-                <th class="w-auto rounded-end text-start text-sm-end min-w-150px">Ações</th>
+                <th class="min-w-150px" data-data="completed">Completado</th>
+                <th class="w-auto rounded-end text-start text-sm-end min-w-200px">Ações</th>
               </tr>
             </thead>
             <tbody>

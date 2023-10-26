@@ -428,43 +428,31 @@ const FinalWorkList = () => {
         {
           data: 'title',
           render(data) {
-            return data
+            return `
+              <div>
+                <span class="text-gray-700 fw-bold">${data}</span>
+              </div>
+            `;
           },
         },
         {
           data: 'mentees_detail',
           render(data) {
-            return data.map(mentee => mentee.full_name).join(', ');
+            return `
+              <div class="text-gray-700 text-ellipsis max-w-200px">
+                ${data.map(mentee => mentee.full_name).join(', ')}
+              </div>
+            `;
           },
         },
         {
           data: 'supervisor_detail',
           render(data) {
-            return data.full_name;
-          },
-        },
-        {
-          data: 'current_stage',
-          render(data) {
-            if (data) {
-              return `
-                <a href="/works/stages/${data.id}/detail">
-                  ${data.stage_detail.description}
-                </a>
-              `;
-            } else {
-              return '--';
-            }
-          },
-        },
-        {
-          data: null,
-          render(data) {
-            if (data.current_stage) {
-              return badges[data.current_stage.status] || '--';
-            } else {
-              return '--';
-            }
+            return `
+              <div>
+                <span class="text-gray-700">${data.full_name}</span>
+              </div>
+            `;
           },
         },
         {
@@ -472,15 +460,15 @@ const FinalWorkList = () => {
           render(data) {
             if (data === true) {
               return `
-                <span class="badge badge-success">
-                  Completado
-                </span>
+                <div>
+                  <i class="far fa-check-circle text-success fs-3"></i>
+                </div>
               `;
             } else {
               return `
-                <span class="badge badge-secondary">
-                  Incompleto
-                </span>
+                <div>
+                  <i class="far fa-times-circle text-danger fs-3"></i>
+                </div>
               `;
             }
           },
@@ -493,13 +481,26 @@ const FinalWorkList = () => {
             let actions = `
               <a
                 href="/works/${data.id}/stages/"
-                class="btn btn-sm btn-icon btn-primary ms-1"
+                class="btn btn-sm btn-icon btn-primary"
                 data-bs-toggle="tooltip"
                 data-bs-placement="top"
                 title="Ver etapas">
                 <i class="fas fa-eye"></i>
               </a>
             `;
+
+            if (data.current_stage) {
+              actions += `
+                <a
+                  href="/works/stages/${data.current_stage.id}/detail"
+                  class="btn btn-sm btn-icon btn-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="${data.current_stage.stage_detail.description}">
+                  <i class="fas fa-calendar-day"></i>
+                </a>
+              `;
+            }
 
             if ($('#tcc_datatable_users').data('teacher') && data.completed === false) {
               actions += `
@@ -523,7 +524,7 @@ const FinalWorkList = () => {
               `;
             }
 
-            return actions;
+            return `<div>${actions}</div>`;
           },
         },
       ],
