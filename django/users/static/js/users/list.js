@@ -101,14 +101,20 @@ const TimetablesList = () => {
         {
           data: 'full_name',
           render(data) {
-            return data
+            return `
+              <div>
+                <span class="text-gray-700">${data}</span>
+              </div>
+            `;
           },
         },
         {
           data: 'username',
           render(data) {
             return `
-              <span class="text-muted fs-7">${data}</span>
+              <div>
+                <span class="text-gray-700">${data}</span>
+              </div>
             `;
           },
         },
@@ -117,15 +123,25 @@ const TimetablesList = () => {
           render(data) {
             if (data.groups_detail && data.groups_detail.length == 0) {
               if (data.is_superuser) {
-                return groupsBadges['Admin'];
+                return `
+                  <div>
+                    ${groupsBadges['Admin']}
+                  </div>
+                `;
               }
 
               return `
-                <span class="text-muted fs-6">Sem perfil</span>
+                <div>
+                  <span class="text-muted fs-6">Sem perfil</span>
+                </div>
               `;
             }
 
-            return groupsBadges[data.groups_detail[0].name]
+            return `
+              <div>
+                ${groupsBadges[data.groups_detail[0].name]}
+              </div>
+            `;
           },
         },
         {
@@ -141,7 +157,7 @@ const TimetablesList = () => {
               activeButtonElement = `
                 <button
                   type="button"
-                  class="btn btn-sm btn-icon btn-primary ms-1 tcc_active_button"
+                  class="btn btn-sm btn-icon btn-primary me-1 tcc_active_button"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="Ativar"
@@ -155,7 +171,7 @@ const TimetablesList = () => {
               activeButtonElement = `
                 <button
                   type="button"
-                  class="btn btn-sm btn-icon btn-primary ms-1 tcc_active_button"
+                  class="btn btn-sm btn-icon btn-primary me-1 tcc_active_button"
                   data-active="${false}"
                   data-id="${data.id}"
                   data-bs-toggle="tooltip"
@@ -170,7 +186,7 @@ const TimetablesList = () => {
               changeRoleElement = `
                 <button
                   type="button"
-                  class="btn btn-sm btn-icon btn-primary ms-1 tcc_change_role_button"
+                  class="btn btn-sm btn-icon btn-primary me-1 tcc_change_role_button"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="Trocar para orientador"
@@ -185,7 +201,7 @@ const TimetablesList = () => {
               changeRoleElement = `
                 <button
                   type="button"
-                  class="btn btn-sm btn-icon btn-primary ms-1 tcc_change_role_button"
+                  class="btn btn-sm btn-icon btn-primary me-1 tcc_change_role_button"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   title="Trocar para orientando"
@@ -197,7 +213,7 @@ const TimetablesList = () => {
             }
 
             if (!data.is_superuser)
-              return `${activeButtonElement} ${changeRoleElement}`;
+              return `<div>${activeButtonElement} ${changeRoleElement}</div>`;
 
             return '';
           },
