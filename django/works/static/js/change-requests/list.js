@@ -66,51 +66,88 @@ const ChangeRequestList = () => {
         {
           data: 'description',
           render(data) {
-            return data;
+            return `
+              <div>
+                <span class="text-gray-700">
+                  ${data}
+                </span>
+              </div>
+            `;
           },
         },
         {
           data: 'requester_detail',
           render(data) {
-            return data.full_name;
+            return `
+              <div>
+                <span class="text-gray-700">
+                  ${data.full_name}
+                </span>
+              </div>
+            `;
           },
         },
         {
-          data: 'final_work',
+          data: null,
           render(data) {
-            return data;
-          },
-        },
-        {
-          data: 'work_stage_detail',
-          render(data) {
-            return `<span>${data.stage_detail.description}</span>`;
+            return `
+              <div>
+                <span class="text-gray-700">
+                  <span class="text-primary fw-bold">
+                    ${data.final_work}:
+                  </span>
+                  ${data.work_stage_detail.stage_detail.description}
+                </span>
+              </div>
+            `;
           },
         },
         {
           data: 'created_at_formated',
           render(data) {
-            return data;
+            return `
+              <div>
+                <span class="text-gray-700">
+                  ${data}
+                </span>
+              </div>
+            `;
           },
         },
         {
           data: 'approved',
           render(data) {
-            let badge = `
-              <span class="badge badge-light">Pendente</span>
-            `;
-
-            if (data == true) {
-              badge = `
-                <span class="badge badge-light-success">Aprovado</span>
+            if (data === true) {
+              return `
+                <div>
+                  <i
+                    class="far fa-check-circle text-success fs-3"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Aprovado"></i>
+                </div>
               `;
-            } else if (data == false) {
-              badge = `
-                <span class="badge badge-light-danger">Reprovado</span>
+            } else if (data === false) {
+              return `
+                <div>
+                  <i
+                    class="far fa-times-circle text-danger fs-3"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Reprovado"></i>
+                </div>
+              `;
+            } else {
+              return `
+                <div>
+                  <i
+                    class="fas fa-exclamation-circle fs-3"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Pendente"></i>
+                </div>
               `;
             }
-
-            return badge;
           },
         },
         {
@@ -121,7 +158,7 @@ const ChangeRequestList = () => {
             let approvedButton = `
               <button
                 type="button"
-                class="btn btn-sm btn-icon btn-primary ms-1 tcc_approve_button"
+                class="btn btn-sm btn-icon btn-primary me-1 tcc_approve_button"
                 data-approve="${true}"
                 data-id="${data.id}"
                 data-bs-toggle="tooltip"
@@ -134,7 +171,7 @@ const ChangeRequestList = () => {
             let disapproveButton = `
               <button
                 type="button"
-                class="btn btn-sm btn-icon btn-primary ms-1 tcc_approve_button"
+                class="btn btn-sm btn-icon btn-primary tcc_approve_button"
                 data-approve="${false}"
                 data-id="${data.id}"
                 data-bs-toggle="tooltip"
@@ -145,7 +182,11 @@ const ChangeRequestList = () => {
             `;
 
             if (data.approved == null) {
-              return approvedButton + disapproveButton;
+              return `
+                <div>
+                  ${approvedButton + disapproveButton}
+                </div>
+              `;
             }
 
             return '';
@@ -157,6 +198,11 @@ const ChangeRequestList = () => {
 
     $(dataTableElement).on('responsive-display.dt', () => {
       handleApproveButtonActions();
+
+      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
     });
 
     $(dataTableElement).on('error.dt', (e, settings, techNote, message) => {

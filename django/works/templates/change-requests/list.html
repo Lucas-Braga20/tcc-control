@@ -69,14 +69,13 @@
         <div class="card-body pt-4">
           <table
             id="tcc_datatable_change_requests"
-            class="table table-row-bordered gy-5"
+            class="table table-row-bordered"
             data-api="{% url 'api:change-requests-list' %}?format=datatables">
             <thead>
               <tr class="fw-bold fs-6 text-muted">
                 <th class="rounded-start min-w-200px" data-data="description">Descrição</th>
                 <th class="min-w-150px" data-data="requester">Responsável</th>
-                <th class="min-w-150px" data-data="final_work">TCC</th>
-                <th class="min-w-150px" data-data="work_stage_detail">Etapa</th>
+                <th class="min-w-150px">TCC</th>
                 <th class="min-w-150px" data-data="created_at_formated">Data da solicitação</th>
                 <th class="min-w-150px" data-data="approved">Estado</th>
                 <th class="w-auto rounded-end text-start text-sm-end min-w-100px">Ações</th>
