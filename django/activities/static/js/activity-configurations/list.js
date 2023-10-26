@@ -72,13 +72,21 @@ const ActivityConfigurationList = () => {
         {
           data: 'name',
           render(data) {
-            return data
+            return `
+              <div>
+                <span class="text-gray-700">${data}</span>
+              </div>
+            `;
           },
         },
         {
           data: 'fields_description',
           render(data) {
-            return data
+            return `
+              <div>
+                <span class="text-gray-700">${data}</span>
+              </div>
+            `;
           },
         },
         {
@@ -100,7 +108,7 @@ const ActivityConfigurationList = () => {
               `;
             }
 
-            return element
+            return element;
           },
         },
         {
@@ -151,7 +159,11 @@ const ActivityConfigurationList = () => {
               `;
             }
 
-            return `${updateButtonElement}${archivedButtonElement}`;
+            return `
+              <div>
+                ${updateButtonElement + archivedButtonElement}
+              </div>
+            `;
           },
         },
       ],
