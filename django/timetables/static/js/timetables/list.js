@@ -72,19 +72,31 @@ const TimetablesList = () => {
         {
           data: 'description',
           render(data) {
-            return data
+            return `
+              <div>
+                <span class="text-gray-700">${data}</span>
+              </div>
+            `;
           },
         },
         {
           data: 'start',
           render(data) {
-            return data
+            return `
+              <div>
+                <span class="text-gray-700">${data}</span>
+              </div>
+            `;
           },
         },
         {
           data: 'end',
           render(data) {
-            return data
+            return `
+              <div>
+                <span class="text-gray-700">${data}</span>
+              </div>
+            `;
           },
         },
         {
@@ -136,16 +148,18 @@ const TimetablesList = () => {
             }
 
             return `
-              ${updateButtonElement}
-              ${archivedButtonElement}
-              <a
-                href="/timetables/detail/${data.id}"
-                class="btn btn-sm btn-icon btn-primary ms-1"
-                data-bs-toggle="tooltip"
-                data-bs-placement="top"
-                title="Detalhes">
-                <i class="fas fa-eye"></i>
-              </a>
+              <div>
+                ${updateButtonElement}
+                ${archivedButtonElement}
+                <a
+                  href="/timetables/detail/${data.id}"
+                  class="btn btn-sm btn-icon btn-primary ms-1"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Detalhes">
+                  <i class="fas fa-eye"></i>
+                </a>
+              </div>
             `;
           },
         },
