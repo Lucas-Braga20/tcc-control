@@ -36,7 +36,9 @@ class User(AbstractUser):
 
     def get_current_work(self):
         """Recupera o TCC atual."""
-        return FinalWork.objects.filter(mentees__in=[self.id], archived=False).order_by('-created_at').last()
+        return FinalWork.objects.filter(
+            mentees__in=[self.id], archived=False, approved=True,
+        ).order_by('-created_at').last()
 
     def get_profile_url(self):
         """Recupera a url do perfil."""

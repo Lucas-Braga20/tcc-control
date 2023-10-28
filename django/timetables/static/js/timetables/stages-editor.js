@@ -406,7 +406,7 @@ class StageEditor {
                 </span>
 
                 <div class="d-flex flex-column pe-0 pe-sm-10 text-white">
-                  <h4 class="fw-semibold">Atenção!</h4>
+                  <h4 class="fw-semibold text-white">Atenção!</h4>
                   <span>
                     Alguns orientandos já adiantaram essa etapa.
                     Se mudar a configuração de atividade, alguns conteúdos podem ser perdidos.
