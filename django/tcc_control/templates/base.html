@@ -11,10 +11,6 @@
       {% block html-title %}TCC Control{% endblock html-title %}{% block html-subtitle %}{% endblock html-subtitle %}
     </title>
 
-    <link href="{% static 'css/seven.style.bundle.css' %}" rel="stylesheet" type="text/css">
-
-    <link href="{% static 'plugins/css/plugins.bundle.css' %}" rel="stylesheet" type="text/css">
-
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
 
@@ -68,61 +64,85 @@
     class="header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-enabled {% block body_class %}{% endblock %}">
     {% block layout %}{% endblock %}
 
-    {% block js %}
-      <!-- Plugins Bundle JS -->
-      <script src="{% static 'plugins/js/plugins.bundle.js' %}"></script>
+    <!-- General js -->
+    {% compress js %}
+      {% block js %}
+        <!-- Plugins Bundle JS -->
+        <script src="{% static 'plugins/js/plugins.bundle.js' %}"></script>
 
-      <!-- Template Seven JS  -->
-      <script src="{% static 'js/seven.scripts.bundle.js' %}"></script>
+        <!-- Template Seven JS  -->
+        <script src="{% static 'js/seven.scripts.bundle.js' %}"></script>
 
-      <!-- SweetAlert -->
-      <script src="{% static 'vendor/sweetalert/sweetalert.js' %}"></script>
-      <script>
-        const Toast = Swal.mixin({
-          toast: true,
-          position: 'bottom-end',
-          showConfirmButton: false,
-          timer: 3000,
-        });
-      </script>
+        <!-- SweetAlert -->
+        <script src="{% static 'vendor/sweetalert/sweetalert.js' %}"></script>
+      {% endblock %}
+    {% endcompress %}
 
-      <!-- Datatable -->
-      <script>
-        const dataTableLanguages = {
-          sEmptyTable: 'Nenhum registro encontrado.',
-          sInfo: 'Mostrando _START_ até _END_ de _TOTAL_.',
-          sInfoEmpty: 'Mostrando 0 até 0 de 0.',
-          sInfoFiltered: '(filtrado do total de _MAX_ registros)',
-          sInfoPostFix: '',
-          sInfoThousands: ',',
-          sLengthMenu: '_MENU_',
-          sLoadingRecords: 'Carregando...',
-          sProcessing: 'Processando...',
-          sSearch: 'Buscar:',
-          sZeroRecords: 'Nenhum registro encontrado.',
-          oPaginate: {
-            sFirst: 'Primeiro',
-            sLast: 'Úlitmo',
-            sNext: 'Próximo',
-            sPrevious: 'Anterior'
-          },
-          select: {
-            rows: {
-              '_': 'Você possui %d linhas selecionadas',
-              '0': 'Clique em um linha para selecionar',
-              '1': '1 linha selecionada'
-            }
-          }
-        }
-      </script>
-
-      {% if request.user.is_authenticated %}
+    {% if request.user.is_authenticated %}
+      {% compress js %}
         <!-- Notification JS -->
         <script src="{% static 'js/notification/notification.js' %}"></script>
-      {% endif %}
-    {% endblock %}
+      {% endcompress %}
+    {% endif %}
 
-    {% block js-vendors %}{% endblock %}
-    {% block js-scripts %}{% endblock %}
+    <!-- Inline general js -->
+    {% compress js inline %}
+      {% block inline-js %}
+        <!-- Toast -->
+        <script>
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'bottom-end',
+            showConfirmButton: false,
+            timer: 3000,
+          });
+        </script>
+
+        <!-- Datatable -->
+        <script>
+          const dataTableLanguages = {
+            sEmptyTable: 'Nenhum registro encontrado.',
+            sInfo: 'Mostrando _START_ até _END_ de _TOTAL_.',
+            sInfoEmpty: 'Mostrando 0 até 0 de 0.',
+            sInfoFiltered: '(filtrado do total de _MAX_ registros)',
+            sInfoPostFix: '',
+            sInfoThousands: ',',
+            sLengthMenu: '_MENU_',
+            sLoadingRecords: 'Carregando...',
+            sProcessing: 'Processando...',
+            sSearch: 'Buscar:',
+            sZeroRecords: 'Nenhum registro encontrado.',
+            oPaginate: {
+              sFirst: 'Primeiro',
+              sLast: 'Úlitmo',
+              sNext: 'Próximo',
+              sPrevious: 'Anterior'
+            },
+            select: {
+              rows: {
+                '_': 'Você possui %d linhas selecionadas',
+                '0': 'Clique em um linha para selecionar',
+                '1': '1 linha selecionada'
+              }
+            }
+          }
+        </script>
+      {% endblock %}
+    {% endcompress %}
+
+    <!-- Js vendors -->
+    {% compress js %}
+      {% block js-vendors %}{% endblock %}
+    {% endcompress %}
+
+    <!-- Js scripts -->
+    {% compress js %}
+      {% block js-scripts %}{% endblock %}
+    {% endcompress %}
+
+    <!-- Inline js scripts -->
+    {% compress js inline %}
+      {% block inline-js-scripts %}{% endblock %}
+    {% endcompress %}
   </body>
 </html>

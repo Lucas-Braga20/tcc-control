@@ -152,6 +152,9 @@
 
 {% block js-scripts %}
   <script src="{% static 'js/activity-configurations/list.js' %}"></script>
+{% endblock %}
+
+{% block inline-js-scripts %}
   <script>
     $('#tcc_form_messages').find('div').each(function() {
       const text = $(this).text();

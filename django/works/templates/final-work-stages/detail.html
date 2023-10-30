@@ -800,6 +800,9 @@
 
 {% block js-scripts %}
   <script src="{% static 'js/final-work-stages/detail.js' %}"></script>
+{% endblock %}
+
+{% block inline-js-scripts %}
   <script>
     $('#tcc_form_messages').find('div').each(function() {
       const text = $(this).text();

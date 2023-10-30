@@ -183,7 +183,9 @@
 
 {% block js-scripts %}
   <script src="{% static 'js/registration/profile.js' %}"></script>
+{% endblock %}
 
+{% block inline-js-scripts %}
   <script>
     $('#tcc_form_messages').find('div').each(function() {
       const text = $(this).text();
