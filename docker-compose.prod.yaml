@@ -26,6 +26,7 @@ services:
     volumes:
       - ./django/:/code
       - staticfiles:/code/staticfiles
+      - mediafiles:/code/tcc_control/media
     expose:
       - "8000"
     networks:
@@ -44,6 +45,7 @@ services:
     volumes:
       - ./django/nginx.conf:/etc/nginx/nginx.conf
       - staticfiles:/code/staticfiles
+      - mediafiles:/code/media
     ports:
       - "8000:80"
     networks:
@@ -55,6 +57,7 @@ volumes:
   mysql_data:
   redis_data:
   staticfiles:
+  mediafiles:
 
 networks:
   web:
