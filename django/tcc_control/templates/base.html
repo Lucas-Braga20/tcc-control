@@ -1,4 +1,4 @@
-{% load static %}
+{% load static compress %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,31 +6,62 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block html-title %}TCC Control{% endblock html-title %}{% block html-subtitle %}{% endblock html-subtitle %}</title>
 
-    {% block css-vendors %}{% endblock %}
+    <title>
+      {% block html-title %}TCC Control{% endblock html-title %}{% block html-subtitle %}{% endblock html-subtitle %}
+    </title>
 
-    {% block css %}
-      <!-- Fonts -->
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+    <link href="{% static 'css/seven.style.bundle.css' %}" rel="stylesheet" type="text/css">
 
-      <!-- Plugins Bundle Css -->
-      <link rel="stylesheet" href="{% static 'plugins/css/plugins.bundle.css' %}">
+    <link href="{% static 'plugins/css/plugins.bundle.css' %}" rel="stylesheet" type="text/css">
 
-      <!-- Template Seven Css -->
-      <link rel="stylesheet" href="{% static 'css/seven.style.bundle.css' %}">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
 
-      <!-- General Css -->
-      <link rel="stylesheet" href="{% static 'css/general.css' %}">
+    <!-- CSS Vendors -->
+    {% compress css %}
+      {% block css-vendors %}{% endblock %}
+    {% endcompress %}
 
-      <style>
-        .dropdown-header-bg {
-          background-image:url('{% static "media/misc/dropdown-header-bg.png" %}')
-        }
-      </style>
-    {% endblock %}
+    <!-- Inline css vendors -->
+    {% compress css inline %}
+      {% block inline-css-vendors %}{% endblock %}
+    {% endcompress %}
 
-    {% block css-styles %}{% endblock %}
+    <!-- General css -->
+    {% compress css %}
+      {% block css %}
+        <!-- Plugins Bundle Css -->
+        <link href="{% static 'plugins/css/plugins.bundle.css' %}" rel="stylesheet" type="text/css">
+
+        <!-- Template Seven Css -->
+        <link href="{% static 'css/seven.style.bundle.css' %}" rel="stylesheet" type="text/css">
+
+        <!-- General Css -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/general.css' %}">
+      {% endblock %}
+    {% endcompress %}
+
+    <!-- Inline general css -->
+    {% compress css inline %}
+      {% block inline-css %}
+        <style>
+          .dropdown-header-bg {
+            background-image:url('{% static "media/misc/dropdown-header-bg.png" %}')
+          }
+        </style>
+      {% endblock %}
+    {% endcompress %}
+
+    <!-- App styles -->
+    {% compress css %}
+      {% block css-styles %}{% endblock %}
+    {% endcompress %}
+
+    <!-- Inline app styles -->
+    {% compress css inline %}
+      {% block inline-css-styles %}{% endblock %}
+    {% endcompress %}
   </head>
   <body
     id="kt_body"

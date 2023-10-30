@@ -14,3 +14,7 @@ beautifulsoup4==4.12.2
 docxtpl==0.16.7
 python-docx==0.8.11
 htmldocx==0.0.6
+gunicorn==21.2.0
+django-compressor==4.4
+django-crispy-forms==2.1
+crispy-bootstrap4==2023.1

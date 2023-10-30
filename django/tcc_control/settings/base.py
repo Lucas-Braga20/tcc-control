@@ -52,6 +52,9 @@ INSTALLED_APPS += [
     'django_redis',
     'django_celery_beat',
     'django_celery_results',
+    'compressor',
+    'crispy_forms',
+    'crispy_bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -136,7 +139,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+STATIC_ROOT = Path(BASE_DIR, 'staticfiles')
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder'
+]
 
 
 # Upload files
@@ -177,3 +188,28 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = os.environ.get('EMAIL_PORT')
 
 EMAIL_USE_TLS = True
+
+
+# Compressor settings
+
+COMPRESS_ENABLED = True
+
+COMPRESS_OFFLINE = True
+
+COMPRESS_CSS_FILTERS = [ 
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter',
+]
+
+COMPRESS_JS_FILTERS = [
+    'compressor.filters.jsmin.JSMinFilter',
+]
+
+COMPRESS_STORAGE = 'compressor.storage.CompressorFileStorage'
+
+
+# Crispy settings
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

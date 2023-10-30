@@ -15,7 +15,17 @@ python manage.py migrate
 echo 'Loading data...'
 python manage.py loaddata **/fixtures/*.json
 
+echo 'Collecting static...'
+python manage.py collectstatic --noinput
+
+echo 'Compressing static files...'
+python manage.py compress
+
 celery -A tcc_control worker --autoscale=3,1 --loglevel=INFO &
 celery -A tcc_control beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler &
 
-python manage.py runserver 0.0.0.0:8000
+if [[ "$DJANGO_SETTINGS_MODULE" == "tcc_control.settings.production" ]]; then
+  gunicorn tcc_control.wsgi:application --bind 0.0.0.0:8000
+else
+  python manage.py runserver 0.0.0.0:8000
+fi
