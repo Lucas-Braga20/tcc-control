@@ -82,6 +82,14 @@ const TimetablesList = () => {
         {
           data: 'start',
           render(data) {
+            if (data == null) {
+              return `
+                <div>
+                  <span class="text-gray-700">Sem data de início</span>
+                </div>
+              `;
+            }
+
             return `
               <div>
                 <span class="text-gray-700">${data}</span>
@@ -92,6 +100,14 @@ const TimetablesList = () => {
         {
           data: 'end',
           render(data) {
+            if (data == null) {
+              return `
+                <div>
+                  <span class="text-gray-700">Sem data de fim</span>
+                </div>
+              `;
+            }
+
             return `
               <div>
                 <span class="text-gray-700">${data}</span>
