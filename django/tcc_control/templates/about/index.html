@@ -1,0 +1,260 @@
+{% extends 'base.html' %}
+
+{% block body_class %}primary-gradient{% endblock %}
+
+{% block layout %}
+  <div class="d-flex flex-column flex-root z-index-1">
+    <div class="d-flex flex-column flex-column-fluid">
+      <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
+        <div class="w-lg-1000px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
+          <div class="d-flex align-items-center justify-content-center">
+            <div class="symbol symbol-50px symbol-circle me-2">
+              <div class="symbol-label fs-2 fw-bolder bg-primary text-white">TC</div>
+            </div>
+
+            <h1 class="fw-bolder mb-0 fs-1">
+              TCC Control
+            </h1>
+          </div>
+
+          <div class="mt-8">
+            <h3>Visão geral</h3>
+
+            <p class="m-0">
+              Bem-vindo ao TCC Control! Nosso projeto é uma ferramenta dedicada à gestão eficiente de Trabalhos
+              de Conclusão de Curso (TCC). Com o objetivo de simplificar e aprimorar o processo de desenvolvimento
+              e apresentação de TCCs, oferecemos uma plataforma abrangente que atende tanto aos alunos quanto aos
+              orientadores e professores da disciplina.
+            </p>
+          </div>
+
+          <div class="mt-8">
+            <h3>Manual de usuário</h3>
+
+            <p class="m-0">
+              Em caso de dúvidas sobre as telas ou o funcionamento da aplicação, recomendamos consultar o manual
+              de usuário. Através dele você encontrará informações detalhadas, explicações passo a passo e recursos
+              visuais que oferecem uma compreensão completa do uso da aplicação.
+            </p>
+
+            <p class="mt-1">
+              Manual de usuário:
+            </p>
+
+            <a href="/media/manual-do-usuario.pdf" class="document-file" target="_blank">
+              <div class="d-flex justify-content-between border border-dashed rounded border-hover-primary border-gray-400 px-5 py-3 w-100">
+                <div class="d-flex align-items-center">
+                  <span>
+                    <i class="far fa-file-word file-icon text-gray-500 fs-2"></i>
+                  </span>
+
+                  <span class="file-name fw-light text-gray-700 fs-6 ms-2">
+                    Documentação de usuário
+                  </span>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="mt-8">
+            <h3>Recursos Principais</h3>
+
+            <div class="container w-100 px-0">
+              <div class="row">
+                <div class="col col-12 col-md-6 col-lg-4">
+                  <div class="p-8 rounded bg-light-primary border-primary border border-dashed h-215px">
+                    <div class="d-flex flex-column align-items-center">
+                      <div class="symbol symbol-50px">
+                        <div class="symbol-label bg-primary fw-bolder">
+                          <i class="fas fa-clipboard-list text-white fs-1"></i>
+                        </div>
+                      </div>
+
+                      <h4 class="text-primary mt-2">
+                        Controle de atividades
+                      </h4>
+                    </div>
+
+                    <p class="fw-bold text-center mb-0">
+                      O sistema permite que os professores consigam criar atividades genéricas e abrangentes.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="col col-12 col-md-6 col-lg-4 mt-5 mt-md-0">
+                  <div class="p-8 rounded bg-light-primary border-primary border border-dashed h-215px">
+                    <div class="d-flex flex-column align-items-center">
+                      <div class="symbol symbol-50px">
+                        <div class="symbol-label bg-primary fw-bolder">
+                          <i class="fas fa-calendar-alt text-white fs-1"></i>
+                        </div>
+                      </div>
+
+                      <h4 class="text-primary mt-2">
+                        Controle de cronograma
+                      </h4>
+                    </div>
+
+                    <p class="fw-bold text-center mb-0">
+                      O sistema permite que os professores consigam criar cronogramas com etapas e datas.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="col col-12 col-lg-4 mt-5 mt-lg-0">
+                  <div class="p-8 rounded bg-light-primary border-primary border border-dashed h-215px">
+                    <div class="d-flex flex-column align-items-center">
+                      <div class="symbol symbol-50px">
+                        <div class="symbol-label bg-primary fw-bolder">
+                          <i class="fas fa-users text-white fs-1"></i>
+                        </div>
+                      </div>
+
+                      <h4 class="text-primary mt-2">
+                        Controle de usuários
+                      </h4>
+                    </div>
+
+                    <p class="fw-bold text-center mb-0">
+                      O sistema permite que os professores consigam controlar usuários com perfis de orientandos
+                      e orientadores.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="col col-12 mt-5">
+                  <div class="p-8 rounded bg-light-primary border-primary border border-dashed">
+                    <div class="d-flex flex-column align-items-center">
+                      <div class="symbol symbol-50px">
+                        <div class="symbol-label bg-primary fw-bolder">
+                          <i class="fas fa-briefcase text-white fs-1"></i>
+                        </div>
+                      </div>
+
+                      <h4 class="text-primary mt-2">
+                        Controle de TCC
+                      </h4>
+                    </div>
+
+                    <p class="fw-bold text-center mb-0">
+                      O sistema possui controle de TCCs, com desenvolvimento próprio de conteúdo, versionamento de etapas,
+                      controle de alterações, comentários, controle de reuniões, controle de avaliações.
+
+                      Além de permitir que os orientandos consigam gerar documentos formatados automaticamente com base
+                      na configuração que o professor definir no cronograma.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <div class="d-flex justify-content-center">
+              <h3 class="mb-0">Equipe</h3>
+            </div>
+
+            <div class="row">
+              <div class="col col-12 col-md-4">
+                <div class="p-8 rounded">
+                  <div class="d-flex flex-column align-items-center">
+                    <div class="symbol symbol-50px symbol-circle">
+                      <div class="symbol-label bg-primary fs-2 fw-bolder bg-primary text-white">
+                        LB
+                      </div>
+                    </div>
+
+                    <h4 class="text-gray-700 text-hover-primary cursor-pointer fw-normal mt-2 mb-0">
+                      Lucas Braga
+                    </h4>
+
+                    <p class="mb-0 text-gray-600 fw-bold">Orientando</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col col-12 col-md-4">
+                <div class="p-8 rounded">
+                  <div class="d-flex flex-column align-items-center">
+                    <div class="symbol symbol-50px symbol-circle">
+                      <div class="symbol-label bg-primary fs-2 fw-bolder bg-primary text-white">
+                        WM
+                      </div>
+                    </div>
+
+                    <h4 class="text-gray-700 text-hover-primary cursor-pointer fw-normal mt-2 mb-0">
+                      Willian Matiussi
+                    </h4>
+
+                    <p class="mb-0 text-gray-600 fw-bold">Orientando</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col col-12 col-md-4">
+                <div class="p-8 rounded">
+                  <div class="d-flex flex-column align-items-center">
+                    <div class="symbol symbol-50px symbol-circle">
+                      <div class="symbol-label bg-primary fs-2 fw-bolder bg-primary text-white">
+                        FP
+                      </div>
+                    </div>
+
+                    <h4 class="text-gray-700 text-hover-primary cursor-pointer fw-normal mt-2 mb-0">
+                      Felipe Perez
+                    </h4>
+
+                    <p class="mb-0 text-gray-600 fw-bold">Orientador</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="d-flex justify-content-center">
+              <a href="{% url 'home' %}" class="btn btn-sm btn-secondary">
+                <i class="fas fa-long-arrow-alt-left"></i>
+
+                Voltar a aplicação
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block inline-css-styles %}
+  <style>
+    .primary-gradient {
+      background: rgb(95,77,239);
+      background: linear-gradient(120deg, rgba(95,77,239,1) 0%, rgba(95,77,239,1) 100%);
+    }
+
+    .h-215px {
+      height: 215px;
+    }
+
+    @media (max-width: 992px) {
+      .h-215px {
+        height: auto;
+      }
+    }
+
+    .document-file {
+      transition: all 0.3s ease-out;
+    }
+
+    .document-file:hover .file-icon {
+      color: #7239EA !important;
+      transition: all 0.3s ease-out;
+    }
+
+    .document-file:hover .file-name {
+      color: #7239EA !important;
+      transition: all 0.3s ease-out;
+    }
+  </style>
+{% endblock %}

@@ -34,6 +34,7 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=tcc_control.settings.production
     env_file:
+      - envs/django.env
       - envs/mysql.env
       - envs/email.env
     depends_on:

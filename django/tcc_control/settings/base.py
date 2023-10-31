@@ -10,7 +10,7 @@ from pathlib import Path
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-SECRET_KEY = 'django-insecure-o7o0lsm285o$=p1cchl3&qd()#p$ptcya3d67sts52&$i9q!59'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 ALLOWED_HOSTS = []
 

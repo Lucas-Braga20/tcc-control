@@ -5,7 +5,7 @@ Contém as views para:
     - HomeView;
 """
 
-from django.views.generic import RedirectView
+from django.views.generic import RedirectView, TemplateView
 
 
 class HomeView(RedirectView):
@@ -17,3 +17,9 @@ class HomeView(RedirectView):
     permanent = False
     query_string = False
     pattern_name = 'timetables:calendar'
+
+
+class AboutView(TemplateView):
+    """View de about do projeto."""
+
+    template_name = 'about/index.html'

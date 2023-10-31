@@ -12,8 +12,10 @@ python manage.py makemigrations
 echo 'Migrating...'
 python manage.py migrate
 
-echo 'Loading data...'
-python manage.py loaddata **/fixtures/*.json
+if [[ "$DJANGO_SETTINGS_MODULE" == "tcc_control.settings.development" ]]; then
+  echo 'Loading data...'
+  python manage.py loaddata **/fixtures/*.json
+fi
 
 echo 'Collecting static...'
 python manage.py collectstatic --noinput
