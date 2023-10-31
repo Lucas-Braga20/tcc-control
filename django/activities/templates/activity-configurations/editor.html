@@ -17,7 +17,11 @@
         data-kt-swapper-mode="prepend"
         data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
         <h1 class="text-dark fw-semibold my-0 fs-2">
-          Adicionar
+          {% if object %}
+            Editar
+          {% else %}
+            Adicionar
+          {% endif %}
         </h1>
 
         <ul class="breadcrumb breadcrumb-line text-muted fw-semibold fs-base my-1">
@@ -27,7 +31,11 @@
             </a>
           </li>
           <li class="breadcrumb-item text-dark">
-            Adicionar
+            {% if object %}
+              Editar
+            {% else %}
+              Adicionar
+            {% endif %}
           </li>
         </ul>
       </div>
@@ -66,7 +74,13 @@
 
         <div class="card">
           <div class="card-header border-0 p-8 pb-4">
-            <h1 class="mb-0">Adicione uma configuração de atividade</h1>
+            <h1 class="mb-0">
+              {% if object %}
+                Edite a configuração de atividade
+              {% else %}
+                Adicione uma configuração de atividade
+              {% endif %}
+            </h1>
           </div>
           <div class="card-body py-4">
             {% if activity_already_advanced %}
