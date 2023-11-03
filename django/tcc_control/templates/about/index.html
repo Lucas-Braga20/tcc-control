@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block body_class %}primary-gradient{% endblock %}
 
@@ -41,7 +42,7 @@
               Manual de usuário:
             </p>
 
-            <a href="/media/manual-do-usuario.pdf" class="document-file" target="_blank">
+            <a href="{% static 'media/manual-do-usuario.pdf' %}" class="document-file" target="_blank">
               <div class="d-flex justify-content-between border border-dashed rounded border-hover-primary border-gray-400 px-5 py-3 w-100">
                 <div class="d-flex align-items-center">
                   <span>

@@ -143,6 +143,9 @@ Esse projeto utiliza o template gratuito Seven Keen themes.
       {% block js-vendors %}{% endblock %}
     {% endcompress %}
 
+    <!-- Uncompress js -->
+    {% block uncompress-js %}{% endblock %}
+
     <!-- Js scripts -->
     {% compress js %}
       {% block js-scripts %}{% endblock %}
