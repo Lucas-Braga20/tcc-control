@@ -18,6 +18,8 @@ RUN pip install --upgrade pip
 COPY tcc_control/requirements/ .
 RUN pip install -r main.txt
 
+RUN adduser --disabled-password --gecos '' celery_user
+
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
