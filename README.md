@@ -29,7 +29,7 @@ O projeto consiste em um sistema de gerenciamento que utiliza a estrutura do Dja
 
 3. Realize o build do container através do comando `docker-compose build`.
 
-4. Execute docker-compose -f docker-compose.prod.yml up para iniciar o servidor em modo de produção.
+4. Execute docker-compose -f docker-compose.prod.yaml up para iniciar o servidor em modo de produção.
 
 ## Estrutura dos endpoints
 
