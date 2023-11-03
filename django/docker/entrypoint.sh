@@ -14,7 +14,7 @@ python manage.py migrate
 
 if [[ "$DJANGO_SETTINGS_MODULE" == "tcc_control.settings.development" ]]; then
   echo 'Loading data...'
-  python manage.py loaddata tcc_control/fixtures/*.json tcc_controlfixtures/tcc_control.json
+  python manage.py loaddata tcc_control/fixtures/*.json tcc_control/fixtures/tcc_control/*.json
 else
   echo 'Loading data...'
   python manage.py loaddata tcc_control/fixtures/*.json
