@@ -1,10 +1,10 @@
-Django==4.2
+Django==4.2.7
 mysqlclient==1.4.3
 django-mysql==4.9.0
 djangorestframework==3.14.0
 djangorestframework-datatables==0.6.0
 django-filter==23.2
-Pillow==9.5.0
+Pillow==10.0.1
 django-widget-tweaks==1.4.12
 celery==5.3.1
 django-redis==5.3.0
