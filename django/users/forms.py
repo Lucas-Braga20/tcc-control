@@ -22,7 +22,7 @@ class SignUpForm(UserCreationForm):
     )
     rgm = forms.CharField(max_length=20, required=True)
     email = forms.EmailField(
-        max_length=254, help_text='Enter a valid email address',
+        max_length=254, help_text='Insira um email válido',
     )
     phone = forms.CharField(
         label='Telefone',
@@ -34,7 +34,7 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = [
             'username', 'first_name', 'last_name', 'email', 'password1',
-            'password2', 'phone', 'university_course',
+            'password2', 'phone', 'rgm', 'university_course',
         ]
 
 

@@ -18,7 +18,7 @@ class UserAdmin(BaseUserAdmin):
     list_display = ('username', 'name', 'email', 'is_active', 'is_staff', 'is_superuser')
     fieldsets = (
         (_('Account'), {'fields': ('username', 'password')}),
-        (_('Personal'), {'fields': ('first_name', 'last_name', 'email')}),
+        (_('Personal'), {'fields': ('first_name', 'last_name', 'email', 'rgm')}),
         (_('Internal Configuration'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
         (_('Permissions'), {'fields': ('groups', 'user_permissions')}),
     )
