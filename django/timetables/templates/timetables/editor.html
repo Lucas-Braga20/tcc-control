@@ -79,6 +79,28 @@
             </h1>
           </div>
           <div class="card-body py-4">
+            {% for error in form.non_field_errors %}
+              <div class="alert alert-dismissible bg-danger d-flex flex-column flex-sm-row w-100 p-5 mb-10">
+                <span class="svg-icon svg-icon-2hx me-4 mb-5 mb-sm-0">
+                  <i class="fas fa-exclamation-circle fa-fw fa-3x text-white"></i>
+                </span>
+
+                <div class="d-flex flex-column pe-0 pe-sm-10 text-white">
+                  <h4 class="fw-semibold text-white">Atenção!</h4>
+                  <span>
+                    {{ error }}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto"
+                  data-bs-dismiss="alert">
+                  <i class="fas fa-times text-white"></i>
+                </button>
+              </div>
+            {% endfor %}
+
             {{ form.teacher }}
 
             <!-- Description -->
@@ -122,7 +144,7 @@
               </label>
 
               {% if form.document_template.errors %}
-                <div>
+                <div class="is-invalid">
                   {{ form.document_template|add_class:"form-control form-control-solid is-invalid" }}
                 </div>
               {% else %}
@@ -156,7 +178,7 @@
                 <option></option>
                 {% for pk, choice in form.mentee_field.field.choices %}
                   <option
-                    {% if pk in mentees %}
+                    {% if pk in mentees or pk|stringformat:"s" in form.mentee_field.data %}
                       selected
                     {% endif %}
                     value="{{ pk }}">
@@ -190,7 +212,7 @@
                 <option></option>
                 {% for pk, choice in form.supervisor_field.field.choices %}
                   <option
-                    {% if pk in supervisors %}
+                    {% if pk in supervisors or pk|stringformat:"s" in form.supervisor_field.data %}
                       selected
                     {% endif %}
                     value="{{ pk }}">
