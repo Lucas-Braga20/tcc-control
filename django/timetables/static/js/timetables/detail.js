@@ -3,7 +3,7 @@ const Detail = () => {
     notifications: {
       send(receivers, message) {
         return fetch(`/api/notifications/send-notification/`, {
-          method: 'post',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),

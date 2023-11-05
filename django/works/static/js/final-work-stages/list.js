@@ -3,7 +3,7 @@ const FinalWorkStageList = () => {
     works: {
       updateTitle(id, title) {
         return fetch(`/api/final-works/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -16,7 +16,7 @@ const FinalWorkStageList = () => {
 
       updateAbleToPresent(id, ableToPresent) {
         return fetch(`/api/final-works/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -29,7 +29,7 @@ const FinalWorkStageList = () => {
 
       updateGradingScore(id, gradingScore) {
         return fetch(`/api/final-works/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -42,7 +42,7 @@ const FinalWorkStageList = () => {
 
       generateDocument(id) {
         return fetch(`/api/final-works/${id}/generate-document/`, {
-          method: 'get',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -52,7 +52,7 @@ const FinalWorkStageList = () => {
 
       documents(id) {
         return fetch(`/api/final-works/${id}/documents/`, {
-          method: 'get',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),

@@ -36,7 +36,7 @@ const FinalWorkList = () => {
     works: {
       completed(id) {
         return fetch(`/api/final-works/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -49,7 +49,7 @@ const FinalWorkList = () => {
 
       details(id) {
         return fetch(`/api/final-works/${id}/`, {
-          method: 'get',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -59,7 +59,7 @@ const FinalWorkList = () => {
 
       update(id) {
         return fetch(`/api/final-works/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),

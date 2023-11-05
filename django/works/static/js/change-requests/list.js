@@ -8,7 +8,7 @@ const ChangeRequestList = () => {
     changeRequests: {
       approve(id) {
         return fetch(`/api/change-requests/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -20,7 +20,7 @@ const ChangeRequestList = () => {
       },
       disapprove(id) {
         return fetch(`/api/change-requests/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),

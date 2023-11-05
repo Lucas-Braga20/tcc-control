@@ -3,7 +3,7 @@ const FinalWorkProposalList = () => {
     works: {
       reprove(id) {
         return fetch(`/api/final-works/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -15,7 +15,7 @@ const FinalWorkProposalList = () => {
       },
       approve(id) {
         return fetch(`/api/final-works/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -28,7 +28,7 @@ const FinalWorkProposalList = () => {
       },
       cancel(id) {
         return fetch(`/api/final-works/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),

@@ -29,7 +29,7 @@ const FinalWorkStageDetail = () => {
     comments: {
       list() {
         return fetch(`/api/comments/?no_page=true&work_stage=${workStageId}`, {
-          method: 'get',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -38,7 +38,7 @@ const FinalWorkStageDetail = () => {
       },
       add(description) {
         return fetch(`/api/comments/`, {
-          method: 'post',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -53,7 +53,7 @@ const FinalWorkStageDetail = () => {
     meetings: {
       list() {
         return fetch(`/api/meetings/?no_page=true&work_stage=${workStageId}`, {
-          method: 'get',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -62,7 +62,7 @@ const FinalWorkStageDetail = () => {
       },
       add(description, meetingDate) {
         return fetch(`/api/meetings/`, {
-          method: 'post',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -76,7 +76,7 @@ const FinalWorkStageDetail = () => {
       },
       edit(meeting, developedActivities, instructions) {
         return fetch(`/api/meetings/${meeting}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -89,7 +89,7 @@ const FinalWorkStageDetail = () => {
       },
       approve(meeting) {
         return fetch('/api/meetings/approve/', {
-          method: 'post',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -101,7 +101,7 @@ const FinalWorkStageDetail = () => {
       },
       disapprove(meeting) {
         return fetch('/api/meetings/disapprove/', {
-          method: 'post',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -115,7 +115,7 @@ const FinalWorkStageDetail = () => {
     workStages: {
       requestReview(workStage) {
         return fetch(`/api/final-work-stages/${workStage}/request_review/`, {
-          method: 'get',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -124,7 +124,7 @@ const FinalWorkStageDetail = () => {
       },
       markReviewed(workStage) {
         return fetch(`/api/final-work-stages/${workStage}/mark_reviewed/`, {
-          method: 'get',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -133,7 +133,7 @@ const FinalWorkStageDetail = () => {
       },
       markCompleted(workStage) {
         return fetch(`/api/final-work-stages/${workStage}/mark_completed/`, {
-          method: 'get',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -142,7 +142,7 @@ const FinalWorkStageDetail = () => {
       },
       markPresented(workStage) {
         return fetch(`/api/final-work-stages/${workStage}/mark_presented/`, {
-          method: 'get',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -153,7 +153,7 @@ const FinalWorkStageDetail = () => {
     changeRequests: {
       add(description, workStage) {
         return fetch(`/api/change-requests/`, {
-          method: 'post',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -701,6 +701,8 @@ const FinalWorkStageDetail = () => {
       .then(() => {
         handleMettingApproveButton();
         handleMettingDisapproveButton();
+        handleMeetingSupervisorForm();
+        handleMeetingFormValidator();
       });
   }
 
@@ -771,7 +773,7 @@ const FinalWorkStageDetail = () => {
             .then(response => {
               if (response.ok === false) {
                 throw new Error(response.statusText);
-              }  
+              }
             }).then(() => {
               Toast.fire({
                 icon: 'success',

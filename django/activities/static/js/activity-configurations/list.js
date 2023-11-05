@@ -11,7 +11,7 @@ const ActivityConfigurationList = () => {
     activities: {
       archive(id) {
         return fetch(`/api/activities/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -23,7 +23,7 @@ const ActivityConfigurationList = () => {
       },
       unarchive(id) {
         return fetch(`/api/activities/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),

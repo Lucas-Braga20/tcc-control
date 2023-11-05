@@ -26,7 +26,7 @@ const TimetablesList = () => {
     users: {
       active(id) {
         return fetch(`/api/users/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -38,7 +38,7 @@ const TimetablesList = () => {
       },
       unactive(id) {
         return fetch(`/api/users/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -50,7 +50,7 @@ const TimetablesList = () => {
       },
       changeRole(id, group) {
         return fetch(`/api/users/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),

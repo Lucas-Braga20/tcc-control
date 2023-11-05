@@ -11,7 +11,7 @@ const TimetablesList = () => {
     timetables: {
       archive(id) {
         return fetch(`/api/timetables/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -23,7 +23,7 @@ const TimetablesList = () => {
       },
       unarchive(id) {
         return fetch(`/api/timetables/${id}/`, {
-          method: 'patch',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
