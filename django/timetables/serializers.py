@@ -65,7 +65,7 @@ class StageSerializer(serializers.ModelSerializer):
     def get_activity_already_advanced(self, obj):
         """Verifica se um etapa já foi adiantada."""
         if obj.activity_configuration is not None:
-            return check_worked_activity(obj.activity_configuration)
+            return check_worked_activity(obj.activity_configuration, obj.timetable)
 
         return False
 

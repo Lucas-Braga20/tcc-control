@@ -64,10 +64,11 @@ const Calendar = () => {
             const events = [];
 
             response.forEach(event => {
+              const endDate = event.presentation_date ? moment(event.presentation_date) : moment(event.send_date)
               events.push({
                 title: event.description,
                 start: event.start_date,
-                end: event.send_date,
+                end: endDate.add(1, 'day').format('YYYY-MM-DD'),
               });
             });
 

@@ -10,6 +10,7 @@ import os
 import datetime
 
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Q
 
 from rest_framework import viewsets, mixins, status, permissions
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -109,6 +110,16 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
         """Recupera o queryset de etapas."""
         queryset = super().get_queryset()
 
+        if start := self.request.query_params.get('start'):
+            queryset = queryset.filter(
+                Q(start_date__gte=start) | Q(send_date__gte=start) | Q(presentation_date__gte=start),
+            )
+
+        if end := self.request.query_params.get('end'):
+            queryset = queryset.filter(
+                Q(presentation_date__lte=end) | Q(send_date__lte=end) | Q(start_date__lte=end),
+            )
+
         user = self.request.user
 
         user_group = UserGroup(user=user)
@@ -195,7 +206,7 @@ class StageViewSet(DisablePaginationMixin, viewsets.ModelViewSet):
             activity_configuration = activity_configuration.first()
 
             if activity_configuration != instance.activity_configuration:
-                already_advanced = check_worked_activity(instance.activity_configuration)
+                already_advanced = check_worked_activity(instance.activity_configuration, instance.timetable)
 
                 if already_advanced:
                     stages = instance.work_timetable_stage.all()

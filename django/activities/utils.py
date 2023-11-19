@@ -32,7 +32,7 @@ def validate_fields_json(fields_value):
             raise Exception('Um dos campos está com o tipo incorreto.')
 
 
-def check_worked_activity(activity):
+def check_worked_activity(activity, timetable=None):
     """Checa atividades com trabalhos adiantados.
 
     Função para verificar se uma atividade possui um etapa de
@@ -41,6 +41,9 @@ def check_worked_activity(activity):
     work_stages = FinalWorkStage.objects.filter(
         stage__activity_configuration=activity.id, status__in=NOT_COMPLETED_STATUS,
     )
+
+    if timetable:
+        work_stages = work_stages.filter(stage__timetable=timetable)
 
     has_advanced_activities = False
 
