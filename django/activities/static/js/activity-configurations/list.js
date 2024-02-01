@@ -10,7 +10,7 @@ const ActivityConfigurationList = () => {
   const API = {
     activities: {
       archive(id) {
-        return fetch(`/api/activities/${id}/`, {
+        return fetch(`/tcc/api/activities/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ const ActivityConfigurationList = () => {
         });
       },
       unarchive(id) {
-        return fetch(`/api/activities/${id}/`, {
+        return fetch(`/tcc/api/activities/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

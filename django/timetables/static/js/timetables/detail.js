@@ -2,7 +2,7 @@ const Detail = () => {
   const API = {
     notifications: {
       send(receivers, message) {
-        return fetch(`/api/notifications/send-notification/`, {
+        return fetch(`/tcc/api/notifications/send-notification/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -279,7 +279,7 @@ const Detail = () => {
 
     $('#tcc_receivers').select2({
       ajax: {
-        url: '/api/users/',
+        url: '/tcc/api/users/',
         dataType: 'json',
         data: function ({ term }, page) {
           return {

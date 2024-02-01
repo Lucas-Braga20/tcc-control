@@ -2,7 +2,7 @@ const FinalWorkProposalList = () => {
   const API = {
     works: {
       reprove(id) {
-        return fetch(`/api/final-works/${id}/`, {
+        return fetch(`/tcc/api/final-works/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -14,7 +14,7 @@ const FinalWorkProposalList = () => {
         });
       },
       approve(id) {
-        return fetch(`/api/final-works/${id}/`, {
+        return fetch(`/tcc/api/final-works/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -27,7 +27,7 @@ const FinalWorkProposalList = () => {
         });
       },
       cancel(id) {
-        return fetch(`/api/final-works/${id}/`, {
+        return fetch(`/tcc/api/final-works/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

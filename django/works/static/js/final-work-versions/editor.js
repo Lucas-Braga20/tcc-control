@@ -29,7 +29,7 @@ const FinalWorkVersionEditor = () => {
 
       xhr = new XMLHttpRequest();
       xhr.withCredentials = false;
-      xhr.open('POST', '/api/version-content-images/');
+      xhr.open('POST', '/tcc/api/version-content-images/');
       xhr.setRequestHeader('X-CSRFToken', $('[name="csrfmiddlewaretoken"]').val());
 
       xhr.upload.onprogress = function (e) {

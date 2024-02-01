@@ -10,7 +10,7 @@ const TimetablesList = () => {
   const API = {
     timetables: {
       archive(id) {
-        return fetch(`/api/timetables/${id}/`, {
+        return fetch(`/tcc/api/timetables/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ const TimetablesList = () => {
         });
       },
       unarchive(id) {
-        return fetch(`/api/timetables/${id}/`, {
+        return fetch(`/tcc/api/timetables/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

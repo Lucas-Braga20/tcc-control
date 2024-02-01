@@ -18,7 +18,7 @@ class StageEditor {
       list() {
         const timetable = $('#tcc_stage_editor_container').data('timetable');
 
-        return fetch(`/api/stages/?no_page=true&timetable=${timetable}&ordering=start_date`, {
+        return fetch(`/tcc/api/stages/?no_page=true&timetable=${timetable}&ordering=start_date`, {
           method: 'get',
           headers: {
             'Content-Type': 'application/json',
@@ -27,7 +27,7 @@ class StageEditor {
         });
       },
       create(body) {
-        return fetch(`/api/stages/`, {
+        return fetch(`/tcc/api/stages/`, {
           method: 'post',
           body,
           headers: {
@@ -36,7 +36,7 @@ class StageEditor {
         });
       },
       delete(id) {
-        return fetch(`/api/stages/${id}/`, {
+        return fetch(`/tcc/api/stages/${id}/`, {
           method: 'delete',
           headers: {
             'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ class StageEditor {
         });
       },
       update(body, id) {
-        return fetch(`/api/stages/${id}/`, {
+        return fetch(`/tcc/api/stages/${id}/`, {
           method: 'patch',
           body,
           headers: {
@@ -257,7 +257,7 @@ class StageEditor {
   initFieldElements(stage) {
     $(`#tcc_stage_editor_activity_${stage.id}`).select2({
       ajax: {
-        url: '/api/activities/',
+        url: '/tcc/api/activities/',
         dataType: 'json',
         data: function ({ term }, page) {
           return {
@@ -281,7 +281,7 @@ class StageEditor {
     });
 
     $.ajax({
-      url: `/api/activities/${stage.activity_configuration}/`,
+      url: `/tcc/api/activities/${stage.activity_configuration}/`,
       dataType: 'json',
       success: function(data) {
         const option = new Option(data.name, data.id, true, true);
@@ -319,7 +319,7 @@ class StageEditor {
   initModalFieldElements() {
     $(`#tcc_stage_editor_activity`).select2({
       ajax: {
-        url: '/api/activities/',
+        url: '/tcc/api/activities/',
         dataType: 'json',
         data: function ({ term }, page) {
           return {

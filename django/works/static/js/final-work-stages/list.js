@@ -2,7 +2,7 @@ const FinalWorkStageList = () => {
   const API = {
     works: {
       updateTitle(id, title) {
-        return fetch(`/api/final-works/${id}/`, {
+        return fetch(`/tcc/api/final-works/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -15,7 +15,7 @@ const FinalWorkStageList = () => {
       },
 
       updateAbleToPresent(id, ableToPresent) {
-        return fetch(`/api/final-works/${id}/`, {
+        return fetch(`/tcc/api/final-works/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ const FinalWorkStageList = () => {
       },
 
       updateGradingScore(id, gradingScore) {
-        return fetch(`/api/final-works/${id}/`, {
+        return fetch(`/tcc/api/final-works/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ const FinalWorkStageList = () => {
       },
 
       generateDocument(id) {
-        return fetch(`/api/final-works/${id}/generate-document/`, {
+        return fetch(`/tcc/api/final-works/${id}/generate-document/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ const FinalWorkStageList = () => {
       },
 
       documents(id) {
-        return fetch(`/api/final-works/${id}/documents/`, {
+        return fetch(`/tcc/api/final-works/${id}/documents/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

@@ -25,7 +25,7 @@ const TimetablesList = () => {
   const API = {
     users: {
       active(id) {
-        return fetch(`/api/users/${id}/`, {
+        return fetch(`/tcc/api/users/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ const TimetablesList = () => {
         });
       },
       unactive(id) {
-        return fetch(`/api/users/${id}/`, {
+        return fetch(`/tcc/api/users/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ const TimetablesList = () => {
         });
       },
       changeRole(id, group) {
-        return fetch(`/api/users/${id}/`, {
+        return fetch(`/tcc/api/users/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

@@ -28,7 +28,7 @@ const FinalWorkStageDetail = () => {
   const API = {
     comments: {
       list() {
-        return fetch(`/api/comments/?no_page=true&work_stage=${workStageId}`, {
+        return fetch(`/tcc/api/comments/?no_page=true&work_stage=${workStageId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ const FinalWorkStageDetail = () => {
         });
       },
       add(description) {
-        return fetch(`/api/comments/`, {
+        return fetch(`/tcc/api/comments/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ const FinalWorkStageDetail = () => {
     },
     meetings: {
       list() {
-        return fetch(`/api/meetings/?no_page=true&work_stage=${workStageId}`, {
+        return fetch(`/tcc/api/meetings/?no_page=true&work_stage=${workStageId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ const FinalWorkStageDetail = () => {
         });
       },
       add(description, meetingDate) {
-        return fetch(`/api/meetings/`, {
+        return fetch(`/tcc/api/meetings/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ const FinalWorkStageDetail = () => {
         });
       },
       edit(meeting, developedActivities, instructions) {
-        return fetch(`/api/meetings/${meeting}/`, {
+        return fetch(`/tcc/api/meetings/${meeting}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ const FinalWorkStageDetail = () => {
         });
       },
       approve(meeting) {
-        return fetch('/api/meetings/approve/', {
+        return fetch('/tcc/api/meetings/approve/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ const FinalWorkStageDetail = () => {
         })
       },
       disapprove(meeting) {
-        return fetch('/api/meetings/disapprove/', {
+        return fetch('/tcc/api/meetings/disapprove/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ const FinalWorkStageDetail = () => {
     },
     workStages: {
       requestReview(workStage) {
-        return fetch(`/api/final-work-stages/${workStage}/request_review/`, {
+        return fetch(`/tcc/api/final-work-stages/${workStage}/request_review/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ const FinalWorkStageDetail = () => {
         });
       },
       markReviewed(workStage) {
-        return fetch(`/api/final-work-stages/${workStage}/mark_reviewed/`, {
+        return fetch(`/tcc/api/final-work-stages/${workStage}/mark_reviewed/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ const FinalWorkStageDetail = () => {
         });
       },
       markCompleted(workStage) {
-        return fetch(`/api/final-work-stages/${workStage}/mark_completed/`, {
+        return fetch(`/tcc/api/final-work-stages/${workStage}/mark_completed/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ const FinalWorkStageDetail = () => {
         });
       },
       markPresented(workStage) {
-        return fetch(`/api/final-work-stages/${workStage}/mark_presented/`, {
+        return fetch(`/tcc/api/final-work-stages/${workStage}/mark_presented/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -152,7 +152,7 @@ const FinalWorkStageDetail = () => {
     },
     changeRequests: {
       add(description, workStage) {
-        return fetch(`/api/change-requests/`, {
+        return fetch(`/tcc/api/change-requests/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

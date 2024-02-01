@@ -35,7 +35,7 @@ const FinalWorkList = () => {
   const API = {
     works: {
       completed(id) {
-        return fetch(`/api/final-works/${id}/`, {
+        return fetch(`/tcc/api/final-works/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const FinalWorkList = () => {
       },
 
       details(id) {
-        return fetch(`/api/final-works/${id}/`, {
+        return fetch(`/tcc/api/final-works/${id}/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ const FinalWorkList = () => {
       },
 
       update(id) {
-        return fetch(`/api/final-works/${id}/`, {
+        return fetch(`/tcc/api/final-works/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ const FinalWorkList = () => {
       placeholder: 'Selecione uma opção de orientador',
       allowClear: false,
       ajax: {
-        url: `/api/final-works/${finalWorkId}/available-supervisors/`,
+        url: `/tcc/api/final-works/${finalWorkId}/available-supervisors/`,
         dataType: 'json',
         processResults: function(data) {
           return {
@@ -121,7 +121,7 @@ const FinalWorkList = () => {
       multiple: true,
       closeOnSelect: false,
       ajax: {
-        url: `/api/final-works/${finalWorkId}/available-mentees/`,
+        url: `/tcc/api/final-works/${finalWorkId}/available-mentees/`,
         dataType: 'json',
         processResults: function(data) {
           return {

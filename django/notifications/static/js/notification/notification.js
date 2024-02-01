@@ -2,7 +2,7 @@ const Notification = () => {
   const API = {
     notification: {
       list(param) {
-        return fetch(`/api/notifications/?no_page=true${param}`, {
+        return fetch(`/tcc/api/notifications/?no_page=true${param}`, {
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),
@@ -10,7 +10,7 @@ const Notification = () => {
         });
       },
       markAllRead() {
-        return fetch(`/api/notifications/mark_all_read/`, {
+        return fetch(`/tcc/api/notifications/mark_all_read/`, {
           headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': $('[name="csrfmiddlewaretoken"]').val(),

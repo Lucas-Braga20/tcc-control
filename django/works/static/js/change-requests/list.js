@@ -7,7 +7,7 @@ const ChangeRequestList = () => {
   const API = {
     changeRequests: {
       approve(id) {
-        return fetch(`/api/change-requests/${id}/`, {
+        return fetch(`/tcc/api/change-requests/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -19,7 +19,7 @@ const ChangeRequestList = () => {
         });
       },
       disapprove(id) {
-        return fetch(`/api/change-requests/${id}/`, {
+        return fetch(`/tcc/api/change-requests/${id}/`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

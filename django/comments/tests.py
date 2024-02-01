@@ -39,7 +39,7 @@ class CommentTest(TestCase):
         """
         factory = APIRequestFactory()
 
-        request = factory.get('/api/comments')
+        request = factory.get('/tcc/api/comments')
         request.user = self.user
 
         form_data = {
