@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.conf.urls import handler400, handler404, handler403, handler500
+from django.conf.urls import handler400, handler404, handler403, handler500, include
 
 from tcc_control import views
 
@@ -20,6 +20,8 @@ urlpatterns = [
     path('timetables/', include('timetables.urls', namespace='timetables')),
     path('about/', views.AboutView.as_view(), name='about'),
 ]
+
+urlpatterns = [path('tcc/', include(urlpatterns))]
 
 
 handler400 = views.Error400View.as_view()

@@ -106,8 +106,9 @@ DATABASES = {
 
 # Password validation
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/accounts/login/'
+LOGIN_URL = '/tcc/accounts/login/'
+LOGIN_REDIRECT_URL = '/tcc/'
+LOGOUT_REDIRECT_URL = '/tcc/accounts/login/'
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -139,7 +140,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 
-STATIC_URL = '/static/'
+STATIC_URL = 'tcc/static/'
 
 STATIC_ROOT = Path(BASE_DIR, 'staticfiles')
 
@@ -152,7 +153,7 @@ STATICFILES_FINDERS = [
 
 # Upload files
 
-MEDIA_URL = '/media/'
+MEDIA_URL = 'tcc/media/'
 
 MEDIA_ROOT = Path(BASE_DIR / 'tcc_control' / 'media')
 
